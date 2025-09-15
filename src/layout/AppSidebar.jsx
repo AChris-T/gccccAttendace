@@ -2,26 +2,45 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { useSidebar } from "../context/SidebarContext";
-import { ChevronDownIcon, CloseIcon, HorizontaLDotsIcon } from "../icons";
+import { AdminIcon, AttendanceIcon2, ChevronDownIcon, DashboardIcon, EventIcon, HorizontaLDotsIcon, UserIcon } from "../icons";
+import { useAuthStore } from "../store/auth.store";
+import { UserRole } from "../utils/constant";
 
 
 const navItems = [
   {
-    icon: <CloseIcon />,
-    name: "Admin",
-    subItems: [
-      { name: "Attendance", path: "/admin/attendance", pro: true },
-    ],
-  },
-  {
-    icon: <CloseIcon />,
+    icon: <DashboardIcon />,
     name: "Dashboard",
     path: "/dashboard",
   },
   {
-    icon: <CloseIcon />,
+    icon: <AttendanceIcon2 width={30} height={30} />,
+    name: "Attendance",
+    path: "/dashboard/attendance",
+  },
+  {
+    icon: <EventIcon width={30} height={30} />,
+    name: "Events",
+    path: "/dashboard/events",
+  },
+  {
+    icon: <UserIcon width={30} height={30} />,
     name: "Profile",
-    path: "/profile",
+    path: "/dashboard/profile",
+  },
+];
+
+const adminNavItems = [
+  {
+    icon: <AdminIcon />,
+    name: "Admin",
+    subItems: [
+      { name: "Attendance", path: "/dashboard/admin/attendance", pro: true },
+      { name: "Members", path: "/dashboard/admin/members", pro: true },
+      { name: "Leaders", path: "/dashboard/admin/leaders", pro: true },
+      { name: "First Timers", path: "/dashboard/admin/first_timers", pro: true },
+      { name: "Units", path: "/dashboard/admin/units", pro: true },
+    ],
   },
 ];
 
@@ -29,6 +48,7 @@ const navItems = [
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();
   const location = useLocation();
+  const { user } = useAuthStore()
 
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [subMenuHeight, setSubMenuHeight] = useState({});
@@ -47,7 +67,7 @@ const AppSidebar = () => {
         nav.subItems.forEach((subItem) => {
           if (isActive(subItem.path)) {
             setOpenSubmenu({
-              type,
+              type: 'main',
               index,
             });
             submenuMatched = true;
@@ -88,7 +108,8 @@ const AppSidebar = () => {
 
   const renderMenuItems = (items, menuType) => (
     <ul className="flex flex-col gap-4">
-      {items.map((nav, index) => (
+      {items.map((nav, index) =>
+      (
         <li key={nav.name}>
           {nav.subItems ? (
             <button
@@ -157,7 +178,7 @@ const AppSidebar = () => {
               }}
             >
               <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
+                {nav.subItems.map((subItem, i) => (
                   <li key={subItem.name}>
                     <Link
                       to={subItem.path}
@@ -168,16 +189,6 @@ const AppSidebar = () => {
                     >
                       {subItem.name}
                       <span className="flex items-center gap-1 ml-auto">
-                        {subItem.new && (
-                          <span
-                            className={`ml-auto ${isActive(subItem.path)
-                              ? "menu-dropdown-badge-active"
-                              : "menu-dropdown-badge-inactive"
-                              } menu-dropdown-badge`}
-                          >
-                            new
-                          </span>
-                        )}
                         {subItem.pro && (
                           <span
                             className={`ml-auto ${isActive(subItem.path)
@@ -185,7 +196,7 @@ const AppSidebar = () => {
                               : "menu-dropdown-badge-inactive"
                               } menu-dropdown-badge`}
                           >
-                            pro
+                            {i}
                           </span>
                         )}
                       </span>
@@ -196,7 +207,8 @@ const AppSidebar = () => {
             </div>
           )}
         </li>
-      ))}
+      ))
+      }
     </ul>
   );
 
@@ -219,14 +231,14 @@ const AppSidebar = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/images/logo/logo2.png"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/logo.png"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -234,7 +246,7 @@ const AppSidebar = () => {
             </>
           ) : (
             <img
-              src="/images/logo/logo-icon.svg"
+              src="/images/logo/gccc.png"
               alt="Logo"
               width={32}
               height={32}
@@ -245,6 +257,21 @@ const AppSidebar = () => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
+            {user.role === UserRole.ADMIN || UserRole.SUPER_ADMIN ? <div>
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded
+                  ? "lg:justify-center"
+                  : "justify-start"
+                  }`}
+              >
+                {isExpanded || isMobileOpen ? (
+                  "Admin"
+                ) : (
+                  <HorizontaLDotsIcon className="size-6" />
+                )}
+              </h2>
+              {renderMenuItems(adminNavItems)}
+            </div> : null}
             <div>
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded

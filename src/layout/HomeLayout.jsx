@@ -37,7 +37,7 @@ const LayoutContent = () => {
                             <HomeIcon width={20} height={20} />
                             Home
                         </NavLink>
-                        <NavLink
+                        {/* <NavLink
                             to={`/attendance`}
                             className={({ isActive }) =>
                                 `flex flex-col items-center rounded gap-[8px] h-[48px] px-2 text-[12px] font-medium ${isActive ? 'text-white' : 'text-[#ffffffa8]'
@@ -46,7 +46,7 @@ const LayoutContent = () => {
                         >
                             <AttendanceIcon2 height={30} width={30} />
                             Attendance
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink
                             to={`/forms`}
                             className={({ isActive }) =>
