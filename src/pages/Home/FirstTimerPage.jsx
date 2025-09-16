@@ -1,8 +1,12 @@
+import PageMeta from "../../components/common/PageMeta"
+
 const FirstTimerPage = () => {
-    return (
+    return (<>
+        <PageMeta title="First Timer | GCCC Ibadan" />
         <div className="flex items-center justify-center w-full min-h-screen">
             FirstTimerPage
         </div>
+    </>
     )
 }
 

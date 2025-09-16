@@ -5,3 +5,4 @@ export const UserRole = Object.freeze({
   MEMBER: 'member',
   FIRST_TIMER: 'first_timer',
 });
+export const Image = 'https://i.pravatar.cc/400?img=59';
