@@ -80,6 +80,33 @@ export const filterProductsSchema = yup.object({
   location: yup.string().trim().optional(),
 });
 
+
+
+export const firstTimerSchema = yup.object({
+  email: yup.string().trim().email("Please enter a valid email").required("Email is required"),
+  first_name: yup.string().trim().min(2).required("First name is required"),
+  last_name: yup.string().trim().min(2).required("Last name is required"),
+  phone_number: yup.string().required("Phone number is required"),
+  gender: yup.string().required("Gender is required"),
+ location: yup.string().required("Please select Yes or No"),
+
+  interest: yup.string().required("Please select Yes, Maybe or No"),
+  address_in_ibadan: yup.string().trim().min(5).required("Address in Ibadan is required"),
+  dob: yup.date().typeError("Please enter a valid date").required("Date of Birth is required"),
+  occupation: yup.string().trim().min(2).required("Occupation is required"),
+  born_again: yup.string().required("Please select an option"),
+
+  service_experience: yup
+    .string()
+    .trim()
+    .required("Please share what you enjoyed about the service"),
+    
+  prayer_point: yup.string().trim().nullable(),
+
+  whatsapp_interest: yup.string().required("Please select Yes or No"),
+});
+
+
 // export const filterProductsSchema = yup.object({
 //   category_id: yup.number().required(),
 //   limit: yup.number().required(),
