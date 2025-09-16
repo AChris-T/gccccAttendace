@@ -89,8 +89,7 @@ export const firstTimerSchema = yup.object({
   phone_number: yup.string().required("Phone number is required"),
   gender: yup.string().required("Gender is required"),
  location: yup.string().required("Please select Yes or No"),
-
-  interest: yup.string().required("Please select Yes, Maybe or No"),
+interest: yup.string().required("Please select Yes, Maybe or No"),
   address_in_ibadan: yup.string().trim().min(5).required("Address in Ibadan is required"),
   dob: yup.date().typeError("Please enter a valid date").required("Date of Birth is required"),
   occupation: yup.string().trim().min(2).required("Occupation is required"),

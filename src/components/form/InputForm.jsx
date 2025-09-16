@@ -14,7 +14,6 @@ const InputForm = ({
   const [showPassword, setShowPassword] = useState(false);
   const [otherValue, setOtherValue] = useState("");
 
-  // 👉 Radio group with optional "Other"
   if (type === "radio") {
     return (
       <div className="mb-4">
@@ -35,7 +34,6 @@ const InputForm = ({
             </label>
           ))}
 
-          {/* Show Other option ONLY for howDidYouLearn */}
           {name === "howDidYouLearn" && (
             <label className="flex items-center text-sm">
               <input
@@ -63,7 +61,6 @@ const InputForm = ({
     );
   }
 
-  // 👉 Default input (text, email, password, etc.)
   return (
     <div className="mb-4 relative">
       {label && <label className="block font-medium mb-1 text-sm">{label}</label>}
