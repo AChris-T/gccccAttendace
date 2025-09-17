@@ -9,9 +9,9 @@ export const MemberService = {
     return data;
   },
 
-  /** Fetch all members */
-  async getAllMembers() {
-    const { data } = await $api.get(MEMBER);
+  /** Fetch members with pagination */
+  async getAllMembers(page, limit) {
+    const { data } = await $api.get(`${MEMBER}?page=${page}&per_page=${limit}`);
     return data;
   },
 
@@ -21,13 +21,13 @@ export const MemberService = {
     return data;
   },
 
-  /** Update a member by ID */
+  /** Update member */
   async updateMember(memberId, payload) {
     const { data } = await $api.put(`${MEMBER}/${memberId}`, payload);
     return data;
   },
 
-  /** Delete a member by ID */
+  /** Delete member */
   async deleteMember(memberId) {
     const { data } = await $api.delete(`${MEMBER}/${memberId}`);
     return data;

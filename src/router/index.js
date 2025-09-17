@@ -15,6 +15,7 @@ import MembersPage from '../pages/Admin/MembersPage';
 import AttendancePage from '../pages/Dashboard/AttendancePage';
 import { AttendancePage as AdminAttendancePage } from '../pages/Admin/AttendancePage';
 import FirstTimerPage from '../pages/Home/FirstTimerPage';
+import AdminFirstTimerPage from '../pages/Admin/FirstTimerPage';
 
 const AppRoutes = [
   // Public Home Routes
@@ -56,6 +57,7 @@ const AppRoutes = [
             Component: AdminProtectedRoute,
             children: [
               { path: 'admin/attendance', Component: AdminAttendancePage }, // `/dashboard/admin/attendance`
+              { path: 'admin/first-timers', Component: AdminFirstTimerPage }, // `/dashboard/admin/first-timer`
               { path: 'admin/members', Component: MembersPage }, // `/dashboard/admin/attendance`
             ],
           },

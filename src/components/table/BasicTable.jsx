@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useMemberStore } from "../../store/member.store";
 import Badge from "../ui/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/Table";
 
@@ -89,12 +87,7 @@ const tableData = [
 ];
 
 export default function BasicTable() {
-  const { members, fetchMembers, loading, error } = useMemberStore();
-  console.log(members)
 
-  useEffect(() => {
-    fetchMembers();
-  }, [fetchMembers]);
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">

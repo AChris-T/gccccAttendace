@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 
 export function downloadCSV(data, filename = 'data.csv') {
   if (!data || data.length === 0) {
-    console.error('No data available to download');
     return;
   }
 
@@ -39,3 +38,38 @@ export function downloadCSV(data, filename = 'data.csv') {
   document.body.removeChild(link);
 }
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
+export const getErrorMessage = (
+  error,
+  defaultMessage = 'Something went wrong'
+) => {
+  return error?.response?.data?.message || defaultMessage;
+};
+// Format header labels into a clean, readable format
+const formatHeaderLabel = (key) => {
+  return key
+    .replace(/_/g, ' ') // Replace underscores with spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+};
+
+// Format cell values consistently
+const formatCellValue = (value) => {
+  if (Array.isArray(value)) return value.length > 0 ? value.join(', ') : '-';
+  if (value === null || value === undefined || value === '') return '-';
+
+  // Handle date strings like "2025-09-16 07:38:45"
+  if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}/)) {
+    return new Date(value).toLocaleDateString();
+  }
+
+  return value;
+};
+// Utility to generate dynamic table headers and values
+export const generateDynamicColumns = (data) => {
+  if (!data || data.length === 0) return [];
+
+  return Object.keys(data[0]).map((key) => ({
+    key,
+    label: formatHeaderLabel(key),
+    render: (row) => formatCellValue(row[key]),
+  }));
+};

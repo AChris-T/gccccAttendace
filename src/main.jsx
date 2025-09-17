@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 
 //css 
 import './index.css';
-import 'swiper/swiper-bundle.css';
 import "react-toastify/dist/ReactToastify.css";
 import 'flatpickr/dist/flatpickr.css';
 import "nprogress/nprogress.css";

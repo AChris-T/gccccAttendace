@@ -1,8 +1,4 @@
 import { useEffect } from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Formspage = () => {
   useEffect(() => {
@@ -25,7 +21,7 @@ const Formspage = () => {
         data-aos-delay="0"
         className="md:px-[200px] flex gap-2 flex-col"
       >
-        <Accordion>
+        {/* <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1-content"
@@ -102,7 +98,7 @@ const Formspage = () => {
               Loading…
             </iframe>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
       </div>
     </div>
   );
