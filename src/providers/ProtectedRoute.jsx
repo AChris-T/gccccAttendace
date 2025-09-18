@@ -3,12 +3,13 @@ import { useAuthStore } from '../store/auth.store';
 import { useEffect } from 'react';
 
 function ProtectedRoute() {
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const { isAuthenticated, resetAuth } = useAuthStore();
     const location = useLocation();
     const navigate = useNavigate()
     const url = `/login?redirect=${encodeURIComponent(location.pathname + location.search)}`
 
     const handleUnauthorized = () => {
+        resetAuth()
         navigate(url, { replace: true })
     }
 

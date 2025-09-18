@@ -54,6 +54,15 @@ export const useAuthStore = create(
           set({ loading: false });
         }
       },
+
+      resetAuth: () => {
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+          loading: false,
+        });
+      },
     }),
     {
       name: 'auth',

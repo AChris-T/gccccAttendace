@@ -230,7 +230,7 @@ const AppSidebar = () => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            {user.role === UserRole.ADMIN || UserRole.SUPER_ADMIN ? <div>
+            {user.role === UserRole.ADMIN || user.role === UserRole.SUPER_ADMIN ? <div>
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded
                   ? "lg:justify-center"

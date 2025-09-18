@@ -168,7 +168,6 @@ const FirstTimerPage = () => {
                     />
                 )}
 
-
                 {step === 5 && (
                     <>
                         <InputForm
@@ -211,7 +210,6 @@ const FirstTimerPage = () => {
                     </>
                 )}
 
-
                 {step === 6 && (
                     <>
                         <InputForm
@@ -247,7 +245,6 @@ const FirstTimerPage = () => {
                         />
                     </>
                 )}
-
 
                 {step === "complete" && (
                     <div className="text-center py-10">
