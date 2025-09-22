@@ -15,14 +15,13 @@ export default function PrayerForm() {
   };
 
   return (
-    <div className="text-white">
+    <div className="text-white max-w-[500px]">
       <h3 className="text-2xl font-semibold">Prayer Request</h3>
       <h3 className="text-sm mt-2">
         Send your prayer request(s), knowing that whatever we ask in His name,
         He will do it. Let's together glorify the Father through the power of
         prayer
       </h3>
-
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
         <TextArea
           label="What is your prayer request ?"

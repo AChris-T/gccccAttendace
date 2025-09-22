@@ -15,7 +15,7 @@ export default function QuestionForm() {
   };
 
   return (
-    <div className="text-white">
+    <div className="text-white max-w-[500px]">
       <h3 className="text-2xl font-semibold">Dear Friend</h3>
       <h3 className="text-sm mt-2">
         Feel free to ask as many questions as you have, bible questions, life
@@ -23,15 +23,17 @@ export default function QuestionForm() {
       </h3>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <TextArea
-          label="What are your questions ?"
-          name="message"
-          register={register}
-          rows={6}
-          cols={40}
-          placeholder="Type your message here..."
-          error={errors.message?.message}
-        />
+        <div>
+          <TextArea
+            label="What are your questions ?"
+            name="message"
+            register={register}
+            rows={6}
+            cols={40}
+            placeholder="Type your message here..."
+            error={errors.message?.message}
+          />
+        </div>
         <button
           type="submit"
           className="mt-3 bg-blue-500 text-white px-4 py-2 rounded"

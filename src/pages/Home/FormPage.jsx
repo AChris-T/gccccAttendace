@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QuestionForm from '../../components/Formpage/QuestionForm';
 import PrayerForm from '../../components/Formpage/PrayerForm';
+import TestimonyForm from '../../components/Formpage/TestimonyForm';
 
 export default function FormPage() {
   const [activeTab, setActiveTab] = useState('Questions');
@@ -23,7 +24,7 @@ export default function FormPage() {
   }, [activeTab]);
 
   return (
-    <div className="p-6 mt-0 md:mt-20 lg:mt-0">
+    <div className="p-6 mt-0 mb-20 md:mt-20 lg:mt-0">
       <div className="mb-4 flex justify-center">
         <img
           src={tabs.find((t) => t.name === activeTab)?.image}
@@ -52,7 +53,7 @@ export default function FormPage() {
       <div className="mt-6">
         {activeTab === 'Questions' && <QuestionForm />}
         {activeTab === 'Prayer Request' && <PrayerForm />}
-        {activeTab === 'Testimony' && <p>Adjust your testimony here.</p>}
+        {activeTab === 'Testimony' && <TestimonyForm />}
       </div>
     </div>
   );
