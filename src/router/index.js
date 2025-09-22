@@ -20,6 +20,8 @@ import AdminAttendancePage from '../pages/Admin/AdminAttendancePage';
 import AdminUnitAndLeaderPage from '../pages/Admin/AdminUnitAndLeaderPage';
 import FirstTimerDetailsPage from '../pages/Dashboard/FirstTimerDetailsPage';
 import EventsPage from '../pages/Dashboard/EventsPage';
+import AdminFormPage from '../pages/Admin/AdminFormsPage';
+import AdminFormsPage from '../pages/Admin/AdminFormsPage';
 
 const AppRoutes = [
   // Public Home Routes
@@ -66,6 +68,7 @@ const AppRoutes = [
               { path: 'admin/attendance', Component: AdminAttendancePage },
               { path: 'admin/first-timers', Component: AdminFirstTimerPage },
               { path: 'admin/members', Component: AdminMembersPage },
+              { path: 'admin/forms', Component: AdminFormsPage },
               {
                 path: 'admin/units-and-leaders',
                 Component: AdminUnitAndLeaderPage,

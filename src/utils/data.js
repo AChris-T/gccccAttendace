@@ -38,6 +38,7 @@ export const adminNavItems = [
         pro: true,
       },
       { name: 'Members', path: '/dashboard/admin/members', pro: true },
+      { name: 'Forms', path: '/dashboard/admin/forms', pro: true },
       {
         name: 'Units And Leaders',
         path: '/dashboard/admin/units-and-leaders',
