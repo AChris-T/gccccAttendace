@@ -1,111 +1,59 @@
-import { useEffect } from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState, useEffect } from 'react';
+import QuestionForm from '../../components/Formpage/QuestionForm';
+import PrayerForm from '../../components/Formpage/PrayerForm';
 
-const Formspage = () => {
+export default function FormPage() {
+  const [activeTab, setActiveTab] = useState('Questions');
+
+  const tabs = [
+    { name: 'Questions', image: '/images/forms/qes.png' },
+    { name: 'Prayer Request', image: '/images/forms/newPrayer.png' },
+    { name: 'Testimony', image: '/images/forms/Ttestimony.png' },
+  ];
+
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  });
+    const savedTab = localStorage.getItem('activeTab');
+    if (savedTab) {
+      setActiveTab(savedTab);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
 
   return (
-    <div className="relative px-10 flex flex-col mt-[100px] w-full gap-16 overflow-hidden ">
-      <div className="relative h-full ">
-        {/*         <h2 className="text-2xl font-semibold text-white">Forms</h2>
-         */}{' '}
+    <div className="p-6 mt-0 md:mt-20 lg:mt-0">
+      <div className="mb-4 flex justify-center">
+        <img
+          src={tabs.find((t) => t.name === activeTab)?.image}
+          alt={activeTab}
+          className="h-32 w-3xl object-contain"
+        />
       </div>
 
-      <div className="absolute md:h-[450px] bg-cover h-[300px] w-full   text-[white] flex  justify-center flex-col items-center"></div>
-      <div
-        data-aos="fade-up"
-        data-aos-delay="0"
-        className="md:px-[200px] flex gap-2 flex-col"
-      >
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1-content"
-            id="panel1-header"
-            style={{ fontWeight: '600', fontSize: '20px' }}
+      <div className="flex space-x-0 border-b">
+        {tabs.map((tab) => (
+          <button
+            key={tab.name}
+            onClick={() => setActiveTab(tab.name)}
+            className={`px-2 md:px-6 py-2 -mb-px font-medium border-b-2 focus:outline-none
+              ${
+                activeTab === tab.name
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-white hover:text-gray-700'
+              }`}
           >
-            TESTIMONY FORM
-          </AccordionSummary>
-          <AccordionDetails
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <iframe
-              title="Google Form"
-              src="https://docs.google.com/forms/d/e/1FAIpQLSeO-WyGS4qovmJl8qABZnvzyvlOIZZffrIVym8ebaZxQnCcLw/viewform?usp=sf_link"
-              width="740"
-              height="800"
-            >
-              Loading…
-            </iframe>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2-content"
-            id="panel2-header"
-            style={{ fontWeight: '600', fontSize: '20px' }}
-          >
-            PRAYER FORM
-          </AccordionSummary>
-          <AccordionDetails
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <iframe
-              title="Google Form"
-              src="https://docs.google.com/forms/d/e/1FAIpQLSdvaPPujgUqxBRCH0uw_0g9dXUEL-LksYLUysAns6PK-beWzQ/viewform"
-              width="740"
-              height="800"
-            >
-              Loading…
-            </iframe>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3-content"
-            id="panel3-header"
-            style={{ fontWeight: '600', fontSize: '20px' }}
-          >
-            QUESTION FORM
-          </AccordionSummary>
-          <AccordionDetails
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <iframe
-              title="Google Form"
-              src="https://docs.google.com/forms/d/e/1FAIpQLSdxYISVjD717jhbA9VkZqnRhBWsHYzJkBUyv1yK-nQv0xQeFA/viewform?pli=1"
-              width="740"
-              height="800"
-            >
-              Loading…
-            </iframe>
-          </AccordionDetails>
-        </Accordion>
+            {tab.name}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6">
+        {activeTab === 'Questions' && <QuestionForm />}
+        {activeTab === 'Prayer Request' && <PrayerForm />}
+        {activeTab === 'Testimony' && <p>Adjust your testimony here.</p>}
       </div>
     </div>
   );
-};
-
-export default Formspage;
+}
