@@ -3,12 +3,12 @@ import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import ComponentCard from '../../components/common/ComponentCard'
 import MemberTable from '../../components/admin/members/MembersTable'
 
-const MembersPage = () => {
+const AdminMembersPage = () => {
 
     return (
         <>
-            <PageMeta title="Members | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Members" />
+            <PageMeta title="Admin | Members | GCCC Ibadan" />
+            <PageBreadcrumb pageTitle="Admin | Members" />
             <div className="space-y-6">
                 <ComponentCard title="All Members">
                     <MemberTable />
@@ -18,4 +18,4 @@ const MembersPage = () => {
     )
 }
 
-export default MembersPage
+export default AdminMembersPage

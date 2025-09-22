@@ -26,15 +26,23 @@ export const adminNavItems = [
     icon: 'AdminIcon',
     name: 'Admin',
     subItems: [
+      {
+        name: 'Dashboard',
+        path: '/dashboard/admin',
+        pro: true,
+      },
       { name: 'Attendance', path: '/dashboard/admin/attendance', pro: true },
-      { name: 'Members', path: '/dashboard/admin/members', pro: true },
-      { name: 'Leaders', path: '/dashboard/admin/leaders', pro: true },
       {
         name: 'First Timers',
         path: '/dashboard/admin/first-timers',
         pro: true,
       },
-      { name: 'Units', path: '/dashboard/admin/units', pro: true },
+      { name: 'Members', path: '/dashboard/admin/members', pro: true },
+      {
+        name: 'Units And Leaders',
+        path: '/dashboard/admin/units-and-leaders',
+        pro: true,
+      },
     ],
   },
 ];

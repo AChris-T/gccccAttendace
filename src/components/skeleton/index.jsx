@@ -67,9 +67,9 @@ export const SkeletonTableLoader = ({ columnCount = 10, rowCount = 50 }) => {
 };
 
 export const BarChartSkeleton = ({
-  bars = 10,
+  bars = 12,
   heights = null,
-  maxHeight = 160,
+  maxHeight = 280,
   showLabels = true,
   className = "",
 }) => {
@@ -131,3 +131,87 @@ export const BarChartSkeleton = ({
   );
 }
 
+export const AnalyticsSkeletonLoader = () => {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-8">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div
+          key={index}
+          className="rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-white/[0.03] md:p-5 animate-pulse"
+        >
+          {/* Top section (icon + dropdown) */}
+          <div className="flex justify-between">
+            <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl dark:bg-gray-700" />
+            <div className="w-6 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+
+          {/* Middle section (title + value) */}
+          <div className="flex items-end justify-between mt-7">
+            <div className="w-full">
+              <div className="w-20 h-3 mb-2 bg-gray-200 rounded dark:bg-gray-700" />
+              <div className="w-16 h-5 bg-gray-300 rounded dark:bg-gray-600" />
+            </div>
+
+            <div className="w-10 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const DashboardSkeletonLoader = () => {
+  return (
+    <div className="space-y-6">
+      {/* Top Filters */}
+      <div className="flex gap-4">
+        <div className="h-10 w-32 bg-gray-200 rounded-md animate-pulse dark:bg-gray-700" />
+        <div className="h-10 w-32 bg-gray-200 rounded-md animate-pulse dark:bg-gray-700" />
+      </div>
+
+      {/* Main Chart Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Pie Chart Skeleton */}
+        <div className="flex flex-col items-center justify-center p-4 bg-white border rounded-lg dark:bg-gray-900 dark:border-gray-800">
+          <div className="h-56 w-56 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700" />
+          <div className="flex justify-center gap-4 mt-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-gray-300 animate-pulse dark:bg-gray-600" />
+                <div className="h-3 w-12 bg-gray-200 rounded dark:bg-gray-700 animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Stacked Bar Chart Skeleton */}
+        <div className="flex flex-col justify-between p-4 bg-white border rounded-lg dark:bg-gray-900 dark:border-gray-800">
+          <div className="h-56 w-full bg-gray-200 rounded-md animate-pulse dark:bg-gray-700" />
+          <div className="grid grid-cols-4 gap-3 mt-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className="h-3 w-3 rounded-full bg-gray-300 animate-pulse dark:bg-gray-600" />
+                <div className="h-3 w-14 bg-gray-200 rounded dark:bg-gray-700 animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Two Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Monthly First Timers */}
+        <div className="flex flex-col p-4 bg-white border rounded-lg dark:bg-gray-900 dark:border-gray-800">
+          <div className="h-6 w-40 bg-gray-200 rounded-md mb-4 animate-pulse dark:bg-gray-700" />
+          <div className="h-56 w-full bg-gray-200 rounded-md animate-pulse dark:bg-gray-700" />
+        </div>
+
+        {/* Monthly Integrated First Timers */}
+        <div className="flex flex-col p-4 bg-white border rounded-lg dark:bg-gray-900 dark:border-gray-800">
+          <div className="h-6 w-60 bg-gray-200 rounded-md mb-4 animate-pulse dark:bg-gray-700" />
+          <div className="h-56 w-full bg-gray-200 rounded-md animate-pulse dark:bg-gray-700" />
+        </div>
+      </div>
+    </div>
+  );
+};

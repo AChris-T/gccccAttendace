@@ -6,161 +6,47 @@ export const UserRole = Object.freeze({
   FIRST_TIMER: 'first_timer',
 });
 export const Image = 'https://i.pravatar.cc/400?img=59';
-export const barChartOptions = {
-  colors: ['#465fff'],
-  chart: {
-    fontFamily: 'Outfit, sans-serif',
-    type: 'bar',
-    height: 180,
-    toolbar: {
-      show: false,
-    },
-  },
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      columnWidth: '39%',
-      borderRadius: 5,
-      borderRadiusApplication: 'end',
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    show: true,
-    width: 4,
-    colors: ['transparent'],
-  },
-  xaxis: {
-    categories: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ],
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  legend: {
-    show: true,
-    position: 'top',
-    horizontalAlign: 'left',
-    fontFamily: 'Outfit',
-  },
-  yaxis: {
-    title: {
-      text: undefined,
-    },
-  },
-  grid: {
-    yaxis: {
-      lines: {
-        show: true,
-      },
-    },
-  },
-  fill: {
-    opacity: 1,
-  },
-
-  tooltip: {
-    x: {
-      show: false,
-    },
-    y: {
-      formatter: (val) => `${val}`,
-    },
-  },
-};
-export const barChartOptions2 = {
-  colors: ['#039855'],
-  chart: {
-    fontFamily: 'Outfit, sans-serif',
-    type: 'bar',
-    height: 180,
-    toolbar: {
-      show: false,
-    },
-  },
-  plotOptions: {
-    bar: {
-      horizontal: false,
-      columnWidth: '39%',
-      borderRadius: 5,
-      borderRadiusApplication: 'end',
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    show: true,
-    width: 4,
-    colors: ['transparent'],
-  },
-  xaxis: {
-    categories: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ],
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  legend: {
-    show: true,
-    position: 'top',
-    horizontalAlign: 'left',
-    fontFamily: 'Outfit',
-  },
-  yaxis: {
-    title: {
-      text: undefined,
-    },
-  },
-  grid: {
-    yaxis: {
-      lines: {
-        show: true,
-      },
-    },
-  },
-  fill: {
-    opacity: 1,
-  },
-
-  tooltip: {
-    x: {
-      show: false,
-    },
-    y: {
-      formatter: (val) => `${val}`,
-    },
-  },
-};
+export const years = [
+  2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035,
+];
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+export const followupCommentTypes = [
+  'Pre-Service',
+  'Post-Service',
+  'Admin',
+  'Pastor',
+  'Unit-Leader',
+  'Others',
+];
+export const textColors = [
+  'text-red-500',
+  'text-orange-500',
+  'text-amber-500',
+  'text-yellow-500',
+  'text-lime-500',
+  'text-green-500',
+  'text-emerald-500',
+  'text-teal-500',
+  'text-cyan-500',
+  'text-sky-500',
+  'text-blue-500',
+  'text-indigo-500',
+  'text-violet-500',
+  'text-purple-500',
+  'text-fuchsia-500',
+  'text-pink-500',
+  'text-rose-500',
+];

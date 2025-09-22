@@ -59,7 +59,7 @@ const Button = ({
   return (
     <button
       type={type}
-      className={`w-full inline-flex items-center justify-center gap-2 transition font-medium focus:outline-none 
+      className={`inline-flex items-center justify-center gap-2 transition font-medium focus:outline-none 
         ${sizeClasses[size]}
         ${variantClasses[variant]}
         ${disabled || loading ? "cursor-not-allowed opacity-50" : ""}

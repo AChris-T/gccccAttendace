@@ -11,11 +11,15 @@ import DashboardPage from '../pages/Dashboard/DashboardPage';
 import HomePage from '../pages/Home/HomePage';
 import AdminProtectedRoute from '../providers/AdminProtectedRoute';
 import UserProfilePage from '../pages/Dashboard/UserProfilePage';
-import MembersPage from '../pages/Admin/MembersPage';
 import AttendancePage from '../pages/Dashboard/AttendancePage';
-import { AttendancePage as AdminAttendancePage } from '../pages/Admin/AttendancePage';
 import FirstTimerPage from '../pages/Home/FirstTimerPage';
-import AdminFirstTimerPage from '../pages/Admin/FirstTimerPage';
+import AdminDashboardPage from '../pages/Admin/AdminDashboardPage';
+import AdminFirstTimerPage from '../pages/Admin/AdminFirstTimerPage';
+import AdminMembersPage from '../pages/Admin/AdminMembersPage';
+import AdminAttendancePage from '../pages/Admin/AdminAttendancePage';
+import AdminUnitAndLeaderPage from '../pages/Admin/AdminUnitAndLeaderPage';
+import FirstTimerDetailsPage from '../pages/Dashboard/FirstTimerDetailsPage';
+import EventsPage from '../pages/Dashboard/EventsPage';
 
 const AppRoutes = [
   // Public Home Routes
@@ -30,11 +34,9 @@ const AppRoutes = [
       },
       { path: 'login', Component: LoginPage },
       { path: 'forms', Component: Formspage },
-      { path: 'first-timer', Component: FirstTimerPage },
+      { path: 'first-timer/welcome', Component: FirstTimerPage },
     ],
   },
-
-  // Dashboard Routes
   {
     path: '/dashboard',
     Component: ProtectedRoute,
@@ -42,23 +44,32 @@ const AppRoutes = [
       {
         Component: AppLayout,
         children: [
-          // Regular dashboard protected routes
           {
+            // Regular dashboard protected routes
             Component: ProtectedRoute,
             children: [
-              { index: true, Component: DashboardPage }, // `/dashboard`
-              { path: 'attendance', Component: AttendancePage }, // `/dashboard/attendance`
-              { path: 'events', Component: DashboardPage }, // `/dashboard/events`
-              { path: 'profile', Component: UserProfilePage }, // `/dashboard/profile`
+              { index: true, Component: DashboardPage },
+              { path: 'attendance', Component: AttendancePage },
+              { path: 'profile', Component: UserProfilePage },
+              { path: 'events', Component: EventsPage },
+              {
+                path: 'first-timer/:firstTimerId',
+                Component: FirstTimerDetailsPage,
+              },
             ],
           },
-          // Admin-only protected routes
           {
+            // Admin-only protected routes
             Component: AdminProtectedRoute,
             children: [
-              { path: 'admin/attendance', Component: AdminAttendancePage }, // `/dashboard/admin/attendance`
-              { path: 'admin/first-timers', Component: AdminFirstTimerPage }, // `/dashboard/admin/first-timer`
-              { path: 'admin/members', Component: MembersPage }, // `/dashboard/admin/attendance`
+              { path: 'admin', Component: AdminDashboardPage },
+              { path: 'admin/attendance', Component: AdminAttendancePage },
+              { path: 'admin/first-timers', Component: AdminFirstTimerPage },
+              { path: 'admin/members', Component: AdminMembersPage },
+              {
+                path: 'admin/units-and-leaders',
+                Component: AdminUnitAndLeaderPage,
+              },
             ],
           },
         ],

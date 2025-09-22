@@ -9,18 +9,11 @@ export const FirstTimerService = {
     const { data } = await $api.get(FIRST_TIMER, { params });
     return data;
   },
-
-  async getAnalytics(params = {}) {
-    const { data } = await $api.get(`${FIRST_TIMER}/analytics`, { params });
-    return data;
-  },
-
   /** Fetch a single first timer by ID */
   async getById(id) {
     const { data } = await $api.get(`${FIRST_TIMER}/${id}`);
     return data;
   },
-
   /** Create a new first timer record */
   async create(payload) {
     const { data } = await $api.post(FIRST_TIMER, payload);

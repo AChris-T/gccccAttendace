@@ -1,12 +1,16 @@
-import React from 'react'
+import ComponentCard from '../../components/common/ComponentCard'
+import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import PageMeta from '../../components/common/PageMeta'
 
 const DashboardPage = () => {
   return (
     <>
       <PageMeta title="Dashboard | GCCC Ibadan" />
-      <div className='grid grid-cols-12 gap-4 md:gap-6 dark:border-gray-800 dark:bg-gray-500'>
-        DashboardPage
+      <PageBreadcrumb pageTitle="Dashboard" />
+      <div className="space-y-6">
+        <ComponentCard title="Dashboard">
+          <img className="w-full rounded" src="/images/site.jpg" alt="site in progress" />
+        </ComponentCard>
       </div>
     </>
   )

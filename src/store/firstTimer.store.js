@@ -4,55 +4,16 @@ import { FirstTimerService } from '../services/firstTimer.service';
 export const useFirstTimerStore = create((set, get) => ({
   /** State */
   firstTimers: [],
-  pagination: {
-    current_page: 1,
-    total: 0,
-    per_page: 10,
-    from: 0,
-    to: 0,
-    links: [],
-  },
   loading: false,
   error: null,
   selectedFirstTimer: null,
-  total_first_timers: [],
-  integrated_first_timers: [],
 
-  /** Fetch all first timers with optional pagination and filters */
-  getAnalytics: async (params = {}) => {
+  fetchFirstTimers: async () => {
     set({ loading: true, error: null });
     try {
-      const { data } = await FirstTimerService.getAnalytics(params);
+      const { data } = await FirstTimerService.getAll();
       set({
-        total_first_timers: data.total_first_timers,
-        integrated_first_timers: data.integrated_first_timers,
-        loading: false,
-      });
-      return response;
-    } catch (error) {
-      return error;
-    }
-  },
-
-  fetchFirstTimers: async (params = {}) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await FirstTimerService.getAll({
-        page: params.page || get().pagination.current_page,
-        per_page: params.per_page || get().pagination.per_page,
-        ...params,
-      });
-
-      set({
-        firstTimers: response?.data || [],
-        pagination: {
-          current_page: response?.current_page,
-          total: response?.total,
-          per_page: response?.per_page,
-          from: response?.from,
-          to: response?.to,
-          links: response?.links || [],
-        },
+        firstTimers: data || [],
         loading: false,
       });
     } catch (error) {
@@ -139,14 +100,6 @@ export const useFirstTimerStore = create((set, get) => ({
   resetFirstTimerState: () =>
     set({
       firstTimers: [],
-      pagination: {
-        current_page: 1,
-        total: 0,
-        per_page: 10,
-        from: 0,
-        to: 0,
-        links: [],
-      },
       selectedFirstTimer: null,
       loading: false,
       error: null,

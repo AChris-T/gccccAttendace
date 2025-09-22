@@ -1,42 +1,6 @@
 import dayjs from 'dayjs';
+import { textColors } from './constant';
 
-export function downloadCSV(data, filename = 'data.csv') {
-  if (!data || data.length === 0) {
-    return;
-  }
-
-  // Extract headers from keys of the first object
-  const headers = Object.keys(data[0]);
-
-  // Convert rows
-  const csvRows = [
-    headers.join(','), // header row
-    ...data.map((row) =>
-      headers
-        .map((field) => {
-          let val = row[field] ?? '';
-          // Escape quotes and commas properly
-          if (typeof val === 'string') {
-            val = `"${val.replace(/"/g, '""')}"`;
-          }
-          return val;
-        })
-        .join(',')
-    ),
-  ];
-
-  // Create blob and download
-  const blob = new Blob([csvRows.join('\n')], {
-    type: 'text/csv;charset=utf-8;',
-  });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
 export const getErrorMessage = (
   error,
@@ -44,32 +8,68 @@ export const getErrorMessage = (
 ) => {
   return error?.response?.data?.message || defaultMessage;
 };
-// Format header labels into a clean, readable format
-const formatHeaderLabel = (key) => {
-  return key
-    .replace(/_/g, ' ') // Replace underscores with spaces
-    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
-};
-
-// Format cell values consistently
-const formatCellValue = (value) => {
-  if (Array.isArray(value)) return value.length > 0 ? value.join(', ') : '-';
-  if (value === null || value === undefined || value === '') return '-';
-
-  // Handle date strings like "2025-09-16 07:38:45"
-  if (typeof value === 'string' && value.match(/^\d{4}-\d{2}-\d{2}/)) {
-    return new Date(value).toLocaleDateString();
+export function generateChartSeries(statusesPerMonth) {
+  if (!Array.isArray(statusesPerMonth) || statusesPerMonth.length === 0) {
+    return [];
   }
 
-  return value;
-};
-// Utility to generate dynamic table headers and values
-export const generateDynamicColumns = (data) => {
-  if (!data || data.length === 0) return [];
+  // Predefined fixed colors for certain statuses
+  const FIXED_COLORS = {
+    'Invited Again': '#f79009',
+    Contacted: '#0ba5ec',
+    'Not Contacted': '#667085',
+    Integrated: '#12b76a',
+    Visiting: '#465fff',
+    'Opt-out': '#f04438',
+  };
 
-  return Object.keys(data[0]).map((key) => ({
-    key,
-    label: formatHeaderLabel(key),
-    render: (row) => formatCellValue(row[key]),
-  }));
-};
+  // Extract dynamic keys (all keys except 'month')
+  const allKeys = Object.keys(statusesPerMonth[0]).filter(
+    (key) => key !== 'month'
+  );
+
+  // Helper to generate a truly random color that doesn't clash with fixed ones
+  const usedColors = new Set(Object.values(FIXED_COLORS));
+
+  const getRandomUniqueColor = () => {
+    let color;
+    do {
+      color = `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')}`;
+    } while (usedColors.has(color));
+    usedColors.add(color);
+    return color;
+  };
+
+  return allKeys.map((key) => {
+    const color =
+      FIXED_COLORS[key] ||
+      (['Second Timer', 'Third Timer', 'Fourth Timer'].includes(key)
+        ? getRandomUniqueColor()
+        : getRandomUniqueColor());
+
+    return {
+      type: 'bar',
+      xKey: 'month',
+      yKey: key,
+      yName: key,
+      stroke: color,
+      fill: color,
+      stacked: true,
+    };
+  });
+}
+export function toSlug(text) {
+  if (!text || typeof text !== 'string') return null;
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export const getRandomTextColor = () =>
+  textColors[Math.floor(Math.random() * textColors.length)];

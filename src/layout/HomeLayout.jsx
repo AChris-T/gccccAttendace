@@ -3,14 +3,10 @@ import Navbar from '../components/header/Navbar';
 import { ScrollToTop } from '../components/common/ScrollToTop';
 import ProgressBar from '../providers/ProgressBar';
 import { useAuthStore } from '../store/auth.store';
-import { AttendanceIcon2, DashboardIcon, FormIcon, HomeIcon, LoadingIcon, LogoutIcon } from '../icons';
+import { DashboardIcon, FormIcon, HomeIcon, LoadingIcon, LogoutIcon } from '../icons';
 
 const LayoutContent = () => {
-    const { logout, loading, isAuthenticated } = useAuthStore();
-
-    const handleLogout = () => {
-        logout();
-    };
+    const { logout, loading, isAuthenticated, isAdmin } = useAuthStore();
 
     return (
         <div
@@ -60,7 +56,7 @@ const LayoutContent = () => {
                         {isAuthenticated &&
                             <>
                                 <NavLink
-                                    to={'/dashboard'}
+                                    to={`${isAdmin ? '/dashboard/admin' : '/dashboard'}`}
                                     className={({ isActive }) =>
                                         `flex flex-col items-center rounded gap-[8px] h-[48px] px-2 text-[12px] font-medium ${isActive ? 'text-white' : 'text-[#ffffffa8]'
                                         }`
@@ -71,7 +67,7 @@ const LayoutContent = () => {
                                 </NavLink>
                                 <NavLink
                                     to='#'
-                                    onClick={handleLogout}
+                                    onClick={logout}
                                     className={({ isActive }) =>
                                         `flex flex-col items-center rounded gap-[8px] h-[48px] px-2 text-[12px] font-medium ${isActive ? 'text-white' : 'text-[#ffffffa8]'
                                         }`
@@ -84,7 +80,7 @@ const LayoutContent = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

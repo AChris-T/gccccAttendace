@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react";
+import Animated from "../../common/Animated";
 
 export const Dropdown = ({
   isOpen,
   onClose,
   children,
   className = "",
+  animation = 'fade-up',
+  duration = 0.5,
+  easing = 'ease'
 }) => {
   const dropdownRef = useRef(null);
 
@@ -28,11 +32,14 @@ export const Dropdown = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      ref={dropdownRef}
-      className={`absolute z-40  right-0 mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
-    >
-      {children}
-    </div>
+    <Animated duration={duration} animation={animation} easing={easing}>
+      <div
+        ref={dropdownRef}
+        className={`absolute z-40  right-0 mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
+      >
+        {children}
+      </div>
+    </Animated>
+
   );
 };

@@ -3,13 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import { AdminIcon, AttendanceIcon2, ChevronDownIcon, DashboardIcon, EventIcon, HorizontaLDotsIcon, UserIcon } from "../icons";
 import { useAuthStore } from "../store/auth.store";
-import { UserRole } from "../utils/constant";
 import { adminNavItems, navItems } from "../utils/data";
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();
   const location = useLocation();
-  const { user } = useAuthStore()
+  const { isAdmin } = useAuthStore()
 
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [subMenuHeight, setSubMenuHeight] = useState({});
@@ -230,7 +229,7 @@ const AppSidebar = () => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            {user.role === UserRole.ADMIN || user.role === UserRole.SUPER_ADMIN ? <div>
+            {isAdmin ? <div>
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded
                   ? "lg:justify-center"

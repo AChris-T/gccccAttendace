@@ -60,7 +60,6 @@ const FirstTimerPage = () => {
     const prevStep = () => setStep((prev) => prev - 1);
 
     const onSubmit = (data) => {
-        console.log("Form submitted:", data);
         setStep("complete");
     };
 

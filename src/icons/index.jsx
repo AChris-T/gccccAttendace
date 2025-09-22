@@ -451,3 +451,74 @@ export const ArrowDownIcon = ({
     </>
   );
 };
+export const ExpandFullScreenIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg className={className} xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 24 24"><path fill={fill} d="m21 15.344l-2.121 2.121l-3.172-3.172l-1.414 1.414l3.172 3.172L15.344 21H21zM3 8.656l2.121-2.121l3.172 3.172l1.414-1.414l-3.172-3.172L8.656 3H3zM21 3h-5.656l2.121 2.121l-3.172 3.172l1.414 1.414l3.172-3.172L21 8.656zM3 21h5.656l-2.121-2.121l3.172-3.172l-1.414-1.414l-3.172 3.172L3 15.344z" /></svg>
+    </>
+  );
+};
+export const HorizontalDotsIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg
+        className={className} width={width} height={height}
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
+          fill={fill}
+        />
+      </svg>
+    </>
+  );
+};
+export const VerticalDotsIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <><svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><g fill={fill}><rect width="4" height="4" x="10" y="3" rx="2" /><rect width="4" height="4" x="10" y="10" rx="2" /><rect width="4" height="4" x="10" y="17" rx="2" /></g></svg>
+    </>
+  );
+};
+export const UnitIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><path fill={fill} d="M1.72 9.95a2.45 2.45 0 1 0 4.9 0a2.45 2.45 0 1 0-4.9 0m15.66 0a2.45 2.45 0 1 0 4.9 0a2.45 2.45 0 1 0-4.9 0M11.5 4.5a1 1 0 0 1-1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1-1 1m5.87-1.62a1 1 0 0 0-1.41 0l-1.42 1.41a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l1.41-1.42a1 1 0 0 0 0-1.41M7.75 6A1 1 0 0 1 7 5.71L5.63 4.29A1 1 0 0 1 7 2.88l1.46 1.41a1 1 0 0 1 0 1.42a1 1 0 0 1-.71.29" /><path fill={fill} d="M16.4 23.5v-6.73a6.35 6.35 0 0 1-5.4-4.32l-.84-2.53A1.46 1.46 0 0 1 11.29 8a1.51 1.51 0 0 1 1.64 1.06l.82 2.45A3.41 3.41 0 0 0 17 13.86h4.3a2 2 0 0 1 2 2v7.64ZM9.54 12.92v-.13A3.4 3.4 0 0 1 7 13.86H2.71a2 2 0 0 0-2 2v7.64H7.6v-6.73a6.37 6.37 0 0 0 3.33-1.33a7.8 7.8 0 0 1-1.39-2.52" /></svg>
+    </>
+  );
+};
+export const FirstTimerIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><path fill={fill} d="M11.158 20.475c.065.53.24 1.05.525 1.522c-2.99-.06-5.268-.964-6.78-2.736a3.75 3.75 0 0 1-.9-2.435v-.578A2.25 2.25 0 0 1 6.254 14h9.273l-1.5 1.5H6.253a.75.75 0 0 0-.75.75v.577c0 .535.192 1.053.54 1.46c1.12 1.313 2.812 2.049 5.115 2.19M12 2.004a5 5 0 1 1 0 10a5 5 0 0 1 0-10m0 1.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7m10.03 9.465a2.87 2.87 0 0 0-4.06 0l-5 5a2.871 2.871 0 0 0 4.06 4.061l5-5a2.87 2.87 0 0 0 0-4.06m-3 1.061a1.371 1.371 0 1 1 1.94 1.94L19 17.94L17.06 16zm-2 4.94a.75.75 0 0 1 0 1.06l-1 1a.75.75 0 0 1-1.06-1.06l1-1a.75.75 0 0 1 1.06 0" /></svg>
+    </>
+  );
+};
