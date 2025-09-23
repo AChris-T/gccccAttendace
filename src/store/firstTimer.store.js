@@ -40,23 +40,26 @@ export const useFirstTimerStore = create((set, get) => ({
     }
   },
 
-createFirstTimer: async (payload) => {
-  set({ loading: true, error: null });
-  try {
-    const response = await FirstTimerService.create(payload);
-    return response;  // ✅ return it so FirstTimerPage can use it
-  } catch (error) {
-    set({
-      error:
-        error.response?.data?.message ||
-        'Failed to create first timer record',
-    });
-    return { error: error.response?.data?.message || 'Failed to create first timer record' }; // ✅ also return error
-  } finally {
-    set({ loading: false });
-  }
-},
-
+  createFirstTimer: async (payload) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await FirstTimerService.create(payload);
+      return response;
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.message ||
+          'Failed to create first timer record',
+      });
+      return {
+        error:
+          error.response?.data?.message ||
+          'Failed to create first timer record',
+      }; // ✅ also return error
+    } finally {
+      set({ loading: false });
+    }
+  },
 
   /** Update a first timer record */
   updateFirstTimer: async (id, payload) => {
@@ -90,11 +93,6 @@ createFirstTimer: async (payload) => {
     } finally {
       set({ loading: false });
     }
-  },
-
-  /** Pagination Handler */
-  setPage: async (page) => {
-    await get().fetchFirstTimers({ page });
   },
 
   /** Reset store */

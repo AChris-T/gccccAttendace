@@ -72,7 +72,6 @@ const FirstTimerPage = () => {
     try {
       const payload = {
         name: `${data.first_name} ${data.last_name}`,
-        slug: `${data.first_name.toLowerCase()}-${data.last_name.toLowerCase()}`,
         phone_number: data.phone_number,
         email: data.email,
         gender:
@@ -157,7 +156,7 @@ const FirstTimerPage = () => {
       <div className={containerClasses}>
         {step !== "complete" && (
           <div className="flex justify-center mb-6">
-            <img src="./images/logo/gccc.png" alt="Logo" className="h-16 w-auto" />
+            <img src="/images/logo/gccc.png" alt="Logo" className="h-16 w-auto" />
           </div>
         )}
 
