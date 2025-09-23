@@ -1,11 +1,24 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
+import { useEffect } from 'react';
 
 function ProtectedRoute() {
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const { isAuthenticated, resetAuth } = useAuthStore();
     const location = useLocation();
+    const navigate = useNavigate()
+    const url = `/login?redirect=${encodeURIComponent(location.pathname + location.search)}`
 
-    if (!isAuthenticated) return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`} replace />
+    const handleUnauthorized = () => {
+        resetAuth()
+        navigate(url, { replace: true })
+    }
+
+    useEffect(() => {
+        window.addEventListener('auth:unauthorized', handleUnauthorized);
+        return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    })
+
+    if (!isAuthenticated) return <Navigate to={url} replace />
 
     return <Outlet />;
 }

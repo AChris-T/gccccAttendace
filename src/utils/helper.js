@@ -1,41 +1,70 @@
 import dayjs from 'dayjs';
+import { textColors } from './constant';
 
-export function downloadCSV(data, filename = 'data.csv') {
-  if (!data || data.length === 0) {
-    console.error('No data available to download');
-    return;
+export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
+
+export function generateChartSeries(statusesPerMonth) {
+  if (!Array.isArray(statusesPerMonth) || statusesPerMonth.length === 0) {
+    return [];
   }
 
-  // Extract headers from keys of the first object
-  const headers = Object.keys(data[0]);
+  // Predefined fixed colors for certain statuses
+  const FIXED_COLORS = {
+    'Invited Again': '#f79009',
+    Contacted: '#0ba5ec',
+    'Not Contacted': '#667085',
+    Integrated: '#12b76a',
+    Visiting: '#465fff',
+    'Opt-out': '#f04438',
+  };
 
-  // Convert rows
-  const csvRows = [
-    headers.join(','), // header row
-    ...data.map((row) =>
-      headers
-        .map((field) => {
-          let val = row[field] ?? '';
-          // Escape quotes and commas properly
-          if (typeof val === 'string') {
-            val = `"${val.replace(/"/g, '""')}"`;
-          }
-          return val;
-        })
-        .join(',')
-    ),
-  ];
+  // Extract dynamic keys (all keys except 'month')
+  const allKeys = Object.keys(statusesPerMonth[0]).filter(
+    (key) => key !== 'month'
+  );
 
-  // Create blob and download
-  const blob = new Blob([csvRows.join('\n')], {
-    type: 'text/csv;charset=utf-8;',
+  // Helper to generate a truly random color that doesn't clash with fixed ones
+  const usedColors = new Set(Object.values(FIXED_COLORS));
+
+  const getRandomUniqueColor = () => {
+    let color;
+    do {
+      color = `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')}`;
+    } while (usedColors.has(color));
+    usedColors.add(color);
+    return color;
+  };
+
+  return allKeys.map((key) => {
+    const color =
+      FIXED_COLORS[key] ||
+      (['Second Timer', 'Third Timer', 'Fourth Timer'].includes(key)
+        ? getRandomUniqueColor()
+        : getRandomUniqueColor());
+
+    return {
+      type: 'bar',
+      xKey: 'month',
+      yKey: key,
+      yName: key,
+      stroke: color,
+      fill: color,
+      stacked: true,
+    };
   });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }
-export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
+export function toSlug(text) {
+  if (!text || typeof text !== 'string') return null;
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export const getRandomTextColor = () =>
+  textColors[Math.floor(Math.random() * textColors.length)];

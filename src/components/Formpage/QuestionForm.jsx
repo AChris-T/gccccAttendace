@@ -2,21 +2,34 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
+import { FormService } from '../../services/form.service';
+import Button from '../ui/Button';
 
 export default function QuestionForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log('Submitted data:', data);
+  const onSubmit = async (data) => {
+    try {
+      const payload = {
+        type: 'question',
+        content: data.message,
+      };
+      const response = await FormService.form(payload);
+      reset();
+      alert(response.message);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
-    <div className="text-white">
-      <h3 className="text-2xl font-semibold">Dear Friend</h3>
+    <div className="">
+      <h3 className="text-[#24244e] text-[24px] font-bold ">Dear Friend</h3>
       <h3 className="text-sm mt-2">
         Feel free to ask as many questions as you have, bible questions, life
         questions, or anything you haven’t gotten answers to. Just ask them all.
@@ -28,16 +41,19 @@ export default function QuestionForm() {
           name="message"
           register={register}
           rows={6}
+          required={true}
           cols={40}
           placeholder="Type your message here..."
           error={errors.message?.message}
         />
-        <button
+        <Button
           type="submit"
-          className="mt-3 bg-blue-500 text-white px-4 py-2 rounded"
+          loading={isSubmitting}
+          size="lg"
+          className="mt-3 bg-[#24244e]  text-white px-4 py-2 rounded"
         >
           Submit
-        </button>
+        </Button>
       </form>
     </div>
   );

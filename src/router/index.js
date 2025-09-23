@@ -1,29 +1,42 @@
-//homepage
+// homepage
 import HomeLayout from '../layout/HomeLayout';
 import NotfoundPage from '../pages/Error/NotfoundPage';
-import AttendancePage from '../pages/Home/AttendancePage';
 import LoginPage from '../pages/Home/Auth/LoginPage';
 import Formspage from '../pages/Home/FormPage';
+
 // dashboard
 import AppLayout from '../layout/AppLayout';
 import ProtectedRoute from '../providers/ProtectedRoute';
 import DashboardPage from '../pages/Dashboard/DashboardPage';
 import HomePage from '../pages/Home/HomePage';
+import AdminProtectedRoute from '../providers/AdminProtectedRoute';
+import UserProfilePage from '../pages/Dashboard/UserProfilePage';
+import AttendancePage from '../pages/Dashboard/AttendancePage';
+import FirstTimerPage from '../pages/Home/FirstTimerPage';
+import AdminDashboardPage from '../pages/Admin/AdminDashboardPage';
+import AdminFirstTimerPage from '../pages/Admin/AdminFirstTimerPage';
+import AdminMembersPage from '../pages/Admin/AdminMembersPage';
+import AdminAttendancePage from '../pages/Admin/AdminAttendancePage';
+import AdminUnitAndLeaderPage from '../pages/Admin/AdminUnitAndLeaderPage';
+import FirstTimerDetailsPage from '../pages/Dashboard/FirstTimerDetailsPage';
+import EventsPage from '../pages/Dashboard/EventsPage';
+import AdminFormPage from '../pages/Admin/AdminFormsPage';
+import AdminFormsPage from '../pages/Admin/AdminFormsPage';
 
 const AppRoutes = [
+  // Public Home Routes
   {
     path: '/',
     Component: HomeLayout,
     children: [
       {
+        // Protected Home Pages
         Component: ProtectedRoute,
-        children: [
-          { index: true, Component: HomePage },
-          { path: 'attendance', Component: AttendancePage },
-        ],
+        children: [{ index: true, Component: HomePage }],
       },
       { path: 'login', Component: LoginPage },
       { path: 'forms', Component: Formspage },
+      { path: 'first-timer/welcome', Component: FirstTimerPage },
     ],
   },
   {
@@ -31,12 +44,42 @@ const AppRoutes = [
     Component: ProtectedRoute,
     children: [
       {
-        path: '',
         Component: AppLayout,
-        children: [{ index: true, Component: DashboardPage }],
+        children: [
+          {
+            // Regular dashboard protected routes
+            Component: ProtectedRoute,
+            children: [
+              { index: true, Component: DashboardPage },
+              { path: 'attendance', Component: AttendancePage },
+              { path: 'profile', Component: UserProfilePage },
+              { path: 'events', Component: EventsPage },
+              {
+                path: 'first-timer/:firstTimerId',
+                Component: FirstTimerDetailsPage,
+              },
+            ],
+          },
+          {
+            // Admin-only protected routes
+            Component: AdminProtectedRoute,
+            children: [
+              { path: 'admin', Component: AdminDashboardPage },
+              { path: 'admin/attendance', Component: AdminAttendancePage },
+              { path: 'admin/first-timers', Component: AdminFirstTimerPage },
+              { path: 'admin/members', Component: AdminMembersPage },
+              { path: 'admin/forms', Component: AdminFormsPage },
+              {
+                path: 'admin/units-and-leaders',
+                Component: AdminUnitAndLeaderPage,
+              },
+            ],
+          },
+        ],
       },
     ],
   },
+  // 404 Page
   { path: '*', Component: NotfoundPage },
 ];
 

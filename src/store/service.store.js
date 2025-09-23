@@ -1,28 +1,24 @@
 import { create } from 'zustand';
 import { ServiceService } from '../services/service.service';
+import { handleApiError } from '../utils/error.helpers';
 
 export const useServiceStore = create((set) => ({
   service: null,
   canMark: false,
   loading: true,
   error: false,
-  message: null,
 
   fetchTodaysService: async () => {
-    set({ loading: true, error: false, message: null });
+    set({ loading: true, error: false });
     try {
-      const { data } = await ServiceService.getTodaysService();
-      set({
-        service: data?.service || null,
-        canMark: data?.can_mark || false,
-        message: 'success',
-      });
+      const {
+        data: { service, can_mark },
+      } = await ServiceService.getTodaysService();
+      set({ service: service, canMark: can_mark });
     } catch (error) {
-      const message =
-        error.response?.data?.message || 'Error, Please try later';
-      set({ error: true, message });
-    } finally {
-      set({ loading: false });
+      set({ error: true, loading: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
     }
   },
 

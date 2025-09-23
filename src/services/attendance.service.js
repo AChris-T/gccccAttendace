@@ -11,7 +11,6 @@ export const AttendanceService = {
     const { data } = await $api.get(`${ATTENDANCE}/history`);
     return data;
   },
-  //Mark all absent users absent for a service
   async markAbsentees(payload) {
     const { data } = await $api.post(`${ATTENDANCE}/mark-absentees`, payload);
     return data;

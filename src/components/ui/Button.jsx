@@ -14,11 +14,12 @@ const Button = ({
 }) => {
   // Size Classes
   const sizeClasses = {
-    sm: "h-8 text-sm",
-    md: "h-10 text-base",
-    lg: "h-12 text-base",
+    sm: "h-8 text-sm px-3",
+    md: "h-10 text-base px-4",
+    lg: "h-12 text-base px-5",
   };
 
+  // Variant Classes
   const variantClasses = {
     primary: "bg-blue-600 text-white hover:bg-blue-700",
     secondary: "bg-gray-600 text-white hover:bg-gray-700",
@@ -29,6 +30,7 @@ const Button = ({
     light: "bg-gray-100 text-black hover:bg-gray-200",
     dark: "bg-gray-900 text-white hover:bg-black",
 
+    // Outline variants
     "outline-primary":
       "bg-transparent border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white",
     "outline-secondary":
@@ -45,44 +47,32 @@ const Button = ({
       "bg-transparent border border-gray-100 text-gray-700 hover:bg-gray-100 hover:text-black",
     "outline-dark":
       "bg-transparent border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white",
+
+    // NEW Variant: Neutral (matches provided style)
+    neutral:
+      "rounded-full border border-gray-300 bg-white text-gray-700 shadow-theme-xs " +
+      "hover:bg-gray-50 hover:text-gray-800 " +
+      "dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 " +
+      "dark:hover:bg-white/[0.03] dark:hover:text-gray-200",
   };
 
   return (
     <button
       type={type}
-      className={`w-full inline-flex items-center justify-center gap-2 rounded-lg transition font-medium focus:outline-none ${sizeClasses[size]
-        } ${variantClasses[variant]} ${disabled || loading ? "cursor-not-allowed opacity-50" : ""
-        } ${className}`}
+      className={`inline-flex items-center justify-center gap-2 transition font-medium focus:outline-none 
+        ${sizeClasses[size]}
+        ${variantClasses[variant]}
+        ${disabled || loading ? "cursor-not-allowed opacity-50" : ""}
+        ${className}`}
       onClick={onClick}
       disabled={disabled || loading}
     >
       {startIcon && <span className="flex items-center">{startIcon}</span>}
       {children}
       {endIcon && <span className="flex items-center">{endIcon}</span>}
-      {loading && <LoadingIcon height={30} width={30} />}
+      {loading && <span className="flex items-center"><LoadingIcon height={30} width={30} /></span>}
     </button>
   );
 };
 
 export default Button;
-
-
-// type?: "button" | "submit" | "reset";
-// size?: "sm" | "md" | "lg";
-// variant?:
-// | "primary"
-// | "secondary"
-// | "success"
-// | "danger"
-// | "warning"
-// | "info"
-// | "light"
-// | "dark"
-// | "outline-primary"
-// | "outline-secondary"
-// | "outline-success"
-// | "outline-danger"
-// | "outline-warning"
-// | "outline-info"
-// | "outline-light"
-// | "outline-dark";

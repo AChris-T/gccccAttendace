@@ -78,8 +78,8 @@ export const useAttendanceStore = create((set, get) => ({
   fetchAllAttendance: async () => {
     set({ loading: true });
     try {
-      const response = await AttendanceService.getAllAttendance();
-      set({ allAttendance: response.data || [], loading: false });
+      const { data } = await AttendanceService.getAllAttendance();
+      set({ allAttendance: data || [], loading: false });
     } catch (error) {
       set({ loading: false });
     }
