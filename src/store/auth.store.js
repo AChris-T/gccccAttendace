@@ -1,18 +1,49 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AuthService } from '../services/auth.service';
-import { UserRole } from '../utils/constant';
+import { handleApiError } from '../utils/error.helpers';
+import {
+  hasRole as checkRole,
+  hasUnit as checkUnit,
+  getUserRoles,
+} from '../utils/auth.helpers';
+import { Toast } from '../lib/toastify';
+
+const initialState = {
+  user: null,
+  token: null,
+  isAuthenticated: false,
+  // Computed user properties (updated when user changes)
+  isAdmin: false,
+  isSuperAdmin: false,
+  isLeader: false,
+  isMember: false,
+  userRoles: [],
+  userUnits: [],
+  // Loading states
+  isLoginLoading: false,
+  isLogoutLoading: false,
+  isGetMeLoading: false,
+
+  isLoginError: false,
+  isLogoutError: false,
+  isGetMeError: false,
+};
 
 export const useAuthStore = create(
   persist(
-    (set) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      loading: false,
-      isAdmin: false,
-      isMember: false,
-      isLeader: false,
+    (set, get) => ({
+      ...initialState,
+
+      hasRole: (role) => {
+        const { user } = get();
+        return checkRole(user?.roles, role);
+      },
+
+      hasUnit: (unit) => {
+        const { user } = get();
+        return checkUnit(user?.units, unit);
+      },
 
       getMe: async () => {
         set({ loading: true });
@@ -28,34 +59,31 @@ export const useAuthStore = create(
       },
 
       login: async (credentials) => {
-        set({ loading: true });
+        set({ isLoginLoading: true, isLoginError: false });
         try {
           const { data } = await AuthService.login(credentials);
           const { token, user } = data;
-          const isAdmin = user?.role?.includes(
-            UserRole.ADMIN || UserRole.SUPER_ADMIN
-          );
-          const isLeader = user?.role?.includes(UserRole.LEADER);
-          const isMember = user?.role?.includes(UserRole.MEMBER);
-          await set({
+          const { isAdmin, isLeader, isMember } = getUserRoles(user?.roles);
+          set({
             token,
             user,
             isAdmin,
             isLeader,
             isMember,
             isAuthenticated: true,
+            isLoginLoading: false,
           });
+          Toast.success(`Welcome back, ${user?.first_name || 'User'}!`);
           return { user };
-        } catch (err) {
-          const message = err.response?.data?.message || 'Login failed';
-          throw new Error(message);
-        } finally {
-          set({ loading: false });
+        } catch (error) {
+          set({ isLoginLoading: false, isLoginError: true });
+          const errorDetails = handleApiError(error);
+          throw new Error(errorDetails.message);
         }
       },
 
       logout: async () => {
-        set({ loading: true });
+        set({ isLogoutLoading: true });
         try {
           await AuthService.logout();
           set({
@@ -65,13 +93,13 @@ export const useAuthStore = create(
             isLeader: false,
             isMember: false,
             isAuthenticated: false,
-            loading: false,
+            isLogoutLoading: false,
           });
-        } catch (err) {
-          const message = err.response?.data?.message || 'Login failed';
-          throw new Error(message);
-        } finally {
-          set({ loading: false });
+          Toast.info('You have been logged out successfully');
+        } catch (error) {
+          set({ isLogoutLoading: false });
+          const errorDetails = handleApiError(error);
+          throw new Error(errorDetails.message);
         }
       },
 
@@ -79,11 +107,22 @@ export const useAuthStore = create(
         set({
           user: null,
           token: null,
+          isAuthenticated: false,
+          // Computed user properties (updated when user changes)
           isAdmin: false,
+          isSuperAdmin: false,
           isLeader: false,
           isMember: false,
-          isAuthenticated: false,
-          loading: false,
+          userRoles: [],
+          userUnits: [],
+          // Loading states
+          isLoginLoading: false,
+          isLogoutLoading: false,
+          isGetMeLoading: false,
+
+          isLoginError: false,
+          isLogoutError: false,
+          isGetMeError: false,
         });
       },
     }),

@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login, loading } = useAuthStore();
+  const { login, isLoginLoading } = useAuthStore();
 
   const redirect = searchParams.get('redirect') || '/';
 
@@ -25,12 +25,9 @@ const LoginPage = () => {
       formattedPassword = formattedPassword.substring(1);
     }
     try {
-      const { user } = await login({ username, password: formattedPassword });
-      showToast(`Welcome back, ${user.first_name || user.last_name}`, 'success')
+      await login({ username, password: formattedPassword });
       navigate(redirect, { replace: true });
-    } catch (error) {
-      showToast(error.message, 'error')
-    }
+    } catch (error) { }
   };
 
   return (
@@ -76,7 +73,7 @@ const LoginPage = () => {
                   className="w-full  focus:outline-none py-[13px] px-2 rounded border-b-[1.8px] text-white bg-transparent"
                 />
               </div>
-              <Button type='submit' loading={loading} size='lg'>Sign In</Button>
+              <Button type='submit' loading={isLoginLoading} size='lg'>Sign In</Button>
             </form>
           </div>
         </div>

@@ -14,8 +14,8 @@ function ProtectedRoute() {
     }
 
     useEffect(() => {
-        window.addEventListener('unauthorized', handleUnauthorized);
-        return () => window.removeEventListener('unauthorized', handleUnauthorized);
+        window.addEventListener('auth:unauthorized', handleUnauthorized);
+        return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
     })
 
     if (!isAuthenticated) return <Navigate to={url} replace />

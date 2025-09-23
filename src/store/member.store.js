@@ -1,46 +1,30 @@
 import { create } from 'zustand';
 import { MemberService } from '../services/member.service';
-import { getErrorMessage } from '../utils/helper';
+import { handleApiError } from '../utils/error.helpers';
+import { Toast } from '../lib/toastify';
 
 export const useMemberStore = create((set, get) => ({
   // ====== STATE ======
   members: [],
-  pagination: null,
   loading: false,
+  loadingBulkUpdate: false,
   error: null,
-  currentPage: 1,
 
   selectedMember: null,
 
-  // ====== ACTIONS ======
-  setPage: (page) => {
-    set({ currentPage: page });
-    get().fetchMembers(page);
-  },
-  /** Fetch paginated members */ //limit = get().limit
-  fetchMembers: async (page = 1, limit = 50) => {
+  fetchMembers: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await MemberService.getAllMembers(page, limit); //limit
-      const { data, meta, links } = response;
-
-      set({
-        members: data,
-        pagination: { ...meta, links },
-        currentPage: page,
-      });
-
-      return response;
+      const { data } = await MemberService.getAllMembers();
+      set({ members: data, loading: false });
+      return data;
     } catch (error) {
-      const message = getErrorMessage(error, 'Failed to fetch members');
-      set({ error: message });
-      throw new Error(message);
-    } finally {
       set({ loading: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
     }
   },
 
-  /** Fetch a single member by ID */
   fetchMemberById: async (memberId) => {
     set({ loading: true, error: null });
     try {
@@ -48,15 +32,12 @@ export const useMemberStore = create((set, get) => ({
       set({ selectedMember: response.data });
       return response.data;
     } catch (error) {
-      const message = getErrorMessage(error, 'Failed to fetch member details');
-      set({ error: message });
-      throw new Error(message);
-    } finally {
       set({ loading: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
     }
   },
 
-  /** Create a new member */
   createMember: async (payload) => {
     set({ loading: true, error: null });
     try {
@@ -65,15 +46,12 @@ export const useMemberStore = create((set, get) => ({
       set({ members: [response.data, ...get().members] });
       return response.data;
     } catch (error) {
-      const message = getErrorMessage(error, 'Failed to create member');
-      set({ error: message });
-      throw new Error(message);
-    } finally {
       set({ loading: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
     }
   },
 
-  /** Update an existing member */
   updateMember: async (memberId, payload) => {
     set({ loading: true, error: null });
     try {
@@ -85,18 +63,14 @@ export const useMemberStore = create((set, get) => ({
       });
       return updatedMember.data;
     } catch (error) {
-      const message = getErrorMessage(error, 'Failed to update member');
-      set({ error: message });
-      throw new Error(message);
-    } finally {
       set({ loading: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
     }
   },
 
-  /** Delete member with Optimistic Update */
   deleteMember: async (memberId) => {
     const previousMembers = get().members;
-    // Optimistically update UI
     set({
       members: previousMembers.filter((m) => m.id !== memberId),
       error: null,
@@ -105,11 +79,25 @@ export const useMemberStore = create((set, get) => ({
     try {
       await MemberService.deleteMember(memberId);
     } catch (error) {
-      // Rollback in case of failure
       set({ members: previousMembers });
-      const message = getErrorMessage(error, 'Failed to delete member');
-      set({ error: message });
-      throw new Error(message);
+      set({ loading: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
+    }
+  },
+
+  bulkUpdate: async (payload) => {
+    set({ loadingBulkUpdate: true });
+
+    try {
+      const data = await MemberService.bulkUpdate(payload);
+      set({ loadingBulkUpdate: false });
+      Toast.success(data?.message);
+      get().fetchMembers();
+    } catch (error) {
+      set({ loadingBulkUpdate: false });
+      const errorDetails = handleApiError(error);
+      throw new Error(errorDetails.message);
     }
   },
 
@@ -119,10 +107,7 @@ export const useMemberStore = create((set, get) => ({
       members: [],
       selectedMember: null,
       loading: false,
+      loadingBulkUpdate: false,
       error: null,
-      page: 1,
-      limit: 10,
-      total: 0,
-      lastPage: 1,
     }),
 }));

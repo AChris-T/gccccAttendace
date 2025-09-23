@@ -1,6 +1,5 @@
-import { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { LoadingIcon } from "../../../assets/icons";
+import { LoadingIcon } from "../../icons";
 
 // size?: "sm" | "md" | "lg";
 // variant?:

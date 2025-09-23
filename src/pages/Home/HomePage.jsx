@@ -21,7 +21,7 @@ const HomePage = () => {
   const [searchParams] = useSearchParams();
   const { service, canMark, loading, error, fetchTodaysService, message } = useServiceStore();
   const { loading: isSubmitting, markAttendance } = useAttendanceStore();
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuthStore();
 
   let source = searchParams.get('source');
   source = source == 'online' ? source : 'onsite'
@@ -68,7 +68,6 @@ const HomePage = () => {
   }
 
   if (error) {
-    showToast(message, 'error')
     return (
       <div className="flex items-center justify-center w-full min-h-screen px-2">
         <div className="flex flex-col items-center gap-3 mb-5">

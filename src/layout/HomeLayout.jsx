@@ -2,11 +2,11 @@ import { NavLink, Outlet } from 'react-router-dom';
 import Navbar from '../components/header/Navbar';
 import { ScrollToTop } from '../components/common/ScrollToTop';
 import ProgressBar from '../providers/ProgressBar';
-import { useAuthStore } from '../store/auth.store';
 import { DashboardIcon, FormIcon, HomeIcon, LoadingIcon, LogoutIcon } from '../icons';
+import { useAuthStore } from '../store/auth.store';
 
 const LayoutContent = () => {
-    const { logout, loading, isAuthenticated, isAdmin } = useAuthStore();
+    const { logout, isLogoutLoading, isAuthenticated, isAdmin } = useAuthStore();
 
     return (
         <div
@@ -66,17 +66,18 @@ const LayoutContent = () => {
                                     Dashboard
                                 </NavLink>
                                 <NavLink
-                                    to='#'
                                     onClick={logout}
+                                    to='#'
                                     className={({ isActive }) =>
                                         `flex flex-col items-center rounded gap-[8px] h-[48px] px-2 text-[12px] font-medium ${isActive ? 'text-white' : 'text-[#ffffffa8]'
                                         }`
                                     }
                                 >
-                                    {loading ? <LoadingIcon /> : <LogoutIcon />}
+                                    {isLogoutLoading ? <LoadingIcon /> : <LogoutIcon />}
                                     Logout
                                 </NavLink>
-                            </>}
+                            </>
+                        }
                     </div>
                 </div>
             </div>

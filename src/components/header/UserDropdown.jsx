@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../../store/auth.store";
 import Button from "../ui/Button";
-import { ArrowDownIcon, AttendanceIcon2, LogoutIcon, UserIcon2 } from "../../icons";
+import { ArrowDownIcon, AttendanceIcon2, DashboardIcon, LogoutIcon, UserIcon2 } from "../../icons";
 import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import Avatar from "../ui/Avatar";
@@ -9,15 +9,10 @@ import { Image } from "../../utils/constant";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout, loading } = useAuthStore()
+  const { user, logout, isLogoutLoading, isAdmin } = useAuthStore()
 
-  function toggleDropdown() {
-    setIsOpen(!isOpen);
-  }
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
-  function closeDropdown() {
-    setIsOpen(false);
-  }
   return (
     <div className="relative">
       <button
@@ -34,7 +29,7 @@ export default function UserDropdown() {
 
       <Dropdown
         isOpen={isOpen}
-        onClose={closeDropdown}
+        onClose={toggleDropdown}
         className="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
       >
         <div>
@@ -49,7 +44,18 @@ export default function UserDropdown() {
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
           <li>
             <DropdownItem
-              onItemClick={closeDropdown}
+              onItemClick={toggleDropdown}
+              tag="a"
+              to={`${isAdmin ? '/dashboard/admin' : '/dashboard'}`}
+              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+            >
+              <DashboardIcon className="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300" />
+              Dashboard
+            </DropdownItem>
+          </li>
+          <li>
+            <DropdownItem
+              onItemClick={toggleDropdown}
               tag="a"
               to="/dashboard/profile"
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -60,7 +66,7 @@ export default function UserDropdown() {
           </li>
           <li>
             <DropdownItem
-              onItemClick={closeDropdown}
+              onItemClick={toggleDropdown}
               tag="a"
               to="/dashboard/attendance"
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -70,7 +76,7 @@ export default function UserDropdown() {
             </DropdownItem>
           </li>
         </ul>
-        <Button loading={loading} className="mt-2" onClick={logout} variant='neutral' startIcon={<LogoutIcon width={18} height={18} />}>Sign out</Button>
+        <Button loading={isLogoutLoading} className="mt-2" onClick={logout} variant='neutral' startIcon={<LogoutIcon width={18} height={18} />}>Sign out</Button>
       </Dropdown>
     </div>
   );

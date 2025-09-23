@@ -5,10 +5,32 @@ export const UserRole = Object.freeze({
   MEMBER: 'member',
   FIRST_TIMER: 'first_timer',
 });
+
+export const Units = {
+  PRAYER_WORSHIP: 'Prayer Worship',
+  MEDIA: 'Media',
+  FOLLOW_UP: 'Follow Up',
+  WELFARE: 'Welfare',
+  CHILDREN: 'Children',
+  SOUND: 'Sound',
+  SANITATION: 'Sanitation',
+  USHERING: 'Ushering',
+  FSP: 'FSP',
+};
+
+export const LoadingStates = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error',
+};
+
 export const Image = 'https://i.pravatar.cc/400?img=59';
+
 export const years = [
   2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035,
 ];
+
 export const monthNames = [
   'January',
   'February',
@@ -23,6 +45,7 @@ export const monthNames = [
   'November',
   'December',
 ];
+
 export const followupCommentTypes = [
   'Pre-Service',
   'Post-Service',

@@ -2,12 +2,7 @@ import dayjs from 'dayjs';
 import { textColors } from './constant';
 
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
-export const getErrorMessage = (
-  error,
-  defaultMessage = 'Something went wrong'
-) => {
-  return error?.response?.data?.message || defaultMessage;
-};
+
 export function generateChartSeries(statusesPerMonth) {
   if (!Array.isArray(statusesPerMonth) || statusesPerMonth.length === 0) {
     return [];

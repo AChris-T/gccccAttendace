@@ -169,6 +169,24 @@ layer(base);
   --z-index-999999: 999999;
 }
 
+.ag-input-field-input:focus {
+  border: 1.5px solid var(--color-blue-300) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.ag-picker-field-wrapper,
+.ag-wrapper.ag-picker-field-wrapper.ag-picker-expanded {
+  border: 1px solid var(--color-gray-300);
+  outline: none !important;
+  box-shadow: none !important;
+}
+.ag-wrapper.ag-picker-field-wrapper.ag-picker-collasped,
+.ag-wrapper.ag-picker-field-wrapper.ag-picker-collasped:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 #nprogress .bar {
   background: var(--color-red-600) !important; /* red */
   height: 3px !important; /* adjust thickness */
