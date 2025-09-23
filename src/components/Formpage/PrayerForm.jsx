@@ -4,8 +4,10 @@ import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
+import useToastify from '../../hooks/useToastify';
 
 export default function PrayerForm() {
+  const { showToast } = useToastify();
   const {
     register,
     handleSubmit,
@@ -21,9 +23,9 @@ export default function PrayerForm() {
       };
       const response = await FormService.form(payload);
       reset();
-      alert(response.message);
+      showToast(response.message, 'success');
     } catch (error) {
-      alert(error.message);
+      showToast(error.message, 'error');
     }
   };
 

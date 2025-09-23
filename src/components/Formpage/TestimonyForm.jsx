@@ -27,9 +27,9 @@ export default function TestimonyForm() {
       };
       const response = await FormService.form(payload);
       reset();
-      showToast(response.message);
+      showToast(response.message, 'success');
     } catch (error) {
-      alert(error.message);
+      showToast(error.message, 'error');
     }
   };
 

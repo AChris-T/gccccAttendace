@@ -4,8 +4,10 @@ import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
+import useToastify from '../../hooks/useToastify';
 
 export default function QuestionForm() {
+  const { showToast } = useToastify();
   const {
     register,
     handleSubmit,
@@ -21,15 +23,15 @@ export default function QuestionForm() {
       };
       const response = await FormService.form(payload);
       reset();
-      alert(response.message);
+      showToast(response.message, 'success');
     } catch (error) {
-      alert(error.message);
+      showToast(error.message, 'error');
     }
   };
 
   return (
     <div className="">
-      <h3 className="text-[#24244e] text-[24px] font-bold ">Dear Friend</h3>
+      <h3 className="text-[#24244e] text-[24px] font-bold ">Dear Friend </h3>
       <h3 className="text-sm mt-2">
         Feel free to ask as many questions as you have, bible questions, life
         questions, or anything you haven’t gotten answers to. Just ask them all.

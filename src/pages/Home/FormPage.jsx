@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QuestionForm from '../../components/Formpage/QuestionForm';
 import PrayerForm from '../../components/Formpage/PrayerForm';
 import TestimonyForm from '../../components/Formpage/TestimonyForm';
+import Animated from '../../components/common/Animated';
 
 export default function FormPage() {
   const [activeTab, setActiveTab] = useState('Question');
@@ -26,13 +27,13 @@ export default function FormPage() {
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="w-full mx-2 md:max-w-xl md:mx-auto h-[80vh] custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 mt-20 mb-20 md:mt-20 lg:mt-20">
-        <div className="mb-4 flex justify-center">
+        <Animated animation="fade-down" duration={0.5} easing="ease-out" className="mb-4 flex justify-center">
           <img
             src={tabs.find((t) => t.name === activeTab)?.image}
             alt={activeTab}
             className="h-32 w-xl object-contain"
           />
-        </div>
+        </Animated>
 
         <div className="flex space-x-0 border-b">
           {tabs.map((tab) => (
@@ -51,11 +52,11 @@ export default function FormPage() {
           ))}
         </div>
 
-        <div className="mt-6">
+        <Animated key={activeTab} animation="fade-up" duration={0.5} easing="ease-out" className="mt-6">
           {activeTab === 'Question' && <QuestionForm />}
           {activeTab === 'Prayer Request' && <PrayerForm />}
           {activeTab === 'Testimony' && <TestimonyForm />}
-        </div>
+        </Animated>
       </div>
     </div>
   );
