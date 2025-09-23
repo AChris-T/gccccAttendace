@@ -7,6 +7,28 @@ layer(base);
   scrollbar-width: none;
 }
 
+.scrollable {
+  height: 80vh;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 0.5) rgba(200, 200, 200, 0.2);
+}
+
+.scrollale::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: rgba(200, 200, 200, 0.2);
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5);
+  border-radius: 10px;
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
