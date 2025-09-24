@@ -13,12 +13,11 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "ag-charts-react": "^12.2.0",
+    "ag-grid-community": "^34.2.0",
     "ag-grid-react": "^34.2.0",
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
-    "file-saver": "^2.0.5",
-    "flatpickr": "^4.6.13",
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
     "nprogress": "^0.2.0",

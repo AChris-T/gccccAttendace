@@ -20,7 +20,6 @@ const FirstTimerPage = () => {
   const { createFirstTimer } = useFirstTimerStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
-
   const { showToast } = useToastify();
 
   const {

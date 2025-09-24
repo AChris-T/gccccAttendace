@@ -41,7 +41,7 @@ const HomePage = () => {
       };
       const { message } = await markAttendance(payload);
       showToast(message || 'Attendance submitted successfully', 'success')
-      navigate(`/attendance`);
+      navigate(`/dashboard`);
     } catch (error) {
       showToast(error.message || 'Attendance submission failed', 'error')
     }

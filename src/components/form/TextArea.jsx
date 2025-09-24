@@ -3,6 +3,7 @@ import React from 'react';
 const TextArea = ({
   label,
   name,
+  required = false,
   register,
   error,
   placeholder,
@@ -11,16 +12,15 @@ const TextArea = ({
 }) => {
   return (
     <div>
-      {label && (
-        <label htmlFor={name} className="block font-medium mb-1 text-xs">
-          {label}
-        </label>
-      )}
+      {label && <p className="block font-medium mb-1 text-sm">{label}</p>}
+
       <textarea
         id={name}
         rows={rows}
         cols={cols}
-        {...register(name)}
+        {...register(name, {
+          required: required ? `${label} is required` : false,
+        })}
         className={`w-full text-xs font-light rounded-lg p-3 focus:outline-gray-200 focus:outline border ${
           error ? 'border-red-500' : 'border-gray-300'
         }`}

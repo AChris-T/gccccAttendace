@@ -14,7 +14,7 @@ export const useServiceStore = create((set) => ({
       const {
         data: { service, can_mark },
       } = await ServiceService.getTodaysService();
-      set({ service: service, canMark: can_mark });
+      set({ service: service, canMark: can_mark, loading: false });
     } catch (error) {
       set({ error: true, loading: false });
       const errorDetails = handleApiError(error);

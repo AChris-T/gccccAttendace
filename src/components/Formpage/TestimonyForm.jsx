@@ -1,35 +1,54 @@
-// QuestionForm.jsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import InputForm from '../form/InputForm';
+import { FormService } from '../../services/form.service';
+import Button from '../ui/Button';
+import useToastify from '../../hooks/useToastify';
 
 export default function TestimonyForm() {
+  const { showToast } = useToastify();
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log('Submitted data:', data);
+  const onSubmit = async (data) => {
+    try {
+      const payload = {
+        type: 'testimony',
+        content: data.message,
+        name: data.name,
+        phone_number: data.phone,
+        wants_to_share_testimony: data.sharePhysically === 'Yes',
+      };
+      const response = await FormService.form(payload);
+      reset();
+      showToast(response.message, 'success');
+    } catch (error) {
+      showToast(error.message, 'error');
+    }
   };
 
   return (
-    <div className="text-white">
-      <h3 className="text-2xl font-semibold">Hi Friend</h3>
+    <div className="">
+      <h3 className="text-[#24244e] text-[24px] font-bold ">Hi Friend</h3>
       <h3 className="text-sm mt-2">
         At the GCCC Ibadan, we have a culture of sharing with the family of God
         what the Lord has done.
       </h3>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mt-4 grid gap-4  grid-cols-1 md:grid-cols-2">
+        <div className="mt-4 grid space-x-2 grid-cols-1 md:grid-cols-2">
           <div>
             <InputForm
               label="Name"
               name="name"
               type="text"
+              required={true}
               register={register}
               error={errors.name?.message}
               placeholder="Enter Your Name"
@@ -39,18 +58,20 @@ export default function TestimonyForm() {
             <InputForm
               label="Phone Number"
               name="phone"
+              required={true}
               type="text"
               register={register}
               error={errors.phone?.message}
               placeholder="Enter Your Phone Number"
             />
           </div>
-          <div className="">
+          <div className="md:col-span-2">
             <TextArea
               label="What are your questions?"
               name="message"
               register={register}
               rows={6}
+              required={true}
               cols={40}
               placeholder="Type your message here..."
               error={errors.message?.message}
@@ -95,12 +116,14 @@ export default function TestimonyForm() {
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
-          className="mt-5 bg-blue-500 text-white px-4 py-2 rounded"
+          loading={isSubmitting}
+          size="lg"
+          className="mt-3 bg-[#24244e]  text-white px-4 py-2 rounded"
         >
           Submit
-        </button>
+        </Button>
       </form>
     </div>
   );
