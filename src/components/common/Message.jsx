@@ -23,9 +23,9 @@ export default function Message({ variant = "info", data, onClose, className }) 
             className={`relative p-4 mb-4 border rounded-lg ${className} ${variantStyles[variant]} shadow`}
             role="alert"
         >
-            <p className="font-medium text-sm">{data?.message}</p>
+            <p className="font-medium text-sm truncate">{data?.message}</p>
             {data?.errors &&
-                <ul className="mt-2 list-disc list-inside space-y-1 text-sm">
+                <ul className="mt-2 list-disc list-inside space-y-1 text-sm truncate">
                     {Object.entries(data?.errors).map(([field, messages]) =>
                         messages?.map((msg, i) => (
                             <li key={`${field}-${i}`}>
