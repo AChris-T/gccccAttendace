@@ -1,13 +1,12 @@
-// QuestionForm.jsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
-import useToastify from '../../hooks/useToastify';
+// import useToastify from '../../hooks/useToastify';
 
 export default function QuestionForm() {
-  const { showToast } = useToastify();
+  // const { showToast } = useToastify();
   const {
     register,
     handleSubmit,
@@ -23,9 +22,9 @@ export default function QuestionForm() {
       };
       const response = await FormService.form(payload);
       reset();
-      showToast(response.message, 'success');
+      // showToast(response.message, 'success');
     } catch (error) {
-      showToast(error.message, 'error');
+      // showToast(error.message, 'error');
     }
   };
 

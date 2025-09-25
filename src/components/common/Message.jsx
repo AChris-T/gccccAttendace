@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { CloseIcon } from "../../icons";
-import Button from "./Button";
 
 const variantStyles = {
     success: "bg-green-100 border-green-400 text-green-800",
@@ -9,7 +8,7 @@ const variantStyles = {
     info: "bg-blue-100 border-blue-400 text-blue-800",
 };
 
-export default function Alert({ variant = "info", message, onClose, className, onClick, loading = false }) {
+export default function Message({ variant = "info", data, onClose, className }) {
     const [visible, setVisible] = useState(true);
 
     if (!visible) return null;
@@ -24,13 +23,19 @@ export default function Alert({ variant = "info", message, onClose, className, o
             className={`relative p-4 mb-4 border rounded-lg ${className} ${variantStyles[variant]} shadow`}
             role="alert"
         >
-            {message && <div className="flex items-center justify-center h-64 rounded-lg">
-                <div className="text-center">
-                    <p className="text-red-600 font-medium">Error!!!</p>
-                    <p className="text-red-500 text-sm mt-1">{message}</p>
-                    <Button loading={loading} onClick={() => onClick()} variant="outline-danger" className="rounded px-5 my-2">Retry</Button>
-                </div>
-            </div>}
+            <p className="font-medium text-sm">{data?.message}</p>
+            {data?.errors &&
+                <ul className="mt-2 list-disc list-inside space-y-1 text-sm">
+                    {Object.entries(data?.errors).map(([field, messages]) =>
+                        messages?.map((msg, i) => (
+                            <li key={`${field}-${i}`}>
+                                <span>{field}</span>: {msg}
+                            </li>
+                        ))
+                    )}
+                </ul>
+            }
+
             <button
                 type="button"
                 className="absolute top-2 right-2 text-lg leading-none"

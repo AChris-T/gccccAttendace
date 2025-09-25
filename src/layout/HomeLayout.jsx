@@ -1,12 +1,14 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import Navbar from '../components/header/Navbar';
-import { ScrollToTop } from '../components/common/ScrollToTop';
-import ProgressBar from '../providers/ProgressBar';
 import { DashboardIcon, FormIcon, HomeIcon, LoadingIcon, LogoutIcon } from '../icons';
+import ProgressBar from '../components/others/ProgressBar';
+import { ScrollToTop } from '../components/others/ScrollToTop';
+import { useLogout } from '../hooks/queries/auth.query';
 import { useAuthStore } from '../store/auth.store';
 
 const LayoutContent = () => {
-    const { logout, isLogoutLoading, isAuthenticated, isAdmin } = useAuthStore();
+    const { mutate, isPending } = useLogout()
+    const { isAuthenticated, isAdmin } = useAuthStore();
 
     return (
         <div
@@ -33,16 +35,6 @@ const LayoutContent = () => {
                             <HomeIcon width={20} height={20} />
                             Home
                         </NavLink>
-                        {/* <NavLink
-                            to={`/attendance`}
-                            className={({ isActive }) =>
-                                `flex flex-col items-center rounded gap-[8px] h-[48px] px-2 text-[12px] font-medium ${isActive ? 'text-white' : 'text-[#ffffffa8]'
-                                }`
-                            }
-                        >
-                            <AttendanceIcon2 height={30} width={30} />
-                            Attendance
-                        </NavLink> */}
                         <NavLink
                             to={`/forms`}
                             className={({ isActive }) =>
@@ -66,14 +58,14 @@ const LayoutContent = () => {
                                     Dashboard
                                 </NavLink>
                                 <NavLink
-                                    onClick={logout}
+                                    onClick={mutate}
                                     to='#'
                                     className={({ isActive }) =>
                                         `flex flex-col items-center rounded gap-[8px] h-[48px] px-2 text-[12px] font-medium ${isActive ? 'text-white' : 'text-[#ffffffa8]'
                                         }`
                                     }
                                 >
-                                    {isLogoutLoading ? <LoadingIcon /> : <LogoutIcon />}
+                                    {isPending ? <LoadingIcon /> : <LogoutIcon />}
                                     Logout
                                 </NavLink>
                             </>

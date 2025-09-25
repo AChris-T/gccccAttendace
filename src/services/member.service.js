@@ -1,6 +1,6 @@
 import $api from '../lib/axios';
 
-const MEMBER = '/members';
+const MEMBER = '/admin/members';
 
 export const MemberService = {
   async createMember(payload) {
@@ -8,7 +8,7 @@ export const MemberService = {
     return data;
   },
 
-  async getAllMembers(page, limit) {
+  async getAllMembers() {
     const { data } = await $api.get(`${MEMBER}`);
     return data;
   },

@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { useAuthStore } from "../../store/auth.store";
 import Button from "../ui/Button";
 import { ArrowDownIcon, AttendanceIcon2, DashboardIcon, LogoutIcon, UserIcon2 } from "../../icons";
 import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import Avatar from "../ui/Avatar";
 import { Image } from "../../utils/constant";
+import { useLogout } from "../../hooks/queries/auth.query";
+import { useAuthStore } from "../../store/auth.store";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout, isLogoutLoading, isAdmin } = useAuthStore()
+  const { user, isAdmin } = useAuthStore()
+  const { mutate, isPending, isError, error } = useLogout()
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -76,7 +78,7 @@ export default function UserDropdown() {
             </DropdownItem>
           </li>
         </ul>
-        <Button loading={isLogoutLoading} className="mt-2" onClick={logout} variant='neutral' startIcon={<LogoutIcon width={18} height={18} />}>Sign out</Button>
+        <Button loading={isPending} className="mt-2" onClick={mutate} variant='neutral' startIcon={<LogoutIcon width={18} height={18} />}>Sign out</Button>
       </Dropdown>
     </div>
   );

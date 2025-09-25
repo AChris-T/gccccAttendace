@@ -84,7 +84,7 @@ export const Step2FriendFamilyLocation = ({ register, errors }) => (
 
 export const Step3Interest = ({ register, errors }) => (
   <InputForm
-    label="Would you be interested in becoming a consistent member of GCCC?"
+    label="Would you be interested in becoming a consistent member of GCCC either online or onsite?"
     name="interest"
     type="radio"
     register={register}

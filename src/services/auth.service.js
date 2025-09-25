@@ -15,4 +15,14 @@ export const AuthService = {
     const { data } = await $api.post('/logout');
     return data;
   },
+
+  // authenticated user
+  uploadAvatar: async (id, file) => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    const { data } = await $api.post(`/users/${id}/avatar`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return data;
+  },
 };

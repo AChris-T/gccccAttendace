@@ -6,10 +6,9 @@ import Formspage from '../pages/Home/FormPage';
 
 // dashboard
 import AppLayout from '../layout/AppLayout';
-import ProtectedRoute from '../providers/ProtectedRoute';
 import DashboardPage from '../pages/Dashboard/DashboardPage';
 import HomePage from '../pages/Home/HomePage';
-import AdminProtectedRoute from '../providers/AdminProtectedRoute';
+
 import UserProfilePage from '../pages/Dashboard/UserProfilePage';
 import AttendancePage from '../pages/Dashboard/AttendancePage';
 import FirstTimerPage from '../pages/Home/FirstTimerPage';
@@ -20,8 +19,9 @@ import AdminAttendancePage from '../pages/Admin/AdminAttendancePage';
 import AdminUnitAndLeaderPage from '../pages/Admin/AdminUnitAndLeaderPage';
 import FirstTimerDetailsPage from '../pages/Dashboard/FirstTimerDetailsPage';
 import EventsPage from '../pages/Dashboard/EventsPage';
-import AdminFormPage from '../pages/Admin/AdminFormsPage';
 import AdminFormsPage from '../pages/Admin/AdminFormsPage';
+import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
+import ProtectedRoute from '../layout/Protected/ProtectedRoute';
 
 const AppRoutes = [
   // Public Home Routes

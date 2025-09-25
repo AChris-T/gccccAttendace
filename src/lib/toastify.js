@@ -1,20 +1,19 @@
-// utils/toast.js
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-let activeToastId = null;
-
-const dismissActiveToast = () => {
-  if (activeToastId !== null) {
-    toast.dismiss(activeToastId);
-    activeToastId = null;
+class ToastService {
+  constructor() {
+    this.activeToastId = null;
   }
-};
 
-const createToastMethod =
-  (toastType) =>
-  (message, options = {}) => {
-    const defaultOptions = {
+  dismissActiveToast() {
+    if (this.activeToastId !== null) {
+      toast.dismiss(this.activeToastId);
+      this.activeToastId = null;
+    }
+  }
+
+  showToast(message, type = 'default', options = {}) {
+    const toastOptions = {
       position: 'top-right',
       autoClose: 4000,
       hideProgressBar: true,
@@ -24,46 +23,45 @@ const createToastMethod =
       ...options,
     };
 
-    // Dismiss any existing toast
-    dismissActiveToast();
+    this.dismissActiveToast();
 
-    // Get the appropriate toast method
-    const toastMethod = toast[toastType] || toast;
+    const toastHandlers = {
+      success: toast.success,
+      error: toast.error,
+      info: toast.info,
+      warning: toast.warning,
+      default: toast,
+    };
 
-    // Show the toast and store its ID
-    const toastId = toastMethod(message, defaultOptions);
-    activeToastId = toastId;
-
+    const toastHandler = toastHandlers[type];
+    const toastId = toastHandler(message, toastOptions);
+    this.activeToastId = toastId;
     return toastId;
-  };
+  }
 
-// Create the Toast object with all methods
-export const Toast = {
-  success: createToastMethod('success'),
-  error: createToastMethod('error'),
-  info: createToastMethod('info'),
-  warning: createToastMethod('warning'),
-  warn: createToastMethod('warning'), // Alias for warning
-  default: createToastMethod('default'),
+  success(message, options) {
+    return this.showToast(message, 'success', options);
+  }
 
-  // Additional utility methods
-  dismiss: () => {
-    dismissActiveToast();
-  },
+  error(message, options) {
+    return this.showToast(message, 'error', options);
+  }
 
-  dismissAll: () => {
-    toast.dismiss();
-    activeToastId = null;
-  },
+  info(message, options) {
+    return this.showToast(message, 'info', options);
+  }
 
-  // For backwards compatibility
-  show: (message, type = 'default', options = {}) => {
-    return Toast[type]
-      ? Toast[type](message, options)
-      : Toast.default(message, options);
-  },
-};
+  warning(message, options) {
+    return this.showToast(message, 'warning', options);
+  }
 
-// Named export for backwards compatibility
-export const showToast = Toast.show;
-export const dismissToast = Toast.dismiss;
+  default(message, options) {
+    return this.showToast(message, 'default', options);
+  }
+
+  dismiss() {
+    this.dismissActiveToast();
+  }
+}
+
+export const Toast = new ToastService();

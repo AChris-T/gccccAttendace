@@ -1,23 +1,19 @@
 
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useEffect, useRef } from 'react';
-import { useFirstTimerStore } from "../../../store/firstTimer.store";
+import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Badge from '../../ui/Badge';
 import { Link } from "react-router-dom";
 import Button from '../../ui/Button';
+import { useFirstTimers } from '../../../hooks/queries/firstTimer.query';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const FirstTimersTable = () => {
-    const { fetchFirstTimers, loading, error, firstTimers } = useFirstTimerStore();
+    const { data: firstTimers, isLoading, isFetching, isError, error, refetch } = useFirstTimers()
+
     const gridRef = useRef(null);
 
-    useEffect(() => {
-        fetchFirstTimers();
-    }, [fetchFirstTimers]);
-
-    // Default column configuration with editing capabilities
     const defaultColDef = useMemo(() => ({
         flex: 1,
         filter: true,
@@ -146,13 +142,13 @@ const FirstTimersTable = () => {
         defaultColDef,
         columnDefs,
         rowData: firstTimers,
-        loading: loading,
+        loading: isLoading || isFetching,
         suppressColumnVirtualisation: false,
         suppressRowVirtualisation: false,
         suppressHorizontalScroll: false,
         alwaysShowHorizontalScroll: false,
         stopEditingWhenCellsLoseFocus: true,
-    }), [defaultColDef, columnDefs, firstTimers, loading]);
+    }), [defaultColDef, columnDefs, firstTimers, isLoading, isFetching]);
 
     // Event handlers
     const onGridReady = useCallback((params) => {
@@ -163,8 +159,7 @@ const FirstTimersTable = () => {
     // Error state
     if (error) return <Alert onClick={fetchMembers} variant='error' message={error} />
 
-    // Loading state
-    if (loading && !firstTimers?.length) {
+    if (isLoading || isFetching && !firstTimers?.length) {
         return (
             <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="text-center">
@@ -192,8 +187,8 @@ const FirstTimersTable = () => {
                 <Button
                     className='rounded px-5'
                     variant='outline-dark'
-                    onClick={() => fetchFirstTimers()}
-                    loading={loading}
+                    onClick={() => refetch()}
+                    loading={isFetching}
                 >
                     Refresh
                 </Button>

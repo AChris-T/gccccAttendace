@@ -1,21 +1,14 @@
-import { useEffect } from 'react';
 import dayjs from 'dayjs';
-import { useAttendanceStore } from '../../store/attendance.store';
 import { LoadingIcon } from '../../icons';
 import { formatDisplayDate } from '../../utils/helper'
 import PageMeta from '../../components/common/PageMeta';
 import PageBreadcrumb from '../../components/common/PageBreadCrumb';
 import ComponentCard from '../../components/common/ComponentCard';
+import { useAttendanceHistory } from '../../hooks/queries/attendance.query';
 
 
 export default function AttendancePage() {
-    const { filteredAttendanceHistory, fetchAttendanceHistory, selectedMonth, setSelectedMonth, loading } = useAttendanceStore();
-
-    useEffect(() => {
-        fetchAttendanceHistory();
-    }, [fetchAttendanceHistory]);
-
-    const filteredResults = filteredAttendanceHistory() || [];
+    const { data: filteredResults = [], isLoading } = useAttendanceHistory()
 
     return (
         <>
@@ -28,7 +21,7 @@ export default function AttendancePage() {
                             <div className="bg-[#2E2E44] w-full p-5 rounded-lg min-w-full">
                                 <div className="flex flex-col-reverse items-start justify-between w-full gap-4 md:flex-row md:items-center">
                                     <div className="flex flex-wrap items-center justify-center w-full gap-3 md:justify-start">
-                                        <div className="h-14 py-3  rounded-lg px-2 font-medium text-sm border-[#444466] border bg-[#1E1E2F]">
+                                        {/* <div className="h-14 py-3  rounded-lg px-2 font-medium text-sm border-[#444466] border bg-[#1E1E2F]">
                                             <select
                                                 className="bg-[#1E1E2F] w-full pr-5 text-white  h-full focus:outline-none"
                                                 value={selectedMonth}
@@ -46,7 +39,7 @@ export default function AttendancePage() {
                                                     );
                                                 })}
                                             </select>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="items-center justify-center hidden w-full gap-2 md:flex md:justify-end">
                                         <h3 className="text-white">Current Streak:</h3>
@@ -57,7 +50,7 @@ export default function AttendancePage() {
                                 </div>
 
                                 <div>
-                                    {loading ? (
+                                    {isLoading ? (
                                         <div className="flex items-center justify-center w-full h-64">
                                             <div className="text-xl text-white">
                                                 <LoadingIcon height={50} width={50} />
@@ -126,31 +119,6 @@ export default function AttendancePage() {
                                                     </table>
                                                 </div>
                                             </div>
-                                            {/* <div className="flex flex-col items-center justify-between w-full gap-2 mt-4 z-60 md:flex-row">
-                  <div className="flex items-center gap-2 mb-2 md:mb-0">
-                    <span className="text-sm text-white">Show</span>
-                    <select
-                      className="bg-[#23233a] text-white border border-[#444466] rounded px-2 py-1 cursor-pointer hover:bg-[#2E2E44] transition-colors"
-                      value={state.itemsPerPage}
-                      onChange={(e) =>
-                        setState((prev) => ({
-                          ...prev,
-                          itemsPerPage: Number(e.target.value),
-                          currentPage: 1,
-                        }))
-                      }
-                    >
-                      {[4, 10].map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="flex text-sm text-white">
-                      from {filteredResults?.length}
-                    </span>
-                  </div>
-                </div> */}
                                         </>
                                     )}
                                 </div>
@@ -159,7 +127,6 @@ export default function AttendancePage() {
                     </div>
                 </ComponentCard>
             </div>
-
         </>
     );
 }

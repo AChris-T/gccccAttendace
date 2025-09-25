@@ -7,8 +7,6 @@ import Animated from "../../common/Animated"
 const AttendanceFilter = () => {
     const [value, setValue] = useState([])
     function handleChange(value) {
-        console.log({ value })
-        //your modification on passed value ....
         setValue(value)
     }
     return (

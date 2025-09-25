@@ -3,8 +3,8 @@ import { Outlet } from "react-router-dom";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
 import AppHeader from "./AppHeader";
-import ProgressBar from "../providers/ProgressBar";
-import { ScrollToTop } from "../components/common/ScrollToTop";
+import { ScrollToTop } from "../components/others/ScrollToTop";
+import ProgressBar from "../components/others/ProgressBar";
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();

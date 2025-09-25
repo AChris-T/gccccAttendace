@@ -1,15 +1,15 @@
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/auth.store';
+import { useAuthStore } from '../../store/auth.store';
 import { useEffect } from 'react';
 
 function ProtectedRoute() {
-    const { isAuthenticated, resetAuth } = useAuthStore();
+    const { isAuthenticated, resetAuthenticatedUser } = useAuthStore();
     const location = useLocation();
     const navigate = useNavigate()
     const url = `/login?redirect=${encodeURIComponent(location.pathname + location.search)}`
 
     const handleUnauthorized = () => {
-        resetAuth()
+        resetAuthenticatedUser()
         navigate(url, { replace: true })
     }
 

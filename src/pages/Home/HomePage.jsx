@@ -1,53 +1,41 @@
-import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import Lottie from 'lottie-react';
 import { motion } from 'framer-motion';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import animationData from '../../utils/animation.json'
 import { CheckedIcon, HandIcon } from '../../icons';
-import useToastify from '../../hooks/useToastify';
 import { useAuthStore } from '../../store/auth.store';
-import { useServiceStore } from '../../store/service.store';
-import { useAttendanceStore } from '../../store/attendance.store';
+import { useTodaysService } from '../../hooks/queries/service.query';
+import { useMarkAttendance } from '../../hooks/queries/attendance.query';
+import { Toast } from '../../lib/toastify';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(isoWeek);
 
 const HomePage = () => {
-  const { showToast } = useToastify()
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { service, canMark, loading, error, fetchTodaysService, message } = useServiceStore();
-  const { loading: isSubmitting, markAttendance } = useAttendanceStore();
+  const { data, isLoading, isError } = useTodaysService()
+  const { service, canMark } = data || {}
+  const { mutate, isPending } = useMarkAttendance()
   const { user } = useAuthStore();
 
   let source = searchParams.get('source');
   source = source == 'online' ? source : 'onsite'
 
-  useEffect(() => {
-    fetchTodaysService();
-  }, [fetchTodaysService]);
-
   const handleButtonClick = async (e) => {
     e.preventDefault();
-    if (!service.id) return showToast('Service Day not found, please try again later.', 'error');
-    try {
-      const payload = {
-        service_id: service.id,
-        mode: source,
-        status: 'present',
-      };
-      const { message } = await markAttendance(payload);
-      showToast(message || 'Attendance submitted successfully', 'success')
-      navigate(`/dashboard`);
-    } catch (error) {
-      showToast(error.message || 'Attendance submission failed', 'error')
-    }
+    if (!service.id) return Toast.warning('Service Day not found, please try again later.');
+    const payload = {
+      service_id: service.id,
+      mode: source,
+      status: 'present',
+    };
+    mutate(payload);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center w-full min-h-screen px-2">
         <div className="flex flex-col items-center gap-3 mb-5">
@@ -67,7 +55,7 @@ const HomePage = () => {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="flex items-center justify-center w-full min-h-screen px-2">
         <div className="flex flex-col items-center gap-3 mb-5">
@@ -113,12 +101,12 @@ const HomePage = () => {
         <div className="flex flex-col items-center gap-4 mx-4">
           {canMark ? (
             <div className="flex flex-col items-center justify-center gap-4">
-              {!isSubmitting ? (
+              {!isPending ? (
                 <div className="bg-[#3A4D70] rounded-full animate-pulse delay-150">
                   <motion.div
                     onClick={handleButtonClick}
-                    disabled={isSubmitting}
-                    className={`rounded-full bg-[#4C8EFF] p-9 cursor-pointer relative ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    disabled={isPending}
+                    className={`rounded-full bg-[#4C8EFF] p-9 cursor-pointer relative ${isPending ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     initial={{ scale: 0.8 }}
                     animate={{ scale: [1, 1.1, 1] }}
@@ -143,7 +131,7 @@ const HomePage = () => {
               )}
               <div className="my-3 text-center">
                 <p className="my-3 text-sm font-semibold text-white">
-                  {isSubmitting ? 'Submitting...' : 'Clock In'}
+                  {isPending ? 'Submitting...' : 'Clock In'}
                 </p>
               </div>
             </div>

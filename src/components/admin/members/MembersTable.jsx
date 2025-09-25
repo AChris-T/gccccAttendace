@@ -1,20 +1,16 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useEffect, useRef } from 'react';
-import { useMemberStore } from "../../../store/member.store";
+import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { Link } from "react-router-dom";
 import Button from '../../ui/Button';
-import Alert from '../../ui/Alert';
+import { useMembers } from '../../../hooks/queries/member.query';
+import Message from '../../common/Message';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const MembersTable = () => {
-    const { fetchMembers, loading, error, members } = useMemberStore();
+    const { data: members = [], isLoading, refetch, isError, error, isFetching } = useMembers()
     const gridRef = useRef(null);
-
-    useEffect(() => {
-        fetchMembers();
-    }, [fetchMembers]);
 
     const defaultColDef = useMemo(() => ({
         flex: 1,
@@ -127,7 +123,7 @@ const MembersTable = () => {
         defaultColDef,
         columnDefs,
         rowData: members,
-        loading: loading,
+        loading: isLoading || isFetching,
         suppressColumnVirtualisation: false,
         suppressRowVirtualisation: false,
         suppressHorizontalScroll: false,
@@ -136,7 +132,7 @@ const MembersTable = () => {
         suppressRowDeselection: false,
         rowMultiSelectWithClick: true,
         enableFillHandle: true,
-    }), [defaultColDef, columnDefs, members, loading]);
+    }), [defaultColDef, columnDefs, members, isLoading, isFetching]);
 
     // Event handlers
     const onGridReady = useCallback((params) => {
@@ -145,9 +141,9 @@ const MembersTable = () => {
     }, []);
 
 
-    if (error) return <Alert onClick={fetchMembers} variant='error' message={error} />
+    if (isError) return <Message variant='error' data={error?.data} />
 
-    if (loading && !members?.length) {
+    if (isLoading || isFetching && !members?.length) {
         return (
             <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="text-center">
@@ -174,8 +170,8 @@ const MembersTable = () => {
                 <Button
                     className='rounded px-5'
                     variant='outline-dark'
-                    onClick={() => fetchMembers()}
-                    loading={loading}
+                    onClick={() => refetch()}
+                    loading={isLoading || isFetching}
                 >
                     Refresh
                 </Button>

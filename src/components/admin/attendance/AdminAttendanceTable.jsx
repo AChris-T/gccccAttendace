@@ -1,19 +1,18 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useEffect, useRef } from 'react';
-import { useAttendanceStore } from "../../../store/attendance.store";
+import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Badge from '../../ui/Badge';
 import Button from '../../ui/Button';
+import { useAllAttendance } from '../../../hooks/queries/attendance.query';
+import Alert from '../../ui/Alert';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const AdminAttendanceTable = () => {
-    const { fetchAllAttendance, loading, error, allAttendance } = useAttendanceStore();
-    const gridRef = useRef(null);
+    const { data, isError, error, isLoading, refetch, isFetching } = useAllAttendance()
 
-    useEffect(() => {
-        fetchAllAttendance();
-    }, [fetchAllAttendance]);
+    const allAttendance = data
+    const gridRef = useRef(null);
 
     // Highly optimized default column configuration for large datasets
     const defaultColDef = useMemo(() => ({
@@ -179,7 +178,7 @@ const AdminAttendanceTable = () => {
         defaultColDef,
         columnDefs,
         rowData: allAttendance,
-        loading: loading,
+        loading: isLoading || isFetching,
 
         // Scroll settings
         suppressHorizontalScroll: false,
@@ -204,7 +203,7 @@ const AdminAttendanceTable = () => {
         // Row height optimization
         rowHeight: 35, // Smaller row height for more data visibility
         headerHeight: 40,
-    }), [defaultColDef, columnDefs, allAttendance, loading]);
+    }), [defaultColDef, columnDefs, allAttendance, isLoading, isFetching]);
 
     // Optimized event handlers
     const onGridReady = useCallback((params) => {
@@ -214,10 +213,10 @@ const AdminAttendanceTable = () => {
         params.api.sizeColumnsToFit();
 
         // Set loading overlay
-        if (loading) {
+        if (isLoading || isFetching) {
             params.api.showLoadingOverlay();
         }
-    }, [loading]);
+    }, [isLoading, isFetching]);
 
     const onFirstDataRendered = useCallback((params) => {
         // Auto-size columns only on first render for performance
@@ -227,25 +226,13 @@ const AdminAttendanceTable = () => {
     }, [allAttendance]);
 
     // Error state
-    if (error) {
+    if (isError) {
         return (
-            <div className="flex items-center justify-center h-64 bg-red-50 border border-red-200 rounded-lg">
-                <div className="text-center">
-                    <p className="text-red-600 font-medium">Error loading attendance data</p>
-                    <p className="text-red-500 text-sm mt-1">{error}</p>
-                    <button
-                        onClick={() => fetchAllAttendance()}
-                        className="mt-3 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                    >
-                        Retry
-                    </button>
-                </div>
-            </div>
+            <Alert variant='error' loading={isLoading || isFetching} onClick={() => refetch()} message={error?.data?.message} />
         );
     }
 
-    // Loading state
-    if (loading && !allAttendance?.length) {
+    if (isLoading || isFetching && !allAttendance?.length) {
         return (
             <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="text-center">
@@ -262,22 +249,22 @@ const AdminAttendanceTable = () => {
             <div className="mb-3 flex justify-between items-center">
                 <p className="text-sm text-gray-600">
                     {allAttendance?.length?.toLocaleString() || 0} records
-                    {loading && <span className="ml-2 text-blue-600">• Loading...</span>}
+                    {isLoading || isFetching && <span className="ml-2 text-blue-600">• Loading...</span>}
                 </p>
                 <div className="flex gap-3">
                     <Button
                         variant='outline-primary'
                         className='rounded px-4 py-2 text-sm'
                         onClick={() => gridRef.current?.exportDataAsCsv()}
-                        disabled={loading}
+                        disabled={isLoading || isFetching}
                     >
                         Export CSV
                     </Button>
                     <Button
                         className='rounded px-4 py-2 text-sm'
                         variant='outline-light'
-                        onClick={() => fetchAllAttendance()}
-                        loading={loading}
+                        onClick={() => refetch()}
+                        loading={isLoading || isFetching}
                     >
                         Refresh
                     </Button>

@@ -1,6 +1,5 @@
 import { UserRole } from './constant';
 
-// utils/auth.helpers.js
 export const hasRole = (userRoles, role) => {
   return Array.isArray(userRoles) && userRoles.includes(role);
 };

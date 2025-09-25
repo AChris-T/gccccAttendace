@@ -68,3 +68,8 @@ export function toSlug(text) {
 
 export const getRandomTextColor = () =>
   textColors[Math.floor(Math.random() * textColors.length)];
+
+export const handleApiError = (error) => {
+  const message = error?.data?.message || 'An error occured.';
+  return message;
+};

@@ -1,18 +1,11 @@
-import { useEffect } from "react"
-import { useAdminStore } from "../../../store/admin.store"
 import { AnalyticsSkeletonLoader } from "../../skeleton"
 import AdminMetric from "./AdminMetric"
-
-
+import { useAdminAnalytics } from "../../../hooks/queries/admin.query"
 
 const AdminMetrics = () => {
-    const { getAdminAnalytics, adminAnalytics, loadingAdminAnalytics } = useAdminStore()
+    const { data: adminAnalytics = [], isLoading } = useAdminAnalytics()
 
-    useEffect(() => {
-        getAdminAnalytics()
-    }, [getAdminAnalytics])
-
-    if (loadingAdminAnalytics) return <AnalyticsSkeletonLoader />
+    if (isLoading) return <AnalyticsSkeletonLoader />
 
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">

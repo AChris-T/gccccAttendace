@@ -1,13 +1,12 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import InputForm from '../form/InputForm';
 import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
-import useToastify from '../../hooks/useToastify';
+// import useToastify from '../../hooks/useToastify';
 
 export default function TestimonyForm() {
-  const { showToast } = useToastify();
+  // const { showToast } = useToastify();
 
   const {
     register,
@@ -27,9 +26,9 @@ export default function TestimonyForm() {
       };
       const response = await FormService.form(payload);
       reset();
-      showToast(response.message, 'success');
+      // showToast(response.message, 'success');
     } catch (error) {
-      showToast(error.message, 'error');
+      // showToast(error.message, 'error');
     }
   };
 

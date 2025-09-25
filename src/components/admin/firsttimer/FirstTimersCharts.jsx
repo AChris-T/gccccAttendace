@@ -1,19 +1,15 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { DashboardSkeletonLoader } from "../../skeleton";
 import { AgCharts } from "ag-charts-react";
 import { generateChartSeries } from "../../../utils/helper";
 import { years } from "../../../utils/constant";
-import { useAdminStore } from "../../../store/admin.store";
+import { useFirstTimersAnalytics } from "../../../hooks/queries/admin.query";
 
 const FirstTimersCharts = () => {
-    const { totalFirstTimers, statusesPerMonth, integratedFirstTimers, loadingFirstTimersAnalytics, getFirstTimersAnalytics } = useAdminStore();
-
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));
     const [selectedYear, setSelectedYear] = useState(2025);
-
-    useEffect(() => {
-        getFirstTimersAnalytics({ year: selectedYear });
-    }, [getFirstTimersAnalytics, selectedYear]);
+    const { data, isLoading } = useFirstTimersAnalytics({ year: selectedYear })
+    const { totalFirstTimers = [], statusesPerMonth = [], integratedFirstTimers = [] } = data || {}
 
     const getStatusDataForMonth = useCallback((selectedMonth, statusesPerMonthData) => {
         if (!statusesPerMonthData?.length) return [];
@@ -94,7 +90,7 @@ const FirstTimersCharts = () => {
         animateRows: true
     };
 
-    if (loadingFirstTimersAnalytics) return <DashboardSkeletonLoader />
+    if (isLoading) return <DashboardSkeletonLoader />
 
     const MonthlyChartsSection = () => (
         <div className="grid grid-cols-1 lg:grid-cols-2">

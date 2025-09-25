@@ -16,7 +16,7 @@ export const AttendanceService = {
     return data;
   },
   async getAllAttendance() {
-    const { data } = await $api.get(`${ATTENDANCE}`);
+    const { data } = await $api.get(`/admin${ATTENDANCE}`);
     return data;
   },
 };
