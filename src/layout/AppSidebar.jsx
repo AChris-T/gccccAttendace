@@ -1,9 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useSidebar } from "../context/SidebarContext";
-import { AdminIcon, AttendanceIcon2, ChevronDownIcon, DashboardIcon, EventIcon, HorizontaLDotsIcon, UserIcon } from "../icons";
-import { useAuthStore } from "../store/auth.store";
-import { adminNavItems, navItems } from "../utils/data";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useSidebar } from '../context/SidebarContext';
+import {
+  AdminIcon,
+  AttendanceIcon2,
+  ChevronDownIcon,
+  DashboardIcon,
+  EventIcon,
+  HorizontaLDotsIcon,
+  UserIcon,
+} from '../icons';
+import { useAuthStore } from '../store/auth.store';
+import { adminNavItems, navItems } from '../utils/data';
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();
@@ -137,13 +145,15 @@ const AppSidebar = () => {
               nav.path && (
                 <Link
                   to={nav.path}
-                  className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                  className={`menu-item group ${isActive(nav.path)
+                      ? 'menu-item-active'
+                      : 'menu-item-inactive'
                     }`}
                 >
                   <span
                     className={`menu-item-icon-size ${isActive(nav.path)
-                      ? "menu-item-icon-active"
-                      : "menu-item-icon-inactive"
+                        ? 'menu-item-icon-active'
+                        : 'menu-item-icon-inactive'
                       }`}
                   >
                     <Icon width={30} height={30} />
@@ -172,8 +182,8 @@ const AppSidebar = () => {
                       <Link
                         to={subItem.path}
                         className={`menu-dropdown-item ${isActive(subItem.path)
-                          ? "menu-dropdown-item-active"
-                          : "menu-dropdown-item-inactive"
+                            ? 'menu-dropdown-item-active'
+                            : 'menu-dropdown-item-inactive'
                           }`}
                       >
                         {subItem.name}
@@ -181,8 +191,8 @@ const AppSidebar = () => {
                           {subItem.pro && (
                             <span
                               className={`ml-auto ${isActive(subItem.path)
-                                ? "menu-dropdown-badge-active"
-                                : "menu-dropdown-badge-inactive"
+                                  ? 'menu-dropdown-badge-active'
+                                  : 'menu-dropdown-badge-inactive'
                                 } menu-dropdown-badge`}
                             >
                               <AdminIcon width={13} height={13} />
@@ -209,7 +219,7 @@ const AppSidebar = () => {
         lg:translate-x-0`}
     >
       <div
-        className={`py-8 flex ${!isExpanded ? "lg:justify-center" : "justify-start"
+        className={`py-8 flex ${!isExpanded ? 'lg:justify-center' : 'justify-start'
           }`}
       >
         <Link to="/">
@@ -264,7 +274,7 @@ const AppSidebar = () => {
                   }`}
               >
                 {isExpanded || isMobileOpen ? (
-                  "Menu"
+                  'Menu'
                 ) : (
                   <HorizontaLDotsIcon className="size-6" />
                 )}

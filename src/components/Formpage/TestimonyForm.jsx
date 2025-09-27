@@ -1,13 +1,10 @@
 import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import InputForm from '../form/InputForm';
-import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
-// import useToastify from '../queries/useToastify';
+import { useFormMessages } from '../../hooks/queries/form.query';
 
 export default function TestimonyForm() {
-  // const { showToast } = useToastify();
-
   const {
     register,
     handleSubmit,
@@ -15,21 +12,22 @@ export default function TestimonyForm() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const payload = {
-        type: 'testimony',
-        content: data.message,
-        name: data.name,
-        phone_number: data.phone,
-        wants_to_share_testimony: data.sharePhysically === 'Yes',
-      };
-      const response = await FormService.form(payload);
+  const { mutateAsync, isPending } = useFormMessages({
+    onSuccess: (response) => {
       reset();
-      // showToast(response.message, 'success');
-    } catch (error) {
-      // showToast(error.message, 'error');
-    }
+      Toast.success('Your question has been submitted successfully.');
+    },
+    onError: (error) => { },
+  });
+  const onSubmit = async (data) => {
+    const payload = {
+      type: 'testimony',
+      content: data.message,
+      name: data.name,
+      phone_number: data.phone,
+      wants_to_share_testimony: data.sharePhysically === 'Yes',
+    };
+    await mutateAsync(payload);
   };
 
   return (

@@ -1,31 +1,31 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
-import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
-// import useToastify from '../queries/useToastify';
+import { useFormMessages } from '../../queries/form.query';
+import { Toast } from '../../lib/toastify';
 
 export default function QuestionForm() {
-  // const { showToast } = useToastify();
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const payload = {
-        type: 'question',
-        content: data.message,
-      };
-      const response = await FormService.form(payload);
+  const { mutateAsync, isPending } = useFormMessages({
+    onSuccess: (response) => {
       reset();
-      // showToast(response.message, 'success');
-    } catch (error) {
-      // showToast(error.message, 'error');
-    }
+      Toast.success('Your question has been submitted successfully.');
+    },
+    onError: (error) => { },
+  });
+
+  const onSubmit = async (data) => {
+    const payload = {
+      type: 'question',
+      content: data.message,
+    };
+    await mutateAsync(payload);
   };
 
   return (
@@ -49,7 +49,7 @@ export default function QuestionForm() {
         />
         <Button
           type="submit"
-          loading={isSubmitting}
+          loading={isPending}
           size="lg"
           className="mt-3 bg-[#24244e]  text-white px-4 py-2 rounded"
         >
