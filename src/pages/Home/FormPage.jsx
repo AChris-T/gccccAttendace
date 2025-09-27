@@ -10,19 +10,19 @@ const TABS_CONFIG = [
     id: 'question',
     name: 'Question',
     image: '/images/forms/qes.png',
-    component: QuestionForm
+    component: QuestionForm,
   },
   {
     id: 'prayer',
     name: 'Prayer Request',
     image: '/images/forms/newPrayer.png',
-    component: PrayerForm
+    component: PrayerForm,
   },
   {
     id: 'testimony',
     name: 'Testimony',
     image: '/images/forms/Ttestimony.png',
-    component: TestimonyForm
+    component: TestimonyForm,
   },
 ];
 
@@ -33,24 +33,24 @@ export default function FormPage() {
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
 
   const activeTabConfig = useMemo(
-    () => TABS_CONFIG.find(tab => tab.id === activeTab) || TABS_CONFIG[0],
+    () => TABS_CONFIG.find((tab) => tab.id === activeTab) || TABS_CONFIG[0],
     [activeTab]
   );
 
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
-    const validTabFromUrl = TABS_CONFIG.find(tab => tab.id === tabFromUrl);
+    const validTabFromUrl = TABS_CONFIG.find((tab) => tab.id === tabFromUrl);
 
     if (validTabFromUrl) {
       setActiveTab(validTabFromUrl.id);
     } else if (tabFromUrl && !validTabFromUrl) {
-      setSearchParams(prev => {
+      setSearchParams((prev) => {
         const newParams = new URLSearchParams(prev);
         newParams.set('tab', DEFAULT_TAB);
         return newParams;
       });
     } else if (!tabFromUrl) {
-      setSearchParams(prev => {
+      setSearchParams((prev) => {
         const newParams = new URLSearchParams(prev);
         newParams.set('tab', DEFAULT_TAB);
         return newParams;
@@ -58,17 +58,20 @@ export default function FormPage() {
     }
   }, [searchParams, setSearchParams]);
 
-  const handleTabChange = useCallback((tabId) => {
-    if (tabId === activeTab) return;
+  const handleTabChange = useCallback(
+    (tabId) => {
+      if (tabId === activeTab) return;
 
-    setActiveTab(tabId);
+      setActiveTab(tabId);
 
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      newParams.set('tab', tabId);
-      return newParams;
-    });
-  }, [activeTab, setSearchParams]);
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set('tab', tabId);
+        return newParams;
+      });
+    },
+    [activeTab, setSearchParams]
+  );
 
   const renderActiveForm = useCallback(() => {
     const ActiveComponent = activeTabConfig.component;
@@ -78,7 +81,6 @@ export default function FormPage() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full mx-2 md:max-w-xl md:mx-auto h-[80vh] custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 mt-20 mb-20 md:mt-20 lg:mt-20">
-
         {/* Tab Image Header */}
         <Animated
           animation="fade-down"
@@ -106,10 +108,11 @@ export default function FormPage() {
                 role="tab"
                 aria-selected={isActive}
                 aria-controls={`panel-${tab.id}`}
-                className={`px-2 md:px-6 py-2 -mb-px font-medium border-b-2 focus:outline-none transition-colors duration-200 hover:text-[#1a1a40] ${isActive
-                  ? 'border-[#24244e] text-[#24244e] font-medium'
-                  : 'border-transparent text-gray-700 hover:border-gray-300'
-                  }`}
+                className={`px-2 md:px-6 py-2 -mb-px font-medium border-b-2 focus:outline-none transition-colors duration-200 hover:text-[#1a1a40] ${
+                  isActive
+                    ? 'border-[#24244e] text-[#24244e] font-medium'
+                    : 'border-transparent text-gray-700 hover:border-gray-300'
+                }`}
               >
                 {tab.name}
               </button>

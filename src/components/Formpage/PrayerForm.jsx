@@ -2,10 +2,10 @@ import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import { FormService } from '../../services/form.service';
 import Button from '../ui/Button';
-// import useToastify from '../../hooks/useToastify';
+import { useFormMessages } from '../../hooks/queries/form.query';
+import { Toast } from '../../lib/toastify';
 
 export default function PrayerForm() {
-  // const { showToast } = useToastify();
   const {
     register,
     handleSubmit,
@@ -13,18 +13,20 @@ export default function PrayerForm() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const payload = {
-        type: 'prayer',
-        content: data.message,
-      };
-      const response = await FormService.form(payload);
+  const { mutateAsync, isPending } = useFormMessages({
+    onSuccess: (response) => {
       reset();
-      // showToast(response.message, 'success');
-    } catch (error) {
-      // showToast(error.message, 'error');
-    }
+      Toast.success('Your question has been submitted successfully.');
+    },
+    onError: (error) => {},
+  });
+
+  const onSubmit = async (data) => {
+    const payload = {
+      type: 'prayer',
+      content: data.message,
+    };
+    await mutateAsync(payload);
   };
 
   return (
