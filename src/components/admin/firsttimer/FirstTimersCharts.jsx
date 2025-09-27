@@ -3,7 +3,7 @@ import { DashboardSkeletonLoader } from "../../skeleton";
 import { AgCharts } from "ag-charts-react";
 import { generateChartSeries } from "../../../utils/helper";
 import { years } from "../../../utils/constant";
-import { useFirstTimersAnalytics } from "../../../hooks/queries/admin.query";
+import { useFirstTimersAnalytics } from "../../../queries/firstTimer.query";
 
 const FirstTimersCharts = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));

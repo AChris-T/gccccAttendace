@@ -1,6 +1,6 @@
+import { useAdminAnalytics } from "../../../queries/admin.query"
 import { AnalyticsSkeletonLoader } from "../../skeleton"
 import AdminMetric from "./AdminMetric"
-import { useAdminAnalytics } from "../../../hooks/queries/admin.query"
 
 const AdminMetrics = () => {
     const { data: adminAnalytics = [], isLoading } = useAdminAnalytics()

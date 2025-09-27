@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Button from '../../../components/ui/Button';
-import { useLogin } from '../../../hooks/queries/auth.query';
+import { useLogin } from '../../../queries/auth.query';
 import { Toast } from '../../../lib/toastify';
 import Message from '../../../components/common/Message';
 

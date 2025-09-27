@@ -3,7 +3,7 @@ import Navbar from '../components/header/Navbar';
 import { DashboardIcon, FormIcon, HomeIcon, LoadingIcon, LogoutIcon } from '../icons';
 import ProgressBar from '../components/others/ProgressBar';
 import { ScrollToTop } from '../components/others/ScrollToTop';
-import { useLogout } from '../hooks/queries/auth.query';
+import { useLogout } from '../queries/auth.query';
 import { useAuthStore } from '../store/auth.store';
 
 const LayoutContent = () => {

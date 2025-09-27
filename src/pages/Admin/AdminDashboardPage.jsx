@@ -1,3 +1,4 @@
+import AdminAttendanceMonthlyStats from "../../components/admin/attendance/AdminAttendanceMonthlyStats"
 import AdminMetrics from "../../components/admin/dashboard/AdminMetrics"
 import FirstTimersCharts from "../../components/admin/firsttimer/FirstTimersCharts"
 import ComponentCard from "../../components/common/ComponentCard"
@@ -14,8 +15,8 @@ const AdminDashboardPage = () => {
                 <ComponentCard title="First Timers Analytics" >
                     <FirstTimersCharts />
                 </ComponentCard>
-                <ComponentCard title="Attendance Analytics" >
-                    <img className="w-full rounded" src="/images/site.jpg" alt="site in progress" />
+                <ComponentCard title="Attendance Monthly Stats" >
+                    <AdminAttendanceMonthlyStats />
                 </ComponentCard>
             </div>
         </>

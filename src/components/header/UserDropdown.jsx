@@ -5,7 +5,7 @@ import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import Avatar from "../ui/Avatar";
 import { Image } from "../../utils/constant";
-import { useLogout } from "../../hooks/queries/auth.query";
+import { useLogout } from "../../queries/auth.query";
 import { useAuthStore } from "../../store/auth.store";
 
 export default function UserDropdown() {

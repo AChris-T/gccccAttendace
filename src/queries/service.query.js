@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { ServiceService } from '../../services/service.service';
-import { QUERY_KEYS } from '../../utils/queryKeys';
+import { ServiceService } from '../services/service.service';
+import { QUERY_KEYS } from '../utils/queryKeys';
 
 export const useTodaysService = (options = {}) => {
   return useQuery({

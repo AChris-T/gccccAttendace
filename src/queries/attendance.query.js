@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { AttendanceService } from '../../services/attendance.service';
-import { QUERY_KEYS } from '../../utils/queryKeys';
+import { AttendanceService } from '../services/attendance.service';
+import { QUERY_KEYS } from '../utils/queryKeys';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Toast } from '../../lib/toastify';
-import { handleApiError } from '../../utils/helper';
+import { Toast } from '../lib/toastify';
+import { handleApiError } from '../utils/helper';
 
 export const useAttendanceHistory = (options = {}) => {
   return useQuery({
@@ -118,5 +118,15 @@ export const useMarkAbsentees = (options = {}) => {
         'Something went wrong while marking absentees';
       options.onError?.(new Error(message));
     },
+  });
+};
+
+export const useMonthlyAttendanceStats = (year, mode) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.ATTENDANCE.BY_MONTH_YEAR(),
+    queryFn: () => AttendanceService.getAdminAttendanceMonthlyStats(year, mode),
+    // enabled: !!id,
+    // staleTime: 5 * 60 * 1000, // 5 minutes
+    // ...options,
   });
 };

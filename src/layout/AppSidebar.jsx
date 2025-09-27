@@ -8,7 +8,7 @@ import { adminNavItems, navItems } from "../utils/data";
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();
   const location = useLocation();
-  const { isAdmin } = useAuthStore()
+  const { isAdmin } = useAuthStore();
 
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [subMenuHeight, setSubMenuHeight] = useState({});
@@ -19,6 +19,23 @@ const AppSidebar = () => {
     [location.pathname]
   );
 
+  // Helper function to check if any submenu item is active for a given menu item
+  const hasActiveSubmenuItem = useCallback((menuItem) => {
+    if (!menuItem.subItems) return false;
+    return menuItem.subItems.some(subItem => isActive(subItem.path));
+  }, [isActive]);
+
+  // Helper function to find which submenu should be open based on active route
+  const findActiveSubmenu = useCallback((items, menuType) => {
+    for (let index = 0; index < items.length; index++) {
+      const nav = items[index];
+      if (hasActiveSubmenuItem(nav)) {
+        return { type: menuType, index };
+      }
+    }
+    return null;
+  }, [hasActiveSubmenuItem]);
+
   const iconMap = {
     AdminIcon,
     AttendanceIcon2,
@@ -27,28 +44,31 @@ const AppSidebar = () => {
     UserIcon,
   };
 
-
   useEffect(() => {
-    let submenuMatched = false;
-
-    navItems.forEach((nav, index) => {
-      if (nav.subItems) {
-        nav.subItems.forEach((subItem) => {
-          if (isActive(subItem.path)) {
-            setOpenSubmenu({
-              type: 'main',
-              index,
-            });
-            submenuMatched = true;
-          }
-        });
+    if (isAdmin) {
+      const activeAdminSubmenu = findActiveSubmenu(adminNavItems, 'admin');
+      if (activeAdminSubmenu) {
+        setOpenSubmenu(activeAdminSubmenu);
+        return;
       }
-    });
-
-    if (!submenuMatched) {
-      setOpenSubmenu(null);
     }
-  }, [location, isActive]);
+
+    const activeMainSubmenu = findActiveSubmenu(navItems, 'main');
+    if (activeMainSubmenu) {
+      setOpenSubmenu(activeMainSubmenu);
+      return;
+    }
+
+    const allItems = isAdmin ? [...adminNavItems, ...navItems] : navItems;
+    const isOnSubmenuRoute = allItems.some(item => hasActiveSubmenuItem(item));
+
+    if (!isOnSubmenuRoute) {
+      const isTopLevelRoute = allItems.some(item => !item.subItems && isActive(item.path));
+      if (isTopLevelRoute) {
+        setOpenSubmenu(null);
+      }
+    }
+  }, [location.pathname, isActive, findActiveSubmenu, hasActiveSubmenuItem, isAdmin]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -78,22 +98,23 @@ const AppSidebar = () => {
   const renderMenuItems = (items, menuType) => (
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => {
-        const Icon = iconMap[nav.icon]
+        const Icon = iconMap[nav.icon];
+        const isSubmenuOpen = openSubmenu?.type === menuType && openSubmenu?.index === index;
+        const hasActiveSubItem = hasActiveSubmenuItem(nav);
+
         return (
           <li key={nav.name}>
             {nav.subItems ? (
               <button
                 onClick={() => handleSubmenuToggle(index, menuType)}
-                className={`menu-item group ${openSubmenu?.type === menuType && openSubmenu?.index === index
+                className={`menu-item group ${isSubmenuOpen || hasActiveSubItem
                   ? "menu-item-active"
                   : "menu-item-inactive"
-                  } cursor-pointer ${!isExpanded
-                    ? "lg:justify-center"
-                    : "lg:justify-start"
+                  } cursor-pointer ${!isExpanded ? "lg:justify-center" : "lg:justify-start"
                   }`}
               >
                 <span
-                  className={`menu-item-icon-size  ${openSubmenu?.type === menuType && openSubmenu?.index === index
+                  className={`menu-item-icon-size ${isSubmenuOpen || hasActiveSubItem
                     ? "menu-item-icon-active"
                     : "menu-item-icon-inactive"
                     }`}
@@ -105,8 +126,7 @@ const AppSidebar = () => {
                 )}
                 {(isExpanded || isMobileOpen) && (
                   <ChevronDownIcon
-                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu?.type === menuType &&
-                      openSubmenu?.index === index
+                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${isSubmenuOpen
                       ? "rotate-180 text-brand-500"
                       : ""
                       }`}
@@ -141,14 +161,13 @@ const AppSidebar = () => {
                 }}
                 className="overflow-hidden transition-all duration-300"
                 style={{
-                  height:
-                    openSubmenu?.type === menuType && openSubmenu?.index === index
-                      ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                      : "0px",
+                  height: isSubmenuOpen
+                    ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                    : "0px",
                 }}
               >
                 <ul className="mt-2 space-y-1 ml-9">
-                  {nav.subItems.map((subItem, i) => (
+                  {nav.subItems.map((subItem) => (
                     <li key={subItem.name}>
                       <Link
                         to={subItem.path}
@@ -177,20 +196,15 @@ const AppSidebar = () => {
               </div>
             )}
           </li>
-        )
-      }
-      )
-      }
+        );
+      })}
     </ul>
   );
 
   return (
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
-        ${isExpanded || isMobileOpen
-          ? "w-[290px]"
-          : "w-[90px]"
-        }
+        ${isExpanded || isMobileOpen ? "w-[290px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}
     >
@@ -229,26 +243,24 @@ const AppSidebar = () => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            {isAdmin ? <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded
-                  ? "lg:justify-center"
-                  : "justify-start"
-                  }`}
-              >
-                {isExpanded || isMobileOpen ? (
-                  "Admin"
-                ) : (
-                  <HorizontaLDotsIcon className="size-6" />
-                )}
-              </h2>
-              {renderMenuItems(adminNavItems)}
-            </div> : null}
+            {isAdmin && (
+              <div>
+                <h2
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center" : "justify-start"
+                    }`}
+                >
+                  {isExpanded || isMobileOpen ? (
+                    "Admin"
+                  ) : (
+                    <HorizontaLDotsIcon className="size-6" />
+                  )}
+                </h2>
+                {renderMenuItems(adminNavItems, 'admin')}
+              </div>
+            )}
             <div>
               <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded
-                  ? "lg:justify-center"
-                  : "justify-start"
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center" : "justify-start"
                   }`}
               >
                 {isExpanded || isMobileOpen ? (
@@ -257,7 +269,7 @@ const AppSidebar = () => {
                   <HorizontaLDotsIcon className="size-6" />
                 )}
               </h2>
-              {renderMenuItems(navItems)}
+              {renderMenuItems(navItems, 'main')}
             </div>
           </div>
         </nav>

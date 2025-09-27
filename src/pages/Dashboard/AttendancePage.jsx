@@ -1,15 +1,12 @@
-import dayjs from 'dayjs';
-import { LoadingIcon } from '../../icons';
-import { formatDisplayDate } from '../../utils/helper'
 import PageMeta from '../../components/common/PageMeta';
 import PageBreadcrumb from '../../components/common/PageBreadCrumb';
 import ComponentCard from '../../components/common/ComponentCard';
-import { useAttendanceHistory } from '../../hooks/queries/attendance.query';
+// import { useAttendanceHistory } from '../queries/attendance.query';
 import AttendanceReport from '../../components/attendance/AttendanceReport';
 
 
 export default function AttendancePage() {
-    const { data: filteredResults = [], isLoading } = useAttendanceHistory()
+    // const { data: filteredResults = [], isLoading } = useAttendanceHistory()
 
     return (
         <>

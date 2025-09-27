@@ -1,4 +1,21 @@
 export const QUERY_KEYS = {
+  // refactored
+  FOLLOW_UP_STATUSES: {
+    ALL: ['followup-status'],
+    DETAIL: (statusId) => ['followup-status', statusId],
+  },
+  FIRST_TIMERS: {
+    ALL: ['first-timers'],
+    FIRST_TIMERS_ANALYTICS: (params) => [
+      'admin',
+      'first-timers-analytics',
+      params,
+    ],
+    // LIST: (params) => ['first-timers', 'list', params],
+    // DETAIL: (id) => ['first-timers', 'detail', id],
+  },
+
+  ////
   AUTH: {
     ME: ['auth', 'me'],
     PROFILE: ['auth', 'profile'],
@@ -7,11 +24,6 @@ export const QUERY_KEYS = {
   ADMIN: {
     ALL: ['admin'],
     ANALYTICS: (params) => ['admin', 'analytics', params],
-    FIRST_TIMERS_ANALYTICS: (params) => [
-      'admin',
-      'first-timers-analytics',
-      params,
-    ],
   },
 
   ATTENDANCE: {
@@ -19,12 +31,6 @@ export const QUERY_KEYS = {
     HISTORY: ['attendance', 'history'],
     ALL_RECORDS: ['attendance', 'all-records'],
     BY_MONTH_YEAR: (month, year) => ['attendance', 'filtered', month, year],
-  },
-
-  FIRST_TIMERS: {
-    ALL: ['first-timers'],
-    LIST: (params) => ['first-timers', 'list', params],
-    DETAIL: (id) => ['first-timers', 'detail', id],
   },
 
   MEMBERS: {

@@ -1,15 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { AuthService } from '../../services/auth.service';
-import { QUERY_KEYS } from '../../utils/queryKeys';
+import { AuthService } from '../services/auth.service';
+import { QUERY_KEYS } from '../utils/queryKeys';
 import {
   hasRole as checkRole,
   hasUnit as checkUnit,
   getUserRoles,
-} from '../../utils/auth.helpers';
-import { Toast } from '../../lib/toastify';
-import { handleApiError } from '../../utils/helper';
-import { useAuthStore } from '../../store/auth.store';
+} from '../utils/auth.helpers';
+import { Toast } from '../lib/toastify';
+import { useAuthStore } from '../store/auth.store';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { handleApiError } from '../utils/helper';
 
 export const useMe = (options = {}) => {
   return useQuery({

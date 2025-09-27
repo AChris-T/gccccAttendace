@@ -7,8 +7,8 @@ import { useSearchParams } from 'react-router-dom';
 import animationData from '../../utils/animation.json'
 import { CheckedIcon, HandIcon } from '../../icons';
 import { useAuthStore } from '../../store/auth.store';
-import { useTodaysService } from '../../hooks/queries/service.query';
-import { useMarkAttendance } from '../../hooks/queries/attendance.query';
+import { useTodaysService } from '../../queries/service.query';
+import { useMarkAttendance } from '../../queries/attendance.query';
 import { Toast } from '../../lib/toastify';
 
 dayjs.extend(customParseFormat);

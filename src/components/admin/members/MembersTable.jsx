@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { Link } from "react-router-dom";
 import Button from '../../ui/Button';
-import { useMembers } from '../../../hooks/queries/member.query';
+import { useMembers } from '../../../queries/member.query';
 import Message from '../../common/Message';
 
 ModuleRegistry.registerModules([AllCommunityModule]);

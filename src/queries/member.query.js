@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { MemberService } from '../../services/member.service';
-import { QUERY_KEYS } from '../../utils/queryKeys';
-import { Toast } from '../../lib/toastify';
-import { handleApiError } from '../../utils/helper';
+import { MemberService } from '../services/member.service';
+import { QUERY_KEYS } from '../utils/queryKeys';
+import { Toast } from '../lib/toastify';
+import { handleApiError } from '../utils/helper';
 
 // Get all members
 export const useMembers = (options = {}) => {

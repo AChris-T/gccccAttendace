@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Badge from '../../ui/Badge';
 import Button from '../../ui/Button';
-import { useAllAttendance } from '../../../hooks/queries/attendance.query';
+import { useAllAttendance } from '../../../queries/attendance.query';
 import Alert from '../../ui/Alert';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -18,12 +18,14 @@ const AdminAttendanceTable = () => {
     const defaultColDef = useMemo(() => ({
         sortable: true,
         resizable: true,
-        // Remove expensive features for large datasets
-        filter: false, // Disable for performance with large data
-        floatingFilter: false, // Disable floating filters for performance
         suppressMenu: false,
         lockPosition: false,
         suppressMovable: false,
+        flex: 1,
+        filter: true,
+        suppressPaste: false,
+        floatingFilter: true,
+        editable: false,
     }), []);
 
     // Memoized and optimized cell renderers

@@ -28,7 +28,6 @@ layer(base);
   border-radius: 10px;
 }
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme {
