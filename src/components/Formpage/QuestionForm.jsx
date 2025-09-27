@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import Button from '../ui/Button';
 import { useFormMessages } from '../../queries/form.query';
-import { Toast } from '../../lib/toastify';
 
 export default function QuestionForm() {
   const {
@@ -12,22 +11,16 @@ export default function QuestionForm() {
     formState: { errors },
   } = useForm();
 
-  const { mutateAsync, isPending } = useFormMessages({
-    onSuccess: (response) => {
-      reset();
-      Toast.success('Your question has been submitted successfully.');
-    },
-    onError: (error) => { },
-  });
+  const { mutate, isPending, isError, error } = useFormMessages();
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     const payload = {
       type: 'question',
       content: data.message,
     };
-    await mutateAsync(payload);
+    mutate(payload);
   };
-
+  // meesage data={error?.data}
   return (
     <div className="">
       <h3 className="text-[#24244e] text-[24px] font-bold ">Dear Friend </h3>

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import TextArea from '../form/TextArea';
 import InputForm from '../form/InputForm';
 import Button from '../ui/Button';
-import { useFormMessages } from '../../hooks/queries/form.query';
+import { useFormMessages } from '../../queries/form.query';
 
 export default function TestimonyForm() {
   const {
