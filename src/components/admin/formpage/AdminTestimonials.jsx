@@ -12,9 +12,9 @@ export default function AdminTestimonials() {
       },
       {
         id: 'q2',
-        content: 'How do I build a stronger prayer life?',
+        content: 'How do I build a stronger prayer life ?',
         created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        attended: true,
+        attended: false,
       },
       {
         id: 'q3',
