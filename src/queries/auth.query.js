@@ -41,6 +41,8 @@ export const useLogin = (options = {}) => {
     onSuccess: ({ data }) => {
       const { token, user } = data;
 
+      console.log(data);
+
       setAuthenticatedUser({ token, user });
       queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
 

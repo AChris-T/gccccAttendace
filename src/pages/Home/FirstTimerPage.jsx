@@ -215,7 +215,7 @@ const FirstTimerPage = () => {
   );
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
+    <div className="flex mt-28 item-center justify-center px-4">
       <div className={containerClasses}>
         {isCompleteStep ? renderCompletionMessage() : renderForm()}
       </div>

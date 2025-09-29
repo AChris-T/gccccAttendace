@@ -12,7 +12,7 @@ const UnitDisplay = () => {
     </div>
     return (
         <>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3  gap-5'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10'>
                 {units?.map((unit, i) => <UnitCard key={unit.id} unit={unit} index={i} />)}
             </div>
         </>

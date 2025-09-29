@@ -1,5 +1,6 @@
 import React from "react";
-import InputForm from "../form/InputForm";
+import InputForm from "@/components/form/InputForm";
+import RadioGroup from "@/components/form/RadioGroup";
 
 export const Step1PersonalInfo = ({ register, errors }) => (
   <>
@@ -42,7 +43,7 @@ export const Step1PersonalInfo = ({ register, errors }) => (
       register={register}
       error={errors.email?.message}
     />
-    <InputForm
+    <RadioGroup
       label="Gender"
       name="gender"
       type="radio"
@@ -68,7 +69,7 @@ export const Step2FriendFamilyLocation = ({ register, errors }) => (
       error={errors.data_of_friend_and_family?.message}
     />
 
-    <InputForm
+    <RadioGroup
       label="Do you currently reside in Ibadan (including for school, NYSC, work, temporary stay or permanent stay)?"
       name="location"
       type="radio"
@@ -84,7 +85,7 @@ export const Step2FriendFamilyLocation = ({ register, errors }) => (
 );
 
 export const Step3Interest = ({ register, errors }) => (
-  <InputForm
+  <RadioGroup
     label="Would you be interested in becoming a consistent member of GCCC either online or onsite?"
     name="interest"
     type="radio"
@@ -123,7 +124,7 @@ export const Step4Details = ({ register, errors }) => (
       register={register}
       error={errors.occupation?.message}
     />
-    <InputForm
+    <RadioGroup
       label="Are you born again?"
       name="born_again"
       type="radio"
@@ -158,7 +159,7 @@ export const Step5Experience = ({ register, errors }) => (
       error={errors.prayer_point?.message}
       type="textarea"
     />
-    <InputForm
+    <RadioGroup
       label="Would you be interested in joining our WhatsApp community to stay updated on our services and important announcements?"
       name="whatsapp_interest"
       type="radio"
