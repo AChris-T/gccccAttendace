@@ -20,7 +20,7 @@ export default function QuestionForm() {
     };
     mutate(payload);
   };
-  // meesage data={error?.data}
+
   return (
     <div className="">
       <h3 className="text-[#24244e] text-[24px] font-bold ">Dear Friend </h3>

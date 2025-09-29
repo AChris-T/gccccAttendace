@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { mutate, isPending, isError, error } = useLogin();
+  console.log(error)
 
   const handleSubmit = async (e) => {
     e.preventDefault();

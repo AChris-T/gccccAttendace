@@ -22,6 +22,7 @@ import EventsPage from '../pages/Dashboard/EventsPage';
 import AdminFormsPage from '../pages/Admin/AdminFormsPage';
 import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
 import ProtectedRoute from '../layout/Protected/ProtectedRoute';
+import PublicRoute from '@/layout/PublicRoute';
 
 const AppRoutes = [
   {
@@ -32,7 +33,10 @@ const AppRoutes = [
         Component: ProtectedRoute,
         children: [{ index: true, Component: HomePage }],
       },
-      { path: 'login', Component: LoginPage },
+      {
+        Component: PublicRoute,
+        children: [{ path: 'login', Component: LoginPage }],
+      },
       { path: 'forms', Component: Formspage },
       { path: 'first-timer/welcome', Component: FirstTimerPage },
     ],

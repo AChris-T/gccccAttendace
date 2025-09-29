@@ -74,7 +74,7 @@ const Button = ({
       {endIcon && <span className="flex items-center">{endIcon}</span>}
       {loading && (
         <span className="flex items-center">
-          <LoadingIcon height={20} width={20} />
+          <LoadingIcon height={24} width={24} />
         </span>
       )}
     </button>

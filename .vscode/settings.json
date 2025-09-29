@@ -1,5 +1,15 @@
 {
-  "javascript.validate.enable": true,
   "javascript.preferences.importModuleSpecifier": "non-relative",
-  "javascript.suggest.autoImports": true
+  "javascript.suggest.autoImports": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "javascript.validate.enable": true,
+  "typescript.suggest.autoImports": true
 }

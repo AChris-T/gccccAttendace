@@ -12,8 +12,8 @@ export const useTodaysService = (options = {}) => {
         canMark: data.can_mark,
       };
     },
-    staleTime: 1 * 60 * 1000,
-    cacheTime: 2 * 60 * 1000,
+    // staleTime: 1 * 60 * 1000,
+    // cacheTime: 2 * 60 * 1000,
     refetchOnWindowFocus: true,
     ...options,
   });
