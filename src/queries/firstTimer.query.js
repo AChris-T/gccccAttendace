@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { FirstTimerService } from '../services/firstTimer.service';
 import { QUERY_KEYS } from '../utils/queryKeys';
-// import { Toast } from '../../lib/toastify';
-// import { handleApiError } from '../../utils/helper';
+import { Toast } from '../lib/toastify';
+import { handleApiError } from '../utils/helper';
 
 export const useFirstTimers = (options = {}) => {
   return useQuery({

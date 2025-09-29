@@ -4,6 +4,7 @@ import { AgCharts } from "ag-charts-react";
 import { generateChartSeries } from "../../../utils/helper";
 import { years } from "../../../utils/constant";
 import { useFirstTimersAnalytics } from "../../../queries/firstTimer.query";
+import React from "react";
 
 const FirstTimersCharts = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));
@@ -97,11 +98,11 @@ const FirstTimersCharts = () => {
             <ChartContainer title="Monthly First Timers">
                 <AgCharts
                     options={chartOptions.totalFirstTimerOptions}
-                    {...commonChartProps}
+                    {...commonChartProps} style={{ height: "500px" }}
                 />
             </ChartContainer>
             <ChartContainer title="Monthly Integrated First Timers">
-                <AgCharts
+                <AgCharts style={{ height: "500px" }}
                     options={chartOptions.integratedFirstTimerOptions}
                     {...commonChartProps}
                 />
@@ -115,13 +116,13 @@ const FirstTimersCharts = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 my-2">
                 <div className="col-span-1 lg:col-span-2 my-7">
                     <AgCharts
-                        className="h-96"
+                        style={{ height: "500px" }}
                         options={chartOptions.statusPerMonthOptionsPie}
                     />
                 </div>
                 <div className="col-span-1 lg:col-span-2 my-7">
                     <AgCharts
-                        className="h-96"
+                        style={{ height: "500px" }}
                         options={chartOptions.statusPerMonthOptions}
                         {...commonChartProps}
                     />

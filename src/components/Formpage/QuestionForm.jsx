@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '../form/TextArea';
-import Button from '../ui/Button';
-import { useFormMessages } from '../../queries/form.query';
+import TextArea from '@/components/form/TextArea';
+import { useFormMessages } from '@/queries/form.query';
+import Button from '@/components/ui/Button';
 
 export default function QuestionForm() {
   const {
@@ -43,8 +43,8 @@ export default function QuestionForm() {
         <Button
           type="submit"
           loading={isPending}
-          size="lg"
-          className="mt-3 bg-[#24244e]  text-white px-4 py-2 rounded"
+          size="md"
+          variant='accent'
         >
           Submit
         </Button>

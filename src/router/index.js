@@ -24,13 +24,11 @@ import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
 import ProtectedRoute from '../layout/Protected/ProtectedRoute';
 
 const AppRoutes = [
-  // Public Home Routes
   {
     path: '/',
     Component: HomeLayout,
     children: [
       {
-        // Protected Home Pages
         Component: ProtectedRoute,
         children: [{ index: true, Component: HomePage }],
       },
@@ -47,7 +45,6 @@ const AppRoutes = [
         Component: AppLayout,
         children: [
           {
-            // Regular dashboard protected routes
             Component: ProtectedRoute,
             children: [
               { index: true, Component: DashboardPage },
@@ -61,7 +58,6 @@ const AppRoutes = [
             ],
           },
           {
-            // Admin-only protected routes
             Component: AdminProtectedRoute,
             children: [
               { path: 'admin', Component: AdminDashboardPage },
@@ -79,7 +75,6 @@ const AppRoutes = [
       },
     ],
   },
-  // 404 Page
   { path: '*', Component: NotfoundPage },
 ];
 

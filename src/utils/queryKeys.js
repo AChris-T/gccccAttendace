@@ -11,8 +11,9 @@ export const QUERY_KEYS = {
       'first-timers-analytics',
       params,
     ],
-    // LIST: (params) => ['first-timers', 'list', params],
-    // DETAIL: (id) => ['first-timers', 'detail', id],
+  },
+  UNITS: {
+    ALL: ['units'],
   },
 
   ////

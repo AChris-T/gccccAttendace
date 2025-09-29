@@ -1,4 +1,4 @@
-"use client";
+import React from "react";
 import InputForm from "../form/InputForm";
 
 export const Step1PersonalInfo = ({ register, errors }) => (
@@ -12,21 +12,22 @@ export const Step1PersonalInfo = ({ register, errors }) => (
       closely knitted Community of Believers. We would like to know you more
       closely, kindly fill in detailed information here.
     </p>
-
-    <InputForm
-      label="First Name"
-      name="first_name"
-      placeholder="Enter first name"
-      register={register}
-      error={errors.first_name?.message}
-    />
-    <InputForm
-      label="Last Name"
-      name="last_name"
-      placeholder="Enter last name"
-      register={register}
-      error={errors.last_name?.message}
-    />
+    <div className="grid grid-cols-2 gap-5">
+      <InputForm
+        label="First Name"
+        name="first_name"
+        placeholder="Enter first name"
+        register={register}
+        error={errors.first_name?.message}
+      />
+      <InputForm
+        label="Last Name"
+        name="last_name"
+        placeholder="Enter last name"
+        register={register}
+        error={errors.last_name?.message}
+      />
+    </div>
     <InputForm
       label="Phone Number"
       name="phone_number"
@@ -45,13 +46,13 @@ export const Step1PersonalInfo = ({ register, errors }) => (
       label="Gender"
       name="gender"
       type="radio"
+      placeholder=''
       register={register}
       error={errors.gender?.message}
       required={true}
       options={[
         { label: "Male", value: "male" },
         { label: "Female", value: "female" },
-        { label: "Other", value: "other" },
       ]}
     />
   </>

@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '../form/TextArea';
-import Button from '../ui/Button';
-import { useFormMessages } from '../../queries/form.query';
-import { Toast } from '../../lib/toastify';
+import TextArea from '@/components/form/TextArea';
+import Button from '@/components/ui/Button';
+import { useFormMessages } from '@/queries/form.query';
+import { Toast } from '@/lib/toastify';
 
 export default function PrayerForm() {
   const {
@@ -50,8 +50,8 @@ export default function PrayerForm() {
         <Button
           type="submit"
           loading={isSubmitting}
-          size="lg"
-          className="mt-3 bg-[#24244e]  text-white px-4 py-2 rounded"
+          size="md"
+          variant='accent'
         >
           Submit
         </Button>

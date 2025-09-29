@@ -37,13 +37,13 @@ const Modal = ({ isOpen, onClose, title, children, maxWidth = "max-w-lg", action
   return createPortal(
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[1000000] flex items-center justify-center"
         style={{ backdropFilter: "blur(1.5px)" }}
+        className="fixed inset-0 z-[1000000] flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, transition: { duration: 0.2 } }}
       >
-        <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
+        <div className="fixed inset-0 bg-opacity-50 transition-opacity  h-full w-full bg-gray-400/50 backdrop-blur-[32px]" />
         <motion.div
           onClick={(e) => e.stopPropagation()}
           initial={{ translateY: -50, opacity: 0 }}

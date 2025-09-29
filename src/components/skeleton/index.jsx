@@ -224,3 +224,31 @@ export const TabContentLoader = () => (
     </div>
   </div>
 );
+export const UnitCardSkeleton = () => {
+  return (
+    <div className="relative border shadow flex flex-col items-center rounded-[20px] p-4 bg-white bg-clip-border shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:!shadow-none animate-pulse">
+      {/* Header */}
+      <div className="relative flex w-full justify-center rounded-xl bg-gray-200 dark:bg-gray-700 h-[70px]">
+        <div className="absolute bottom-2 w-1/2 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+      </div>
+
+      {/* Leaders */}
+      <div className="mb-5 mt-10 flex flex-wrap gap-4">
+        <div className="flex flex-col items-center">
+          <div className="w-24 h-5 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
+          <div className="w-16 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="w-24 h-5 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
+          <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="my-5 flex flex-wrap items-center gap-4">
+        <div className="w-36 h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
+        <div className="w-28 h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
+      </div>
+    </div>
+  );
+};

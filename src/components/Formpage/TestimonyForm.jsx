@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '../form/TextArea';
+import TextArea from "@/components/form/TextArea";
 import InputForm from '../form/InputForm';
 import Button from '../ui/Button';
 import { useFormMessages } from '../../queries/form.query';
@@ -116,8 +116,8 @@ export default function TestimonyForm() {
         <Button
           type="submit"
           loading={isSubmitting}
-          size="lg"
-          className="mt-3 bg-[#24244e]  text-white px-4 py-2 rounded"
+          size="md"
+          variant='accent'
         >
           Submit
         </Button>

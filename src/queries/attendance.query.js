@@ -123,10 +123,16 @@ export const useMarkAbsentees = (options = {}) => {
 
 export const useMonthlyAttendanceStats = (year, mode) => {
   return useQuery({
-    queryKey: QUERY_KEYS.ATTENDANCE.BY_MONTH_YEAR(),
-    queryFn: () => AttendanceService.getAdminAttendanceMonthlyStats(year, mode),
+    queryKey: QUERY_KEYS.ATTENDANCE.BY_MONTH_YEAR(year, mode),
+    queryFn: async () => {
+      const { data } = await AttendanceService.getAdminAttendanceMonthlyStats(
+        year,
+        mode
+      );
+      return data;
+    },
     // enabled: !!id,
-    // staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
     // ...options,
   });
 };

@@ -80,7 +80,7 @@ export default function FormPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="w-full mx-2 md:max-w-xl md:mx-auto h-[80vh] custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 mt-20 mb-20 md:mt-20 lg:mt-20">
+      <div className="w-full mx-2 md:max-w-3xl md:mx-auto h-auto custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 mt-20 mb-20 md:mt-20 lg:mt-20">
         {/* Tab Image Header */}
         <Animated
           animation="fade-down"
@@ -108,11 +108,10 @@ export default function FormPage() {
                 role="tab"
                 aria-selected={isActive}
                 aria-controls={`panel-${tab.id}`}
-                className={`px-2 md:px-6 py-2 -mb-px font-medium border-b-2 focus:outline-none transition-colors duration-200 hover:text-[#1a1a40] ${
-                  isActive
-                    ? 'border-[#24244e] text-[#24244e] font-medium'
-                    : 'border-transparent text-gray-700 hover:border-gray-300'
-                }`}
+                className={`px-2 md:px-6 py-2 -mb-px font-medium border-b-2 focus:outline-none transition-colors duration-200 hover:text-[#1a1a40] ${isActive
+                  ? 'border-[#24244e] text-[#24244e] font-medium'
+                  : 'border-transparent text-gray-700 hover:border-gray-300'
+                  }`}
               >
                 {tab.name}
               </button>

@@ -3,10 +3,7 @@ import { FormService } from '../services/form.service';
 import { QUERY_KEYS } from '../utils/queryKeys';
 import { Toast } from '../lib/toastify';
 
-// useFormsByType
-
-// Create member mutation
-export const useCreateForm = (options = {}) => {
+export const useFormMessages = (options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({

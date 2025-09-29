@@ -1,4 +1,18 @@
 {
-  "files": [],
-  "references": [{ "path": "./jsconfig.node.json" }]
+  "compilerOptions": {
+    "jsx": "react",
+    "composite": true,
+    "module": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "checkJs": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["src/**/*", "vite.config.js"],
+  "exclude": ["node_modules"]
 }

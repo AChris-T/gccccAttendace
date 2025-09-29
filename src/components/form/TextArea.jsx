@@ -21,9 +21,8 @@ const TextArea = ({
         {...register(name, {
           required: required ? `${label} is required` : false,
         })}
-        className={`w-full text-xs font-light rounded-lg p-3 focus:outline-gray-200 focus:outline border ${
-          error ? 'border-red-500' : 'border-gray-300'
-        }`}
+        className={`w-full text-xs font-light rounded-lg p-3 focus:outline-gray-200 focus:outline border ${error ? 'border-red-500' : 'border-gray-300'
+          }`}
         placeholder={placeholder}
       />
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}

@@ -15,7 +15,7 @@ const AdminDashboardPage = () => {
                 <ComponentCard title="First Timers Analytics" >
                     <FirstTimersCharts />
                 </ComponentCard>
-                <ComponentCard title="Attendance Monthly Stats" >
+                <ComponentCard title="Attendance Analytics" >
                     <AdminAttendanceMonthlyStats />
                 </ComponentCard>
             </div>

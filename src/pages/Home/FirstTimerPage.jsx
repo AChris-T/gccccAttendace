@@ -14,7 +14,9 @@ import {
 import { useCreateFirstTimer } from "../../queries/firstTimer.query";
 import Message from "../../components/common/Message";
 import Button from "../../components/ui/Button";
-import { CompletedIcon } from "../../icons";
+import { CompletedIcon, LoadingIcon } from "../../icons";
+import { Toast } from "../../lib/toastify";
+import { handleApiError } from "../../utils/helper";
 
 // Constants
 const TOTAL_STEPS = 5;
@@ -68,8 +70,8 @@ const FirstTimerPage = () => {
   const isCompleteStep = useMemo(() => step === "complete", [step]);
   const isLastStep = useMemo(() => step === TOTAL_STEPS, [step]);
   const containerClasses = useMemo(() => {
-    const baseClasses = "max-w-xl w-full p-6 bg-white shadow rounded-md";
-    const scrollClasses = SCROLLABLE_STEPS.includes(step) ? "h-[80vh] overflow-y-auto" : "";
+    const baseClasses = "max-w-3xl w-full p-6 bg-white shadow rounded-md";
+    const scrollClasses = SCROLLABLE_STEPS.includes(step) ? "h-auto overflow-y-auto" : "";
     return `${baseClasses} ${scrollClasses}`;
   }, [step]);
 
@@ -95,10 +97,7 @@ const FirstTimerPage = () => {
 
     const isValid = await trigger(fieldsToValidate);
 
-    if (!isValid) {
-      // Note: Toast is referenced but not imported - should be imported or use a notification system
-      console.warn("Please fill in all required fields correctly before proceeding.");
-    }
+    if (!isValid) Toast.warning("Please fill in all required fields correctly before proceeding.")
 
     return isValid;
   }, [step, getValidationFields, trigger]);
@@ -136,7 +135,8 @@ const FirstTimerPage = () => {
       await createFirstTimer(payload);
       setStep("complete");
     } catch (err) {
-      console.error("Form submission failed:", err);
+      const message = handleApiError(err)
+      Toast.error(`Form submission failed: ${message}`)
     }
   }, [createFirstTimer]);
 
@@ -148,11 +148,6 @@ const FirstTimerPage = () => {
     }
   }, [isLastStep, handleSubmit, handleFormSubmit, handleNextStep]);
 
-  // UI helpers
-  const getButtonText = useCallback(() => {
-    if (isPending) return "Processing...";
-    return isLastStep ? "Submit" : "Next";
-  }, [isPending, isLastStep]);
 
   const renderProgressBar = () => (
     <div className="mb-6 mt-4">
@@ -181,24 +176,11 @@ const FirstTimerPage = () => {
   };
 
   const renderActionButtons = () => (
-    <div className="flex justify-between mt-6 mb-4">
+    <div className="flex justify-between my-6">
       {step > 1 && (
-        <button
-          type="button"
-          onClick={handlePreviousStep}
-          className="px-8 py-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
-        >
-          Previous
-        </button>
+        <Button className="px-6" type="button" onClick={handlePreviousStep} variant="ghost" size="md">Previous</Button>
       )}
-      <button
-        type="button"
-        onClick={handleButtonClick}
-        disabled={isPending}
-        className="ml-auto px-8 py-2 bg-[#24244e] text-white rounded hover:bg-[#1a1a40] disabled:opacity-50 transition-colors"
-      >
-        {getButtonText()}
-      </button>
+      <Button type="button" className="px-6" loading={isPending} onClick={handleButtonClick} variant="accent" size="md"> {isLastStep ? "Submit" : "Next"}</Button>
     </div>
   );
 
@@ -217,12 +199,12 @@ const FirstTimerPage = () => {
   const renderForm = () => (
     <>
       <div className="flex justify-center mb-6">
-        <img src="/images/logo/gccc.png" alt="Logo" className="h-16 w-auto" />
+        <img src="/images/logo/logo2.png" alt="Logo" className="h-16 w-auto" />
       </div>
 
       {renderProgressBar()}
 
-      <form className="mb-12" onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+      <form className="my-8" onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         {renderStepContent()}
 
         {isError && <Message variant="error" data={error?.data} />}
