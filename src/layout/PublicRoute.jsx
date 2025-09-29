@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/auth.store";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PublicRoute = () => {
     const { user, isAuthenticated } = useAuthStore();
@@ -8,7 +8,7 @@ const PublicRoute = () => {
         return <Navigate to="/" replace />;
     }
 
-    return children;
+    return <Outlet />;
 }
 
 export default PublicRoute
