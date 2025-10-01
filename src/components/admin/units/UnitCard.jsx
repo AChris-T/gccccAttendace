@@ -2,7 +2,7 @@ import useGlassmorphismTheme from "@/hooks/useGlassmorphismTheme";
 import { useModal } from "../../../hooks/useModal";
 import { AssignIcon, AttendanceIcon2, UserIcon, UserIcon2 } from "../../../icons"
 import Button from "../../ui/Button"
-import Modal from "../../ui/modal";
+import Modal from "../../ui/Modal";
 
 const UnitCard = ({ unit, index }) => {
     const { isOpen, openModal, closeModal } = useModal();
