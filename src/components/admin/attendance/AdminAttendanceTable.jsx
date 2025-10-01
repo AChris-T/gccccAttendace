@@ -1,314 +1,335 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Badge from '../../ui/Badge';
 import Button from '../../ui/Button';
-import { useAllAttendance } from '../../../queries/attendance.query';
-import Alert from '../../ui/Alert';
+import { useAllAttendance } from '@/queries/attendance.query';
+import { useServices } from '@/queries/service.query';
+import AttendanceFilter from './AttendanceFilter';
+import { LoadingIcon } from '@/icons';
+import AttendanceReport from '@/components/admin/attendance/AttendanceReport';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const AdminAttendanceTable = () => {
-    const { data, isError, error, isLoading, refetch, isFetching } = useAllAttendance()
-
-    const allAttendance = data
     const gridRef = useRef(null);
 
-    // Highly optimized default column configuration for large datasets
+    // Filter state
+    const [activeFilters, setActiveFilters] = useState({
+        service_id: '',
+        attendance_date: [],
+        status: '',
+        mode: ''
+    });
+
+    // Data fetching hooks
+    const {
+        data: allAttendance = [],
+        isError,
+        error,
+        isLoading,
+        refetch,
+        isFetching
+    } = useAllAttendance(activeFilters);
+
+    const { data: services = [], isLoading: servicesLoading } = useServices();
+
+    // Default column definitions
     const defaultColDef = useMemo(() => ({
-        sortable: true,
-        resizable: true,
-        suppressMenu: false,
-        lockPosition: false,
-        suppressMovable: false,
         flex: 1,
         filter: true,
+        sortable: true,
+        resizable: true,
         suppressPaste: false,
         floatingFilter: true,
         editable: false,
     }), []);
 
-    // Memoized and optimized cell renderers
+    // Cell Renderers
     const StatusRenderer = useCallback(({ value }) => {
-        if (!value) return <span className="text-gray-400">N/A</span>;
+        if (!value) return <span className="text-gray-400 text-center">--</span>;
 
-        // Optimized color logic without switch statement
-        const colors = { present: 'green', absent: 'red', late: 'yellow' };
-        const color = colors[value.toLowerCase()] || 'gray';
+        const colorMap = {
+            present: 'success',
+            absent: 'error',
+        };
+        const color = colorMap[value.toLowerCase()];
 
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
     const ModeRenderer = useCallback(({ value }) => {
-        if (!value) return <span className="text-gray-400">N/A</span>;
+        if (!value) return <span className="text-gray-400 text-center">--</span>;
 
-        const colors = { onsite: 'blue', online: 'purple', hybrid: 'indigo' };
-        const color = colors[value.toLowerCase()] || 'gray';
+        const colorMap = {
+            onsite: 'primary',
+            online: 'warning',
+        };
+        const color = colorMap[value.toLowerCase()];
 
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
-    const DayRenderer = useCallback(({ value }) => {
-        if (!value) return <span className="text-gray-400">N/A</span>;
-
-        const colors = {
-            sunday: 'orange', monday: 'blue', tuesday: 'green', wednesday: 'purple',
-            thursday: 'pink', friday: 'indigo', saturday: 'yellow'
-        };
-        const color = colors[value.toLowerCase()] || 'gray';
-        const formatted = value.charAt(0).toUpperCase() + value.slice(1);
-
-        return <Badge color={color}>{formatted}</Badge>;
-    }, []);
-
-    // Optimized formatters using simple functions
-    const dateFormatter = useCallback(({ value }) => {
-        if (!value) return '';
-        return new Date(value).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric'
+    // Value Formatters
+    const dateFormatter = useCallback((params) => {
+        if (!params.value) return '';
+        const date = new Date(params.value);
+        if (isNaN(date.getTime())) return params.value;
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
         });
     }, []);
 
-    const timeFormatter = useCallback(({ value }) => value || '', []);
-
-    const nameFormatter = useCallback(({ data }) => {
-        const { first_name, last_name } = data;
-        if (!first_name && !last_name) return 'N/A';
-        return `${first_name || ''} ${last_name || ''}`.trim();
+    const nameFormatter = useCallback((params) => {
+        if (!params.data?.user) return 'N/A';
+        const { first_name = '', last_name = '' } = params.data.user;
+        return `${first_name} ${last_name}`.trim() || 'N/A';
     }, []);
 
-    // Streamlined column definitions optimized for performance
+    const emailFormatter = useCallback((params) => {
+        return params.data?.user?.email || 'N/A';
+    }, []);
+
+    const phoneFormatter = useCallback((params) => {
+        return params.data?.user?.phone_number || 'N/A';
+    }, []);
+
+    const serviceFormatter = useCallback((params) => {
+        return params.data?.service?.name || 'N/A';
+    }, []);
+
+    // Column Definitions
     const columnDefs = useMemo(() => [
         {
             field: "id",
             headerName: "ID",
-            width: 70,
+            width: 80,
             pinned: 'left',
-            cellClass: 'text-xs font-medium',
-            suppressSizeToFit: true,
+            cellClass: 'font-medium',
+            editable: false,
         },
         {
             headerName: "Name",
-            valueGetter: nameFormatter,
-            width: 140,
-            cellClass: 'text-xs',
-        },
-        {
-            field: "email",
-            headerName: "Email",
+            valueFormatter: nameFormatter,
             width: 180,
-            cellClass: 'text-xs text-blue-600',
-            tooltipField: 'email', // Show full email on hover
         },
         {
-            field: "service_name",
+            headerName: "Email",
+            valueFormatter: emailFormatter,
+            width: 220,
+            cellClass: 'text-blue-600 dark:text-blue-400',
+        },
+        {
+            headerName: "Phone",
+            valueFormatter: phoneFormatter,
+            width: 140,
+        },
+        {
             headerName: "Service",
-            width: 120,
-            cellClass: 'text-xs font-medium',
+            valueFormatter: serviceFormatter,
+            width: 150,
+            cellClass: 'font-medium',
         },
         {
             field: "attendance_date",
             headerName: "Date",
             valueFormatter: dateFormatter,
-            width: 100,
-            cellClass: 'text-xs',
+            width: 120,
+            filter: false,
         },
         {
             field: "status",
             headerName: "Status",
             cellRenderer: StatusRenderer,
-            width: 90,
-            cellClass: 'text-xs',
+            width: 110,
+            editable: false,
         },
         {
             field: "mode",
             headerName: "Mode",
             cellRenderer: ModeRenderer,
-            width: 90,
-            cellClass: 'text-xs',
+            width: 110,
+            editable: false,
         },
-        {
-            field: "service_day_of_week",
-            headerName: "Day",
-            cellRenderer: DayRenderer,
-            width: 90,
-            cellClass: 'text-xs',
-        },
-        {
-            field: "service_start_time",
-            headerName: "Time",
-            valueFormatter: timeFormatter,
-            width: 80,
-            cellClass: 'text-xs',
-        },
-        {
-            field: "phone_number",
-            headerName: "Phone",
-            width: 120,
-            cellClass: 'text-xs',
-        },
-        {
-            field: "role",
-            headerName: "Role",
-            width: 100,
-            cellClass: 'text-xs',
-        },
-    ], [StatusRenderer, ModeRenderer, DayRenderer, dateFormatter, timeFormatter, nameFormatter]);
+    ], [StatusRenderer, ModeRenderer, dateFormatter, nameFormatter, emailFormatter, phoneFormatter, serviceFormatter]);
 
-    // Highly optimized grid options for large datasets
+    // Grid Options
     const gridOptions = useMemo(() => ({
-        // Pagination optimizations
         pagination: true,
-        paginationPageSize: 100, // Smaller page size for better performance
-        paginationPageSizeSelector: [50, 100, 200],
-
-        // Performance optimizations for large datasets
-        rowBuffer: 10, // Minimal row buffer
-        suppressRowVirtualisation: false, // Enable row virtualization
-        suppressColumnVirtualisation: false, // Enable column virtualization
-
-        // Remove expensive features
+        paginationPageSize: 200,
+        paginationPageSizeSelector: [25, 50, 100, 200],
         suppressDragLeaveHidesColumns: true,
-        suppressMovableColumns: false,
-        suppressFieldDotNotation: true,
-
-        // Animation settings for performance
-        animateRows: false, // Disable for large datasets
-        suppressAnimationFrame: false,
-
-        // Grid settings
+        animateRows: true,
+        suppressCellFocus: false,
         defaultColDef,
         columnDefs,
         rowData: allAttendance,
         loading: isLoading || isFetching,
-
-        // Scroll settings
+        suppressColumnVirtualisation: false,
+        suppressRowVirtualisation: false,
         suppressHorizontalScroll: false,
         alwaysShowHorizontalScroll: false,
-        suppressScrollOnNewData: true,
-
-        // Selection settings (minimal overhead)
-        suppressRowClickSelection: false,
-        suppressRowDeselection: false,
-
-        // Performance cache settings
-        cacheBlockSize: 100,
-        maxBlocksInCache: 10,
-        maxConcurrentDatasourceRequests: 2,
-        blockLoadDebounceMillis: 50,
-
-        // Disable expensive features
-        enableRangeSelection: false,
-        enableRangeHandle: false,
-        enableFillHandle: false,
-
-        // Row height optimization
-        rowHeight: 35, // Smaller row height for more data visibility
-        headerHeight: 40,
     }), [defaultColDef, columnDefs, allAttendance, isLoading, isFetching]);
 
-    // Optimized event handlers
     const onGridReady = useCallback((params) => {
         gridRef.current = params.api;
+    }, []);
 
-        // Optimize grid for large datasets
-        params.api.sizeColumnsToFit();
+    const handleApplyFilters = useCallback((filters) => {
+        setActiveFilters(filters);
+    }, [activeFilters]);
 
-        // Set loading overlay
-        if (isLoading || isFetching) {
-            params.api.showLoadingOverlay();
+    const handleResetFilters = useCallback((filters) => {
+        setActiveFilters(filters);
+    }, []);
+
+    // Export handler
+    const handleExportCSV = useCallback(() => {
+        if (gridRef.current) {
+            const timestamp = new Date().toISOString().split('T')[0];
+            gridRef.current.exportDataAsCsv({
+                fileName: `attendance-report-${timestamp}.csv`,
+            });
         }
-    }, [isLoading, isFetching]);
+    }, []);
 
-    const onFirstDataRendered = useCallback((params) => {
-        // Auto-size columns only on first render for performance
-        if (allAttendance?.length > 0 && allAttendance.length < 1000) {
-            params.api.sizeColumnsToFit();
-        }
-    }, [allAttendance]);
-
-    // Error state
-    if (isError) {
-        return (
-            <Alert variant='error' loading={isLoading || isFetching} onClick={() => refetch()} message={error?.data?.message} />
-        );
-    }
-
-    if (isLoading || isFetching && !allAttendance?.length) {
-        return (
-            <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-2">Loading attendance records...</p>
-                </div>
-            </div>
-        );
-    }
+    // Check if any filters are active
+    const hasActiveFilters =
+        activeFilters.service_id ||
+        activeFilters.attendance_date?.length > 0 ||
+        activeFilters.status ||
+        activeFilters.mode;
 
     return (
-        <div className="w-full">
-            {/* Minimal header for performance */}
-            <div className="mb-3 flex justify-between items-center">
-                <p className="text-sm text-gray-600">
-                    {allAttendance?.length?.toLocaleString() || 0} records
-                    {isLoading || isFetching && <span className="ml-2 text-blue-600">• Loading...</span>}
-                </p>
-                <div className="flex gap-3">
-                    <Button
-                        variant='outline-primary'
-                        className='rounded px-4 py-2 text-sm'
-                        onClick={() => gridRef.current?.exportDataAsCsv()}
-                        disabled={isLoading || isFetching}
-                    >
-                        Export CSV
-                    </Button>
-                    <Button
-                        className='rounded px-4 py-2 text-sm'
-                        variant='outline-light'
-                        onClick={() => refetch()}
-                        loading={isLoading || isFetching}
-                    >
-                        Refresh
-                    </Button>
-                </div>
+        <div className="w-full animate-fadeIn">
+            <div className='mb-14 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0'>
+                <AttendanceFilter
+                    services={services}
+                    initialFilters={activeFilters}
+                    onApply={handleApplyFilters}
+                    onReset={handleResetFilters}
+                    loading={isLoading || isFetching || servicesLoading}
+                />
+                <AttendanceReport services={services} />
             </div>
 
-            {/* Optimized AG Grid for large datasets */}
-            <div
-                className="ag-theme-alpine border border-gray-200 rounded-lg shadow-sm"
-                style={{ width: "100%", height: "700px" }}
-            >
-                <AgGridReact
-                    ref={gridRef}
-                    {...gridOptions}
-                    onGridReady={onGridReady}
-                    onFirstDataRendered={onFirstDataRendered}
-                    loadingOverlayComponent={() => (
-                        <div className="flex items-center justify-center h-full">
-                            <div className="text-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                                <p className="text-gray-600 mt-2">Loading records...</p>
+            {isError && error ? <>
+                <div className="flex items-center justify-center h-64 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg animate-fadeIn">
+                    <div className="text-center">
+                        <svg className="w-16 h-16 mx-auto text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div className="text-red-600 dark:text-red-400 mb-4 font-semibold">
+                            Error loading attendance data
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            {error?.message || 'An unexpected error occurred'}
+                        </p>
+                        <Button onClick={() => refetch()} variant="outline-danger" className='rounded'>
+                            Retry
+                        </Button>
+                    </div>
+                </div>
+            </> : isLoading || (isFetching && !allAttendance?.length) ?
+                <>
+                    <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg animate-fadeIn">
+                        <LoadingIcon width={40} height={40} />
+                        <p>Fetching attendance records</p>
+                    </div>
+                </> :
+                <>
+                    {/* Header Section */}
+                    <div className="flex justify-between items-center my-3">
+                        <div className="flex items-center gap-3">
+                            <p className="text-sm text-blue-600 dark:text-gray-400">
+                                <span className="font-semibold text-blue-900 dark:text-white">
+                                    {allAttendance?.length || 0}
+                                </span>
+                                {' '}record{allAttendance?.length !== 1 ? 's' : ''} found
+                            </p>
+                            {hasActiveFilters && (
+                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-blue-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800">
+                                    Filtered
+                                </span>
+                            )}
+                            {(isFetching) && (
+                                <span className="inline-flex items-center text-sm text-green-600 dark:text-blue-400">
+                                    Syncing...
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    {/* Action Buttons */}
+                    <div className="flex gap-2 mb-4">
+                        <Button
+                            variant='accent'
+                            className='rounded px-5'
+                            onClick={handleExportCSV}
+                            disabled={isLoading || isFetching || !allAttendance?.length}
+                        >
+                            Export CSV
+                        </Button>
+                        <Button
+                            className='rounded px-5'
+                            variant='ghost'
+                            onClick={() => refetch()}
+                            loading={isFetching}
+                            disabled={isLoading}
+                        >
+                            Refresh
+                        </Button>
+                    </div>
+
+                    {/* AG Grid Table */}
+                    <div
+                        className="ag-theme-alpine dark:ag-theme-alpine-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg overflow-hidden"
+                        style={{ width: "100%", height: "1000px" }}
+                    >
+                        <AgGridReact
+                            ref={gridRef}
+                            {...gridOptions}
+                            onGridReady={onGridReady}
+                            loadingOverlayComponent={() => (
+                                <div className="flex items-center justify-center h-full">
+                                    <LoadingIcon width={40} height={40} />
+                                    <p>Fetching attendance records</p>
+                                </div>
+                            )}
+                            noRowsOverlayComponent={() => (
+                                <div className="flex items-center justify-center h-full">
+                                    <div className="text-center">
+                                        <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
+                                            No attendance records found
+                                        </p>
+                                        <p className="text-gray-400 dark:text-gray-500 text-sm">
+                                            {hasActiveFilters
+                                                ? 'Try adjusting your filters or reset them to see all records'
+                                                : 'Records will appear here once available'}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        />
+                    </div>
+
+                    {/* Footer Section */}
+                    {allAttendance?.length > 0 && (
+                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center animate-fadeIn">
+                            <span>Last updated: {new Date().toLocaleString()}</span>
+                            <div className="flex items-center gap-2">
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                    <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
+                                </span>
                             </div>
                         </div>
                     )}
-                    noRowsOverlayComponent={() => (
-                        <div className="flex items-center justify-center h-full">
-                            <p className="text-gray-500">No attendance records found</p>
-                        </div>
-                    )}
-                />
-            </div>
-
-            {/* Minimal footer */}
-            {allAttendance?.length > 0 && (
-                <div className="mt-3 text-xs text-gray-500 flex justify-between items-center">
-                    <span>Updated: {new Date().toLocaleTimeString()}</span>
-                    <span className="flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                        Live
-                    </span>
-                </div>
-            )}
+                </>}
         </div>
     );
 };

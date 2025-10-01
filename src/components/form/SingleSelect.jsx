@@ -92,8 +92,8 @@ const SingleSelect = memo(({
                     onClick={toggleDropdown}
                     disabled={disabled}
                     className={`w-full flex items-center justify-between min-h-[2.75rem] rounded-lg border px-3 py-2 text-left shadow-sm transition-all duration-200 ${error
-                        ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-200'
-                        : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:focus:border-blue-400'
+                        ? 'border-red-500 focus:border-red-500 focus:ring-0 focus:ring-red-200'
+                        : 'border-gray-300 focus:border-blue-500 focus:ring-0 focus:ring-blue-200 dark:border-gray-700 dark:focus:border-blue-400'
                         } ${disabled
                             ? 'bg-gray-100 cursor-not-allowed opacity-60 dark:bg-gray-800'
                             : 'bg-white cursor-pointer hover:border-gray-400 dark:bg-gray-900'

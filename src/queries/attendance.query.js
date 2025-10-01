@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AttendanceService } from '../services/attendance.service';
 import { QUERY_KEYS } from '../utils/queryKeys';
-import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
@@ -20,57 +19,21 @@ export const useAttendanceHistory = (options = {}) => {
 };
 
 // Get all attendance records
-export const useAllAttendance = (options = {}) => {
+export const useAllAttendance = (params = {}, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS,
+    queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
     queryFn: async () => {
-      const { data } = await AttendanceService.getAllAttendance();
+      const { data } = await AttendanceService.getAllAttendance(params);
       return data || [];
     },
-    staleTime: 30 * 1000, // 30 seconds
-    cacheTime: 2 * 60 * 1000, // 2 minutes
+    cacheTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
     ...options,
   });
-};
-
-export const useFilteredAttendance = () => {
-  const [selectedMonth, setSelectedMonth] = useState(
-    new Date().toLocaleString('default', { month: 'long' })
-  );
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  const { data: attendanceHistory = [], ...queryProps } =
-    useAttendanceHistory();
-
-  const filteredAttendanceHistory = useMemo(() => {
-    if (attendanceHistory.length === 0) return [];
-
-    return attendanceHistory.filter((record) => {
-      if (!record.attendance_date) return false;
-
-      const recordDate = new Date(record.attendance_date);
-      const recordMonth = recordDate.toLocaleString('default', {
-        month: 'long',
-      });
-      const recordYear = recordDate.getFullYear();
-
-      const matchesMonth =
-        selectedMonth === 'All' || recordMonth === selectedMonth;
-      const matchesYear = recordYear === selectedYear;
-
-      return matchesMonth && matchesYear;
-    });
-  }, [attendanceHistory, selectedMonth, selectedYear]);
-
-  return {
-    attendanceHistory,
-    filteredAttendanceHistory,
-    selectedMonth,
-    selectedYear,
-    setSelectedMonth,
-    setSelectedYear,
-    ...queryProps,
-  };
 };
 
 // Mark attendance mutation
@@ -107,20 +70,40 @@ export const useMarkAbsentees = (options = {}) => {
   return useMutation({
     mutationFn: AttendanceService.markAbsentees,
     onSuccess: (data, variables) => {
-      // Invalidate attendance queries
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ATTENDANCE.ALL });
-
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(),
+      });
+      Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {
-      const message =
-        error.response?.data?.message ||
-        'Something went wrong while marking absentees';
+      const message = handleApiError(error);
+      Toast.error(message);
+      options.onError?.(new Error(message));
+    },
+  });
+};
+export const useAssignAbsenteesToLeaders = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: AttendanceService.assignAbsenteesToLeaders,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(),
+      });
+      Toast.success(data?.message);
+      options.onSuccess?.(data, variables);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message);
       options.onError?.(new Error(message));
     },
   });
 };
 
+//  usher attendance
 export const useMonthlyAttendanceStats = (year, mode) => {
   return useQuery({
     queryKey: QUERY_KEYS.ATTENDANCE.BY_MONTH_YEAR(year, mode),

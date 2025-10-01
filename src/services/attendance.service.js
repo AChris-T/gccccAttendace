@@ -9,13 +9,36 @@ export const AttendanceService = {
     const { data } = await $api.get(`/attendance/history`);
     return data;
   },
+  // admin
   async markAbsentees(payload) {
-    const { data } = await $api.post(`/attendance/mark-absentees`, payload);
+    const { data } = await $api.post(
+      `/admin/attendance/mark-absentees`,
+      payload
+    );
     return data;
   },
-  // admin
-  async getAllAttendance() {
-    const { data } = await $api.get(`/admin/attendance`);
+  async assignAbsenteesToLeaders(payload) {
+    const { data } = await $api.post(
+      `/admin/attendance/assign-absentees-to-leaders`,
+      payload
+    );
+    return data;
+  },
+  async getAllAttendance(params = {}) {
+    const queryParams = new URLSearchParams();
+
+    params.attendance_date?.forEach((date) =>
+      queryParams.append('attendance_date[]', date)
+    );
+
+    ['service_id', 'status', 'mode'].forEach((key) => {
+      if (params[key]) queryParams.append(key, params[key]);
+    });
+
+    const query = queryParams.toString();
+    const endpoint = `/admin/attendance${query ? `?${query}` : ''}`;
+
+    const { data } = await $api.get(endpoint);
     return data;
   },
   //  Get monthly attendance statistics (average or total). for usher attendance

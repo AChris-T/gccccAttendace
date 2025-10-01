@@ -189,7 +189,12 @@ layer(base);
   --z-index-99999: 99999;
   --z-index-999999: 999999;
 }
-
+/* datepicker  */
+.rmdp-input {
+  padding: 20px !important;
+  @apply w-full text-sm font-light rounded-lg border shadow border-gray-300 focus:border-blue-500 focus:ring-blue-200 dark:border-gray-700 dark:focus:border-blue-400;
+  @apply p-5 shadow text-gray-700 dark:text-gray-400;
+}
 .ag-input-field-input:focus {
   border: 1.5px solid var(--color-blue-300) !important;
   outline: none !important;

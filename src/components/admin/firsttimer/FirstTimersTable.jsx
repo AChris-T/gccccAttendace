@@ -225,7 +225,6 @@ const FirstTimersTable = () => {
             Toast.info('Please select at least one row');
             return;
         }
-        console.log('Performing bulk action on IDs:', selectedRowIds, selectedStatus);
     }, [selectedRowIds, selectedStatus]);
 
     // Error state

@@ -88,8 +88,8 @@ const MultiSelect = memo(({
                     >
                         <div
                             className={`mb-2 flex min-h-[2.75rem] rounded-lg border py-1.5 pl-3 pr-3 shadow-sm transition-all duration-200 ${error
-                                ? 'border-red-500 focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-200'
-                                : 'border-gray-300 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 dark:border-gray-700 dark:focus-within:border-blue-400'
+                                ? 'border-red-500 focus-within:border-red-500 focus-within:ring-0 focus-within:ring-red-200'
+                                : 'border-gray-300 focus-within:border-blue-500 focus-within:ring-0 focus-within:ring-blue-200 dark:border-gray-700 dark:focus-within:border-blue-400'
                                 } dark:bg-gray-900`}
                             role="combobox"
                             aria-expanded={isOpen}
@@ -272,10 +272,11 @@ const MultiSelect = memo(({
     );
 });
 
-MultiSelect.displayName = "MultiSelect";
+export default MultiSelect;
+
 
 // ==================== Demo Component ====================
-export default function MultiSelectDemo() {
+export function MultiSelectDemo() {
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedCountries, setSelectedCountries] = useState(["usa"]);
     const [selectedColors, setSelectedColors] = useState([]);
