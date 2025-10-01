@@ -5,8 +5,8 @@ import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import Avatar from "../ui/Avatar";
 import { Image } from "../../utils/constant";
-import { useLogout } from "../../queries/auth.query";
-import { useAuthStore } from "../../store/auth.store";
+import { useLogout } from "@/queries/auth.query";
+import { useAuthStore } from "@/store/auth.store";
 import Badge from "@/components/ui/Badge";
 
 export default function UserDropdown() {
