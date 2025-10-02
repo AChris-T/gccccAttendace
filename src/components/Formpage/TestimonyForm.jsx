@@ -1,25 +1,23 @@
 import { useForm } from 'react-hook-form';
-import TextArea from "@/components/form/TextArea";
 import InputForm from '../form/InputForm';
 import Button from '../ui/Button';
-import { useFormMessages } from '../../queries/form.query';
+import { useCreateFormMessages } from '@/queries/form.query';
+import TextArea from '../../components/form/TextArea';
 
 export default function TestimonyForm() {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
-  const { mutateAsync, isPending } = useFormMessages({
-    onSuccess: (response) => {
+  const { mutate, isPending } = useCreateFormMessages({
+    onSuccess: () => {
       reset();
-      Toast.success('Your question has been submitted successfully.');
     },
-    onError: (error) => { },
   });
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     const payload = {
       type: 'testimony',
       content: data.message,
@@ -27,7 +25,7 @@ export default function TestimonyForm() {
       phone_number: data.phone,
       wants_to_share_testimony: data.sharePhysically === 'Yes',
     };
-    await mutateAsync(payload);
+    mutate(payload);
   };
 
   return (
@@ -113,12 +111,7 @@ export default function TestimonyForm() {
           </div>
         </div>
 
-        <Button
-          type="submit"
-          loading={isSubmitting}
-          size="md"
-          variant='accent'
-        >
+        <Button type="submit" loading={isPending} size="md" variant="accent">
           Submit
         </Button>
       </form>

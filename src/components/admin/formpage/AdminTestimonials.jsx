@@ -1,32 +1,12 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 
-export default function AdminTestimonials() {
-  const initialQuestions = useMemo(
-    () => [
-      {
-        id: 'q1',
-        content: 'What does Romans 8:28 mean in practical terms?',
-        created_at: new Date().toISOString(),
-        attended: false,
-      },
-      {
-        id: 'q2',
-        content: 'How do I build a stronger prayer life ?',
-        created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        attended: false,
-      },
-      {
-        id: 'q3',
-        content: 'How do I build a stronger prayer life?',
-        created_at: new Date(Date.now() - 10000 * 60 * 12).toISOString(),
-        attended: true,
-      },
-    ],
-    []
-  );
+export default function AdminTestimonials({ items = [], isLoading, isError, error, type = 'testimony' }) {
+  const [questions, setQuestions] = useState(items);
 
-  const [questions, setQuestions] = useState(initialQuestions);
+  React.useEffect(() => {
+    setQuestions(items);
+  }, [items]);
 
   const currentQuestions = useMemo(() => {
     return [...questions]
@@ -66,8 +46,16 @@ export default function AdminTestimonials() {
     );
   }, []);
 
+  if (isLoading) {
+    return <div className="text-sm text-gray-500 dark:text-white">Loading testimonies...</div>;
+  }
+
+  if (isError) {
+    return <div className="text-sm text-red-600">{error?.message || 'Failed to load testimonies.'}</div>;
+  }
+
   if (!questions.length) {
-    return <div className="text-sm text-gray-500">No questions available.</div>;
+    return <div className="text-sm text-gray-500 dark:text-white">No testimonies available.</div>;
   }
 
   const renderList = (list) => (
@@ -76,14 +64,16 @@ export default function AdminTestimonials() {
         <div
           key={q.id}
           className={
-            `p-3 rounded-md border flex items-start justify-between gap-3 ` +
+            `p-3 rounded-md border flex items-start justify-between gap-3 dark:text-white ` +
             (q.attended ? 'border-gray-200' : 'border-red-300')
           }
         >
           <label htmlFor={`attended-${q.id}`} className="flex-1 cursor-pointer">
-            <p className="text-sm text-gray-800 break-words">{q.content}</p>
+            <p className="text-sm text-gray-800 break-words dark:text-white">
+              {q.content}
+            </p>
             <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-white">
                 {formatDisplayDate(q.created_at)} •{' '}
                 {formatDisplayTime(q.created_at)}
               </span>
@@ -97,13 +87,9 @@ export default function AdminTestimonials() {
               onChange={() => handleToggleAttended(q.id)}
               className="h-4 w-4 rounded mr-3 border-gray-300 text-[#24244e] focus:ring-[#24244e]"
             />
-            {q.attended ? (
+            {q.attended && (
               <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                Attended
-              </span>
-            ) : (
-              <span className="inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs font-medium invisible">
-                Attended
+                Completed
               </span>
             )}
           </div>
@@ -115,7 +101,7 @@ export default function AdminTestimonials() {
   return (
     <div className="space-y-8">
       <section>
-        <h4 className="text-sm font-semibold text-gray-700">
+        <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
           Current Testimony
         </h4>
         {currentQuestions.length ? (
@@ -127,11 +113,15 @@ export default function AdminTestimonials() {
         )}
       </section>
       <section>
-        <h4 className="text-sm font-semibold text-gray-700">Past Testimony</h4>
+        <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
+          Past Testimony
+        </h4>
         {recentQuestions.length ? (
           <div className="mt-2">{renderList(recentQuestions)}</div>
         ) : (
-          <div className="mt-2 text-sm text-gray-500">No recent questions.</div>
+          <div className="mt-2 text-sm text-gray-500 dark:text-white">
+            No recent questions.
+          </div>
         )}
       </section>
     </div>

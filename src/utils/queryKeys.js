@@ -1,4 +1,8 @@
 export const QUERY_KEYS = {
+  ////forms
+  FORM_MESSAGES: {
+    ALL: ['form-messages'],
+  },
   // refactored
   FOLLOW_UP_STATUSES: {
     ALL: ['followup-status'],

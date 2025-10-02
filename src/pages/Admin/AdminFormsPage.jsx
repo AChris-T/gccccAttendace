@@ -1,45 +1,57 @@
-import { Suspense, useCallback } from "react";
-import { useTabManagement } from "../../hooks/useTabManagement";
+import { Suspense, useCallback } from 'react';
+import { useTabManagement } from '../../hooks/useTabManagement';
 import ComponentCard from '../../components/common/ComponentCard';
 import PageBreadcrumb from '../../components/common/PageBreadCrumb';
 import PageMeta from '../../components/common/PageMeta';
-import { TabButton } from "../../components/admin/forms/tabs/TabButton";
-import { TabContentErrorBoundary } from "../../components/admin/forms/tabs/TabContentErrorBoundary";
-import { TabContentLoader } from "../../components/skeleton";
-
+import { TabButton } from '../../components/admin/forms/tabs/TabButton';
+import { TabContentErrorBoundary } from '../../components/admin/forms/tabs/TabContentErrorBoundary';
+import { TabContentLoader } from '../../components/skeleton';
 
 const AdminFormsPage = () => {
-  const { activeTab, activeTabData, updateTab, tabs } = useTabManagement();
+  const {
+    activeTab,
+    activeTabData,
+    updateTab,
+    tabs,
+    categorized,
+    isLoading,
+    isError,
+    error,
+  } = useTabManagement();
+  const handleKeyDown = useCallback(
+    (event, tabId) => {
+      const currentIndex = tabs.findIndex((tab) => tab.id === tabId);
+      let nextIndex;
 
-  const handleKeyDown = useCallback((event, tabId) => {
-    const currentIndex = tabs.findIndex(tab => tab.id === tabId);
-    let nextIndex;
-
-    switch (event.key) {
-      case 'ArrowLeft':
-        event.preventDefault();
-        nextIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
-        updateTab(tabs[nextIndex].id);
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
-        updateTab(tabs[nextIndex].id);
-        break;
-      case 'Home':
-        event.preventDefault();
-        updateTab(tabs[0].id);
-        break;
-      case 'End':
-        event.preventDefault();
-        updateTab(tabs[tabs.length - 1].id);
-        break;
-      default:
-        break;
-    }
-  }, [tabs, updateTab]);
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          nextIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+          updateTab(tabs[nextIndex].id);
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+          updateTab(tabs[nextIndex].id);
+          break;
+        case 'Home':
+          event.preventDefault();
+          updateTab(tabs[0].id);
+          break;
+        case 'End':
+          event.preventDefault();
+          updateTab(tabs[tabs.length - 1].id);
+          break;
+        default:
+          break;
+      }
+    },
+    [tabs, updateTab]
+  );
 
   const ActiveComponent = activeTabData.component;
+  const itemsForActiveTab = categorized[activeTab] || [];
+  const typeForActiveTab = activeTab;
 
   return (
     <>
@@ -48,7 +60,6 @@ const AdminFormsPage = () => {
 
       <div className="space-y-6">
         <ComponentCard title="All Forms">
-          {/* Tab Navigation */}
           <div className="border-b border-gray-200">
             <nav
               className="flex items-center gap-1"
@@ -56,10 +67,7 @@ const AdminFormsPage = () => {
               aria-label="Form management tabs"
             >
               {tabs.map((tab) => (
-                <div
-                  key={tab.id}
-                  onKeyDown={(e) => handleKeyDown(e, tab.id)}
-                >
+                <div key={tab.id} onKeyDown={(e) => handleKeyDown(e, tab.id)}>
                   <TabButton
                     tab={tab}
                     isActive={activeTab === tab.id}
@@ -69,8 +77,6 @@ const AdminFormsPage = () => {
               ))}
             </nav>
           </div>
-
-          {/* Tab Content */}
           <div
             className="pt-6"
             role="tabpanel"
@@ -79,7 +85,13 @@ const AdminFormsPage = () => {
           >
             <TabContentErrorBoundary tabId={activeTab}>
               <Suspense fallback={<TabContentLoader />}>
-                <ActiveComponent />
+                <ActiveComponent
+                  items={itemsForActiveTab}
+                  isLoading={isLoading}
+                  isError={isError}
+                  error={error}
+                  type={typeForActiveTab}
+                />
               </Suspense>
             </TabContentErrorBoundary>
           </div>
@@ -90,8 +102,6 @@ const AdminFormsPage = () => {
 };
 
 export default AdminFormsPage;
-
-
 
 // const AdminFormsPage = () => {
 //   const [searchParams, setSearchParams] = useSearchParams();

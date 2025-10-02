@@ -1,31 +1,28 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '@/components/form/TextArea';
-import Button from '@/components/ui/Button';
-import { useFormMessages } from '@/queries/form.query';
-import { Toast } from '@/lib/toastify';
+import TextArea from '../../components/form/TextArea';
+import Button from '../../components/ui/Button';
+import { useCreateFormMessages } from '@/queries/form.query';
 
 export default function PrayerForm() {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
-  const { mutateAsync, isPending } = useFormMessages({
-    onSuccess: (response) => {
+  const { mutate, isPending } = useCreateFormMessages({
+    onSuccess: () => {
       reset();
-      Toast.success('Your question has been submitted successfully.');
     },
-    onError: (error) => { },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     const payload = {
       type: 'prayer',
       content: data.message,
     };
-    await mutateAsync(payload);
+    mutate(payload);
   };
 
   return (
@@ -47,12 +44,7 @@ export default function PrayerForm() {
           placeholder="Type your message here..."
           error={errors.message?.message}
         />
-        <Button
-          type="submit"
-          loading={isSubmitting}
-          size="md"
-          variant='accent'
-        >
+        <Button type="submit" loading={isPending} size="md" variant="accent">
           Submit
         </Button>
       </form>
