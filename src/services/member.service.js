@@ -1,6 +1,6 @@
 import $api from '../lib/axios';
 
-const MEMBER = '/admin/members';
+const MEMBER = '/members';
 
 export const MemberService = {
   async createMember(payload) {

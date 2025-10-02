@@ -32,17 +32,14 @@ export const useAuthStore = create()(
         return checkUnit(user?.units, unit);
       },
 
-      setAuthenticatedUser: ({ user, token }) => {
+      setAuthenticatedUser: ({ user }) => {
         const { isAdmin, isLeader, isMember } = getUserRoles(user?.roles);
-        set({
-          user,
-          token,
-          isAdmin,
-          isLeader,
-          isMember,
-          isAuthenticated: true,
-        });
+        set({ user, isAdmin, isLeader, isMember });
       },
+      setToken: ({ token }) => {
+        set({ token, isAuthenticated: true });
+      },
+
       resetAuthenticatedUser: () => {
         set({
           user: null,

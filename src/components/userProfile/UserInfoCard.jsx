@@ -3,7 +3,7 @@ import { EditIcon } from "../../icons";
 import { useAuthStore } from "../../store/auth.store";
 import InputForm from "../form/InputForm";
 import Button from "../ui/Button";
-import Modal from "../ui/modal";
+import Modal from "../ui/Modal";
 
 
 export default function UserInfoCard() {

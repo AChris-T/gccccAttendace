@@ -5,13 +5,14 @@ import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import Avatar from "../ui/Avatar";
 import { Image } from "../../utils/constant";
-import { useLogout } from "../../queries/auth.query";
-import { useAuthStore } from "../../store/auth.store";
+import { useLogout } from "@/queries/auth.query";
+import { useAuthStore } from "@/store/auth.store";
+import Badge from "@/components/ui/Badge";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAdmin } = useAuthStore()
-  const { mutate, isPending, isError, error } = useLogout()
+  const { user, isAdmin, isLeader } = useAuthStore()
+  const { mutate, isPending } = useLogout()
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -41,6 +42,7 @@ export default function UserDropdown() {
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             {user?.email}
           </span>
+          <Badge size="sm" color={isAdmin ? 'error' : isLeader ? 'warning' : 'primary'}>{isAdmin ? 'Admin' : isLeader ? 'Leader' : 'Member'}</Badge>
         </div>
 
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">

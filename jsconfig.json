@@ -12,6 +12,10 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["src/**/*", "vite.config.js"],
+  "include": [
+    "src/**/*",
+    "vite.config.js",
+    "src/components/admin/attendance/AdminAttendanceTable.jsx"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,8 +1,8 @@
-import { useModal } from "../../hooks/useModal";
-import { useAuthStore } from "../../store/auth.store";
-import InputForm from "../form/InputForm";
-import Button from "../ui/Button";
-import Modal from "../ui/modal";
+import Modal from "@/components/ui/Modal";
+import { useModal } from "@/hooks/useModal";
+import { useAuthStore } from "@/store/auth.store";
+import InputForm from "@/components/form/InputForm";
+import Button from "@/components/ui/Button";
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();

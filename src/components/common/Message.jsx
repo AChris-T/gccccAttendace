@@ -24,7 +24,21 @@ export default function Message({ variant = "info", data, onClose, className }) 
             role="alert"
         >
             <p className="font-medium text-sm truncate">{data?.message}</p>
-            {data?.errors &&
+            {data?.errors && (
+                <ul className="mt-2 list-disc list-inside space-y-1 text-sm break-words">
+                    {Object.entries(data.errors).map(([field, messages]) => {
+                        const msgs = Array.isArray(messages) ? messages : [messages];
+
+                        return msgs.map((msg, i) => (
+                            <li key={`${field}-${i}`}>
+                                <span className="font-medium">{field}</span>: {String(msg)}
+                            </li>
+                        ));
+                    })}
+                </ul>
+            )}
+
+            {/* {data?.errors &&
                 <ul className="mt-2 list-disc list-inside space-y-1 text-sm truncate">
                     {Object.entries(data?.errors).map(([field, messages]) =>
                         messages?.map((msg, i) => (
@@ -34,7 +48,7 @@ export default function Message({ variant = "info", data, onClose, className }) 
                         ))
                     )}
                 </ul>
-            }
+            } */}
 
             <button
                 type="button"

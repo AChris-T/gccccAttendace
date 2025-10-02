@@ -12,26 +12,31 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { handleApiError } from '../utils/helper';
 
 export const useMe = (options = {}) => {
+  const { setAuthenticatedUser } = useAuthStore();
+
   return useQuery({
     queryKey: QUERY_KEYS.AUTH.ME,
     queryFn: async () => {
-      const { data } = await AuthService.getMe();
-      return data.user;
+      const {
+        data: { user },
+      } = await AuthService.getMe();
+      setAuthenticatedUser({ user });
+      return user;
     },
     staleTime: 10 * 60 * 1000,
     cacheTime: 15 * 60 * 1000,
-    retry: (failureCount, error) => {
-      // Don't retry on auth errors
-      if (error?.response?.status === 401) return false;
-      return failureCount < 2;
-    },
+    refetchOnWindowFocus: true,
+    // retry: (failureCount, error) => {
+    //   if (error?.response?.status === 401) return false;
+    //   return failureCount < 2;
+    // },
     ...options,
   });
 };
 
 export const useLogin = (options = {}) => {
   const queryClient = useQueryClient();
-  const { setAuthenticatedUser } = useAuthStore();
+  const { setAuthenticatedUser, setToken } = useAuthStore();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
@@ -41,9 +46,8 @@ export const useLogin = (options = {}) => {
     onSuccess: ({ data }) => {
       const { token, user } = data;
 
-      console.log(data);
-
-      setAuthenticatedUser({ token, user });
+      setAuthenticatedUser({ user });
+      setToken({ token });
       queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
 
       Toast.success(`Welcome back, ${user?.first_name}!`);
