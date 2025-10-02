@@ -4,7 +4,10 @@ import PageMeta from '../../components/common/PageMeta'
 import UserAddressCard from '../../components/userProfile/UserAddressCard'
 import UserInfoCard from '../../components/userProfile/UserInfoCard'
 import UserMetaCard from '../../components/userProfile/UserMetaCard'
-
+import UserOtherInformationCard from '../../components/userProfile/UserOtherInformationCrd'
+import UserProfessionalCard from '@/components/userProfile/UserProfessionalCard'
+import UserUnitsCard from '@/components/userProfile/UserUnitsCard'
+import UserFirstTimersCard from '@/components/userProfile/UserFirstTimersCard'
 const UserProfilePage = () => {
     return (
         <>
@@ -15,6 +18,10 @@ const UserProfilePage = () => {
                     <UserMetaCard />
                     <UserInfoCard />
                     <UserAddressCard />
+                    <UserOtherInformationCard/>
+                     <UserProfessionalCard />
+                     <UserUnitsCard/>
+                     <UserFirstTimersCard/>
                 </ComponentCard>
             </div>
         </>

@@ -20,6 +20,7 @@ export const QUERY_KEYS = {
   AUTH: {
     ME: ['auth', 'me'],
     PROFILE: ['auth', 'profile'],
+    AVATAR_UPLOAD: ['auth', 'avatar-upload'],
   },
 
   ADMIN: {

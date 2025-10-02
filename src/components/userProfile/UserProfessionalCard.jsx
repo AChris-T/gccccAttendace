@@ -9,11 +9,11 @@ import { useAuthStore } from "../../store/auth.store";
 import { useUpdateProfile } from "../../queries/profile.query";
 import { EditIcon } from "../../icons";
 
-export default function UserAddressCard() {
+export default function UserProfessionalCard() {
   const { user } = useAuthStore();
   const { isOpen, openModal, closeModal } = useModal();
 
-  // ✅ Form setup with correct default values
+  // ✅ setup form with default values
   const {
     register,
     handleSubmit,
@@ -21,29 +21,29 @@ export default function UserAddressCard() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      country: user?.country || "",
-      city_or_state: user?.city_or_state || "",
-      address: user?.address || "",
+      education: user?.education || "",
+      field_of_study: user?.field_of_study || "",
+      occupation: user?.occupation || "",
     },
   });
 
-  // ✅ Mutation hook
+  // ✅ mutation hook
   const { mutate: updateProfile, isPending } = useUpdateProfile({
     onSuccess: () => closeModal(),
   });
 
-  // ✅ Handle form submit
+  // ✅ submit handler
   const handleSave = (data) => {
-    console.log("📤 Updating address:", data);
+    console.log("📤 Updating professional info:", data);
     updateProfile(data);
   };
 
-  // ✅ When clicking edit, populate fields again
+  // ✅ edit handler
   const handleEdit = () => {
     reset({
-      country: user?.country || "",
-      city_or_state: user?.city_or_state || "",
-      address: user?.address || "",
+      education: user?.education || "",
+      field_of_study: user?.field_of_study || "",
+      occupation: user?.occupation || "",
     });
     openModal();
   };
@@ -51,44 +51,10 @@ export default function UserAddressCard() {
   return (
     <>
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-              Address
-            </h4>
-
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
-              <div>
-                <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-                  Country
-                </p>
-                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  {user?.country || "N/A"}
-                </p>
-              </div>
-
-              <div>
-                <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-                  City/State
-                </p>
-                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  {user?.city_or_state || "N/A"}
-                </p>
-              </div>
-
-              <div className="lg:col-span-2">
-                <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-                  Address
-                </p>
-                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  {user?.address || "N/A"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* ✅ Edit Button */}
-         <Button
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-gray-800 text-lg">Professional Information</h3>
+  <Button
           variant="neutral"
           size="md"
           className="flex lg:inline-flex lg:w-auto"
@@ -98,17 +64,39 @@ export default function UserAddressCard() {
           Edit
         </Button>
         </div>
+
+        {/* Info Display */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <p className="text-gray-500 text-sm">Education</p>
+            <p className="font-medium text-gray-800 dark:text-white/90">
+              {user?.education || "N/A"}
+            </p>
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm">Field of Study</p>
+            <p className="font-medium text-gray-800 dark:text-white/90">
+              {user?.field_of_study || "N/A"}
+            </p>
+          </div>
+          <div>
+            <p className="text-gray-500 text-sm">Occupation</p>
+            <p className="font-medium text-gray-800 dark:text-white/90">
+              {user?.occupation || "N/A"}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* ✅ Address Edit Modal */}
+      {/* ✅ Modal for Editing */}
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
+        <div className="relative w-full p-4 overflow-y-auto bg-white rounded-3xl dark:bg-gray-900 lg:p-11">
           <div className="px-2">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Edit Address
+              Edit Professional Information
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update your address information to keep your profile up-to-date.
+              Update your education, field of study, or occupation details.
             </p>
           </div>
 
@@ -116,25 +104,25 @@ export default function UserAddressCard() {
             <div className="px-2 overflow-y-auto custom-scrollbar">
               <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                 <InputForm
-                  label="Country"
-                  name="country"
+                  label="Education"
+                  name="education"
                   type="text"
                   register={register}
-                  error={errors.country?.message}
+                  error={errors.education?.message}
                 />
                 <InputForm
-                  label="City/State"
-                  name="city_or_state"
+                  label="Field of Study"
+                  name="field_of_study"
                   type="text"
                   register={register}
-                  error={errors.city_or_state?.message}
+                  error={errors.field_of_study?.message}
                 />
                 <InputForm
-                  label="Address"
-                  name="address"
+                  label="Occupation"
+                  name="occupation"
                   type="text"
                   register={register}
-                  error={errors.address?.message}
+                  error={errors.occupation?.message}
                 />
               </div>
             </div>

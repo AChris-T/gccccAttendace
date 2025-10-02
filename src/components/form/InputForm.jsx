@@ -10,6 +10,7 @@ const InputForm = ({
   placeholder,
   required = false,
   options = [],
+  disabled = false, // <-- controls read-only behavior
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [otherValue, setOtherValue] = useState("");
@@ -69,14 +70,15 @@ const InputForm = ({
         {...register(name, {
           required: required ? `${label} is required` : false,
         })}
+        readOnly={disabled} // ✅ Prevents editing but keeps visible + submittable
         className={`w-full text-xs font-light rounded-lg p-3 focus:outline-gray-200 focus:outline border ${
           error ? "border-red-500" : "border-gray-300"
-        }`}
+        } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`} // ✅ Visually indicate non-editable
         placeholder={placeholder}
       />
 
       {/* Password toggle */}
-      {type === "password" && (
+      {type === "password" && !disabled && (
         <span
           onClick={() => setShowPassword(!showPassword)}
           className="absolute z-30 -translate-y-1/2 cursor-pointer right-3 top-[38px]"

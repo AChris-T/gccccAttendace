@@ -43,6 +43,17 @@ export const useAuthStore = create()(
           isAuthenticated: true,
         });
       },
+
+      setUser: (updatedUser) => {
+  const { user } = get();
+  // If `updatedUser` is a function, call it (so we can do setUser(prev => ...))
+  if (typeof updatedUser === 'function') {
+    set({ user: updatedUser(user) });
+  } else {
+    set({ user: { ...user, ...updatedUser } });
+  }
+},
+
       resetAuthenticatedUser: () => {
         set({
           user: null,
