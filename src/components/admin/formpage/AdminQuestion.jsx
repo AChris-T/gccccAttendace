@@ -1,32 +1,18 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 
-export default function AdminQuestion() {
-  const initialQuestions = useMemo(
-    () => [
-      {
-        id: 'q1',
-        content: 'What does Romans 8:28 mean in practical terms?',
-        created_at: new Date().toISOString(),
-        attended: false,
-      },
-      {
-        id: 'q2',
-        content: 'How do I build a stronger prayer life?',
-        created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        attended: true,
-      },
-      {
-        id: 'q3',
-        content: 'How do I build a stronger prayer life?',
-        created_at: new Date(Date.now() - 10000 * 60 * 12).toISOString(),
-        attended: true,
-      },
-    ],
-    []
-  );
+export default function AdminQuestion({
+  items = [],
+  isLoading,
+  isError,
+  error,
+  type = 'question',
+}) {
+  const [questions, setQuestions] = useState(items);
 
-  const [questions, setQuestions] = useState(initialQuestions);
+  React.useEffect(() => {
+    setQuestions(items);
+  }, [items]);
 
   const currentQuestions = useMemo(() => {
     return [...questions]
@@ -66,10 +52,6 @@ export default function AdminQuestion() {
     );
   }, []);
 
-  if (!questions.length) {
-    return <div className="text-sm text-gray-500">No questions available.</div>;
-  }
-
   const renderList = (list) => (
     <div className="space-y-3">
       {list.map((q) => (
@@ -81,14 +63,16 @@ export default function AdminQuestion() {
           }
         >
           <label htmlFor={`attended-${q.id}`} className="flex-1 cursor-pointer">
-            <p className="text-sm text-gray-800 break-words">{q.content}</p>
+            <p className="text-sm text-gray-800 break-words dark:text-white">
+              {q.content}
+            </p>
             <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <span className="text-xs text-gray-500">
                 {formatDisplayDate(q.created_at)} •{' '}
                 {formatDisplayTime(q.created_at)}
               </span>
             </div>
-          </label> 
+          </label>
           <div className="flex flex-col items-end gap-2 w-24 shrink-0">
             <input
               id={`attended-${q.id}`}
@@ -97,13 +81,9 @@ export default function AdminQuestion() {
               onChange={() => handleToggleAttended(q.id)}
               className="h-4 w-4 rounded mr-3 border-gray-300 text-[#24244e] focus:ring-[#24244e]"
             />
-            {q.attended ? (
+            {q.attended && (
               <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                Attended
-              </span>
-            ) : (
-              <span className="inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs font-medium invisible">
-                Attended
+                Completed
               </span>
             )}
           </div>
@@ -115,23 +95,27 @@ export default function AdminQuestion() {
   return (
     <div className="space-y-8">
       <section>
-        <h4 className="text-sm font-semibold text-gray-700">
+        <h4 className="text-sm font-semibold dark:text-white text-gray-700">
           Current questions
         </h4>
         {currentQuestions.length ? (
           <div className="mt-2">{renderList(currentQuestions)}</div>
         ) : (
-          <div className="mt-2 text-sm text-gray-500">
+          <div className="mt-2 text-sm text-gray-500 dark:text-white">
             No current questions today.
           </div>
         )}
       </section>
       <section>
-        <h4 className="text-sm font-semibold text-gray-700">Past questions</h4>
+        <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
+          Past questions
+        </h4>
         {recentQuestions.length ? (
           <div className="mt-2">{renderList(recentQuestions)}</div>
         ) : (
-          <div className="mt-2 text-sm text-gray-500">No recent questions.</div>
+          <div className="mt-2 text-sm text-gray-500 dark:text-white">
+            No recent questions.
+          </div>
         )}
       </section>
     </div>

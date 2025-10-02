@@ -1,4 +1,5 @@
 import { lazy, useCallback, useEffect, useMemo } from 'react';
+import { useAllFormMessages } from '../queries/form.query';
 import { useSearchParams } from 'react-router-dom';
 
 const AdminQuestion = lazy(() =>
@@ -36,6 +37,8 @@ const DEFAULT_TAB = 'question';
 
 export const useTabManagement = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { categorized, isLoading, isError, error } = useAllFormMessages();
 
   const activeTab = useMemo(() => {
     const tabFromUrl = searchParams.get('tab');
@@ -85,5 +88,9 @@ export const useTabManagement = () => {
     activeTabData,
     updateTab,
     tabs: FORM_TABS,
+    isLoading,
+    isError,
+    error,
+    categorized,
   };
 };

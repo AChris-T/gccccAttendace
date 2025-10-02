@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '@/components/form/TextArea';
-import { useFormMessages } from '@/queries/form.query';
-import Button from '@/components/ui/Button';
+import TextArea from '../../components/form/TextArea';
+import Button from '../../components/ui/Button';
+import { useCreateFormMessages } from '@/queries/form.query';
 
 export default function QuestionForm() {
   const {
@@ -11,7 +11,11 @@ export default function QuestionForm() {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isPending, isError, error } = useFormMessages();
+  const { mutate, isPending } = useCreateFormMessages({
+    onSuccess: () => {
+      reset();
+    },
+  });
 
   const onSubmit = (data) => {
     const payload = {
@@ -40,12 +44,7 @@ export default function QuestionForm() {
           placeholder="Type your message here..."
           error={errors.message?.message}
         />
-        <Button
-          type="submit"
-          loading={isPending}
-          size="md"
-          variant='accent'
-        >
+        <Button type="submit" loading={isPending} size="md" variant="accent">
           Submit
         </Button>
       </form>

@@ -1,32 +1,11 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 
-export default function AdminPrayers() {
-  const initialQuestions = useMemo(
-    () => [
-      {
-        id: 'q1',
-        content: 'What does Romans 8:28 mean in practical terms?',
-        created_at: new Date().toISOString(),
-        attended: false,
-      },
-      {
-        id: 'q2',
-        content: 'How do I build a stronger prayer life?',
-        created_at: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
-        attended: true,
-      },
-      {
-        id: 'q3',
-        content: 'How do I build a stronger prayer life?',
-        created_at: new Date(Date.now() - 10000 * 60 * 12).toISOString(),
-        attended: true,
-      },
-    ],
-    []
-  );
-
-  const [questions, setQuestions] = useState(initialQuestions);
+export default function AdminPrayers({ items = [], isLoading, isError, error, type = 'prayer' }) {
+  const [questions, setQuestions] = useState(items);
+  React.useEffect(() => {
+    setQuestions(items);
+  }, [items]);
 
   const currentQuestions = useMemo(() => {
     return [...questions]
@@ -66,10 +45,6 @@ export default function AdminPrayers() {
     );
   }, []);
 
-  if (!questions.length) {
-    return <div className="text-sm text-gray-500">No questions available.</div>;
-  }
-
   const renderList = (list) => (
     <div className="space-y-3">
       {list.map((q) => (
@@ -81,7 +56,9 @@ export default function AdminPrayers() {
           }
         >
           <label htmlFor={`attended-${q.id}`} className="flex-1 cursor-pointer">
-            <p className="text-sm text-gray-800 break-words">{q.content}</p>
+            <p className="text-sm text-gray-800 dark:text-white break-words">
+              {q.content}
+            </p>
             <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <span className="text-xs text-gray-500">
                 {formatDisplayDate(q.created_at)} •{' '}
@@ -97,13 +74,9 @@ export default function AdminPrayers() {
               onChange={() => handleToggleAttended(q.id)}
               className="h-4 w-4 rounded mr-3 border-gray-300 text-[#24244e] focus:ring-[#24244e]"
             />
-            {q.attended ? (
+            {q.attended && (
               <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                Attended
-              </span>
-            ) : (
-              <span className="inline-flex w-fit items-center rounded-full px-2 py-0.5 text-xs font-medium invisible">
-                Attended
+                Completed
               </span>
             )}
           </div>
@@ -113,25 +86,29 @@ export default function AdminPrayers() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 ">
       <section>
-        <h4 className="text-sm font-semibold text-gray-700">
+        <h4 className="text-sm font-semibold dark:text-white text-gray-700">
           Current Prayer
         </h4>
         {currentQuestions.length ? (
           <div className="mt-2">{renderList(currentQuestions)}</div>
         ) : (
-          <div className="mt-2 text-sm text-gray-500">
+          <div className="mt-2 text-sm dark:text-white text-gray-500">
             No current Prayer today.
           </div>
         )}
       </section>
       <section>
-        <h4 className="text-sm font-semibold text-gray-700">Past Prayers</h4>
+        <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
+          Past Prayers
+        </h4>
         {recentQuestions.length ? (
           <div className="mt-2">{renderList(recentQuestions)}</div>
         ) : (
-          <div className="mt-2 text-sm text-gray-500">No recent questions.</div>
+          <div className="mt-2 text-sm text-gray-500 dark:text-white">
+            No recent questions.
+          </div>
         )}
       </section>
     </div>

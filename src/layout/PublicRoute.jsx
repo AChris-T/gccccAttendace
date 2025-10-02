@@ -10,7 +10,7 @@ const PublicRoute = () => {
         return <Navigate to={redirect} replace />;
     }
 
-    return <Outlet />;
-}
+  return <Outlet />;
+};
 
-export default PublicRoute
+export default PublicRoute;
