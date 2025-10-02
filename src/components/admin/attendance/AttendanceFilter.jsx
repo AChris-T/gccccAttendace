@@ -88,7 +88,7 @@ const AttendanceFilter = ({
     return (
         <Animated
             animation="fade-up"
-            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow animate-fadeIn w-full md:w-1/2 lg:w-1/2 xl:w-3/4 transition-all duration-300"
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow animate-fadeIn w-full md:w-1/2 lg:w-1/2 xl:w-3/5 transition-all duration-300"
         >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">

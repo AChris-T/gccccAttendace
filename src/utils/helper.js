@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { textColors } from './constant';
+import { attendanceLevels, textColors } from './constant';
 
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
 
@@ -66,10 +66,84 @@ export function toSlug(text) {
     .replace(/^-+|-+$/g, '');
 }
 
-export const getRandomTextColor = () =>
-  textColors[Math.floor(Math.random() * textColors.length)];
+export const getRandomTextColor = (value) => {
+  if (value) return textColors[value];
+  return textColors[Math.floor(Math.random() * textColors.length)];
+};
 
 export const handleApiError = (error) => {
   const message = error?.data?.message || 'An error occured.';
   return message;
 };
+
+export function isServiceDay(services, selectedDate) {
+  const date = dayjs(selectedDate);
+  const dayOfWeek = date.format('dddd').toLowerCase();
+
+  return services.some((service) => {
+    if (service.is_recurring) {
+      return service.day_of_week?.toLowerCase() === dayOfWeek;
+    } else {
+      return service.service_date
+        ? dayjs(service.service_date).isSame(date, 'day')
+        : false;
+    }
+  });
+}
+export function getMatchingServiceId(services, selectedDate) {
+  const date = dayjs(selectedDate);
+  const dayOfWeek = date.format('dddd').toLowerCase();
+
+  const match = services.find((service) => {
+    if (service.is_recurring) {
+      return service.day_of_week?.toLowerCase() === dayOfWeek;
+    } else {
+      return service.service_date
+        ? dayjs(service.service_date).isSame(date, 'day')
+        : false;
+    }
+  });
+
+  return match ? match.id : null;
+}
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+export function getAttendanceMessage(percentage) {
+  if (typeof percentage !== 'number' || percentage < 0 || percentage > 100) {
+    return {
+      level: 'Error',
+      message:
+        'Invalid percentage provided. Please ensure it is a number between 0 and 100.',
+    };
+  }
+
+  const levelObject = attendanceLevels.find(
+    (level) => percentage >= level.min && percentage <= level.max
+  );
+
+  if (levelObject) {
+    const messages = levelObject.messages;
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    const selectedMessage = messages[randomIndex];
+
+    return {
+      level: levelObject.level,
+      message: selectedMessage,
+      fromColor: levelObject.fromColor,
+      toColor: levelObject.toColor,
+    };
+  }
+
+  return {
+    level: 'Undefined',
+    message: 'We appreciate your dedication! Keep moving forward.',
+    fromColor: '#000000',
+    toColor: '#000000',
+  };
+}

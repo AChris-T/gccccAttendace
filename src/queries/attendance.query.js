@@ -83,6 +83,7 @@ export const useMarkAbsentees = (options = {}) => {
     },
   });
 };
+
 export const useAssignAbsenteesToLeaders = (options = {}) => {
   const queryClient = useQueryClient();
 
@@ -100,6 +101,22 @@ export const useAssignAbsenteesToLeaders = (options = {}) => {
       Toast.error(message);
       options.onError?.(new Error(message));
     },
+  });
+};
+
+export const useUsersMonthlyAttendanceStats = (year, mode) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.ATTENDANCE.USER_BY_MONTH_YEAR(year, mode),
+    queryFn: async () => {
+      const { data } = await AttendanceService.getUserAttendanceMonthlyStats(
+        year,
+        mode
+      );
+      return data;
+    },
+    // enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    // ...options,
   });
 };
 

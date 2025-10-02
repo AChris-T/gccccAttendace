@@ -1,55 +1,107 @@
-import { Dropdown } from '@/components/ui/dropdown/Dropdown';
-import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
-import React, { useState } from 'react'
+import { useState, useEffect } from "react";
+import Message from "@/components/common/Message";
+import ConfettiShower from "@/components/dashboard/ConfettiShower";
+import { SemiCircleProgress } from "@/components/dashboard/metrics/SemiCircleProgress";
+import { MonthlyTargetSkeleton } from "@/components/skeleton";
+import { BagdeIcon } from "@/icons";
+import { Toast } from "@/lib/toastify";
+import { getAttendanceMessage } from "@/utils/helper";
+import dayjs from "dayjs";
+import { useAuthStore } from "@/store/auth.store";
+import Badge from "@/components/ui/Badge";
 
-const MonthlyTarget = () => {
-    const [isOpen, setIsOpen] = useState(false);
+const CONFETTI_DURATION = 9000;
+const GOAL_PERCENTAGE = 100;
 
-    function toggleDropdown() {
-        setIsOpen(!isOpen);
-    }
+const MonthlyTarget = ({ data, isError, isLoading, error }) => {
+    const [showConfetti, setShowConfetti] = useState(false);
+    const [hasShownToast, setHasShownToast] = useState(false);
 
-    function closeDropdown() {
-        setIsOpen(false);
-    }
+    const monthName = dayjs().format("MMMM");
+    const percentage = 100// Number(data?.present_percentage) ?? 0;
+    const { level, message, fromColor, toColor } = getAttendanceMessage(percentage);
+    const isGoalMet = percentage === GOAL_PERCENTAGE;
+
+    useEffect(() => {
+        if (isGoalMet && !isLoading) {
+            setShowConfetti(true);
+            if (!hasShownToast) {
+                Toast.success(message);
+                setHasShownToast(true);
+            }
+            const timer = setTimeout(() => {
+                setShowConfetti(false);
+            }, CONFETTI_DURATION);
+            return () => clearTimeout(timer);
+        }
+    }, [isGoalMet, isLoading, message, hasShownToast]);
+
+    if (isLoading) return <MonthlyTargetSkeleton />;
+    if (isError) return <Message variant="error" data={error?.data} />;
+
     return (
-        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-            <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+        <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03] transition-all hover:shadow-md">
+            {showConfetti && <ConfettiShower />}
+
+            <Header monthName={monthName} isGoalMet={isGoalMet} />
+
+            <ChartSection
+                percentage={percentage}
+                fromColor={fromColor}
+                toColor={toColor}
+                level={level}
+                message={message}
+            />
+        </div>
+    );
+};
+
+const Header = ({ monthName, isGoalMet }) => {
+    const { user } = useAuthStore()
+    return (
+        <div className="flex items-start justify-between px-4 pt-4 sm:px-6 sm:pt-6">
+            <div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                     Monthly Target
                 </h3>
-                <div className="relative inline-block">
-                    <button className="dropdown-toggle" onClick={toggleDropdown}>
-                        {''} {/* <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" /> */}
-                    </button>
-                    <Dropdown
-                        isOpen={isOpen}
-                        onClose={closeDropdown}
-                        className="w-40 p-2"
-                    >
-                        <DropdownItem
-                            onItemClick={closeDropdown}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                            View More
-                        </DropdownItem>
-                        <DropdownItem
-                            onItemClick={closeDropdown}
-                            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                        >
-                            Delete
-                        </DropdownItem>
-                    </Dropdown>
-                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
+                    Attendance Progress for {monthName}
+                </p>
             </div>
 
-            <div className="max-w-full overflow-x-auto custom-scrollbar">
-                <div className="-ml-5 min-w-[650px] xl:min-w-full pl-2">
-                    {/* <Chart options={options} series={series} type="bar" height={180} /> */}
+            {isGoalMet || user?.attendance_badge ? (
+                <div className="animate-bounce flex gap-0.5">
+                    <BagdeIcon
+                        width={24}
+                        height={24}
+                        fill="#32d583"
+                    />
+                    <Badge color="success">
+                        <span className="text-xs font-bold">{user?.attendance_badge}</span>
+                    </Badge>
                 </div>
-            </div>
+            ) : null}
         </div>
-    )
+    );
 }
 
-export default MonthlyTarget
+
+
+const ChartSection = ({ percentage, fromColor, toColor, level, message }) => (
+    <div className="px-4 py-7 sm:px-6 sm:py-8">
+        <SemiCircleProgress
+            percentage={percentage}
+            fillColor={fromColor}
+            toColor={toColor}
+            level={level}
+        />
+
+        <div className="mt-6 text-center sm:mt-7">
+            <p className="px-4 text-sm text-gray-700 dark:text-gray-300 sm:text-base">
+                {message}
+            </p>
+        </div>
+    </div>
+);
+
+export default MonthlyTarget;

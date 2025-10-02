@@ -1,35 +1,36 @@
 import $api from '../lib/axios';
 
-const MEMBER = '/members';
+const MEMBERS = 'members';
+const ADMIN_MEMBERS = `/admin/${MEMBERS}`;
 
 export const MemberService = {
-  async createMember(payload) {
-    const { data } = await $api.post(MEMBER, payload);
-    return data;
-  },
-
   async getAllMembers() {
-    const { data } = await $api.get(`${MEMBER}`);
+    const { data } = await $api.get(`${MEMBERS}`);
     return data;
   },
 
-  async getMemberById(memberId) {
-    const { data } = await $api.get(`${MEMBER}/${memberId}`);
+  async fetchMembersByRole(role) {
+    const { data } = await $api.get(`${ADMIN_MEMBERS}/role/${role}`);
     return data;
   },
 
-  async updateMember(memberId, payload) {
-    const { data } = await $api.put(`${MEMBER}/${memberId}`, payload);
-    return data;
-  },
+  // async createMember(payload) {
+  //   const { data } = await $api.post(`/${MEMBERS}`, payload);
+  //   return data;
+  // },
 
-  async deleteMember(memberId) {
-    const { data } = await $api.delete(`${MEMBER}/${memberId}`);
-    return data;
-  },
+  // async getMemberById(memberId) {
+  //   const { data } = await $api.get(`/${MEMBERS}/${memberId}`);
+  //   return data;
+  // },
 
-  async bulkUpdate(payload) {
-    const { data } = await $api.put(`${MEMBER}/bulk-update`, payload);
-    return data;
-  },
+  // async updateMember(memberId, payload) {
+  //   const { data } = await $api.put(`/${MEMBERS}/${memberId}`, payload);
+  //   return data;
+  // },
+
+  // async deleteMember(memberId) {
+  //   const { data } = await $api.delete(`/${MEMBERS}/${memberId}`);
+  //   return data;
+  // },
 };

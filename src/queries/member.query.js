@@ -18,133 +18,124 @@ export const useMembers = (options = {}) => {
   });
 };
 
-// Get member by ID
-export const useMember = (memberId, options = {}) => {
+export function useMembersByRole(role) {
   return useQuery({
-    queryKey: QUERY_KEYS.MEMBERS.DETAIL(memberId),
+    queryKey: QUERY_KEYS.MEMBERS.ROLE(role),
     queryFn: async () => {
-      const response = await MemberService.getMemberById(memberId);
-      return response.data;
+      const { data } = await MemberService.fetchMembersByRole(role);
+      return data;
     },
-    enabled: !!memberId,
-    staleTime: 5 * 60 * 1000,
-    ...options,
+    enabled: !!role,
+    staleTime: 1000 * 60 * 5,
   });
-};
+}
 
-// Create member mutation
-export const useCreateMember = (options = {}) => {
-  const queryClient = useQueryClient();
+// // Get member by ID
+// export const useMember = (memberId, options = {}) => {
+//   return useQuery({
+//     queryKey: QUERY_KEYS.MEMBERS.DETAIL(memberId),
+//     queryFn: async () => {
+//       const response = await MemberService.getMemberById(memberId);
+//       return response.data;
+//     },
+//     enabled: !!memberId,
+//     staleTime: 5 * 60 * 1000,
+//     ...options,
+//   });
+// };
 
-  return useMutation({
-    mutationFn: MemberService.createMember,
-    onSuccess: (response, variables) => {
-      // Optimistic update: Add new member to the cache
-      queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, (oldData) => [
-        response.data,
-        ...(oldData || []),
-      ]);
+// // Create member mutation
+// export const useCreateMember = (options = {}) => {
+//   const queryClient = useQueryClient();
 
-      options.onSuccess?.(response.data, variables);
-    },
-    onError: (error) => {
-      const errorDetails = handleApiError(error);
-      Toast.error(errorDetails.message);
-      options.onError?.(new Error(errorDetails.message));
-    },
-  });
-};
+//   return useMutation({
+//     mutationFn: MemberService.createMember,
+//     onSuccess: (response, variables) => {
+//       // Optimistic update: Add new member to the cache
+//       queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, (oldData) => [
+//         response.data,
+//         ...(oldData || []),
+//       ]);
 
-// Update member mutation
-export const useUpdateMember = (options = {}) => {
-  const queryClient = useQueryClient();
+//       options.onSuccess?.(response.data, variables);
+//     },
+//     onError: (error) => {
+//       const errorDetails = handleApiError(error);
+//       Toast.error(errorDetails.message);
+//       options.onError?.(new Error(errorDetails.message));
+//     },
+//   });
+// };
 
-  return useMutation({
-    mutationFn: ({ memberId, ...payload }) =>
-      MemberService.updateMember(memberId, payload),
-    onSuccess: (response, variables) => {
-      const { memberId } = variables;
+// // Update member mutation
+// export const useUpdateMember = (options = {}) => {
+//   const queryClient = useQueryClient();
 
-      // Update specific member in cache
-      queryClient.setQueryData(
-        QUERY_KEYS.MEMBERS.DETAIL(memberId),
-        response.data
-      );
+//   return useMutation({
+//     mutationFn: ({ memberId, ...payload }) =>
+//       MemberService.updateMember(memberId, payload),
+//     onSuccess: (response, variables) => {
+//       const { memberId } = variables;
 
-      // Update member in the list
-      queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, (oldData) =>
-        oldData?.map((member) =>
-          member.id === memberId ? response.data : member
-        )
-      );
+//       // Update specific member in cache
+//       queryClient.setQueryData(
+//         QUERY_KEYS.MEMBERS.DETAIL(memberId),
+//         response.data
+//       );
 
-      options.onSuccess?.(response.data, variables);
-    },
-    onError: (error) => {
-      const errorDetails = handleApiError(error);
-      Toast.error(errorDetails.message);
-      options.onError?.(new Error(errorDetails.message));
-    },
-  });
-};
+//       // Update member in the list
+//       queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, (oldData) =>
+//         oldData?.map((member) =>
+//           member.id === memberId ? response.data : member
+//         )
+//       );
 
-// Delete member mutation with optimistic updates
-export const useDeleteMember = (options = {}) => {
-  const queryClient = useQueryClient();
+//       options.onSuccess?.(response.data, variables);
+//     },
+//     onError: (error) => {
+//       const errorDetails = handleApiError(error);
+//       Toast.error(errorDetails.message);
+//       options.onError?.(new Error(errorDetails.message));
+//     },
+//   });
+// };
 
-  return useMutation({
-    mutationFn: MemberService.deleteMember,
-    onMutate: async (memberId) => {
-      // Cancel outgoing refetches
-      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
+// // Delete member mutation with optimistic updates
+// export const useDeleteMember = (options = {}) => {
+//   const queryClient = useQueryClient();
 
-      // Snapshot the previous value
-      const previousMembers = queryClient.getQueryData(QUERY_KEYS.MEMBERS.ALL);
+//   return useMutation({
+//     mutationFn: MemberService.deleteMember,
+//     onMutate: async (memberId) => {
+//       // Cancel outgoing refetches
+//       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
 
-      // Optimistically update by removing the member
-      queryClient.setQueryData(
-        QUERY_KEYS.MEMBERS.ALL,
-        (old) => old?.filter((member) => member.id !== memberId) || []
-      );
+//       // Snapshot the previous value
+//       const previousMembers = queryClient.getQueryData(QUERY_KEYS.MEMBERS.ALL);
 
-      return { previousMembers };
-    },
-    onSuccess: (data, variables, context) => {
-      // Remove member detail from cache
-      queryClient.removeQueries({
-        queryKey: QUERY_KEYS.MEMBERS.DETAIL(variables),
-      });
+//       // Optimistically update by removing the member
+//       queryClient.setQueryData(
+//         QUERY_KEYS.MEMBERS.ALL,
+//         (old) => old?.filter((member) => member.id !== memberId) || []
+//       );
 
-      options.onSuccess?.(data, variables);
-    },
-    onError: (error, variables, context) => {
-      // Rollback optimistic update
-      queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, context.previousMembers);
+//       return { previousMembers };
+//     },
+//     onSuccess: (data, variables, context) => {
+//       // Remove member detail from cache
+//       queryClient.removeQueries({
+//         queryKey: QUERY_KEYS.MEMBERS.DETAIL(variables),
+//       });
 
-      const errorDetails = handleApiError(error);
-      Toast.error(errorDetails.message);
-      options.onError?.(new Error(errorDetails.message));
-    },
-  });
-};
+//       options.onSuccess?.(data, variables);
+//     },
+//     onError: (error, variables, context) => {
+//       // Rollback optimistic update
+//       queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, context.previousMembers);
 
-// Bulk update members mutation
-export const useBulkUpdateMembers = (options = {}) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: MemberService.bulkUpdate,
-    onSuccess: (data, variables) => {
-      // Invalidate members list to refetch updated data
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
-
-      Toast.success(data?.message || 'Members updated successfully');
-      options.onSuccess?.(data, variables);
-    },
-    onError: (error) => {
-      const errorDetails = handleApiError(error);
-      Toast.error(errorDetails.message);
-      options.onError?.(new Error(errorDetails.message));
-    },
-  });
-};
+//       const errorDetails = handleApiError(error);
+//       Toast.error(errorDetails.message);
+//       options.onError?.(new Error(errorDetails.message));
+//     },
+//   });
+// };

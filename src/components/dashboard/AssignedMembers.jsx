@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const AssignedMembers = ({ assignedMembers }) => {
-    console.log(assignedMembers)
 
     return (
         <>

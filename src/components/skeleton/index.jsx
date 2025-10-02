@@ -252,3 +252,99 @@ export const UnitCardSkeleton = () => {
     </div>
   );
 };
+
+export const VideoCardSkeleton = () => {
+  return (
+    <div className="group bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      {/* Thumbnail placeholder */}
+      <div className="relative overflow-hidden aspect-video bg-slate-200 dark:bg-slate-700 animate-pulse">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-10 h-10 bg-slate-300 dark:bg-slate-600 rounded-full animate-pulse"></div>
+        </div>
+      </div>
+
+      {/* Content placeholder */}
+      <div className="p-6 space-y-4">
+        <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-3/4 animate-pulse"></div>
+        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2 animate-pulse"></div>
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3 animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const AttendanceStatsSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8 animate-pulse">
+      {/* Present Card Skeleton */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-8">
+        {/* Icon placeholder */}
+        <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl dark:bg-gray-700"></div>
+
+        <div className="flex items-end justify-between mt-5">
+          <div>
+            <div className="h-4 w-20 bg-gray-200 rounded dark:bg-gray-700"></div>
+            <div className="h-6 w-32 mt-2 bg-gray-200 rounded dark:bg-gray-700"></div>
+          </div>
+
+          {/* Badge placeholder */}
+          <div className="h-8 w-16 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+        </div>
+      </div>
+
+      {/* Absent Card Skeleton */}
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-8">
+        {/* Icon placeholder */}
+        <div className="flex items-center justify-center w-12 h-12 bg-gray-200 rounded-xl dark:bg-gray-700"></div>
+
+        <div className="flex items-end justify-between mt-5">
+          <div>
+            <div className="h-4 w-20 bg-gray-200 rounded dark:bg-gray-700"></div>
+            <div className="h-6 w-32 mt-2 bg-gray-200 rounded dark:bg-gray-700"></div>
+          </div>
+
+          {/* Badge placeholder */}
+          <div className="h-8 w-16 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const MonthlyTargetSkeleton = () => {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03] animate-pulse">
+      {/* Header Skeleton */}
+      <div className="px-4 pt-4 sm:px-6 sm:pt-6">
+        <div className="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded sm:h-6 sm:w-40" />
+        <div className="mt-2 h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded sm:h-4 sm:w-56" />
+      </div>
+
+      {/* Chart Skeleton */}
+      <div className="px-4 py-6 sm:px-6 sm:py-[75px]">
+        <div className="flex flex-col items-center justify-center">
+          {/* Semi-circle skeleton */}
+          <div className="relative w-full max-w-[220px] sm:max-w-[280px]">
+            <div className="aspect-[2/1] flex items-center justify-center">
+              <div className="w-full h-full rounded-t-full border-b-0 border-[16px] sm:border-[20px] border-gray-200 dark:border-gray-700" />
+            </div>
+
+            {/* Center text skeleton */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center pb-4 sm:pb-6">
+              <div className="h-10 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-2 sm:h-12 sm:w-24" />
+              <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded sm:h-5 sm:w-20" />
+            </div>
+          </div>
+
+          {/* Message Skeleton */}
+          <div className="mt-4 sm:mt-6 w-full max-w-xs space-y-2">
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -570,3 +570,63 @@ export const ViewIcon = ({
     </>
   );
 };
+export const BagdeIcon = ({
+  width = 14,
+  height = 14,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 14 14"><path fill={fill} fillRule="evenodd" d="M7 1.25a4.25 4.25 0 1 0 0 8.5a4.25 4.25 0 0 0 0-8.5M1.5 5.5a5.5 5.5 0 1 1 10.37 2.56l2.059 3.433a.5.5 0 0 1-.484.754l-1.904-.211l-.844 1.688a.5.5 0 0 1-.881.024l-1.642-2.873a5.5 5.5 0 0 1-2.348 0l-1.642 2.873a.5.5 0 0 1-.881-.024l-.844-1.688l-1.904.211a.5.5 0 0 1-.484-.754l2.06-3.433A5.5 5.5 0 0 1 1.5 5.5m5.486-3.083a.48.48 0 0 1 .436.26l.002.003l.679 1.366l1.506.228a.48.48 0 0 1 .263.827L8.816 6.104a.3.3 0 0 1 .013.05l.213 1.501a.48.48 0 0 1-.708.507l-1.335-.706h-.002l-.003-.001h-.005l-1.335.707a.48.48 0 0 1-.708-.51l.253-1.505l.003-.014l-1.088-1.041l-.005-.005a.48.48 0 0 1 .265-.812h.003l1.507-.221l.678-1.364a.48.48 0 0 1 .424-.273" clipRule="evenodd" /></svg>
+    </>
+  );
+};
+export const PlayIcon = ({
+  width = 14,
+  height = 14,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 16 16"><path fill={fill} d="M14.642 6.285c1.294.777 1.294 2.653 0 3.43l-9.113 5.468c-1.333.8-3.028-.16-3.029-1.715V2.532C2.5.978 4.196.018 5.53.818z" /></svg>
+    </>
+  );
+};
+export const CalenderIcon = ({
+  width = 14,
+  height = 14,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><path fill={fill} d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" /></svg>
+    </>
+  );
+};
+export const LeftIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><g fill="none" fillRule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill={fill} d="M8.293 12.707a1 1 0 0 1 0-1.414l5.657-5.657a1 1 0 1 1 1.414 1.414L10.414 12l4.95 4.95a1 1 0 0 1-1.414 1.414z" /></g></svg>
+    </>
+  );
+};
+export const RightIcon = ({
+  width = 24,
+  height = 24,
+  fill = "currentColor",
+  className = "",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><g fill="none" fillRule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill={fill} d="M15.707 11.293a1 1 0 0 1 0 1.414l-5.657 5.657a1 1 0 1 1-1.414-1.414l4.95-4.95l-4.95-4.95a1 1 0 0 1 1.414-1.414z" /></g></svg>
+    </>
+  );
+};

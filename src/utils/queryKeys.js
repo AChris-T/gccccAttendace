@@ -8,6 +8,7 @@ export const QUERY_KEYS = {
     ALL: ['members'],
     LIST: (params) => ['members', 'list', params],
     DETAIL: (id) => ['members', 'detail', id],
+    ROLE: (role) => [('members', role)],
   },
 
   SERVICES: {
@@ -43,5 +44,11 @@ export const QUERY_KEYS = {
     HISTORY: ['attendance', 'history'],
     ALL_RECORDS: (params) => ['attendance', 'all-records', params],
     BY_MONTH_YEAR: (month, year) => ['attendance', 'filtered', month, year],
+    USER_BY_MONTH_YEAR: (month, year) => [
+      'attendance',
+      'filtered',
+      month,
+      year,
+    ],
   },
 };

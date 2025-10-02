@@ -47,7 +47,7 @@ const Button = ({
     "outline-light":
       "bg-transparent border border-gray-100 text-gray-700 hover:bg-gray-100 hover:text-black rounded",
     "outline-dark":
-      "bg-transparent border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white rounded",
+      "bg-transparent border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white rounded dark:text-gray-400 dark:border-gray-400",
     neutral:
       "rounded-full border border-gray-300 bg-white text-gray-700 shadow-theme-xs " +
       "hover:bg-gray-50 hover:text-gray-800 " +

@@ -293,3 +293,61 @@ export const GLASSMORPHISM_THEMES = [
     assistantLabel: 'text-blue-600 dark:text-blue-300',
   },
 ];
+
+export const attendanceLevels = [
+  {
+    level: "The Sower's Seed", // Biblical title for foundation/start (0-25%)
+    min: 0,
+    max: 25,
+    fromColor: '#f04438', // Cool Shade of Red (Starting phase/initial effort)
+    toColor: '#f97066', // Lighter Red for gradient
+    messages: [
+      "Welcome back! Every journey starts with a single step. **Take it one service at a time**—we're excited to see you here!",
+      "Ready to start strong? Making it to that **first service is the biggest win**. We're looking forward to worshipping with you.",
+    ],
+  },
+  {
+    level: "Faith's Foundation", // Biblical title for building/momentum (26-50%)
+    min: 26,
+    max: 50,
+    fromColor: '#dc6803', // Warm Yellow/Orange (Building momentum)
+    toColor: '#f79009', // Very Light Yellow for gradient
+    messages: [
+      "Great progress so far! You've found your rhythm. **Keep your momentum going, one service at a time.** Your consistency matters!",
+      "Halfway to the point! You've shown great dedication this month. **Keep building that good habit** and prioritize the next service.",
+    ],
+  },
+  {
+    level: 'The Shining Lamp', // Biblical title for witness/consistency (51-75%)
+    min: 51,
+    max: 75,
+    fromColor: '#3641f5',
+    toColor: '#7592ff',
+    messages: [
+      "Fantastic! You've crushed more than half your goal. Don't slow down now—**finish strong, one service at a time!**",
+      "You're in the home stretch! **This is where commitment pays off.** Keep showing up; your community is stronger because of your presence.",
+    ],
+  },
+  {
+    level: 'Finishing the Race',
+    min: 76,
+    max: 99,
+    fromColor: '#039855',
+    toColor: '#32d583',
+    messages: [
+      "You've almost hit your personal attendance goal for the month. **Take it one service at a time** — you've got this!",
+      'Incredible dedication! You are just **one step away from meeting your monthly goal.** We celebrate your commitment to growing your faith!',
+    ],
+  },
+  {
+    level: 'The Good Steward', // Biblical title for 100% completion/mastery
+    min: 100,
+    max: 100,
+    fromColor: '#6A0DAD', // Deep Purple/Violet (Celebratory, distinction)
+    toColor: '#C3A6EE', // Lighter Purple for gradient
+    messages: [
+      "Mission accomplished! You've faithfully attended every service this month and met your goal. **Your dedication is a testament to your faith!**",
+      "Congratulations! **100% attendance!** You've completed your goal. May the foundation you built this month carry you into the next.",
+    ],
+  },
+];
