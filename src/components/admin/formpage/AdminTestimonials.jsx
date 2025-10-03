@@ -4,10 +4,12 @@ import {
   useDeleteFormMessages,
   useUpdateFormMessages,
 } from '@/queries/form.query';
+import Modal from '@/components/ui/Modal';
 
 export default function AdminTestimonial({ items = [] }) {
   const [testimony, setTestimony] = useState(items);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const updateFormMessages = useUpdateFormMessages({
     onSuccess: () => {
@@ -61,9 +63,10 @@ export default function AdminTestimonial({ items = [] }) {
     setSelectedIds((prev) => (prev.length === allIds.length ? [] : allIds));
   };
 
-  const handleBulkDelete = () => {
+  const handleConfirmDelete = () => {
     if (!selectedIds.length) return;
     deleteFormMessages.mutate({ ids: selectedIds });
+    setShowDeleteModal(false);
   };
   const handleBulkMarkCompleted = () => {
     if (!selectedIds.length) return;
@@ -75,9 +78,11 @@ export default function AdminTestimonial({ items = [] }) {
       {list.map((q) => (
         <div
           key={q.id}
+          onClick={() => handleSelect(q.id)}
           className={
-            `p-3 rounded-md border flex md:flex-row flex-col-reverse items-start justify-between gap-3 ` +
-            (q.is_completed ? 'border-gray-200' : 'border-red-300')
+            `p-3 rounded-md border flex md:flex-row flex-col-reverse items-start justify-between gap-3 cursor-pointer ` +
+            (q.is_completed ? 'border-gray-200' : 'border-red-300') +
+            (selectedIds.includes(q.id) ? ' bg-indigo-50' : '')
           }
         >
           <label className="flex-1 cursor-pointer ml-2">
@@ -97,8 +102,9 @@ export default function AdminTestimonial({ items = [] }) {
               type="checkbox"
               checked={selectedIds.includes(q.id)}
               onChange={() => handleSelect(q.id)}
+              onClick={(e) => e.stopPropagation()} // prevent double toggle
               className="mt-1 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-            />{' '}
+            />
             <div className="flex flex-col items-end gap-2 w-24 shrink-0">
               {q.is_completed && (
                 <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
@@ -118,7 +124,7 @@ export default function AdminTestimonial({ items = [] }) {
       {selectedIds.length > 0 && (
         <div className="flex gap-3 mb-4">
           <button
-            onClick={handleBulkDelete}
+            onClick={() => setShowDeleteModal(true)}
             className="px-3 py-1 rounded bg-red-600 text-white text-sm hover:bg-red-700"
           >
             Delete ({selectedIds.length})
@@ -184,6 +190,25 @@ export default function AdminTestimonial({ items = [] }) {
           </div>
         )}
       </section>
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Confirm Delete"
+        actionButton={
+          <button
+            onClick={handleConfirmDelete}
+            disabled={deleteFormMessages.isLoading}
+            className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 disabled:opacity-50"
+          >
+            {deleteFormMessages.isLoading ? 'Deleting...' : 'Delete'}
+          </button>
+        }
+      >
+        <p className="text-sm text-gray-600">
+          Are you sure you want to delete {selectedIds.length} message
+          {selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
+        </p>
+      </Modal>
     </div>
   );
 }
