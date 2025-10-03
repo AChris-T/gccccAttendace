@@ -1,123 +1,22 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import dayjs from 'dayjs';
-import {
-  useDeleteFormMessages,
-  useUpdateFormMessages,
-} from '@/queries/form.query';
+import React from 'react';
 import Modal from '@/components/ui/Modal';
+import { useSelectableList } from '@/hooks/useSelectableList';
+import ListRender from '@/components/admin/formpage/ListRender';
 
 export default function AdminTestimonial({ items = [] }) {
-  const [testimony, setTestimony] = useState(items);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const updateFormMessages = useUpdateFormMessages({
-    onSuccess: () => {
-      setTestimony((prev) =>
-        prev.map((q) =>
-          selectedIds.includes(q.id) ? { ...q, attended: true } : q
-        )
-      );
-      setSelectedIds([]);
-    },
-  });
-  useEffect(() => {
-    setTestimony(items);
-  }, [items]);
-
-  const deleteFormMessages = useDeleteFormMessages({
-    onSuccess: () => {
-      setTestimony((prev) =>
-        prev.map((q) =>
-          selectedIds.includes(q.id) ? { ...q, attended: true } : q
-        )
-      );
-      setSelectedIds([]);
-    },
-  });
-
-  useEffect(() => {
-    setTestimony(items);
-  }, [items]);
-
-  const currentQuestions = useMemo(() => {
-    return [...testimony]
-      .filter((q) => dayjs(q.created_at).isSame(dayjs(), 'day'))
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }, [testimony]);
-
-  const recentQuestions = useMemo(() => {
-    return [...testimony]
-      .filter((q) => !dayjs(q.created_at).isSame(dayjs(), 'day'))
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }, [testimony]);
-
-  const handleSelect = useCallback((id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-    );
-  }, []);
-
-  const handleSelectAll = (list) => {
-    const allIds = list.map((q) => q.id);
-    setSelectedIds((prev) => (prev.length === allIds.length ? [] : allIds));
-  };
-
-  const handleConfirmDelete = () => {
-    if (!selectedIds.length) return;
-    deleteFormMessages.mutate({ ids: selectedIds });
-    setShowDeleteModal(false);
-  };
-  const handleBulkMarkCompleted = () => {
-    if (!selectedIds.length) return;
-    updateFormMessages.mutate({ ids: selectedIds });
-  };
-
-  const renderList = (list) => (
-    <div className="space-y-3">
-      {list.map((q) => (
-        <div
-          key={q.id}
-          onClick={() => handleSelect(q.id)}
-          className={
-            `p-3 rounded-md border flex md:flex-row flex-col-reverse items-start justify-between gap-3 cursor-pointer ` +
-            (q.is_completed ? 'border-gray-200' : 'border-red-300') +
-            (selectedIds.includes(q.id) ? ' bg-indigo-50' : '')
-          }
-        >
-          <label className="flex-1 cursor-pointer ml-2">
-            <p className="text-sm text-gray-800 break-words dark:text-white">
-              {q.content}
-            </p>
-            <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <span className="text-xs text-gray-500">
-                {dayjs(q.created_at).format('dddd, MMM YYYY')} •{' '}
-                {dayjs(q.created_at).format('h:mma')}
-              </span>
-            </div>
-          </label>
-          <div className="flex flex-row md:flex-col items-end md:gap-2 md:w-24 shrink-0">
-            {' '}
-            <input
-              type="checkbox"
-              checked={selectedIds.includes(q.id)}
-              onChange={() => handleSelect(q.id)}
-              onClick={(e) => e.stopPropagation()} // prevent double toggle
-              className="mt-1 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-            />
-            <div className="flex flex-col items-end gap-2 w-24 shrink-0">
-              {q.is_completed && (
-                <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                  {' '}
-                  Completed{' '}
-                </span>
-              )}{' '}
-            </div>{' '}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  const {
+    current,
+    past,
+    selectedIds,
+    showDeleteModal,
+    setShowDeleteModal,
+    handleSelect,
+    handleSelectAll,
+    handleConfirmDelete,
+    handleBulkMarkCompleted,
+    updateFormMessages,
+    deleteFormMessages,
+  } = useSelectableList(items);
 
   return (
     <div className="space-y-8">
@@ -142,27 +41,31 @@ export default function AdminTestimonial({ items = [] }) {
       )}
 
       <section>
-        <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold dark:text-white text-gray-700">
+        <div className="flex mb-2  items-center justify-between">
+          <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
             Current Testimony
           </h4>
-          {currentQuestions.length > 0 && (
+          {current.length > 0 && (
             <button
-              onClick={() => handleSelectAll(currentQuestions)}
+              onClick={() => handleSelectAll(current)}
               className="text-xs text-indigo-600"
             >
-              {selectedIds.length === currentQuestions.length
+              {selectedIds.length === current.length
                 ? 'Unselect All'
                 : 'Select All'}
             </button>
           )}
         </div>
-        {currentQuestions.length ? (
-          <div className="mt-2">{renderList(currentQuestions)}</div>
+        {current.length ? (
+          <ListRender
+            list={current}
+            selectedIds={selectedIds}
+            onSelect={handleSelect}
+          />
         ) : (
-          <div className="mt-2 text-sm text-gray-500 dark:text-white">
-            No current testimony today.
-          </div>
+          <p className="mt-2 text-sm text-gray-500 dark:text-white">
+            No current testimony.
+          </p>
         )}
       </section>
 
@@ -171,25 +74,31 @@ export default function AdminTestimonial({ items = [] }) {
           <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
             Past Testimony
           </h4>
-          {recentQuestions.length > 0 && (
+          {past.length > 0 && (
             <button
-              onClick={() => handleSelectAll(recentQuestions)}
+              onClick={() => handleSelectAll(past)}
               className="text-xs text-indigo-600"
             >
-              {selectedIds.length === recentQuestions.length
+              {selectedIds.length === past.length
                 ? 'Unselect All'
                 : 'Select All'}
             </button>
           )}
         </div>
-        {recentQuestions.length ? (
-          <div className="mt-2">{renderList(recentQuestions)}</div>
+        {past.length ? (
+          <ListRenderer
+            list={past}
+            selectedIds={selectedIds}
+            onSelect={handleSelect}
+          />
         ) : (
-          <div className="mt-2 text-sm text-gray-500 dark:text-white">
-            No recent testimony.
-          </div>
+          <p className="mt-2 text-sm text-gray-500 dark:text-white">
+            No past testimony.
+          </p>
         )}
       </section>
+
+      {/* Modal */}
       <Modal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
