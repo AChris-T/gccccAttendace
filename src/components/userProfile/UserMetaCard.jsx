@@ -201,7 +201,6 @@ export default function UserMetaCard() {
         </div>
       </div>
 
-      {/* ✅ Edit Modal */}
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <div
           className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11"

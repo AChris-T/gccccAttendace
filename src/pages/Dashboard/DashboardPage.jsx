@@ -2,7 +2,7 @@ import AttendanceMetrics from '@/components/dashboard/metrics/AttendanceMetrics'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import PageMeta from '../../components/common/PageMeta'
 import MonthlyTarget from '@/components/dashboard/MonthlyTarget'
-import AssignedMembers from '@/components/dashboard/AssignedMembers'
+import AssignedMembers from '@/components/dashboard/assigned/AssignedMembers'
 import { useAuthStore } from '@/store/auth.store'
 import VideoCarousel from '@/components/media/VideoCarousel'
 import { useUsersMonthlyAttendanceStats } from '@/queries/attendance.query'
@@ -33,14 +33,14 @@ const DashboardPage = () => {
           <VideoCarousel />
         </div>
 
-
-        {/* 
-        <div className="col-span-12 xl:col-span-5">
-          <DemographicCard />
-        </div>
- */}
-        {user?.assignedAbsentees?.length > 0 && <div className="col-span-12">
+        <div className="col-span-12 xl:col-span-6">
           <AssignedMembers assignedMembers={user?.assignedAbsentees} />
+        </div>
+        <div className="col-span-12 xl:col-span-6">
+          <AssignedMembers assignedMembers={user?.assignedAbsentees} />
+        </div>
+
+        {user?.assignedAbsentees?.length > 0 && <div className="col-span-12">
         </div>}
 
       </div>

@@ -146,14 +146,14 @@ const AppSidebar = () => {
                 <Link
                   to={nav.path}
                   className={`menu-item group ${isActive(nav.path)
-                      ? 'menu-item-active'
-                      : 'menu-item-inactive'
+                    ? 'menu-item-active'
+                    : 'menu-item-inactive'
                     }`}
                 >
                   <span
                     className={`menu-item-icon-size ${isActive(nav.path)
-                        ? 'menu-item-icon-active'
-                        : 'menu-item-icon-inactive'
+                      ? 'menu-item-icon-active'
+                      : 'menu-item-icon-inactive'
                       }`}
                   >
                     <Icon width={30} height={30} />
@@ -182,8 +182,8 @@ const AppSidebar = () => {
                       <Link
                         to={subItem.path}
                         className={`menu-dropdown-item ${isActive(subItem.path)
-                            ? 'menu-dropdown-item-active'
-                            : 'menu-dropdown-item-inactive'
+                          ? 'menu-dropdown-item-active'
+                          : 'menu-dropdown-item-inactive'
                           }`}
                       >
                         {subItem.name}
@@ -191,8 +191,8 @@ const AppSidebar = () => {
                           {subItem.pro && (
                             <span
                               className={`ml-auto ${isActive(subItem.path)
-                                  ? 'menu-dropdown-badge-active'
-                                  : 'menu-dropdown-badge-inactive'
+                                ? 'menu-dropdown-badge-active'
+                                : 'menu-dropdown-badge-inactive'
                                 } menu-dropdown-badge`}
                             >
                               <AdminIcon width={13} height={13} />
@@ -213,7 +213,7 @@ const AppSidebar = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed flex flex-col mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${isExpanded || isMobileOpen ? "w-[290px]" : "w-[90px]"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}

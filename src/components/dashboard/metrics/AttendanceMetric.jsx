@@ -36,8 +36,8 @@ const AttendanceMetric = ({ data, type }) => {
     }, [type, data]);
 
     const percentage = useMemo(() => {
-        return data?.present_percentage ?? 0;
-    }, [data?.present_percentage]);
+        return type === METRIC_TYPES.PRESENT ? data?.present_percentage ?? 0 : data?.absent_percentage ?? 0;
+    }, [data?.present_percentage, data?.absent_percentage, type]);
 
     return (
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
