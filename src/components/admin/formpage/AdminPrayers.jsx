@@ -1,49 +1,74 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
+import {
+  useDeleteFormMessages,
+  useUpdateFormMessages,
+} from '@/queries/form.query';
 
-export default function AdminPrayers({ items = [], isLoading, isError, error, type = 'prayer' }) {
-  const [questions, setQuestions] = useState(items);
-  React.useEffect(() => {
-    setQuestions(items);
+export default function AdminQuestion({ items = [] }) {
+  const [prayers, setPrayers] = useState(items);
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  const updateFormMessages = useUpdateFormMessages({
+    onSuccess: () => {
+      setPrayers((prev) =>
+        prev.map((q) =>
+          selectedIds.includes(q.id) ? { ...q, attended: true } : q
+        )
+      );
+      setSelectedIds([]);
+    },
+  });
+  useEffect(() => {
+    setPrayers(items);
+  }, [items]);
+
+  const deleteFormMessages = useDeleteFormMessages({
+    onSuccess: () => {
+      setPrayers((prev) =>
+        prev.map((q) =>
+          selectedIds.includes(q.id) ? { ...q, attended: true } : q
+        )
+      );
+      setSelectedIds([]);
+    },
+  });
+
+  useEffect(() => {
+    setPrayers(items);
   }, [items]);
 
   const currentQuestions = useMemo(() => {
-    return [...questions]
+    return [...prayers]
       .filter((q) => dayjs(q.created_at).isSame(dayjs(), 'day'))
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }, [questions]);
+  }, [prayers]);
 
   const recentQuestions = useMemo(() => {
-    return [...questions]
+    return [...prayers]
       .filter((q) => !dayjs(q.created_at).isSame(dayjs(), 'day'))
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }, [questions]);
+  }, [prayers]);
 
-  const formatDisplayDate = useCallback((iso) => {
-    const d = dayjs(iso);
-    const weekday = d.format('dddd');
-    let month = d.format('MMM');
-    if (month === 'Sep') month = 'Sept';
-    const year = d.format('YYYY');
-    return `${weekday},${month},${year}`;
-  }, []);
-
-  const formatDisplayTime = useCallback((iso) => {
-    return dayjs(iso).format('h:mma');
-  }, []);
-
-  const handleToggleAttended = useCallback((id) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === id
-          ? {
-              ...q,
-              attended: !q.attended,
-            }
-          : q
-      )
+  const handleSelect = useCallback((id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
     );
   }, []);
+
+  const handleSelectAll = (list) => {
+    const allIds = list.map((q) => q.id);
+    setSelectedIds((prev) => (prev.length === allIds.length ? [] : allIds));
+  };
+
+  const handleBulkDelete = () => {
+    if (!selectedIds.length) return;
+    deleteFormMessages.mutate({ ids: selectedIds });
+  };
+  const handleBulkMarkCompleted = () => {
+    if (!selectedIds.length) return;
+    updateFormMessages.mutate({ ids: selectedIds });
+  };
 
   const renderList = (list) => (
     <div className="space-y-3">
@@ -51,34 +76,37 @@ export default function AdminPrayers({ items = [], isLoading, isError, error, ty
         <div
           key={q.id}
           className={
-            `p-3 rounded-md border flex items-start justify-between gap-3 ` +
-            (q.attended ? 'border-gray-200' : 'border-red-300')
+            `p-3 rounded-md border flex md:flex-row flex-col-reverse items-start justify-between gap-3 ` +
+            (q.is_completed ? 'border-gray-200' : 'border-red-300')
           }
         >
-          <label htmlFor={`attended-${q.id}`} className="flex-1 cursor-pointer">
-            <p className="text-sm text-gray-800 dark:text-white break-words">
+          <label className="flex-1 cursor-pointer ml-2">
+            <p className="text-sm text-gray-800 break-words dark:text-white">
               {q.content}
             </p>
             <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <span className="text-xs text-gray-500">
-                {formatDisplayDate(q.created_at)} •{' '}
-                {formatDisplayTime(q.created_at)}
+                {dayjs(q.created_at).format('dddd, MMM YYYY')} •{' '}
+                {dayjs(q.created_at).format('h:mma')}
               </span>
             </div>
           </label>
-          <div className="flex flex-col items-end gap-2 w-24 shrink-0">
+          <div className="flex flex-row md:flex-col items-end md:gap-2 md:w-24 shrink-0">
+            {' '}
             <input
-              id={`attended-${q.id}`}
               type="checkbox"
-              checked={q.attended}
-              onChange={() => handleToggleAttended(q.id)}
-              className="h-4 w-4 rounded mr-3 border-gray-300 text-[#24244e] focus:ring-[#24244e]"
-            />
-            {q.attended && (
-              <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                Completed
-              </span>
-            )}
+              checked={selectedIds.includes(q.id)}
+              onChange={() => handleSelect(q.id)}
+              className="mt-1 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+            />{' '}
+            <div className="flex flex-col items-end gap-2 w-24 shrink-0">
+              {q.is_completed && (
+                <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                  {' '}
+                  Completed{' '}
+                </span>
+              )}{' '}
+            </div>{' '}
           </div>
         </div>
       ))}
@@ -86,28 +114,73 @@ export default function AdminPrayers({ items = [], isLoading, isError, error, ty
   );
 
   return (
-    <div className="space-y-8 ">
+    <div className="space-y-8">
+      {selectedIds.length > 0 && (
+        <div className="flex gap-3 mb-4">
+          <button
+            onClick={handleBulkDelete}
+            className="px-3 py-1 rounded bg-red-600 text-white text-sm hover:bg-red-700"
+          >
+            Delete ({selectedIds.length})
+          </button>
+          <button
+            onClick={handleBulkMarkCompleted}
+            disabled={updateFormMessages.isLoading}
+            className="px-3 py-1 rounded bg-green-600 text-white text-sm hover:bg-green-700 disabled:opacity-50"
+          >
+            {updateFormMessages.isLoading
+              ? 'Updating...'
+              : `Mark Completed (${selectedIds.length})`}
+          </button>
+        </div>
+      )}
+
       <section>
-        <h4 className="text-sm font-semibold dark:text-white text-gray-700">
-          Current Prayer
-        </h4>
+        <div className="flex items-center justify-between">
+          <h4 className="text-sm font-semibold dark:text-white text-gray-700">
+            Current prayers
+          </h4>
+          {currentQuestions.length > 0 && (
+            <button
+              onClick={() => handleSelectAll(currentQuestions)}
+              className="text-xs text-indigo-600"
+            >
+              {selectedIds.length === currentQuestions.length
+                ? 'Unselect All'
+                : 'Select All'}
+            </button>
+          )}
+        </div>
         {currentQuestions.length ? (
           <div className="mt-2">{renderList(currentQuestions)}</div>
         ) : (
-          <div className="mt-2 text-sm dark:text-white text-gray-500">
-            No current Prayer today.
+          <div className="mt-2 text-sm text-gray-500 dark:text-white">
+            No current prayers today.
           </div>
         )}
       </section>
+
       <section>
-        <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
-          Past Prayers
-        </h4>
+        <div className="flex items-center justify-between">
+          <h4 className="text-sm font-semibold text-gray-700 dark:text-white">
+            Past prayers
+          </h4>
+          {recentQuestions.length > 0 && (
+            <button
+              onClick={() => handleSelectAll(recentQuestions)}
+              className="text-xs text-indigo-600"
+            >
+              {selectedIds.length === recentQuestions.length
+                ? 'Unselect All'
+                : 'Select All'}
+            </button>
+          )}
+        </div>
         {recentQuestions.length ? (
           <div className="mt-2">{renderList(recentQuestions)}</div>
         ) : (
           <div className="mt-2 text-sm text-gray-500 dark:text-white">
-            No recent questions.
+            No recent prayers.
           </div>
         )}
       </section>

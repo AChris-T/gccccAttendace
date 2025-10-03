@@ -9,4 +9,12 @@ export const FormService = {
     const { data } = await $api.get('/admin/forms', { params });
     return data;
   },
+  async updateFormMessages(payload) {
+    const { data } = await $api.patch('/admin/forms/completed', payload);
+    return data;
+  },
+  async deleteFormMessages(ids) {
+    const { data } = await $api.delete('/admin/forms', { data: ids });
+    return data;
+  },
 };
