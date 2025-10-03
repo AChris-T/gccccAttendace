@@ -9,6 +9,7 @@ import { QUERY_KEYS } from '../utils/queryKeys';
 import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 
+// use to get all form messagess
 export const useAllFormMessages = (
   formTypes = ['question', 'prayer', 'testimony']
 ) => {
@@ -36,6 +37,7 @@ export const useAllFormMessages = (
   };
 };
 
+// use to update form messages (mark as completed)
 export const useUpdateFormMessages = (options = {}) => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -55,12 +57,10 @@ export const useUpdateFormMessages = (options = {}) => {
   });
 };
 
-// useDeleteFormMessages.js
+// use to delete form messages
 export const useDeleteFormMessages = (options = {}) => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    // expect an object with ids array
     mutationFn: async ({ ids }) => {
       return await FormService.deleteFormMessages({ ids });
     },
@@ -100,6 +100,7 @@ export const useDeleteFormMessages = (options = {}) => {
   });
 };
 
+// use to create form messages
 export const useCreateFormMessages = (options = {}) => {
   const queryClient = useQueryClient();
   return useMutation({
