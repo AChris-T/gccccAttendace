@@ -1,71 +1,106 @@
-import { useQuery, useQueries, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useQueries,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { FormService } from '../services/form.service';
 import { QUERY_KEYS } from '../utils/queryKeys';
 import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 
-export const useFormMessages = (type, options = {}) => {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.FORM_MESSAGES.ALL, { type }],
-    queryFn: async () => {
-      const { data } = await FormService.getFormMessages({ type });
-      return data || [];
-    },
-    enabled: Boolean(type),
-    staleTime: 2 * 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
-    ...options,
-  });
-};
-
-// Fetch all three types concurrently and combine results
-export const useAllFormMessages = () => {
+// use to get all form messagess
+export const useAllFormMessages = (
+  formTypes = ['question', 'prayer', 'testimony']
+) => {
   const results = useQueries({
-    queries: [
-      {
-        queryKey: [...QUERY_KEYS.FORM_MESSAGES.ALL, { type: 'question' }],
-        queryFn: async () => {
-          const { data } = await FormService.getFormMessages({ type: 'question' });
-          return data || [];
-        },
-        staleTime: 2 * 60 * 1000,
-        cacheTime: 5 * 60 * 1000,
+    queries: formTypes.map((type) => ({
+      queryKey: [...QUERY_KEYS.FORM_MESSAGES.ALL, { type }],
+      queryFn: async () => {
+        const { data } = await FormService.getFormMessages({ type });
+        return data || [];
       },
-      {
-        queryKey: [...QUERY_KEYS.FORM_MESSAGES.ALL, { type: 'prayer' }],
-        queryFn: async () => {
-          const { data } = await FormService.getFormMessages({ type: 'prayer' });
-          return data || [];
-        },
-        staleTime: 2 * 60 * 1000,
-        cacheTime: 5 * 60 * 1000,
-      },
-      {
-        queryKey: [...QUERY_KEYS.FORM_MESSAGES.ALL, { type: 'testimony' }],
-        queryFn: async () => {
-          const { data } = await FormService.getFormMessages({ type: 'testimony' });
-          return data || [];
-        },
-        staleTime: 2 * 60 * 1000,
-        cacheTime: 5 * 60 * 1000,
-      },
-    ],
+      staleTime: 2 * 60 * 1000,
+      cacheTime: 5 * 60 * 1000,
+    })),
   });
-
-  const [q, p, t] = results;
+  const categorized = formTypes.reduce((acc, type, i) => {
+    acc[type] = results[i]?.data || [];
+    return acc;
+  }, {});
 
   return {
-    categorized: {
-      question: q?.data || [],
-      prayer: p?.data || [],
-      testimony: t?.data || [],
-    },
-    isLoading: Boolean(q?.isLoading || p?.isLoading || t?.isLoading),
-    isError: Boolean(q?.isError || p?.isError || t?.isError),
-    error: q?.error || p?.error || t?.error,
+    categorized,
+    isLoading: results.some((r) => r.isLoading),
+    isError: results.some((r) => r.isError),
+    error: results.find((r) => r.error)?.error ?? null,
   };
 };
 
+// use to update form messages (mark as completed)
+export const useUpdateFormMessages = (options = {}) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ ids, attended }) => {
+      return await FormService.updateFormMessages({ ids, attended });
+    },
+    onSuccess: (response, variables) => {
+      queryClient.invalidateQueries(QUERY_KEYS.FORM_MESSAGES.ALL);
+      options.onSuccess?.(response.data, variables);
+      Toast.success('Messages updated successfully!');
+    },
+    onError: (error) => {
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message);
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};
+
+// use to delete form messages
+export const useDeleteFormMessages = (options = {}) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ ids }) => {
+      return await FormService.deleteFormMessages({ ids });
+    },
+    onMutate: async ({ ids }) => {
+      await queryClient.cancelQueries({
+        queryKey: QUERY_KEYS.FORM_MESSAGES.ALL,
+      });
+      const previousMessages = queryClient.getQueryData(
+        QUERY_KEYS.FORM_MESSAGES.ALL
+      );
+
+      queryClient.setQueryData(QUERY_KEYS.FORM_MESSAGES.ALL, (old = []) =>
+        old.filter((msg) => !ids.includes(msg.id))
+      );
+
+      return { previousMessages };
+    },
+    onSuccess: (data, { ids }, context) => {
+      ids.forEach((id) =>
+        queryClient.removeQueries({
+          queryKey: QUERY_KEYS.FORM_MESSAGES.DETAIL(id),
+        })
+      );
+      Toast.success('Messages deleted successfully');
+      options.onSuccess?.(data, ids);
+    },
+    onError: (error, { ids }, context) => {
+      queryClient.setQueryData(
+        QUERY_KEYS.FORM_MESSAGES.ALL,
+        context.previousMessages
+      );
+
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message || 'Failed to delete messages');
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};
+
+// use to create form messages
 export const useCreateFormMessages = (options = {}) => {
   const queryClient = useQueryClient();
   return useMutation({

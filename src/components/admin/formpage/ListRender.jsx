@@ -1,0 +1,47 @@
+// components/ListRenderer.js
+import React from 'react';
+import dayjs from 'dayjs';
+
+export default function ListRender({ list, selectedIds, onSelect }) {
+  return (
+    <div className="space-y-3">
+      {list.map((q) => (
+        <div
+          key={q.id}
+          onClick={() => onSelect(q.id)}
+          className={`p-3 rounded-md border flex md:flex-row flex-col-reverse items-start justify-between gap-3 cursor-pointer 
+            ${q.is_completed ? 'border-gray-200' : 'border-red-300'}
+            ${selectedIds.includes(q.id) ? ' bg-indigo-50' : ''}`}
+        >
+          <label className="flex-1 cursor-pointer ml-2">
+            <p className="text-sm text-gray-800 break-words dark:text-white">
+              {q.content}
+            </p>
+            <div className="mt-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-xs text-gray-500">
+                {dayjs(q.created_at).format('dddd, MMM YYYY')} •{' '}
+                {dayjs(q.created_at).format('h:mma')}
+              </span>
+            </div>
+          </label>
+          <div className="flex flex-row md:flex-col items-end md:gap-2 md:w-24 shrink-0">
+            <input
+              type="checkbox"
+              checked={selectedIds.includes(q.id)}
+              onChange={() => onSelect(q.id)}
+              onClick={(e) => e.stopPropagation()}
+              className="mt-1 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+            />
+            <div className="flex flex-col items-end gap-2 w-24 shrink-0">
+              {q.is_completed && (
+                <span className="inline-flex w-fit items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                  Completed
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
