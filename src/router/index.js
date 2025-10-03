@@ -23,6 +23,7 @@ import AdminFormsPage from '../pages/Admin/AdminFormsPage';
 import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
 import ProtectedRoute from '../layout/Protected/ProtectedRoute';
 import PublicRoute from '../layout/PublicRoute';
+import MemberDetailsPage from '@/pages/Dashboard/MemberDetailsPage';
 
 const AppRoutes = [
   {
@@ -58,6 +59,10 @@ const AppRoutes = [
               {
                 path: 'first-timer/:firstTimerId',
                 Component: FirstTimerDetailsPage,
+              },
+              {
+                path: 'members/:memberId',
+                Component: MemberDetailsPage,
               },
             ],
           },

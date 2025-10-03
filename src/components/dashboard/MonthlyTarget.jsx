@@ -5,19 +5,18 @@ import { SemiCircleProgress } from "@/components/dashboard/metrics/SemiCirclePro
 import { MonthlyTargetSkeleton } from "@/components/skeleton";
 import { BagdeIcon } from "@/icons";
 import { Toast } from "@/lib/toastify";
-import { getAttendanceMessage } from "@/utils/helper";
-import dayjs from "dayjs";
+import { getAttendanceMessage, getMonthName } from "@/utils/helper";
 import { useAuthStore } from "@/store/auth.store";
 import Badge from "@/components/ui/Badge";
 
 const CONFETTI_DURATION = 9000;
 const GOAL_PERCENTAGE = 100;
 
-const MonthlyTarget = ({ data, isError, isLoading, error }) => {
+const MonthlyTarget = ({ data, isError, isLoading, error, params }) => {
     const [showConfetti, setShowConfetti] = useState(false);
     const [hasShownToast, setHasShownToast] = useState(false);
 
-    const monthName = dayjs().format("MMMM");
+    const monthAndYear = `${getMonthName(params?.month)}, ${params.year}`;
     const percentage = Number(data?.present_percentage) ?? 0;
     const { level, message, fromColor, toColor } = getAttendanceMessage(percentage);
     const isGoalMet = percentage === GOAL_PERCENTAGE;
@@ -43,7 +42,7 @@ const MonthlyTarget = ({ data, isError, isLoading, error }) => {
         <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03] transition-all hover:shadow-md">
             {showConfetti && <ConfettiShower />}
 
-            <Header monthName={monthName} isGoalMet={isGoalMet} />
+            <Header monthAndYear={monthAndYear} isGoalMet={isGoalMet} />
 
             <ChartSection
                 percentage={percentage}
@@ -56,7 +55,7 @@ const MonthlyTarget = ({ data, isError, isLoading, error }) => {
     );
 };
 
-const Header = ({ monthName, isGoalMet }) => {
+const Header = ({ monthAndYear, isGoalMet }) => {
     const { user } = useAuthStore()
     return (
         <div className="flex items-start justify-between px-4 pt-4 sm:px-6 sm:pt-6">
@@ -65,7 +64,7 @@ const Header = ({ monthName, isGoalMet }) => {
                     Monthly Target
                 </h3>
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
-                    Attendance Progress for {monthName}
+                    Attendance Report for <Badge color="primary">{monthAndYear}</Badge>
                 </p>
             </div>
 

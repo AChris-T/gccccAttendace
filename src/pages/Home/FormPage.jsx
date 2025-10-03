@@ -9,19 +9,19 @@ const TABS_CONFIG = [
   {
     id: 'question',
     name: 'Question',
-    image: '/images/forms/qes.png',
+    image: '/images/forms/question2.png',
     component: QuestionForm,
   },
   {
     id: 'prayer',
     name: 'Prayer Request',
-    image: '/images/forms/newPrayer.png',
+    image: '/images/forms/prayer2.png',
     component: PrayerForm,
   },
   {
     id: 'testimony',
     name: 'Testimony',
-    image: '/images/forms/Ttestimony.png',
+    image: '/images/forms/testimony2.png',
     component: TestimonyForm,
   },
 ];

@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../store/auth.store";
 
-const PageBreadcrumb = ({ pageTitle }) => {
+const PageBreadcrumb = ({ pageTitle, children }) => {
   const { isAdmin } = useAuthStore()
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-      <h2
-        className="text-xl font-semibold text-gray-800 dark:text-white/90"
-        x-text="pageName"
-      >
-        {pageTitle}
-      </h2>
+      <div className="relative">
+        <h2
+          className="text-xl font-semibold text-gray-800 dark:text-white/90 flex items-center gap-2"
+          x-text="pageName"
+        >
+          {pageTitle} {children}
+        </h2>
+      </div>
       <nav>
         <ol className="flex items-center gap-1.5">
           <li>

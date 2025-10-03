@@ -351,3 +351,29 @@ export const attendanceLevels = [
     ],
   },
 ];
+export const QUICK_ACTION_LINKS = [
+  {
+    to: '#',
+    src: '/images/contribution.jpg',
+    alt: 'contribution',
+    external: false,
+  },
+  {
+    to: '/forms?tab=question',
+    src: '/images/forms/question2.png',
+    alt: 'question',
+    external: true,
+  },
+  {
+    to: '/forms?tab=prayer',
+    src: '/images/forms/prayer2.png',
+    alt: 'prayer',
+    external: true,
+  },
+  {
+    to: '/forms?tab=testimony',
+    src: '/images/forms/testimony2.png',
+    alt: 'testimony',
+    external: true,
+  },
+];

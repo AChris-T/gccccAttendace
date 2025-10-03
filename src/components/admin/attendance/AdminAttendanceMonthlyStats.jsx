@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useMonthlyAttendanceStats } from '../../../queries/attendance.query'
 import { AgCharts } from 'ag-charts-react'
 import { BarChartSkeleton } from '../../skeleton'
-import ChartTab from './ChartTab'
 import { years } from '../../../utils/constant'
 const VALUE = {
     avg: 'Average',

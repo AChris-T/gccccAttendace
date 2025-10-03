@@ -7,7 +7,7 @@ import InputForm from "../form/InputForm";
 import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import { useForm } from "react-hook-form";
-import { useUpdateProfile } from "../../queries/profile.query";
+import { useUpdateProfile } from "../../queries/user.query";
 
 export default function UserInfoCard() {
   const { user, setUser } = useAuthStore();

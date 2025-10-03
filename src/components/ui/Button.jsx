@@ -53,7 +53,7 @@ const Button = ({
       "hover:bg-gray-50 hover:text-gray-800 " +
       "dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 " +
       "dark:hover:bg-white/[0.03] dark:hover:text-gray-200",
-    ghost: "bg-gray-200 text-gray-900 hover:bg-gray-300 rounded",
+    ghost: "bg-gray-200 text-gray-900 hover:bg-gray-300 rounded dark:bg-gray-700 dark:text-gray-300",
     accent: "bg-[#24244e] text-white hover:bg-[#1a1a40] rounded",
   };
 

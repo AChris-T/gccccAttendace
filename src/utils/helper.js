@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { attendanceLevels, textColors } from './constant';
+import { attendanceLevels, monthNames, textColors } from './constant';
 
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
 
@@ -146,4 +146,10 @@ export function getAttendanceMessage(percentage) {
     fromColor: '#000000',
     toColor: '#000000',
   };
+}
+export function getMonthName(monthNumber) {
+  if (monthNumber < 1 || monthNumber > 12) {
+    return null;
+  }
+  return monthNames[monthNumber - 1];
 }

@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
+import 'swiper/css/effect-fade';
 import Message from "@/components/common/Message";
 import { VideoCardSkeleton } from "@/components/skeleton";
 import { CalenderIcon, CloseIcon, LeftIcon, PlayIcon, RightIcon } from "@/icons";
@@ -27,7 +28,6 @@ const VideoCarousel = () => {
         setSelectedVideo(null);
     };
 
-    if (isLoading) return <VideoCardSkeleton />
     if (isError) return <Message variant="error" data={error?.data} />
 
     return (
@@ -72,14 +72,26 @@ const VideoCarousel = () => {
                             slidesPerView: 2,
                             spaceBetween: 20
                         },
+                        800: {
+                            slidesPerView: 2.5,
+                            spaceBetween: 20
+                        },
                         1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 30
+                        },
+                        1280: {
                             slidesPerView: 3.5,
                             spaceBetween: 30
                         }
                     }}
                     className="!pb-16"
                 >
-                    {videos.map((video) => (
+                    {isLoading ? <> {[...Array(4)].map((_, i) => (
+                        <SwiperSlide key={i}>
+                            <VideoCardSkeleton />
+                        </SwiperSlide>
+                    ))}</> : <> {videos.map((video) => (
                         <SwiperSlide key={video.id}>
                             <div
                                 className="group bg-white dark:bg-slate-800 rounded-3xl shadow-xl hover:shadow-2xl dark:shadow-slate-950/50 transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-3 border border-slate-200 dark:border-slate-700"
@@ -131,7 +143,7 @@ const VideoCarousel = () => {
                                 </div>
                             </div>
                         </SwiperSlide>
-                    ))}
+                    ))}</>}
                 </Swiper>
             </div>
 
@@ -190,7 +202,7 @@ const VideoCarousel = () => {
                 </div>
             )}
 
-            <style jsx>{`
+            <style>{`
                 .swiper-pagination-bullet {
                 width: 12px;
                 height: 12px;

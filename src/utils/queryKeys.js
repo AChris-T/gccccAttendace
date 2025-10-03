@@ -14,6 +14,9 @@ export const QUERY_KEYS = {
     DETAIL: (id) => ['members', 'detail', id],
     ROLE: (role) => [('members', role)],
   },
+  USER: {
+    ABSENT: ['all_absent_members'],
+  },
 
   SERVICES: {
     ALL: ['services'],

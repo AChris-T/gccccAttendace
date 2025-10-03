@@ -50,7 +50,7 @@ const Modal = ({
         >
           <div
             ref={modalRef}
-            className={`relative ${maxWidth} w-full bg-white rounded-2xl shadow-xl overflow-hidden`}
+            className={`relative ${maxWidth} w-full bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden`}
           >
             {/* Header */}
             {title && (
@@ -65,6 +65,11 @@ const Modal = ({
             </div>
 
             {/* Footer */}
+            <div className="px-6 py-5 overflow-y-auto text-gray-700 flex gap-4 justify-end">
+              <Button size="md" variant="outline-danger" onClick={onClose}>
+                Close
+              </Button>
+            </div>
           </div>
         </motion.div>
       </motion.div>

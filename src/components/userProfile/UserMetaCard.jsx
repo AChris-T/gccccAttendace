@@ -14,7 +14,7 @@ import {
   EditIcon,
   CameraIcon,
 } from "../../icons";
-import { useUploadAvatar, useUpdateProfile } from "../../queries/profile.query";
+import { useUploadAvatar, useUpdateProfile } from "../../queries/user.query";
 import { useForm } from "react-hook-form";
 
 export default function UserMetaCard() {

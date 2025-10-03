@@ -10,7 +10,7 @@ import Badge from "@/components/ui/Badge";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAdmin } = useAuthStore();
+  const { user, isAdmin, isLeader } = useAuthStore();
   const { mutate, isPending } = useLogout();
 
   const toggleDropdown = () => setIsOpen(!isOpen);

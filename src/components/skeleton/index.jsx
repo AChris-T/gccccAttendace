@@ -1,3 +1,4 @@
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/Table";
 import { useMemo } from "react";
 
 export const LoginLoader = () => {
@@ -255,20 +256,27 @@ export const UnitCardSkeleton = () => {
 
 export const VideoCardSkeleton = () => {
   return (
-    <div className="group bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-      {/* Thumbnail placeholder */}
-      <div className="relative overflow-hidden aspect-video bg-slate-200 dark:bg-slate-700 animate-pulse">
+    <div className="group bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+      {/* Thumbnail skeleton */}
+      <div className="relative aspect-video bg-slate-200 dark:bg-slate-700 animate-pulse">
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-10 h-10 bg-slate-300 dark:bg-slate-600 rounded-full animate-pulse"></div>
+          <div className="w-20 h-20 bg-slate-300 dark:bg-slate-600 rounded-full animate-pulse"></div>
         </div>
       </div>
-
-      {/* Content placeholder */}
+      {/* Content skeleton */}
       <div className="p-6 space-y-4">
-        <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-3/4 animate-pulse"></div>
-        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2 animate-pulse"></div>
-        <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/3 animate-pulse"></div>
+        {/* Title */}
+        <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4 animate-pulse"></div>
+
+        {/* Badge */}
+        <div className="flex gap-2">
+          <div className="h-3 w-20 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+        </div>
+
+        {/* Footer */}
+        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+          <div className="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"></div>
+          <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse"></div>
         </div>
       </div>
     </div>
@@ -348,3 +356,69 @@ export const MonthlyTargetSkeleton = () => {
     </div>
   );
 };
+
+export function TableSkeletonLoader() {
+  const skeletonRows = Array.from({ length: 5 }); // 5 rows
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+      {/* Fake header */}
+      <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="h-5 w-40 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="mt-2 h-4 w-72 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+        </div>
+      </div>
+
+      {/* Table with fake headers */}
+      <div className="max-w-full overflow-x-auto">
+        <Table>
+          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
+            <TableRow>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <TableCell key={i} className="py-3">
+                  <div className="h-4 w-16 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHeader>
+
+          {/* Skeleton rows */}
+          <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
+            {skeletonRows.map((_, i) => (
+              <TableRow key={i}>
+                <TableCell className="py-3">
+                  <div className="h-4 w-6 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                    <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                  </div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="h-4 w-32 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="h-5 w-14 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="h-4 w-20 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="h-4 w-20 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+                <TableCell className="py-3">
+                  <div className="h-5 w-16 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}

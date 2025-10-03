@@ -1,8 +1,8 @@
-import { useAuthStore } from "../store/auth.store";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "../utils/queryKeys";
-import { ProfileService } from "../services/profile.service";
-import { Toast } from "../lib/toastify";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '../utils/queryKeys';
+import { UserService } from '../services/user.service';
+import { Toast } from '../lib/toastify';
+import { useAuthStore } from '@/store/auth.store';
 
 export const useUploadAvatar = (options = {}) => {
   const queryClient = useQueryClient();
@@ -10,12 +10,10 @@ export const useUploadAvatar = (options = {}) => {
 
   return useMutation({
     mutationKey: QUERY_KEYS.AUTH.AVATAR_UPLOAD,
-    mutationFn: ProfileService.uploadAvatar,
+    mutationFn: UserService.uploadAvatar,
 
     onSuccess: (response, variables) => {
-      console.log("✅ Avatar upload response:", response);
-
-      Toast.success(response?.message || "Avatar uploaded successfully ✅");
+      Toast.success(response?.message || 'Avatar uploaded successfully ✅');
 
       if (response?.data?.avatar_url) {
         setUser((prev) => ({
@@ -31,14 +29,12 @@ export const useUploadAvatar = (options = {}) => {
     },
 
     onError: (error) => {
-      console.error(" Avatar upload error:", error);
-
       // ✅ Safely extract backend message
       const message =
         error?.response?.data?.message ||
         error?.response?.data?.error ||
         error?.message ||
-        "Failed to upload avatar.";
+        'Failed to upload avatar.';
 
       Toast.error(message);
       options.onError?.(error);
@@ -52,24 +48,19 @@ export const useUpdateProfile = (options = {}) => {
 
   return useMutation({
     mutationKey: QUERY_KEYS.AUTH.UPDATE_PROFILE,
-    mutationFn: ProfileService.updateProfile,
+    mutationFn: UserService.updateProfile,
 
     onSuccess: (response, variables) => {
-      console.log(" Profile update full response:", response);
-
-    
-      Toast.success(response?.message || "Profile updated successfully");
+      Toast.success(response?.message || 'Profile updated successfully');
       const updatedUser =
         response?.data?.user || response?.data || response?.user;
 
       if (updatedUser) {
-        console.log("Updating Zustand store with:", updatedUser);
         setUser((prev) => ({
           ...prev,
           ...updatedUser,
         }));
       } else {
-        console.warn(" No user found in response data");
       }
 
       queryClient.invalidateQueries(QUERY_KEYS.AUTH.ME);
@@ -79,15 +70,30 @@ export const useUpdateProfile = (options = {}) => {
     },
 
     onError: (error) => {
-      console.error("Profile update error:", error);
       const message =
         error?.response?.data?.message ||
         error?.response?.data?.error ||
         error?.message ||
-        "Failed to update profile.";
+        'Failed to update profile.';
 
       Toast.error(message);
       options.onError?.(error);
     },
+  });
+};
+
+export const useGetAssignedAbsentees = (options = {}) => {
+  const { isAdmin, isLeader } = useAuthStore();
+  return useQuery({
+    queryKey: QUERY_KEYS.USER.ABSENT,
+    queryFn: async () => {
+      const { data } = await UserService.getAssignedAbsentees();
+      return data;
+    },
+    staleTime: 10 * 60 * 1000,
+    cacheTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: true,
+    enabled: isAdmin || isLeader,
+    ...options,
   });
 };

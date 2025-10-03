@@ -6,7 +6,7 @@ import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "../../store/auth.store";
-import { useUpdateProfile } from "../../queries/profile.query";
+import { useUpdateProfile } from "../../queries/user.query";
 import { EditIcon } from "../../icons";
 
 export default function UserAddressCard() {
@@ -34,7 +34,6 @@ export default function UserAddressCard() {
 
   // ✅ Handle form submit
   const handleSave = (data) => {
-    console.log("📤 Updating address:", data);
     updateProfile(data);
   };
 

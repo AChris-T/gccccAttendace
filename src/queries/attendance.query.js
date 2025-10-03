@@ -104,13 +104,13 @@ export const useAssignAbsenteesToLeaders = (options = {}) => {
   });
 };
 
-export const useUsersMonthlyAttendanceStats = (year, mode) => {
+export const useUsersMonthlyAttendanceStats = (year, month) => {
   return useQuery({
-    queryKey: QUERY_KEYS.ATTENDANCE.USER_BY_MONTH_YEAR(year, mode),
+    queryKey: QUERY_KEYS.ATTENDANCE.USER_BY_MONTH_YEAR(year, month),
     queryFn: async () => {
       const { data } = await AttendanceService.getUserAttendanceMonthlyStats(
         year,
-        mode
+        month
       );
       return data;
     },

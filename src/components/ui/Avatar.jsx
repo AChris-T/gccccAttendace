@@ -23,7 +23,7 @@ const statusColorClasses = {
 };
 
 const Avatar = ({
-  src,
+  src = '/images/user/avatar.jpeg',
   alt = "User Avatar",
   size = "medium",
   status = "none",

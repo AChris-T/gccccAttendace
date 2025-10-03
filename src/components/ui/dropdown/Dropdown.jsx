@@ -8,7 +8,8 @@ export const Dropdown = ({
   className = "",
   animation = 'fade-up',
   duration = 0.5,
-  easing = 'ease'
+  easing = 'ease',
+  direction = 'left'
 }) => {
   const dropdownRef = useRef(null);
 
@@ -32,14 +33,11 @@ export const Dropdown = ({
   if (!isOpen) return null;
 
   return (
-    <Animated duration={duration} animation={animation} easing={easing}>
-      <div
-        ref={dropdownRef}
-        className={`absolute z-40  right-0 mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
-      >
-        {children}
-      </div>
+    <Animated duration={duration} animation={animation} easing={easing}
+      ref={dropdownRef}
+      className={`absolute z-40 ${direction == 'right' ? 'left-0 top-7' : 'right-0'}  mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
+    >
+      {children}
     </Animated>
-
   );
 };

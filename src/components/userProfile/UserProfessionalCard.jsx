@@ -6,7 +6,7 @@ import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "../../store/auth.store";
-import { useUpdateProfile } from "../../queries/profile.query";
+import { useUpdateProfile } from "../../queries/user.query";
 import { EditIcon } from "../../icons";
 
 export default function UserProfessionalCard() {
@@ -34,7 +34,6 @@ export default function UserProfessionalCard() {
 
   // ✅ submit handler
   const handleSave = (data) => {
-    console.log("📤 Updating professional info:", data);
     updateProfile(data);
   };
 
@@ -54,15 +53,15 @@ export default function UserProfessionalCard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-gray-800 text-lg">Professional Information</h3>
-  <Button
-          variant="neutral"
-          size="md"
-          className="flex lg:inline-flex lg:w-auto"
-          onClick={handleEdit}
-          startIcon={<EditIcon width={18} />}
-        >
-          Edit
-        </Button>
+          <Button
+            variant="neutral"
+            size="md"
+            className="flex lg:inline-flex lg:w-auto"
+            onClick={handleEdit}
+            startIcon={<EditIcon width={18} />}
+          >
+            Edit
+          </Button>
         </div>
 
         {/* Info Display */}

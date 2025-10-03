@@ -9,9 +9,9 @@ export const AttendanceService = {
     const { data } = await $api.get(`/attendance/history`);
     return data;
   },
-  async getUserAttendanceMonthlyStats(year, mode) {
+  async getUserAttendanceMonthlyStats(year, month) {
     const { data } = await $api.get(
-      `/attendance/monthly-stats?year=${year}&mode=${mode}`
+      `/attendance/monthly-stats?year=${year}&month=${month}`
     );
     return data;
   },
