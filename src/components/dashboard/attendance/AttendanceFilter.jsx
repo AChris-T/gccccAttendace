@@ -88,51 +88,22 @@ const AttendanceFilter = ({
     return (
         <Animated
             animation="fade-up"
-            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow animate-fadeIn w-full md:w-1/2 lg:w-1/2 xl:w-3/5 transition-all duration-300"
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow animate-fadeIn w-full transition-all duration-300 p-6"
         >
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                        Filter Attendance
-                    </h3>
-                    {hasActiveFilters && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                            {activeFilterCount} active
-                        </span>
-                    )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 sm:gap-5">
+                <div>
+                    <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Service Date
+                    </label>
+                    <DatePicker
+                        format="YYYY/MM/DD"
+                        multiple
+                        onChange={handleDateChange}
+                        placeholder="Select date(s)"
+                        disabled={loading}
+                    />
                 </div>
-
-                {hasActiveFilters && (
-                    <button
-                        type="button"
-                        onClick={handleReset}
-                        className="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                        aria-label="Clear all filters"
-                    >
-                        Clear All
-                    </button>
-                )}
-            </div>
-
-            {/* Filter Fields */}
-            <div className="p-6">
-                <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                    {/* Date Picker */}
-                    <div>
-                        <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            Service Date
-                        </label>
-                        <DatePicker
-                            format="YYYY/MM/DD"
-                            multiple
-                            onChange={handleDateChange}
-                            placeholder="Select date(s)"
-                            disabled={loading}
-                        />
-                    </div>
-
-                    {/* Service Select */}
+                <div>
                     <SingleSelect
                         label="Select Service"
                         name="service"
@@ -143,8 +114,9 @@ const AttendanceFilter = ({
                         searchable
                         disabled={loading}
                     />
+                </div>
 
-                    {/* Status Select */}
+                <div>
                     <SingleSelect
                         label="Attendance Status"
                         name="status"
@@ -154,8 +126,8 @@ const AttendanceFilter = ({
                         placeholder="Select status..."
                         disabled={loading}
                     />
-
-                    {/* Mode Select */}
+                </div>
+                <div>
                     <SingleSelect
                         label="Attendance Mode"
                         name="mode"
@@ -166,27 +138,51 @@ const AttendanceFilter = ({
                         disabled={loading}
                     />
                 </div>
+            </div>
 
-                {/* Filter Summary */}
-                {hasActiveFilters && (
-                    <div className="flex items-center text-xs text-green-600 dark:text-gray-400 mt-4">
-                        <InfoIcon />
-                        <span>{filterSummary}</span>
+            <div>
+                <div className="my-3">
+                    {hasActiveFilters && (
+                        <div className="flex items-center text-xs text-green-600 dark:text-gray-400">
+                            <InfoIcon />
+                            <span>{filterSummary}</span>
+                        </div>
+                    )}
+
+                    <div className="flex items-center gap-10 my-2">
+                        <div className="flex items-center">
+                            {hasActiveFilters && (
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                    {activeFilterCount} active
+                                </span>
+                            )}
+                        </div>
+
+                        {hasActiveFilters && (
+                            <button
+                                type="button"
+                                onClick={handleReset}
+                                className="text-sm font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                                aria-label="Clear all filters"
+                            >
+                                Clear All
+                            </button>
+                        )}
                     </div>
-                )}
 
-                {/* Action Buttons */}
+                </div>
+
                 <div className="flex gap-3 mt-2 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <Button
-                        variant="success"
+                        variant="primary"
                         className="rounded px-6"
                         onClick={handleApply}
+                        loading={loading}
                         disabled={loading || !hasActiveFilters}
-                    >
-                        {loading ? 'Applying...' : 'Apply Filters'}
+                    >Filter
                     </Button>
                     <Button
-                        variant="danger"
+                        variant="outline-light"
                         className="rounded px-6"
                         onClick={handleReset}
                         disabled={loading || !hasActiveFilters}

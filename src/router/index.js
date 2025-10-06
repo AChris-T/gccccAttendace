@@ -16,7 +16,6 @@ import AdminDashboardPage from '../pages/Admin/AdminDashboardPage';
 import AdminFirstTimerPage from '../pages/Admin/AdminFirstTimerPage';
 import AdminMembersPage from '../pages/Admin/AdminMembersPage';
 import AdminAttendancePage from '../pages/Admin/AdminAttendancePage';
-import AdminUnitAndLeaderPage from '../pages/Admin/AdminUnitAndLeaderPage';
 import FirstTimerDetailsPage from '../pages/Dashboard/FirstTimerDetailsPage';
 import EventsPage from '../pages/Dashboard/EventsPage';
 import AdminFormsPage from '../pages/Admin/AdminFormsPage';
@@ -24,6 +23,10 @@ import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
 import ProtectedRoute from '../layout/Protected/ProtectedRoute';
 import PublicRoute from '../layout/PublicRoute';
 import MemberDetailsPage from '@/pages/Dashboard/MemberDetailsPage';
+import AdminFollowupFeedbacksPage from '@/pages/Admin/AdminFollowupFeedbacksPage';
+import LeadersDashboardPage from '@/pages/Leaders/LeadersDashboardPage';
+import LeadersProtectedRoute from '@/layout/Protected/LeadersProtectedRoute';
+import LeadersUnitPage from '@/pages/Leaders/LeadersUnitPage';
 
 const AppRoutes = [
   {
@@ -57,7 +60,7 @@ const AppRoutes = [
               { path: 'profile', Component: UserProfilePage },
               { path: 'events', Component: EventsPage },
               {
-                path: 'first-timer/:firstTimerId',
+                path: 'first-timers/:firstTimerId',
                 Component: FirstTimerDetailsPage,
               },
               {
@@ -75,9 +78,16 @@ const AppRoutes = [
               { path: 'admin/members', Component: AdminMembersPage },
               { path: 'admin/forms', Component: AdminFormsPage },
               {
-                path: 'admin/units-and-leaders',
-                Component: AdminUnitAndLeaderPage,
+                path: 'admin/followup-feedbacks',
+                Component: AdminFollowupFeedbacksPage,
               },
+            ],
+          },
+          {
+            Component: LeadersProtectedRoute,
+            children: [
+              { path: 'leaders', Component: LeadersDashboardPage },
+              { path: 'leaders/units', Component: LeadersUnitPage },
             ],
           },
         ],

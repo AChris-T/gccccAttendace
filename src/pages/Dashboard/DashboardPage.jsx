@@ -15,21 +15,50 @@ import { useUsersMonthlyAttendanceStats } from '@/queries/attendance.query';
 import { CalenderIcon } from '@/icons';
 import { useGetAssignedAbsentees } from '@/queries/user.query';
 import { TableSkeletonLoader } from '@/components/skeleton';
+import FirstTimerAssigned from '@/components/dashboard/assigned/FirstTimerAssigned';
+import { useGetFirstTimersAssigned } from '@/queries/firstTimer.query';
 
+// Constants
 const getCurrentDateParams = () => ({
   year: new Date().getFullYear(),
   month: new Date().getMonth() + 1,
 });
 
-const AssignedMembersSection = ({ assignedMembers }) => {
-  if (!assignedMembers?.length) return null;
-  return (
-    <div className="col-span-12">
-      <AssignedAbsentMembers assignedMembers={assignedMembers} />
-    </div>
-  );
+// Custom Hooks
+const useDateFilter = () => {
+  const [params, setParams] = useState(getCurrentDateParams);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
+
+  const handleDateChange = useCallback((newParams) => {
+    setParams(newParams);
+    setIsOpen(false);
+  }, []);
+
+  return {
+    params,
+    isOpen,
+    toggleDropdown,
+    handleDateChange,
+  };
 };
 
+const useDashboardData = (year, month) => {
+  const attendanceQuery = useUsersMonthlyAttendanceStats(year, month);
+  const assignedMembersQuery = useGetAssignedAbsentees();
+  const firstTimersQuery = useGetFirstTimersAssigned();
+
+  return {
+    attendance: attendanceQuery,
+    assignedMembers: assignedMembersQuery,
+    firstTimers: firstTimersQuery,
+  };
+};
+
+// Presentational Components
 const DateFilterDropdown = ({ isOpen, onToggle, onDateChange }) => (
   <>
     <Button
@@ -39,7 +68,7 @@ const DateFilterDropdown = ({ isOpen, onToggle, onDateChange }) => (
       aria-label="Select date range"
       aria-expanded={isOpen}
     >
-      <CalenderIcon height={20} width={20} />
+      <CalenderIcon height={17} width={17} />
     </Button>
     <Dropdown
       direction="right"
@@ -65,40 +94,45 @@ const SidebarSection = ({ attendanceProps }) => (
   </aside>
 );
 
-const useDateFilter = () => {
-  const [params, setParams] = useState(getCurrentDateParams);
-  const [isOpen, setIsOpen] = useState(false);
+const LoadingSection = () => (
+  <section className="col-span-12 my-5">
+    <TableSkeletonLoader />
+  </section>
+);
 
-  const toggleDropdown = useCallback(() => {
-    setIsOpen(prev => !prev);
-  }, []);
+const AssignedMembersSection = ({ data, isLoading }) => {
+  if (isLoading) return <LoadingSection />;
+  if (!data?.length) return null;
 
-  const handleDateChange = useCallback((newParams) => {
-    setParams(newParams);
-    setIsOpen(false);
-  }, []);
+  return <AssignedAbsentMembers assignedMembers={data} />;
+};
 
-  return {
-    params,
-    isOpen,
-    toggleDropdown,
-    handleDateChange,
-  };
+const FirstTimersSection = ({ data, isLoading }) => {
+  if (isLoading) return <LoadingSection />;
+  if (!data?.length) return null;
+
+  return <FirstTimerAssigned firstTimers={data} />;
 };
 
 // Main Component
 const DashboardPage = () => {
   const { params, isOpen, toggleDropdown, handleDateChange } = useDateFilter();
-  const { data: assignedMembers, isLoading: isLoadingAssignedMembers } = useGetAssignedAbsentees();
 
-  const { data, isLoading, isError, error } = useUsersMonthlyAttendanceStats(
-    params.year,
-    params.month
-  );
+  const {
+    attendance,
+    assignedMembers,
+    firstTimers,
+  } = useDashboardData(params.year, params.month);
 
   const attendanceProps = useMemo(
-    () => ({ data, isLoading, isError, error, params }),
-    [data, isLoading, isError, error, params]
+    () => ({
+      data: attendance.data,
+      isLoading: attendance.isLoading,
+      isError: attendance.isError,
+      error: attendance.error,
+      params,
+    }),
+    [attendance.data, attendance.isLoading, attendance.isError, attendance.error, params]
   );
 
   return (
@@ -122,9 +156,15 @@ const DashboardPage = () => {
           <VideoCarousel />
         </section>
 
-        {isLoadingAssignedMembers ? <section className="col-span-12 my-5">
-          <TableSkeletonLoader />
-        </section> : <AssignedMembersSection assignedMembers={assignedMembers} />}
+        <AssignedMembersSection
+          data={assignedMembers.data}
+          isLoading={assignedMembers.isLoading}
+        />
+
+        <FirstTimersSection
+          data={firstTimers.data}
+          isLoading={firstTimers.isLoading}
+        />
       </main>
     </>
   );

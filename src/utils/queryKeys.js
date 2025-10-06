@@ -30,6 +30,7 @@ export const QUERY_KEYS = {
       'first-timers-analytics',
       params,
     ],
+    ASSIGNED: ['assigned'],
   },
   UNITS: {
     ALL: ['units'],
@@ -51,6 +52,7 @@ export const QUERY_KEYS = {
     ALL: ['attendance'],
     HISTORY: ['attendance', 'history'],
     ALL_RECORDS: (params) => ['attendance', 'all-records', params],
+    ALL_RECORDS_USER: (params) => ['attendance', 'all-records_user', params],
     BY_MONTH_YEAR: (month, year) => ['attendance', 'filtered', month, year],
     USER_BY_MONTH_YEAR: (month, year) => [
       'attendance',

@@ -16,6 +16,18 @@ export const useFirstTimers = (options = {}) => {
     ...options,
   });
 };
+export const useGetFirstTimersAssigned = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FIRST_TIMERS.ASSIGNED,
+    queryFn: async () => {
+      const { data } = await FirstTimerService.getFirstTimersAssigned();
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
 
 export const useCreateFirstTimer = (options = {}) => {
   const queryClient = useQueryClient();

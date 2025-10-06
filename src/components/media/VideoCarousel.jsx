@@ -10,7 +10,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-fade';
 import Message from "@/components/common/Message";
 import { VideoCardSkeleton } from "@/components/skeleton";
-import { CalenderIcon, CloseIcon, LeftIcon, PlayIcon, RightIcon } from "@/icons";
+import { CalenderIcon, CloseIcon, LeftIcon, PlayIcon, RightIcon, UserIcon, UserIcon2 } from "@/icons";
 import Badge from "@/components/ui/Badge";
 
 const VideoCarousel = () => {
@@ -93,36 +93,48 @@ const VideoCarousel = () => {
                         </SwiperSlide>
                     ))}</> : <> {videos.map((video) => (
                         <SwiperSlide key={video.id}>
-                            <div
-                                className="group bg-white dark:bg-slate-800 rounded-3xl shadow-xl hover:shadow-2xl dark:shadow-slate-950/50 transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-3 border border-slate-200 dark:border-slate-700"
+                            <article
+                                className="group relative bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-2xl dark:shadow-slate-950/50 transition-all duration-500 overflow-hidden cursor-pointer hover:-translate-y-2 border border-slate-100 dark:border-slate-800"
                                 onClick={() => openVideo(video)}
                             >
-                                {/* Thumbnail */}
-                                <div className="relative overflow-hidden aspect-video bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800">
+                                {/* Thumbnail Container */}
+                                <div className="relative overflow-hidden aspect-video bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
                                     <img
                                         src={video.thumbnail_high}
                                         alt={video.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                        loading="lazy"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent group-hover:from-black/70 transition-all duration-300"></div>
+
+                                    {/* Gradient Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
                                     {/* Play Button */}
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="relative">
-                                            <div className="absolute inset-0 bg-blue-600 rounded-full blur-xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
-                                            <div className="animate-pulse relative w-20 h-20 bg-gradient-to-br from-gray-900 to-gray-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
-                                                <PlayIcon className="w-10 h-10 text-white ml-1" fill="white" />
+                                            {/* Glow Effect */}
+                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 scale-150" />
+
+                                            {/* Main Play Button */}
+                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-violet-500 transition-all duration-300 shadow-2xl">
+                                                <PlayIcon
+                                                    className="w-7 h-7 sm:w-9 sm:h-9 text-slate-800 dark:text-slate-100 group-hover:text-white transition-colors duration-300 ml-1"
+                                                    fill="currentColor"
+                                                />
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 {/* Content */}
-                                <div className="p-6">
-                                    <h3 className="font-bold text-xl text-slate-800 dark:text-slate-100 mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight truncate">
+                                <div className="p-4 sm:p-6">
+                                    {/* Title */}
+                                    <h3 className="font-bold text-base sm:text-lg lg:text-xl text-slate-900 dark:text-slate-50 mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 leading-snug">
                                         {video.title}
                                     </h3>
 
+                                    {/* Date Badge */}
                                     <div className="flex items-center gap-3 mb-4">
                                         <Badge size="sm">
                                             <CalenderIcon />
@@ -130,18 +142,19 @@ const VideoCarousel = () => {
                                         </Badge>
                                     </div>
 
-                                    <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">
+                                    {/* Footer */}
+                                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider truncate">
                                                 {video.channel_title}
                                             </p>
-                                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <PlayIcon className="w-4 h-4 text-white" fill="white" />
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+
+                                {/* Hover Border Effect */}
+                                <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-transparent group-hover:border-blue-500/20 dark:group-hover:border-blue-400/20 transition-colors duration-300 pointer-events-none" />
+                            </article>
                         </SwiperSlide>
                     ))}</>}
                 </Swiper>
@@ -149,6 +162,7 @@ const VideoCarousel = () => {
 
             {/* Video Modal */}
             {selectedVideo && (
+
                 <div
                     className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn"
                     onClick={closeVideo}
@@ -177,11 +191,11 @@ const VideoCarousel = () => {
                         </div>
 
                         <div className="p-8 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
-                            <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">
+                            <h2 className="text-lg ms:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">
                                 {selectedVideo.title}
                             </h2>
                             {selectedVideo.description && (
-                                <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                                <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
                                     {selectedVideo.description}
                                 </p>
                             )}

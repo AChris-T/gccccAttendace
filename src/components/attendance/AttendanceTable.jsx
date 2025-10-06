@@ -1,21 +1,18 @@
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import Badge from '../../ui/Badge';
-import Button from '../../ui/Button';
-import { useAllAttendance } from '@/queries/attendance.query';
+import Badge from '@/components/ui/Badge';
+import Button from '@/components/ui/Button';
+import { useAllAttendance, useUserAttendance } from '@/queries/attendance.query';
 import { useServices } from '@/queries/service.query';
 import { LoadingIcon } from '@/icons';
-import AttendanceMarkAbsent from '@/components/admin/attendance/AttendanceMarkAbsent';
-import AttendanceAssignment from '@/components/admin/attendance/AttendanceAssignment';
-import AdminAttendanceFilter from './AdminAttendanceFilter';
+import AttendanceFilter from '@/components/dashboard/attendance/AttendanceFilter';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const AdminAttendanceTable = () => {
+const AttendanceTable = () => {
     const gridRef = useRef(null);
 
-    // Filter state
     const [activeFilters, setActiveFilters] = useState({
         service_id: '',
         attendance_date: [],
@@ -23,7 +20,6 @@ const AdminAttendanceTable = () => {
         mode: ''
     });
 
-    // Data fetching hooks
     const {
         data: allAttendance = [],
         isError,
@@ -31,11 +27,11 @@ const AdminAttendanceTable = () => {
         isLoading,
         refetch,
         isFetching
-    } = useAllAttendance(activeFilters);
+    } = useUserAttendance(activeFilters);
+
 
     const { data: services = [] } = useServices();
 
-    // Default column definitions
     const defaultColDef = useMemo(() => ({
         flex: 1,
         filter: true,
@@ -46,7 +42,6 @@ const AdminAttendanceTable = () => {
         editable: false,
     }), []);
 
-    // Cell Renderers
     const StatusRenderer = useCallback(({ value }) => {
         if (!value) return <span className="text-gray-400 text-center">--</span>;
 
@@ -71,7 +66,6 @@ const AdminAttendanceTable = () => {
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
-    // Value Formatters
     const dateFormatter = useCallback((params) => {
         if (!params.value) return '';
         const date = new Date(params.value);
@@ -101,7 +95,6 @@ const AdminAttendanceTable = () => {
         return params.data?.service?.name || 'N/A';
     }, []);
 
-    // Column Definitions
     const columnDefs = useMemo(() => [
         {
             field: "id",
@@ -156,7 +149,6 @@ const AdminAttendanceTable = () => {
         },
     ], [StatusRenderer, ModeRenderer, dateFormatter, nameFormatter, emailFormatter, phoneFormatter, serviceFormatter]);
 
-    // Grid Options
     const gridOptions = useMemo(() => ({
         pagination: true,
         paginationPageSize: 200,
@@ -186,7 +178,6 @@ const AdminAttendanceTable = () => {
         setActiveFilters(filters);
     }, []);
 
-    // Export handler
     const handleExportCSV = useCallback(() => {
         if (gridRef.current) {
             const timestamp = new Date().toISOString().split('T')[0];
@@ -196,7 +187,6 @@ const AdminAttendanceTable = () => {
         }
     }, []);
 
-    // Check if any filters are active
     const hasActiveFilters =
         activeFilters.service_id ||
         activeFilters.attendance_date?.length > 0 ||
@@ -205,16 +195,14 @@ const AdminAttendanceTable = () => {
 
     return (
         <div className="w-full animate-fadeIn">
-            <div className='mb-14 flex flex-col md:flex-row md:space-x-5 space-y-4 md:space-y-0'>
-                <AdminAttendanceFilter
+            <div className='mb-14'>
+                <AttendanceFilter
                     services={services}
                     initialFilters={activeFilters}
                     onApply={handleApplyFilters}
                     onReset={handleResetFilters}
                     loading={isFetching}
                 />
-                <AttendanceMarkAbsent services={services} />
-                <AttendanceAssignment services={services} />
             </div>
 
             {isError && error ? <>
@@ -263,7 +251,6 @@ const AdminAttendanceTable = () => {
                             )}
                         </div>
                     </div>
-                    {/* Action Buttons */}
                     <div className="flex gap-2 mb-4">
                         <Button
                             variant='accent'
@@ -319,7 +306,6 @@ const AdminAttendanceTable = () => {
                         />
                     </div>
 
-                    {/* Footer Section */}
                     {allAttendance?.length > 0 && (
                         <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center animate-fadeIn">
                             <span>Last updated: {new Date().toLocaleString()}</span>
@@ -336,4 +322,4 @@ const AdminAttendanceTable = () => {
     );
 };
 
-export default AdminAttendanceTable;
+export default AttendanceTable;

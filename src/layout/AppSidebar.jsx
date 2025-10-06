@@ -9,14 +9,15 @@ import {
   EventIcon,
   HorizontaLDotsIcon,
   UserIcon,
+  LeaderIcon
 } from '../icons';
 import { useAuthStore } from '../store/auth.store';
-import { adminNavItems, navItems } from '../utils/data';
+import { adminNavItems, leaderNavItems, navItems } from '../utils/data';
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();
   const location = useLocation();
-  const { isAdmin } = useAuthStore();
+  const { isAdmin, isLeader } = useAuthStore();
 
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [subMenuHeight, setSubMenuHeight] = useState({});
@@ -50,6 +51,7 @@ const AppSidebar = () => {
     DashboardIcon,
     EventIcon,
     UserIcon,
+    LeaderIcon
   };
 
   useEffect(() => {
@@ -268,18 +270,33 @@ const AppSidebar = () => {
                 {renderMenuItems(adminNavItems, 'admin')}
               </div>
             )}
+            {isAdmin || isLeader ? (
+              <div>
+                <h2
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center" : "justify-start"
+                    }`}
+                >
+                  {isExpanded || isMobileOpen ? (
+                    "Leaders"
+                  ) : (
+                    <HorizontaLDotsIcon className="size-6" />
+                  )}
+                </h2>
+                {renderMenuItems(leaderNavItems, 'leaders')}
+              </div>
+            ) : null}
             <div>
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded ? "lg:justify-center" : "justify-start"
                   }`}
               >
                 {isExpanded || isMobileOpen ? (
-                  'Menu'
+                  'Members'
                 ) : (
                   <HorizontaLDotsIcon className="size-6" />
                 )}
               </h2>
-              {renderMenuItems(navItems, 'main')}
+              {renderMenuItems(navItems, 'members')}
             </div>
           </div>
         </nav>

@@ -14,6 +14,11 @@ export const FirstTimerService = {
     return data;
   },
 
+  getFirstTimersAssigned: async () => {
+    const { data } = await $api.get('/first-timers/assigned');
+    return data;
+  },
+
   async getFirstTimersAnalytics(params) {
     const { data } = await $api.get(`${ADMIN}/analytics?year=${params?.year}`);
     return data;

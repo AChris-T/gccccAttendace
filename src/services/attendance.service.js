@@ -30,6 +30,23 @@ export const AttendanceService = {
     );
     return data;
   },
+  async getAllUserAttendance(params = {}) {
+    const queryParams = new URLSearchParams();
+
+    params.attendance_date?.forEach((date) =>
+      queryParams.append('attendance_date[]', date)
+    );
+
+    ['service_id', 'status', 'mode'].forEach((key) => {
+      if (params[key]) queryParams.append(key, params[key]);
+    });
+
+    const query = queryParams.toString();
+    const endpoint = `/attendance/history${query ? `?${query}` : ''}`;
+
+    const { data } = await $api.get(endpoint);
+    return data;
+  },
   async getAllAttendance(params = {}) {
     const queryParams = new URLSearchParams();
 

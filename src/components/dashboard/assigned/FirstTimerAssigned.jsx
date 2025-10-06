@@ -1,21 +1,22 @@
-import Avatar from '@/components/ui/Avatar';
-import Badge from '@/components/ui/Badge';
+import Avatar from '@/components/ui/Avatar'
+import Badge from '@/components/ui/Badge'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table'
-import { formatDate } from '@/utils/helper';
-import { Link } from 'react-router-dom';
+import { formatDate } from '@/utils/helper'
+import { Link } from 'react-router-dom'
 
-const AssignedAbsentMembers = ({ assignedMembers }) => {
+
+const FirstTimerAssigned = ({ firstTimers }) => {
     return (
         <>
-            <div className="col-span-12 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+            <div className="col-span-12 my-5 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
 
                 <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                            Assigned Members
+                            Assigned First Timers
                         </h3>
                         <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-                            Here's a list of absent members assigned to you to follow up.
+                            Here's a list of first timers assigned to you to follow up.
                         </p>
                     </div>
                 </div>
@@ -57,13 +58,7 @@ const AssignedAbsentMembers = ({ assignedMembers }) => {
                                     isHeader
                                     className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                                 >
-                                    Service
-                                </TableCell>
-                                <TableCell
-                                    isHeader
-                                    className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                    Service Date
+                                    Date of Visit
                                 </TableCell>
                                 <TableCell
                                     isHeader
@@ -75,61 +70,50 @@ const AssignedAbsentMembers = ({ assignedMembers }) => {
                         </TableHeader>
 
                         <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-                            {assignedMembers?.map((member, index) => (
-                                <TableRow key={member.id} className="">
+                            {firstTimers?.map((firstTimer, index) => (
+                                <TableRow key={firstTimer.id} className="">
                                     <TableCell className="py-3">
-                                        <Link to={`/dashboard/members/${member.id}`} target="_blank" className='text-gray-500 text-theme-sm dark:text-gray-400'>
+                                        <Link to={`/dashboard/first-timers/${firstTimer.id}`} target="_blank" className='text-gray-500 text-theme-sm dark:text-gray-400'>
                                             {index + 1}
                                         </Link>
                                     </TableCell>
                                     <TableCell className="py-3">
-                                        <Link to={`/dashboard/members/${member.id}`} target="_blank" className='hover:underline'>
+                                        <Link to={`/dashboard/first-timers/${firstTimer.id}`} target="_blank" className='hover:underline'>
                                             <div className="flex items-center gap-3">
                                                 <Avatar />
                                                 <p className="font-medium hover:text-blue-500 text-gray-800 text-theme-sm dark:text-white/90">
-                                                    {member.name}
+                                                    {firstTimer.name}
                                                 </p>
                                             </div>
                                         </Link>
                                     </TableCell>
                                     <TableCell className="py-3 text-blue-500 text-theme-sm dark:text-gray-400">
-                                        <Link to={`mailto:${member.email}`}>{member.email}</Link>
+                                        <Link to={`mailto:${firstTimer.email}`}>{firstTimer.email}</Link>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        <Link to={`tel:${member.phone}`}>{member.phone}</Link>
+                                        <Link to={`tel:${firstTimer.phone}`}>{firstTimer.phone || 'N/A'} </Link>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                         <Badge
                                             size="sm"
                                             color={
-                                                member?.gender === "Male"
+                                                firstTimer?.gender === "Male"
                                                     ? "primary"
-                                                    : member.gender === "Female"
+                                                    : firstTimer.gender === "Female"
                                                         ? "info"
                                                         : "error"
                                             }
                                         >
-                                            {member?.gender || 'N/A'}
+                                            {firstTimer?.gender || 'N/A'}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        <p> {member?.attendance?.service?.name}</p>
+                                        <p>{formatDate(firstTimer?.date_of_visit)}</p>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        <p>{formatDate(member?.attendance?.attendance_date)}</p>
-                                    </TableCell>
-                                    <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        <Badge
-                                            size="sm"
-                                            color={
-                                                member?.attendance?.status === "present"
-                                                    ? "success"
-                                                    : member.status === "absent"
-                                                        ? "error"
-                                                        : "error"
-                                            }
+                                        <Badge size="sm" color={firstTimer?.follow_up_status?.color}
                                         >
-                                            {member?.attendance?.status}
+                                            {firstTimer?.follow_up_status?.title}
                                         </Badge>
                                     </TableCell>
                                 </TableRow>
@@ -142,4 +126,4 @@ const AssignedAbsentMembers = ({ assignedMembers }) => {
     )
 }
 
-export default AssignedAbsentMembers
+export default FirstTimerAssigned

@@ -189,9 +189,16 @@ layer(base);
   --z-index-99999: 99999;
   --z-index-999999: 999999;
 }
+.ag-paging-panel {
+  height: 110px !important;
+}
+
 /* datepicker  */
 .rmdp-input {
   padding: 20px !important;
+  margin-bottom: 17px !important;
+  max-width: 315px !important;
+  min-width: 100px !important;
   @apply w-full text-sm font-light rounded-lg border shadow border-gray-300 focus:border-blue-500 focus:ring-blue-200 dark:border-gray-700 dark:focus:border-blue-400;
   @apply p-5 shadow text-gray-700 dark:text-gray-400;
 }

@@ -18,12 +18,27 @@ export const useAttendanceHistory = (options = {}) => {
   });
 };
 
-// Get all attendance records
 export const useAllAttendance = (params = {}, options = {}) => {
   return useQuery({
     queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
     queryFn: async () => {
       const { data } = await AttendanceService.getAllAttendance(params);
+      return data || [];
+    },
+    cacheTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
+    ...options,
+  });
+};
+export const useUserAttendance = (params = {}, options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
+    queryFn: async () => {
+      const { data } = await AttendanceService.getAllUserAttendance(params);
       return data || [];
     },
     cacheTime: 5 * 60 * 1000,
@@ -97,6 +112,7 @@ export const useAssignAbsenteesToLeaders = (options = {}) => {
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {
+      console.log({ error });
       const message = handleApiError(error);
       Toast.error(message);
       options.onError?.(new Error(message));

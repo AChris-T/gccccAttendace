@@ -66,6 +66,7 @@ const Modal = ({
 
             {/* Footer */}
             <div className="px-6 py-5 overflow-y-auto text-gray-700 flex gap-4 justify-end">
+              {actionButton && actionButton}
               <Button size="md" variant="outline-danger" onClick={onClose}>
                 Close
               </Button>
