@@ -1,4 +1,3 @@
-import EmptyStateDemo from "@/components/common/EmptyState"
 import ComponentCard from "../../components/common/ComponentCard"
 import PageBreadcrumb from "../../components/common/PageBreadCrumb"
 import PageMeta from "../../components/common/PageMeta"
@@ -10,7 +9,6 @@ const AdminFollowupFeedbacksPage = () => {
             <PageBreadcrumb pageTitle="Admin | Followup Feedbacks" />
             <div className="space-y-6">
                 <ComponentCard title="Followup Feedbacks" desc="">
-                    <EmptyStateDemo />
                 </ComponentCard>
             </div>
         </>

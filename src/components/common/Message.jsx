@@ -8,7 +8,7 @@ const variantStyles = {
     info: "bg-blue-100 border-blue-400 text-blue-800",
 };
 
-export default function Message({ variant = "info", data, onClose, className }) {
+export default function Message({ variant = "info", data, onClose, className, message = null }) {
     const [visible, setVisible] = useState(true);
 
     if (!visible) return null;
@@ -24,6 +24,7 @@ export default function Message({ variant = "info", data, onClose, className }) 
             role="alert"
         >
             <p className="font-medium text-sm truncate">{data?.message}</p>
+            {message && <p className="font-medium text-sm truncate">{message}</p>}
             {data?.errors && (
                 <ul className="mt-2 list-disc list-inside space-y-1 text-sm break-words">
                     {Object.entries(data.errors).map(([field, messages]) => {

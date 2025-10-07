@@ -112,7 +112,6 @@ export const useAssignAbsenteesToLeaders = (options = {}) => {
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {
-      console.log({ error });
       const message = handleApiError(error);
       Toast.error(message);
       options.onError?.(new Error(message));

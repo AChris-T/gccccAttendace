@@ -1,7 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import Button from "../../components/ui/Button";
+import Animated from "@/components/common/Animated";
+import { CloseIcon } from "@/icons";
 
 const Modal = ({
   isOpen,
@@ -9,8 +9,6 @@ const Modal = ({
   title,
   children,
   maxWidth = "max-w-lg",
-  actionButton,
-  displayFooter = true,
 }) => {
   const modalRef = useRef(null);
 
@@ -35,46 +33,28 @@ const Modal = ({
   if (!isOpen) return null;
 
   return createPortal(
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-[1000000] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, transition: { duration: 0.2 } }}
+    <div onClick={(e) => e.stopPropagation()} className="fixed inset-0 z-[1000000] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm">
+      <Animated
+        ref={modalRef}
+        animation='zoom-in'
+        className={`relative ${maxWidth} w-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden p-5 md:p-8`}
       >
-        <motion.div
-          onClick={(e) => e.stopPropagation()}
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1, transition: { duration: 0.25 } }}
-          exit={{ scale: 0.95, opacity: 0 }}
-        >
-          <div
-            ref={modalRef}
-            className={`relative ${maxWidth} w-full bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden`}
+        <div className="relative border-b border-gray-100 text-gray-900 dark:text-gray-200 pb-1">
+          <h3 className="text-lg font-semibold">{title}</h3>
+          <button
+            onClick={onClose}
+            className="absolute -top-5 -right-5 z-10 bg-red-50 border-red-200 shadow-2xl hover:bg-red-100 dark:bg-white/10 dark:hover:bg-white/20 backdrop-blur-sm text-white rounded-full p-1 transition-all duration-300 hover:scale-110 border"
           >
-            {/* Header */}
-            {title && (
-              <div className="px-6 py-4 border-b border-gray-100 text-center">
-                <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-              </div>
-            )}
+            <CloseIcon className=" text-red-400" />
+          </button>
+        </div>
 
-            {/* Body */}
-            <div className="px-6 py-5 max-h-[90vh] overflow-y-auto text-gray-700">
-              {children}
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 py-5 overflow-y-auto text-gray-700 flex gap-4 justify-end">
-              {actionButton && actionButton}
-              <Button size="md" variant="outline-danger" onClick={onClose}>
-                Close
-              </Button>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>,
+        {/* Body */}
+        <div className="max-h-[90vh] overflow-y-auto text-gray-700">
+          {children}
+        </div>
+      </Animated>
+    </div>,
     document.body
   );
 };

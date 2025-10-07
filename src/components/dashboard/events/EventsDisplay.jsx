@@ -126,7 +126,6 @@ const EventCalculator = ({ event, onBack }) => {
         };
 
         setRegistrationData(savedData);
-        console.log('Saved Registration:', savedData);
     };
 
     return (

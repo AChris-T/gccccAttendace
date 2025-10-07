@@ -65,3 +65,57 @@ export const leaderNavItems = [
     ],
   },
 ];
+
+export const gradients = [
+  'from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700',
+  'from-pink-500 to-rose-600 dark:from-pink-600 dark:to-rose-700',
+  'from-emerald-500 to-teal-600 dark:from-emerald-600 dark:to-teal-700',
+  'from-orange-500 to-red-600 dark:from-orange-600 dark:to-red-700',
+  'from-violet-500 to-purple-600 dark:from-violet-600 dark:to-purple-700',
+  'from-cyan-500 to-blue-600 dark:from-cyan-600 dark:to-blue-700',
+  'from-fuchsia-500 to-pink-600 dark:from-fuchsia-600 dark:to-pink-700',
+  'from-lime-500 to-green-600 dark:from-lime-600 dark:to-green-700',
+  'from-amber-500 to-orange-600 dark:from-amber-600 dark:to-orange-700',
+  'from-indigo-500 to-blue-600 dark:from-indigo-600 dark:to-blue-700',
+  'from-rose-500 to-pink-600 dark:from-rose-600 dark:to-pink-700',
+  'from-teal-500 to-cyan-600 dark:from-teal-600 dark:to-cyan-700',
+  'from-red-500 to-orange-600 dark:from-red-600 dark:to-orange-700',
+  'from-purple-500 to-fuchsia-600 dark:from-purple-600 dark:to-fuchsia-700',
+  'from-sky-500 to-indigo-600 dark:from-sky-600 dark:to-indigo-700',
+];
+
+export const avatarGradients = [
+  'from-blue-500 to-purple-600',
+  'from-pink-500 to-rose-600',
+  'from-emerald-500 to-teal-600',
+  'from-orange-500 to-red-600',
+  'from-violet-500 to-purple-600',
+  'from-cyan-500 to-blue-600',
+  'from-fuchsia-500 to-pink-600',
+  'from-lime-500 to-green-600',
+  'from-amber-500 to-orange-600',
+  'from-indigo-500 to-blue-600',
+  'from-rose-500 to-pink-600',
+  'from-teal-500 to-cyan-600',
+  'from-red-500 to-orange-600',
+  'from-purple-500 to-fuchsia-600',
+  'from-sky-500 to-indigo-600',
+];
+
+export const assistantGradients = [
+  'from-purple-500 to-pink-600',
+  'from-rose-500 to-orange-600',
+  'from-teal-500 to-emerald-600',
+  'from-red-500 to-pink-600',
+  'from-purple-500 to-indigo-600',
+  'from-blue-500 to-cyan-600',
+  'from-pink-500 to-fuchsia-600',
+  'from-green-500 to-lime-600',
+  'from-orange-500 to-amber-600',
+  'from-blue-500 to-indigo-600',
+  'from-pink-500 to-rose-600',
+  'from-cyan-500 to-teal-600',
+  'from-orange-500 to-red-600',
+  'from-fuchsia-500 to-purple-600',
+  'from-indigo-500 to-sky-600',
+];

@@ -4,7 +4,7 @@ const InputForm = memo(({
   label,
   name,
   type = "text",
-  register,
+  register = () => { },
   error,
   placeholder,
   required = false,
@@ -40,7 +40,7 @@ const InputForm = memo(({
       )}
 
       {error && (
-        <p id={`${name}-error`} className="text-red-500 text-xs mt-1" role="alert">
+        <p id={`${name}-error`} className="text-red-500 text-xs mt-[1px]" role="alert">
           {error}
         </p>
       )}

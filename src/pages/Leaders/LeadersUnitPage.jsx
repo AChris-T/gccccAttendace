@@ -1,5 +1,4 @@
-import UnitCards from "../../components/admin/units/UnitDisplay"
-// import UnitDisplay from "../../components/admin/units/UnitDisplay"
+import UnitDisplay from "@/components/leaders/units/UnitDisplay"
 import ComponentCard from "../../components/common/ComponentCard"
 import PageBreadcrumb from "../../components/common/PageBreadCrumb"
 import PageMeta from "../../components/common/PageMeta"
@@ -11,7 +10,7 @@ const LeadersUnitPage = () => {
             <PageBreadcrumb pageTitle="Leaders | Units" />
             <div className="space-y-6">
                 <ComponentCard title="Units" desc="Manage all units and their members">
-                    <UnitCards />
+                    <UnitDisplay />
                 </ComponentCard>
             </div>
         </>

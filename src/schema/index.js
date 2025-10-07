@@ -1,8 +1,27 @@
 import * as yup from 'yup';
 
-export const signInSchema = yup.object({
-  email: yup.string().required('Email is required'),
-  password: yup.string().required('Password is required'),
+export const unitSchema = yup.object({
+  name: yup.string().max(255, 'Name must not exceed 255 characters').required(),
+
+  member_ids: yup
+    .array()
+    .of(yup.number().positive('Invalid member ID').integer('Invalid member ID'))
+    .nullable()
+    .notRequired(),
+
+  assistant_id: yup
+    .number()
+    .positive('Invalid assistant ID')
+    .integer('Invalid assistant ID')
+    .nullable()
+    .notRequired(),
+
+  leader_id: yup
+    .number()
+    .positive('Invalid leader ID')
+    .integer('Invalid leader ID')
+    .nullable()
+    .notRequired(),
 });
 export const signUpSchema = yup.object({
   email: yup
@@ -34,7 +53,6 @@ export const signUpSchema = yup.object({
     )
     .required('Password is required'),
 });
-
 export const firstTimerSchema = yup.object({
   email: yup
     .string()
@@ -47,45 +65,42 @@ export const firstTimerSchema = yup.object({
   gender: yup.string().required('Gender is required'),
   location: yup.string().required('Please select Yes or No'),
   interest: yup.string().required('Please select Yes, Maybe or No'),
-  
+
   address_in_ibadan: yup
     .string()
     .trim()
     .when(['location', 'interest'], {
-      is: (location:any, interest:any) => location === 'yes' && interest === 'yes',
+      is: (location, interest) => location === 'yes' && interest === 'yes',
       then: (schema) => schema.min(5).required('Address in Ibadan is required'),
-      otherwise: (schema) => schema.nullable().optional()
+      otherwise: (schema) => schema.nullable().optional(),
     }),
-  
-  dob: yup
-    .string()
-    .when(['location', 'interest'], {
-      is: (location:any, interest:any) => location === 'yes' && interest === 'yes',
-      then: (schema) => schema.matches(
-        /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])$/,
-        "Date of Birth must be in dd/mm format"
-      ).required("Date of Birth is required"),
-      otherwise: (schema) => schema.nullable().optional()
-    }),
+
+  dob: yup.string().when(['location', 'interest'], {
+    is: (location, interest) => location === 'yes' && interest === 'yes',
+    then: (schema) =>
+      schema
+        .matches(
+          /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])$/,
+          'Date of Birth must be in dd/mm format'
+        )
+        .required('Date of Birth is required'),
+    otherwise: (schema) => schema.nullable().optional(),
+  }),
 
   occupation: yup
     .string()
     .trim()
     .when(['location', 'interest'], {
-      is: (location:any, interest
-        :any
-      ) => location === 'yes' && interest === 'yes',
+      is: (location, interest) => location === 'yes' && interest === 'yes',
       then: (schema) => schema.min(2).required('Occupation is required'),
-      otherwise: (schema) => schema.nullable().optional()
+      otherwise: (schema) => schema.nullable().optional(),
     }),
 
-  born_again: yup
-    .string()
-    .when(['location', 'interest'], {
-      is: (location:any, interest:any) => location === 'yes' && interest === 'yes',
-      then: (schema) => schema.required('Please select an option'),
-      otherwise: (schema) => schema.nullable().optional()
-    }),
+  born_again: yup.string().when(['location', 'interest'], {
+    is: (location, interest) => location === 'yes' && interest === 'yes',
+    then: (schema) => schema.required('Please select an option'),
+    otherwise: (schema) => schema.nullable().optional(),
+  }),
 
   service_experience: yup
     .string()

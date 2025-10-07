@@ -47,7 +47,7 @@ const FirstTimersTable = () => {
         return (
             <Link
                 target="_blank"
-                to={`/dashboard/first-timer/${value}`}
+                to={`/dashboard/first-timers/${value}`}
                 className="text-blue-600 hover:text-blue-800 underline"
                 rel="noopener noreferrer"
             >

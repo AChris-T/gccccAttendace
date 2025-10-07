@@ -29,6 +29,23 @@ export const useGetFirstTimersAssigned = (options = {}) => {
   });
 };
 
+export const useFirstTimerActions = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: FirstTimerService.createFirstTimer,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FIRST_TIMERS.ALL });
+      Toast.success(data?.message);
+      options.onSuccess?.(data, variables);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message || 'Failed to create first timer record');
+      options.onError?.(new Error(message));
+    },
+  });
+};
 export const useCreateFirstTimer = (options = {}) => {
   const queryClient = useQueryClient();
 

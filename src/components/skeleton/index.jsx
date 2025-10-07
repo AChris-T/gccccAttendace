@@ -225,34 +225,58 @@ export const TabContentLoader = () => (
     </div>
   </div>
 );
-export const UnitCardSkeleton = () => {
-  return (
-    <div className="relative border shadow flex flex-col items-center rounded-[20px] p-4 bg-white bg-clip-border shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:!shadow-none animate-pulse">
-      {/* Header */}
-      <div className="relative flex w-full justify-center rounded-xl bg-gray-200 dark:bg-gray-700 h-[70px]">
-        <div className="absolute bottom-2 w-1/2 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div>
-      </div>
 
-      {/* Leaders */}
-      <div className="mb-5 mt-10 flex flex-wrap gap-4">
-        <div className="flex flex-col items-center">
-          <div className="w-24 h-5 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
-          <div className="w-16 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
+export const UnitCardSkeleton = () => (
+  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 animate-pulse">
+    {/* Header */}
+    <div className="bg-gradient-to-r from-gray-300 to-gray-200 dark:from-gray-700 dark:to-gray-600 p-6 relative">
+      <div className="flex justify-between items-start">
+        <div className="flex-1">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-white/30 rounded-xl mb-3"></div>
+          <div className="h-5 w-32 bg-white/30 rounded"></div>
         </div>
-        <div className="flex flex-col items-center">
-          <div className="w-24 h-5 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
-          <div className="w-20 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-        </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="my-5 flex flex-wrap items-center gap-4">
-        <div className="w-36 h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
-        <div className="w-28 h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
+        <div className="w-8 h-8 bg-white/30 rounded-lg"></div>
       </div>
     </div>
-  );
-};
+
+    {/* Content */}
+    <div className="p-5 space-y-3">
+      {/* Leader Info */}
+      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+        <div className="flex-1 space-y-2">
+          <div className="h-3 w-20 bg-gray-300 dark:bg-gray-600 rounded"></div>
+          <div className="h-4 w-32 bg-gray-400 dark:bg-gray-500 rounded"></div>
+        </div>
+      </div>
+
+      {/* Assistant Leader Info */}
+      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+        <div className="flex-1 space-y-2">
+          <div className="h-3 w-24 bg-gray-300 dark:bg-gray-600 rounded"></div>
+          <div className="h-4 w-28 bg-gray-400 dark:bg-gray-500 rounded"></div>
+        </div>
+      </div>
+
+      {/* Members Count */}
+      <div className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-lg"></div>
+          <div className="space-y-2">
+            <div className="h-3 w-20 bg-gray-300 dark:bg-gray-600 rounded"></div>
+            <div className="h-5 w-10 bg-gray-400 dark:bg-gray-500 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Footer */}
+    <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/30 border-t border-gray-200 dark:border-gray-700">
+      <div className="h-3 w-40 bg-gray-300 dark:bg-gray-600 mx-auto rounded"></div>
+    </div>
+  </div>
+);
 
 export const VideoCardSkeleton = () => {
   return (
@@ -522,6 +546,94 @@ export const TimelineSkeletonLoader = (skeletonItems = [1, 2, 3, 4]) => {
         <div className="mt-8 text-center animate-pulse">
           <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 mx-auto"></div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+import React from 'react';
+
+const pulse = "animate-pulse bg-gray-200 dark:bg-gray-700";
+
+const InfoSkeleton = ({ fullWidth = false }) => (
+  <div className={`${fullWidth ? 'col-span-2' : ''}`}>
+    <div className="flex items-start gap-2 mb-1">
+      <div className={`w-4 h-4 rounded ${pulse}`} />
+      <div className={`w-24 h-3 rounded ${pulse}`} />
+    </div>
+    <div className={`ml-6 w-full h-4 rounded ${pulse}`} />
+  </div>
+);
+
+const SectionSkeleton = ({ title = true, count = 4 }) => (
+  <div className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-3">
+        <div className={`w-8 h-8 rounded-lg ${pulse}`} />
+        {title && <div className={`w-40 h-5 rounded ${pulse}`} />}
+      </div>
+      <div className={`w-20 h-8 rounded-lg ${pulse}`} />
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {Array.from({ length: count }).map((_, i) => (
+        <InfoSkeleton key={i} />
+      ))}
+    </div>
+  </div>
+);
+
+export const FirstTimerProfileSkeleton = () => {
+  return (
+    <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors space-y-8">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className={`w-16 h-16 rounded-full ${pulse}`} />
+            <div className="space-y-2">
+              <div className={`w-40 h-5 rounded ${pulse}`} />
+              <div className={`w-60 h-3 rounded ${pulse}`} />
+            </div>
+          </div>
+          <div className={`w-24 h-6 rounded-full ${pulse}`} />
+        </div>
+      </div>
+
+      {/* Toolbox */}
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className={`w-8 h-8 rounded-lg ${pulse}`} />
+          <div className={`w-48 h-5 rounded ${pulse}`} />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              className={`p-4 rounded-lg border border-gray-200 dark:border-gray-600 ${pulse}`}
+            />
+          ))}
+        </div>
+        <div className="mt-6 bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+          <div className={`w-32 h-3 mb-3 rounded ${pulse}`} />
+          <div className="space-y-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className={`w-full h-3 rounded ${pulse}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Grid sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-6">
+          <SectionSkeleton count={6} />
+          <SectionSkeleton count={3} />
+          <SectionSkeleton count={5} />
+          <SectionSkeleton count={3} />
+          <SectionSkeleton count={5} />
+          <SectionSkeleton count={3} />
+        </div>
+        <div className={`h-[600px] w-full rounded-xl ${pulse}`} />
       </div>
     </div>
   );

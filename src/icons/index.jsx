@@ -730,6 +730,18 @@ export const FilterIcon = ({
     </>
   );
 };
+export const DeleteIcon = ({
+  width = 24,
+  height = 24,
+  className = "",
+  fill = "currentColor",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><path fill={fill} d="M7.616 20q-.667 0-1.141-.475T6 18.386V6h-.5q-.213 0-.356-.144T5 5.499t.144-.356T5.5 5H9q0-.31.23-.54t.54-.23h4.46q.31 0 .54.23T15 5h3.5q.213 0 .356.144t.144.357t-.144.356T18.5 6H18v12.385q0 .666-.475 1.14t-1.14.475zM17 6H7v12.385q0 .269.173.442t.443.173h8.769q.269 0 .442-.173t.173-.442zm-6.692 11q.213 0 .357-.144t.143-.356v-8q0-.213-.144-.356T10.307 8t-.356.144t-.143.356v8q0 .213.144.356q.144.144.356.144m3.385 0q.213 0 .356-.144t.143-.356v-8q0-.213-.144-.356Q13.904 8 13.692 8q-.213 0-.357.144t-.143.356v8q0 .213.144.356t.357.144M7 6v13z" /></svg>
+    </>
+  );
+};
 export const LeaderIcon = ({
   width = 2048,
   height = 2048,
@@ -742,4 +754,154 @@ export const LeaderIcon = ({
     </>
   );
 };
+export const PlusIcon = ({
+  width = 24,
+  height = 24,
+  className = "",
+  fill = "currentColor",
+}) => {
+  return (
+    <>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="-4.5 -4.5 24 24"><path fill={fill} d="M8.9 6.9v-5a1 1 0 1 0-2 0v5h-5a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0v-5h5a1 1 0 1 0 0-2z" /></svg>
+    </>
+  );
+};
 
+export const InfoIcon = ({
+  width = 24,
+  height = 24,
+  className = "w-4 h-4 mr-1.5",
+  fill = "currentColor",
+}) => {
+  return (
+    <>
+      <svg fill="none" className={className} width={width} height={height} stroke={fill} viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </>
+  );
+};
+
+export const User = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 14a4 4 0 10-8 0m8 0a4 4 0 11-8 0m8 0v1a4 4 0 01-8 0v-1m8 0H8" />
+  </svg>
+);
+
+export const Mail = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4h16v16H4z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M22 6l-10 7L2 6" />
+  </svg>
+);
+
+export const Phone = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h2l2 4-2 2a12 12 0 006 6l2-2 4 2v2a2 2 0 01-2 2h-1C8.82 21 3 15.18 3 8V5z" />
+  </svg>
+);
+
+export const MapPin = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21C12 21 4 13.828 4 8a8 8 0 1116 0c0 5.828-8 13-8 13z" />
+    <circle cx="12" cy="8" r="3" />
+  </svg>
+);
+
+export const Calendar = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+  </svg>
+);
+
+export const Briefcase = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+    <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+  </svg>
+);
+
+export const UserCheck = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+    <circle cx="8.5" cy="7" r="4" />
+    <path d="M17 11l2 2 4-4" />
+  </svg>
+);
+
+export const ClipboardList = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+    <path d="M9 10h6M9 14h6M9 18h6M5 8h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2z" />
+  </svg>
+);
+
+export const MessageSquare = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+  </svg>
+);
+
+export const Users = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M17 21v-2a4 4 0 00-3-3.87m-4 0A4 4 0 007 19v2M9 7a4 4 0 118 0 4 4 0 01-8 0z" />
+    <path d="M5 21v-2a4 4 0 013-3.87m10 0A4 4 0 0121 19v2" />
+  </svg>
+);
+
+export const Heart = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-.06-.06a5.5 5.5 0 00-7.78 7.78l7.78 7.78 7.78-7.78a5.5 5.5 0 000-7.78z" />
+  </svg>
+);
+
+export const BookOpen = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M12 21V3m0 0a9 9 0 00-9 9v9a9 9 0 019-9z" />
+    <path d="M12 3a9 9 0 019 9v9a9 9 0 00-9-9z" />
+  </svg>
+);
+
+export const Edit = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+    <path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+  </svg>
+);
+
+export const Send = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M22 2L11 13" />
+    <path d="M22 2L15 22l-4-9-9-4 20-7z" />
+  </svg>
+);
+
+export const Copy = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+  </svg>
+);
+
+export const Check = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M5 13l4 4L19 7" />
+  </svg>
+);
+
+export const ChevronDown = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+);
+
+export const UserPlus = (props) => (
+  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path d="M16 21v-2a4 4 0 00-3-3.87m-4 0A4 4 0 007 19v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M20 8v6M23 11h-6" />
+  </svg>
+);
