@@ -29,7 +29,7 @@ const MembersTable = () => {
         return (
             <Link
                 target="_blank"
-                to={`/dashboard/member/${value}`}
+                to={`/dashboard/members/${value}`}
                 className="text-blue-600 hover:text-blue-800 underline"
                 rel="noopener noreferrer"
             >

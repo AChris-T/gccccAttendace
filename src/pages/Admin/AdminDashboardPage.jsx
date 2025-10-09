@@ -8,8 +8,8 @@ import PageMeta from "../../components/common/PageMeta"
 const AdminDashboardPage = () => {
     return (
         <>
-            <PageMeta title="Admin | Dashboard | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Admin | Dashboard" />
+            <PageMeta title="Admin: Dashboard | GCCC Ibadan" />
+            <PageBreadcrumb pageTitle="Admin: Dashboard" />
             <div className="space-y-6">
                 <AdminMetrics />
                 <ComponentCard title="First Timers Analytics" >

@@ -5,8 +5,8 @@ import PageMeta from "../../components/common/PageMeta"
 const AdminFollowupFeedbacksPage = () => {
     return (
         <>
-            <PageMeta title="Admin | Followup Feedbacks | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Admin | Followup Feedbacks" />
+            <PageMeta title="Admin: Followup Feedbacks | GCCC Ibadan" />
+            <PageBreadcrumb pageTitle="Admin: Followup Feedbacks" />
             <div className="space-y-6">
                 <ComponentCard title="Followup Feedbacks" desc="">
                 </ComponentCard>

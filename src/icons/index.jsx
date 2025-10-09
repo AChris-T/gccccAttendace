@@ -546,7 +546,7 @@ export const CompletedIcon = ({
 }) => {
   return (
     <>
-      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><path fill={fill} fillRule="evenodd" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12S5.925 1 12 1s11 4.925 11 11M7 13l1.5-1.5l2 2l5-5L17 10l-6.5 6.5z" clip-rule="evenodd" /></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 24 24"><path fill={fill} fillRule="evenodd" d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12S5.925 1 12 1s11 4.925 11 11M7 13l1.5-1.5l2 2l5-5L17 10l-6.5 6.5z" clipRule="evenodd" /></svg>
     </>
   );
 };
@@ -782,126 +782,135 @@ export const InfoIcon = ({
   );
 };
 
-export const User = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 14a4 4 0 10-8 0m8 0a4 4 0 11-8 0m8 0v1a4 4 0 01-8 0v-1m8 0H8" />
+export const UserIcon3 = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
   </svg>
 );
 
-export const Mail = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4h16v16H4z" />
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M22 6l-10 7L2 6" />
+export const MailIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
   </svg>
 );
 
-export const Phone = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h2l2 4-2 2a12 12 0 006 6l2-2 4 2v2a2 2 0 01-2 2h-1C8.82 21 3 15.18 3 8V5z" />
+export const PhoneIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
   </svg>
 );
 
-export const MapPin = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21C12 21 4 13.828 4 8a8 8 0 1116 0c0 5.828-8 13-8 13z" />
-    <circle cx="12" cy="8" r="3" />
+export const MapPinIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
   </svg>
 );
 
-export const Calendar = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
-    <line x1="3" y1="10" x2="21" y2="10" />
+export const CalendarIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
   </svg>
 );
 
-export const Briefcase = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-    <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
+export const BriefcaseIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
   </svg>
 );
 
-export const UserCheck = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-    <circle cx="8.5" cy="7" r="4" />
-    <path d="M17 11l2 2 4-4" />
+export const UserCheckIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
 
-export const ClipboardList = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-    <path d="M9 10h6M9 14h6M9 18h6M5 8h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2z" />
+export const ClipboardListIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
   </svg>
 );
 
-export const MessageSquare = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+export const MessageSquareIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
   </svg>
 );
 
-export const Users = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M17 21v-2a4 4 0 00-3-3.87m-4 0A4 4 0 007 19v2M9 7a4 4 0 118 0 4 4 0 01-8 0z" />
-    <path d="M5 21v-2a4 4 0 013-3.87m10 0A4 4 0 0121 19v2" />
+export const UsersIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
   </svg>
 );
 
-export const Heart = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-.06-.06a5.5 5.5 0 00-7.78 7.78l7.78 7.78 7.78-7.78a5.5 5.5 0 000-7.78z" />
+export const HeartIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
   </svg>
 );
 
-export const BookOpen = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M12 21V3m0 0a9 9 0 00-9 9v9a9 9 0 019-9z" />
-    <path d="M12 3a9 9 0 019 9v9a9 9 0 00-9-9z" />
+export const BookOpenIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
   </svg>
 );
 
-export const Edit = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-    <path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+export const EditIcon2 = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
   </svg>
 );
 
-export const Send = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M22 2L11 13" />
-    <path d="M22 2L15 22l-4-9-9-4 20-7z" />
+export const SendIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
   </svg>
 );
 
-export const Copy = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+export const CopyIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
   </svg>
 );
 
-export const Check = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M5 13l4 4L19 7" />
+export const CheckIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
   </svg>
 );
 
-export const ChevronDown = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M6 9l6 6 6-6" />
+export const ChevronDownIcon2 = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
   </svg>
 );
 
-export const UserPlus = (props) => (
-  <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path d="M16 21v-2a4 4 0 00-3-3.87m-4 0A4 4 0 007 19v2" />
-    <circle cx="9" cy="7" r="4" />
-    <path d="M20 8v6M23 11h-6" />
+export const ChevronUpIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+  </svg>
+);
+
+export const UserPlusIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+  </svg>
+);
+
+export const TrashIcon = ({ width = 24, height = 24, className = "w-4 h-4", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+);
+
+export const ToolboxIcon = ({ width = 24, height = 24, className = "w-6 h-6", fill = "currentColor" }) => (
+  <svg className={className} width={width} height={height} fill="none" stroke={fill} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+  </svg>
+);
+
+export const WhatsAppIcon = ({ width = 24, height = 24, className = "w-5 h-5" }) => (
+  <svg className={className} width={width} height={height} fill="currentColor" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
   </svg>
 );

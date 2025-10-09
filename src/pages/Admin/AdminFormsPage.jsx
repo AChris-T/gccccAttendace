@@ -55,8 +55,8 @@ const AdminFormsPage = () => {
 
   return (
     <>
-      <PageMeta title="Admin | Forms | GCCC Ibadan" />
-      <PageBreadcrumb pageTitle="Admin | Forms" />
+      <PageMeta title="Admin: Forms | GCCC Ibadan" />
+      <PageBreadcrumb pageTitle="Admin: Forms" />
 
       <div className="space-y-6">
         <ComponentCard title="All Forms">

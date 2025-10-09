@@ -7,8 +7,8 @@ const AdminMembersPage = () => {
 
     return (
         <>
-            <PageMeta title="Admin | Members | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Admin | Members" />
+            <PageMeta title="Admin: Members | GCCC Ibadan" />
+            <PageBreadcrumb pageTitle="Admin: Members" />
             <div className="space-y-6">
                 <ComponentCard title="All Members">
                     <MemberTable />

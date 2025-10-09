@@ -18,10 +18,10 @@ const UserProfilePage = () => {
                     <UserMetaCard />
                     <UserInfoCard />
                     <UserAddressCard />
-                    <UserOtherInformationCard/>
-                     <UserProfessionalCard />
-                     <UserUnitsCard/>
-                     <UserFirstTimersCard/>
+                    <UserOtherInformationCard />
+                    <UserProfessionalCard />
+                    <UserUnitsCard />
+                    <UserFirstTimersCard />
                 </ComponentCard>
             </div>
         </>

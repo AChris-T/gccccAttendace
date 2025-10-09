@@ -16,6 +16,18 @@ export const useFirstTimers = (options = {}) => {
     ...options,
   });
 };
+export const useFirstTimer = (id, options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FIRST_TIMERS.DETAIL(id),
+    queryFn: async () => {
+      const { data } = await FirstTimerService.fetchFirstTimer(id);
+      return data;
+    },
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+    ...options,
+  });
+};
 export const useGetFirstTimersAssigned = (options = {}) => {
   return useQuery({
     queryKey: QUERY_KEYS.FIRST_TIMERS.ASSIGNED,
@@ -29,23 +41,29 @@ export const useGetFirstTimersAssigned = (options = {}) => {
   });
 };
 
-export const useFirstTimerActions = (options = {}) => {
+export const useUpdateFirstTimer = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: FirstTimerService.createFirstTimer,
+    mutationFn: FirstTimerService.updateFirstTimer,
     onSuccess: (data, variables) => {
+      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FIRST_TIMERS.ALL });
+      // queryClient.invalidateQueries({ queryKey: ['firsttimers'] });
+      // queryClient.invalidateQueries({
+      //   queryKey: ['firsttimer', variables.id],
+      // });
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {
       const message = handleApiError(error);
-      Toast.error(message || 'Failed to create first timer record');
+      Toast.error(message || 'Failed to update first timer record');
       options.onError?.(new Error(message));
     },
   });
 };
+
 export const useCreateFirstTimer = (options = {}) => {
   const queryClient = useQueryClient();
 

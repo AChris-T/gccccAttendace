@@ -13,7 +13,7 @@ import {
 import { useCreateFirstTimer } from '../../queries/firstTimer.query';
 import Message from '../../components/common/Message';
 import Button from '../../components/ui/Button';
-import { CompletedIcon, LoadingIcon } from '../../icons';
+import { CompletedIcon } from '../../icons';
 import { Toast } from '../../lib/toastify';
 import { handleApiError } from '../../utils/helper';
 
@@ -31,21 +31,23 @@ const STEP_VALIDATION_FIELDS = {
 // Helper functions
 const createFormPayload = (data) => ({
   name: `${data.first_name} ${data.last_name}`,
+  first_name: data.first_name,
+  last_name: data.last_name,
   phone_number: data.phone_number,
   email: data.email,
   gender:
     data.gender === 'male'
       ? 'Male'
       : data.gender === 'female'
-      ? 'Female'
-      : 'Other',
+        ? 'Female'
+        : 'Other',
   located_in_ibadan: data.location === 'yes',
   interest:
     data.interest === 'yes'
       ? 'Yes'
       : data.interest === 'maybe'
-      ? 'Maybe'
-      : 'No',
+        ? 'Maybe'
+        : 'No',
   born_again: data.born_again === 'yes' ? 'Yes' : 'No',
   whatsapp_interest: data.whatsapp_interest === 'yes',
   address: data.address_in_ibadan || '',
@@ -164,6 +166,7 @@ const FirstTimerPage = () => {
         await createFirstTimer(payload);
         setStep('complete');
       } catch (err) {
+        console.log(err)
         const message = handleApiError(err);
         Toast.error(`Form submission failed: ${message}`);
       }

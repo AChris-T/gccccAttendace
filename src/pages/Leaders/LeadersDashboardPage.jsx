@@ -5,8 +5,8 @@ import PageMeta from "../../components/common/PageMeta"
 const LeadersDashboardPage = () => {
     return (
         <>
-            <PageMeta title="Leaders | Dashboard | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Leaders | Dashboard" />
+            <PageMeta title="Leaders: Dashboard | GCCC Ibadan" />
+            <PageBreadcrumb pageTitle="Leaders: Dashboard" />
             <div className="space-y-6">
                 <ComponentCard title="Leaders" >
                 </ComponentCard>

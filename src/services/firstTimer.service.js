@@ -8,7 +8,14 @@ export const FirstTimerService = {
     const { data } = await $api.get(`/${FIRST_TIMER}`, { params });
     return data;
   },
-
+  async fetchFirstTimer(id) {
+    const { data } = await $api.get(`/${FIRST_TIMER}/${id}`);
+    return data;
+  },
+  async updateFirstTimer({ id, payload }) {
+    const { data } = await $api.put(`/${FIRST_TIMER}/${id}`, payload);
+    return data;
+  },
   async createFirstTimer(payload) {
     const { data } = await $api.post(`/${FIRST_TIMER}`, payload);
     return data;

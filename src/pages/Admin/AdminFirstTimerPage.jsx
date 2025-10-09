@@ -6,8 +6,8 @@ import FirstTimersTable from '../../components/admin/firsttimer/FirstTimersTable
 const AdminFirstTimerPage = () => {
     return (
         <>
-            <PageMeta title="Admin | First Timers | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Admin | First Timers" />
+            <PageMeta title="Admin: First Timers | GCCC Ibadan" />
+            <PageBreadcrumb pageTitle="Admin: First Timers" />
             <div className="space-y-6">
                 <ComponentCard title="First Timers Table">
                     <FirstTimersTable />
