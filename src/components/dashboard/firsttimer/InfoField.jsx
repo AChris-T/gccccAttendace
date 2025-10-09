@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const InfoField = ({ icon: Icon, label, value, fullWidth = false, isEmail = false, isPhone = false }) => (
     <div className={`${fullWidth ? 'col-span-2' : ''}`}>
         <div className="flex items-start gap-2 mb-1">
@@ -7,13 +9,13 @@ export const InfoField = ({ icon: Icon, label, value, fullWidth = false, isEmail
             </span>
         </div>
         {isEmail ? (
-            <a href={`mailto:${value}`} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 ml-6 hover:underline">
+            <Link to={`mailto:${value}`} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 ml-6 hover:underline">
                 {value || 'N/A'}
-            </a>
+            </Link>
         ) : isPhone ? (
-            <a href={`tel:${value}`} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 ml-6 hover:underline">
+            <Link to={`tel:${value}`} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 ml-6 hover:underline">
                 {value || 'N/A'}
-            </a>
+            </Link>
         ) : (
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 ml-6">
                 {value || 'N/A'}
