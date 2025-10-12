@@ -7,6 +7,7 @@ import { useState } from "react";
 import InputForm from "@/components/form/InputForm";
 import SelectForm from "@/components/form/SelectForm";
 import Button from "@/components/ui/Button";
+import Message from "@/components/common/Message";
 
 export default function RegisterPage() {
     const { mutate, isPending, isError, error } = useRegister();
