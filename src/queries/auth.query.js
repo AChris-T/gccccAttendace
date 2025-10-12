@@ -62,6 +62,34 @@ export const useLogin = (options = {}) => {
   });
 };
 
+export const useRegister = (options = {}) => {
+  const queryClient = useQueryClient();
+  const { setAuthenticatedUser, setToken } = useAuthStore();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
+
+  return useMutation({
+    mutationFn: AuthService.register,
+    onSuccess: ({ data }) => {
+      const { token, user } = data;
+
+      setAuthenticatedUser({ user });
+      setToken({ token });
+      queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
+
+      Toast.success(`Welcome back, ${user?.first_name}!`);
+      navigate(redirect, { replace: true });
+
+      options.onSuccess?.(response, credentials);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message);
+    },
+  });
+};
+
 // Logout mutation
 export const useLogout = (options = {}) => {
   const queryClient = useQueryClient();

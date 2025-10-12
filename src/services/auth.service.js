@@ -6,6 +6,11 @@ export const AuthService = {
     return data;
   },
 
+  async register(payload) {
+    const { data } = await $api.post('/register', payload);
+    return data;
+  },
+
   async getMe() {
     const { data } = await $api.get('/me');
     return data;

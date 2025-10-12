@@ -6,6 +6,7 @@ import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import { useLogout } from "@/queries/auth.query";
 import { useAuthStore } from "@/store/auth.store";
 import Badge from "@/components/ui/Badge";
+import Avatar from "@/components/ui/Avatar";
 
 
 export default function UserDropdown() {
@@ -21,14 +22,8 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center gap-2 text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        {/* ✅ User Avatar (updates immediately when user.avatar_url changes) */}
-        <div className="w-9 h-9 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
-          <img
-            key={user?.avatar_url} // 👈 ensures instant re-render when avatar updates
-            src={user?.avatar_url || "/images/user/owner.jpg"}
-            alt="User Avatar"
-            className="object-cover w-full h-full"
-          />
+        <div className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
+          {user?.avatar_url ? <Avatar size="xxlarge" src={user?.avatar_url} /> : <Avatar size="xxlarge" />}
         </div>
 
         <span className="block mr-1 font-medium text-theme-sm">

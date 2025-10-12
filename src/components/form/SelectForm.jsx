@@ -19,9 +19,9 @@ const SelectForm = ({
                 className={`w-full text-xs font-light rounded-lg p-3 focus:outline-gray-200 focus:outline border ${error ? "border-red-500" : "border-gray-300"
                     }`}
             >
-                <option value={0}>
+                {/* <option value={0}>
                     All
-                </option>
+                </option> */}
                 {options.map((opt) => (
                     <option defaultValue={opt.id} key={opt.id} value={opt.id}>
                         {opt.name}

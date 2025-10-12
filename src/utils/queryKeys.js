@@ -26,6 +26,7 @@ export const QUERY_KEYS = {
   FIRST_TIMERS: {
     ALL: ['first-timers'],
     DETAIL: (id) => ['first-timers', id],
+    FOLLOWUPS: (id) => ['FOLLOWUPS', id],
     FIRST_TIMERS_ANALYTICS: (params) => [
       'admin',
       'first-timers-analytics',

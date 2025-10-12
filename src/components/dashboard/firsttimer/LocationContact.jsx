@@ -8,7 +8,7 @@ const LocationContact = ({ firstTimerData }) => {
             <SectionCard title="Location & Contact" icon={MapPinIcon} onEdit={() => console.log('Edit location')}>
                 <InfoField icon={MapPinIcon} label="Address" value={firstTimerData.address} fullWidth />
                 <InfoField icon={MapPinIcon} label="Located in Ibadan" value={firstTimerData.located_in_ibadan ? 'Yes' : 'No'} />
-                <InfoField icon={MessageSquareIcon} label="WhatsApp Interest" value={firstTimerData.whatsapp_interest ? 'Yes' : 'No'} />
+                <InfoField icon={MessageSquareIcon} label="Interest in joining our community" value={firstTimerData.whatsapp_interest ? 'Yes' : 'No'} />
             </SectionCard></>
     )
 }

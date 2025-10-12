@@ -1,5 +1,10 @@
 import dayjs from 'dayjs';
-import { attendanceLevels, monthNames, textColors } from './constant';
+import {
+  attendanceLevels,
+  followupCommentTypes,
+  monthNames,
+  textColors,
+} from './constant';
 
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
 
@@ -190,4 +195,19 @@ export function normalizePhone(rawNumber, countryCode = '+234') {
   }
 
   return number;
+}
+export function getFilteredCommentTypes({ isAdmin, isLeader, isMember }) {
+  if (isAdmin) return followupCommentTypes;
+
+  if (isLeader)
+    return followupCommentTypes.filter((c) =>
+      ['Pre-Service', 'Post-Service', 'Unit-Leader', 'Others'].includes(c.id)
+    );
+
+  if (isMember)
+    return followupCommentTypes.filter((c) =>
+      ['Pre-Service', 'Post-Service', 'Others'].includes(c.id)
+    );
+
+  return [];
 }

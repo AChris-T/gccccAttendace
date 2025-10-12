@@ -86,7 +86,7 @@ export default function AdminQuestion({ items = [] }) {
           )}
         </div>
         {past.length ? (
-          <ListRenderer
+          <ListRender
             list={past}
             selectedIds={selectedIds}
             onSelect={handleSelect}

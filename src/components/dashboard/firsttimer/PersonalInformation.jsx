@@ -7,12 +7,12 @@ const PersonalInformation = ({ firstTimerData }) => {
         <>
             <SectionCard title="Personal Information" icon={UserIcon} onEdit={() => console.log('Edit personal info')}>
                 <InfoField icon={UserIcon} label="Full Name" value={firstTimerData.name} fullWidth />
-                <InfoField icon={MailIcon} label="Email Address" value={firstTimerData.email} isEmail />
+                <InfoField fullWidth icon={MailIcon} label="Email Address" value={firstTimerData.email} isEmail />
                 <InfoField icon={PhoneIcon} label="Phone Number" value={firstTimerData.phone_number} isPhone />
                 <InfoField icon={UserIcon} label="Gender" value={firstTimerData.gender} />
                 <InfoField icon={CalendarIcon} label="Date of Birth" value={firstTimerData.date_of_birth} />
                 <InfoField icon={BriefcaseIcon} label="Occupation" value={firstTimerData.occupation} />
-                <InfoField icon={BookOpenIcon} label="Student Status" value={firstTimerData.is_student ? 'Yes' : 'No'} />
+                <InfoField icon={BookOpenIcon} label="Student" value={firstTimerData.is_student ? 'Yes' : 'No'} />
             </SectionCard>
         </>
     )

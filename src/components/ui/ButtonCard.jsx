@@ -92,7 +92,7 @@ const ButtonCard = ({
     // Disabled state classes
     const disabledClasses =
         disabled || loading
-            ? "cursor-not-allowed opacity-50 pointer-events-none"
+            ? "!cursor-not-allowed opacity-50 pointer-events-none"
             : "cursor-pointer";
 
     // Common classes for both button and anchor

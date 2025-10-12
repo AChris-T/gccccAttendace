@@ -447,104 +447,58 @@ export function TableSkeletonLoader() {
   );
 }
 
-export const TimelineSkeletonLoader = (skeletonItems = [1, 2, 3, 4]) => {
+export const TimelineSkeletonLoader = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-4xl mx-auto">
         {/* Header Skeleton */}
-        <div className="mb-8 sm:mb-12 animate-pulse">
-          <div className="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg w-64 mb-3"></div>
-          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-96 max-w-full"></div>
+        <div className="mb-10 text-center">
+          <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-lg w-64 mx-auto mb-3 animate-pulse" />
+          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded-lg w-96 mx-auto animate-pulse" />
         </div>
 
-        {/* Timeline */}
+        {/* Timeline Container */}
         <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 via-gray-200 to-transparent dark:from-gray-700 dark:via-gray-800" />
+          {/* Vertical Line */}
+          <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 via-gray-300 to-gray-300 dark:from-gray-700 dark:via-gray-700 dark:to-gray-700 opacity-30" />
 
-          {/* Skeleton Timeline Items */}
+          {/* Skeleton Items */}
           <div className="space-y-6 sm:space-y-8">
-            {skeletonItems.map((item, index) => (
-              <div key={item} className="relative pl-12 sm:pl-16">
-                {/* Timeline dot with pulse */}
-                <div className="absolute left-2.5 sm:left-4 top-2 w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-700 ring-4 ring-white dark:ring-gray-900 animate-pulse" />
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="relative pl-12 sm:pl-20">
+                {/* Timeline Dot Skeleton */}
+                <div className="absolute left-2.5 sm:left-6 top-6 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gray-300 dark:bg-gray-700 animate-pulse" />
 
                 {/* Card Skeleton */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
-                  <div className="p-4 sm:p-6">
-                    <div className="animate-pulse">
-                      {/* Status badge and timestamp */}
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                        <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div className="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-md overflow-hidden border border-gray-200/80 dark:border-gray-700/80">
+                  <div className="p-5 sm:p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3 sm:gap-4 flex-1">
+                        {/* Avatar Skeleton */}
+                        <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0" />
+
+                        {/* Content Skeleton */}
+                        <div className="flex-1 space-y-3">
+                          <div className="flex items-center gap-2">
+                            <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse" />
+                            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-24 animate-pulse" />
+                          </div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48 animate-pulse" />
+                          <div className="flex gap-4">
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse" />
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse" />
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Title */}
-                      <div className="space-y-2 mb-3">
-                        <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-                      </div>
-
-                      {/* Author info */}
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                        <div className="h-4 w-1 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                        <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      </div>
-
-                      {/* Summary text - 2 lines */}
-                      <div className="space-y-2">
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
-                      </div>
+                      {/* Button Skeleton */}
+                      <div className="w-9 h-9 rounded-xl bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0" />
                     </div>
                   </div>
-
-                  {/* Randomly show expanded state for variety */}
-                  {index % 3 === 0 && (
-                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-gray-100 dark:border-gray-700">
-                      <div className="pt-4 sm:pt-6 animate-pulse">
-                        {/* Details section */}
-                        <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-20 mb-2"></div>
-                        <div className="space-y-2 mb-4">
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5"></div>
-                        </div>
-
-                        {/* Responses section */}
-                        <div className="h-5 bg-gray-300 dark:bg-gray-700 rounded w-32 mb-3"></div>
-                        <div className="space-y-3">
-                          {[1, 2].map((response) => (
-                            <div
-                              key={response}
-                              className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 sm:p-4 border border-gray-200 dark:border-gray-600"
-                            >
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="h-3 w-24 bg-gray-300 dark:bg-gray-600 rounded"></div>
-                                <div className="h-3 w-1 bg-gray-300 dark:bg-gray-600 rounded"></div>
-                                <div className="h-3 w-20 bg-gray-300 dark:bg-gray-600 rounded"></div>
-                                <div className="ml-auto h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded"></div>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-                                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Footer Skeleton */}
-        <div className="mt-8 text-center animate-pulse">
-          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 mx-auto"></div>
         </div>
       </div>
     </div>

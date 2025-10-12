@@ -23,7 +23,7 @@ export const unitSchema = yup.object({
     .nullable()
     .notRequired(),
 });
-export const signUpSchema = yup.object({
+export const registerSchema = yup.object({
   email: yup
     .string()
     .trim()
@@ -40,19 +40,13 @@ export const signUpSchema = yup.object({
     .min(2, 'Last name must be at least 2 characters')
     .required('Last name is required'),
   phone_number: yup.string().required('Phone number is required'),
-  // .matches(/^0[789][01]\d{8}$/, "Invalid phone number format"),
-  password: yup
-    .string()
-    .trim()
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[0-9]/, 'Password must contain at least one number')
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>-]/,
-      'Password must contain at least one special character'
-    )
-    .required('Password is required'),
+  gender: yup.string().required('Gender is required'),
 });
+export const timelineSchema = yup.object({
+  note: yup.string().required('Comment field is required'),
+  type: yup.string().required('Type field is required'),
+});
+
 export const firstTimerSchema = yup.object({
   email: yup
     .string()

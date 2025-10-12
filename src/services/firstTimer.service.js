@@ -12,12 +12,33 @@ export const FirstTimerService = {
     const { data } = await $api.get(`/${FIRST_TIMER}/${id}`);
     return data;
   },
-  async updateFirstTimer({ id, payload }) {
-    const { data } = await $api.put(`/${FIRST_TIMER}/${id}`, payload);
+  async updateFirstTimer(payload) {
+    const { data } = await $api.put(`/${FIRST_TIMER}/${payload.id}`, payload);
     return data;
   },
   async createFirstTimer(payload) {
     const { data } = await $api.post(`/${FIRST_TIMER}`, payload);
+    return data;
+  },
+
+  async sendFirstTimerWelcomeEmail(payload) {
+    const { data } = await $api.post(
+      `/${FIRST_TIMER}/${payload.id}/welcome-email`,
+      payload
+    );
+    return data;
+  },
+
+  storeFirstTimersFollowups: async (payload) => {
+    const { data } = await $api.post(
+      `/${FIRST_TIMER}/${payload.first_timer_id}/store-follow-ups`,
+      payload
+    );
+    return data;
+  },
+
+  getFirstTimersFollowups: async (id) => {
+    const { data } = await $api.get(`/${FIRST_TIMER}/${id}/get-follow-ups`);
     return data;
   },
 

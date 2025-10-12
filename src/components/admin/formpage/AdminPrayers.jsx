@@ -86,7 +86,7 @@ export default function AdminPrayers({ items = [] }) {
           )}
         </div>
         {past.length ? (
-          <ListRenderer
+          <ListRender
             list={past}
             selectedIds={selectedIds}
             onSelect={handleSelect}

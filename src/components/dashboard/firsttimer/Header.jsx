@@ -2,11 +2,11 @@ import Badge from '@/components/ui/Badge'
 
 const Header = ({ firstTimerData }) => {
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-5">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                        {firstTimerData?.name?.split(' ').map(n => n[0])?.join('')}
+                        {firstTimerData?.name?.split(' ')?.map(n => n[0])?.join('')}
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -18,7 +18,8 @@ const Header = ({ firstTimerData }) => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Badge color={firstTimerData?.follow_up_status?.color} >{firstTimerData?.follow_up_status?.title}</Badge>
+                    <Badge size='md' color={firstTimerData?.follow_up_status?.color} >{firstTimerData?.follow_up_status?.title}</Badge>
+                    {firstTimerData?.status == 'deactivated' && <Badge size='md' color='error' >Deactivated</Badge>}
                 </div>
             </div>
         </div>

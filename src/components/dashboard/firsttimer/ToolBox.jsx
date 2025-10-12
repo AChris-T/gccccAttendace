@@ -1,30 +1,34 @@
 import { useState, useCallback, useMemo } from "react";
-import DeleteConfirmation from "@/components/dashboard/firsttimer/DeleteConfirmation";
 import EditFirstTimer from "@/components/dashboard/firsttimer/edit/EditFirstTimer";
 import ButtonCard from "@/components/ui/ButtonCard";
 import Modal from "@/components/ui/Modal";
 import { useModal } from "@/hooks/useModal";
 import {
+    CheckIcon,
     ChevronDownIcon,
     ChevronUpIcon,
     EditIcon2,
     MessageSquareIcon,
     SendIcon,
     ToolboxIcon,
-    TrashIcon,
-    WhatsAppIcon,
+    WhatsAppIcon
 } from "@/icons";
 import { Toast } from "@/lib/toastify";
 import { getWelcomeMessage, normalizePhone } from "@/utils/helper";
+import { useFirstTimerWelcomeEmail } from "@/queries/firstTimer.query";
+import UpdateFirstTimer from "@/components/dashboard/firsttimer/edit/UpdateFirstTimer";
 
 const COPY_TIMEOUT_MS = 2000;
 
 const ToolBox = ({ firstTimerData }) => {
+    const { mutate: sendWelcomeEmailMutation, isPending: isSendingEmail } = useFirstTimerWelcomeEmail();
+
     const {
-        isOpen: isOpenDeleteModal,
-        openModal: openDeleteModal,
-        closeModal: closeDeleteModal,
+        isOpen: isOpenUpdateStatusModal,
+        openModal: openUpdateStatusModal,
+        closeModal: closeUpdateStatusModal,
     } = useModal();
+
     const {
         isOpen: isOpenEditModal,
         openModal: openEditModal,
@@ -34,22 +38,39 @@ const ToolBox = ({ firstTimerData }) => {
     const [copied, setCopied] = useState(false);
     const [toolboxOpen, setToolboxOpen] = useState(true);
 
+    const isStatusActive = useMemo(
+        () => firstTimerData?.status === 'active',
+        [firstTimerData?.status]
+    );
+
+    const canSendWelcomeEmail = useMemo(
+        () => firstTimerData?.follow_up_status?.title === 'Not Contacted',
+        [firstTimerData?.follow_up_status?.title]
+    );
+
     const welcomeMessage = useMemo(
-        () => getWelcomeMessage(firstTimerData.first_name),
-        [firstTimerData.first_name]
+        () => getWelcomeMessage(firstTimerData?.first_name),
+        [firstTimerData?.first_name]
     );
 
     const whatsappLink = useMemo(
         () =>
-            `https://wa.me/${normalizePhone(firstTimerData.phone_number)}?text=${encodeURIComponent(
+            `https://wa.me/${normalizePhone(firstTimerData?.phone_number)}?text=${encodeURIComponent(
                 welcomeMessage
             )}`,
-        [firstTimerData.phone_number, welcomeMessage]
+        [firstTimerData?.phone_number, welcomeMessage]
     );
 
-    // Callbacks
+    const statusButtonConfig = useMemo(() => ({
+        color: isStatusActive ? 'red' : 'cyan',
+        label: isStatusActive ? 'Deactivate' : 'Activate',
+        description: `${firstTimerData?.first_name}'s record will be ${isStatusActive ? 'archived' : 'un-archived'
+            } and active followups will ${isStatusActive ? 'be paused.' : 'resume.'
+            }`
+    }), [isStatusActive, firstTimerData?.first_name]);
+
     const toggleToolbox = useCallback(() => {
-        setToolboxOpen((prev) => !prev);
+        setToolboxOpen(prev => !prev);
     }, []);
 
     const copyToClipboard = useCallback(async () => {
@@ -63,22 +84,34 @@ const ToolBox = ({ firstTimerData }) => {
         }
     }, [welcomeMessage]);
 
-    const sendWelcomeEmail = useCallback(() => {
-        console.log("Send welcome email to:", firstTimerData.email);
-    }, [firstTimerData.email]);
+    const handleSendWelcomeEmail = useCallback(() => {
+        if (!canSendWelcomeEmail) return;
 
-    const handleDelete = useCallback(() => {
-        console.log("Delete record:", firstTimerData.id);
-    }, [firstTimerData.id]);
+        const payload = {
+            id: firstTimerData.id,
+            email: firstTimerData.email,
+            name: firstTimerData.first_name
+        };
+
+        sendWelcomeEmailMutation(payload);
+    }, [canSendWelcomeEmail, firstTimerData.id, firstTimerData.email, firstTimerData.first_name, sendWelcomeEmailMutation]);
+
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            copyToClipboard();
+        }
+    }, [copyToClipboard]);
 
     return (
-        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden mb-5">
+        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
             {/* Toolbox Header */}
             <button
                 onClick={toggleToolbox}
                 className="w-full p-6 flex items-center justify-between hover:bg-indigo-100/50 dark:hover:bg-gray-700/50 transition-colors duration-200"
                 aria-expanded={toolboxOpen}
                 aria-controls="toolbox-content"
+                aria-label={`${toolboxOpen ? 'Collapse' : 'Expand'} action toolbox`}
             >
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-white dark:bg-gray-700 rounded-lg shadow-sm">
@@ -112,8 +145,9 @@ const ToolBox = ({ firstTimerData }) => {
                             color="indigo"
                             icon={<SendIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
                             description="Compose welcome message"
-                            onClick={sendWelcomeEmail}
-                            loading={false}
+                            onClick={handleSendWelcomeEmail}
+                            loading={isSendingEmail}
+                            disabled={!canSendWelcomeEmail || firstTimerData?.status == 'deactivated'}
                         >
                             Send Welcome Email
                         </ButtonCard>
@@ -125,6 +159,7 @@ const ToolBox = ({ firstTimerData }) => {
                             href={whatsappLink}
                             target="_blank"
                             rel="noopener noreferrer"
+                            disabled={firstTimerData?.status == 'deactivated'}
                         >
                             WhatsApp Message
                         </ButtonCard>
@@ -134,18 +169,18 @@ const ToolBox = ({ firstTimerData }) => {
                             icon={<EditIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                             description="Change Follow-up Status, Reassign to Member"
                             onClick={openEditModal}
+                            disabled={firstTimerData?.status == 'deactivated'}
                         >
                             Update First Timer
                         </ButtonCard>
 
                         <ButtonCard
-                            color="red"
-                            icon={<TrashIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
-                            description="This action cannot be reversed"
-                            onClick={openDeleteModal}
-                            loading={false}
+                            color={statusButtonConfig.color}
+                            icon={<CheckIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
+                            description={statusButtonConfig.description}
+                            onClick={openUpdateStatusModal}
                         >
-                            Delete First Timer
+                            {statusButtonConfig.label} First Timer
                         </ButtonCard>
                     </div>
 
@@ -156,28 +191,23 @@ const ToolBox = ({ firstTimerData }) => {
                             <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
                                 Welcome Message Preview
                             </span>
+                            {copied && (
+                                <span className="inline-block text-xs text-green-600 dark:text-green-400 font-medium animate-fade-in">
+                                    ✓ Copied!
+                                </span>
+                            )}
                         </div>
                         <div
                             onClick={copyToClipboard}
                             className="cursor-pointer bg-gray-50 dark:bg-gray-800 rounded-lg p-4 max-h-48 overflow-y-auto hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors duration-150"
                             role="button"
                             tabIndex={0}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                    e.preventDefault();
-                                    copyToClipboard();
-                                }
-                            }}
+                            onKeyDown={handleKeyDown}
                             aria-label="Click to copy welcome message"
                         >
                             <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
                                 {welcomeMessage}
                             </p>
-                            {copied && (
-                                <span className="inline-block mt-2 text-xs text-green-600 dark:text-green-400 font-medium animate-fade-in">
-                                    ✓ Copied!
-                                </span>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -185,11 +215,14 @@ const ToolBox = ({ firstTimerData }) => {
 
             {/* Modals */}
             <Modal
-                title={`Delete ${firstTimerData?.name}`}
-                isOpen={isOpenDeleteModal}
-                onClose={closeDeleteModal}
+                title={`Update ${firstTimerData?.name}'s status`}
+                isOpen={isOpenUpdateStatusModal}
+                onClose={closeUpdateStatusModal}
             >
-                <DeleteConfirmation onConfirm={handleDelete} />
+                <UpdateFirstTimer
+                    firstTimerData={firstTimerData}
+                    onClose={closeUpdateStatusModal}
+                />
             </Modal>
 
             <Modal
@@ -197,7 +230,10 @@ const ToolBox = ({ firstTimerData }) => {
                 isOpen={isOpenEditModal}
                 onClose={closeEditModal}
             >
-                <EditFirstTimer firstTimerData={firstTimerData} />
+                <EditFirstTimer
+                    firstTimerData={firstTimerData}
+                    onClose={closeEditModal}
+                />
             </Modal>
         </div>
     );

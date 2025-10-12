@@ -61,7 +61,7 @@ const createFormPayload = (data) => ({
   friend_family: data.data_of_friend_and_family || '',
   notes: '',
   visitation_report: '',
-  status: 'pending',
+  status: 'active',
   pastorate_call: '',
   how_did_you_learn: '',
 });
@@ -223,10 +223,9 @@ const FirstTimerPage = () => {
       )}
       <Button
         type="button"
-        className="px-6"
         loading={isPending}
         onClick={handleButtonClick}
-        variant="accent"
+        variant="primary"
         size="md"
       >
         {' '}

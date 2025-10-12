@@ -4,7 +4,7 @@ import { BookOpenIcon, CalendarIcon, HeartIcon, UsersIcon } from '@/icons'
 
 const VisitInformation = ({ firstTimerData }) => {
     return (
-        <SectionCard title="Visit Information" icon={CalendarIcon} onEdit={() => console.log('Edit visit info')}>
+        <SectionCard title="Visit Information" icon={CalendarIcon} isEdit={false}>
             <InfoField icon={CalendarIcon} label="Date of Visit" value={new Date(firstTimerData.date_of_visit).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} />
             <InfoField icon={UsersIcon} label="Invited By" value={firstTimerData.invited_by} />
             <InfoField icon={UsersIcon} label="Friend/Family" value={firstTimerData.friend_family} />

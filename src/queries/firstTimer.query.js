@@ -28,6 +28,7 @@ export const useFirstTimer = (id, options = {}) => {
     ...options,
   });
 };
+
 export const useGetFirstTimersAssigned = (options = {}) => {
   return useQuery({
     queryKey: QUERY_KEYS.FIRST_TIMERS.ASSIGNED,
@@ -41,18 +42,79 @@ export const useGetFirstTimersAssigned = (options = {}) => {
   });
 };
 
-export const useUpdateFirstTimer = () => {
+export const useGetFirstTimersFollowups = (id, options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FIRST_TIMERS.FOLLOWUPS(id),
+    queryFn: async () => {
+      const { data } = await FirstTimerService.getFirstTimersFollowups(id);
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
+
+export const useCreateFirstTimersFollowups = (options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: FirstTimerService.updateFirstTimer,
+    mutationFn: async (payload) => {
+      return await FirstTimerService.storeFirstTimersFollowups(payload);
+    },
     onSuccess: (data, variables) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FIRST_TIMERS.ALL });
-      // queryClient.invalidateQueries({ queryKey: ['firsttimers'] });
-      // queryClient.invalidateQueries({
-      //   queryKey: ['firsttimer', variables.id],
-      // });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.FIRST_TIMERS.FOLLOWUPS(
+          variables.first_timer_id?.toString()
+        ),
+      });
+      Toast.success(data?.message);
+      options.onSuccess?.(data, variables);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message || 'Failed to save followup feedback.');
+      options.onError?.(new Error(message));
+    },
+  });
+};
+
+export const useUpdateFirstTimer = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload) => {
+      return await FirstTimerService.updateFirstTimer(payload);
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.FIRST_TIMERS.DETAIL(variables?.id?.toString()),
+        exact: true,
+      });
+      Toast.success(data?.message);
+      options.onSuccess?.(data, variables);
+    },
+    onError: (error) => {
+      console.log(error);
+      const message = handleApiError(error);
+      Toast.error(message || 'Failed to update first timer record');
+      options.onError?.(new Error(message));
+    },
+  });
+};
+
+export const useFirstTimerWelcomeEmail = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload) => {
+      return await FirstTimerService.sendFirstTimerWelcomeEmail(payload);
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.FIRST_TIMERS.DETAIL(variables?.id?.toString()),
+        exact: true,
+      });
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },

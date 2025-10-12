@@ -4,10 +4,10 @@ import { BookOpenIcon, HeartIcon, MessageSquareIcon } from '@/icons'
 
 const SpiritualInformation = ({ firstTimerData }) => {
     return (
-        <SectionCard title="Spiritual Information" icon={HeartIcon} onEdit={() => console.log('Edit spiritual info')}>
-            <InfoField icon={HeartIcon} label="Born Again" value={firstTimerData.born_again} />
-            <InfoField icon={BookOpenIcon} label="Interest" value={firstTimerData.interest} />
-            <InfoField icon={MessageSquareIcon} label="Prayer Point" value={firstTimerData.prayer_point} fullWidth />
+        <SectionCard title="Spiritual Information" icon={HeartIcon} isEdit={false}>
+            <InfoField icon={HeartIcon} label="Are you Born Again?" value={firstTimerData.born_again} />
+            <InfoField icon={BookOpenIcon} label="Interest in becoming a consistent member" value={firstTimerData.interest} />
+            <InfoField icon={MessageSquareIcon} label="Prayer Request" value={firstTimerData.prayer_point} fullWidth />
         </SectionCard>
     )
 }

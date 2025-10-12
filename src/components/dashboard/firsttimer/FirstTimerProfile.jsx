@@ -10,31 +10,50 @@ import LocationContact from '@/components/dashboard/firsttimer/LocationContact';
 import FollowupDetails from '@/components/dashboard/firsttimer/FollowupDetails';
 import ToolBox from '@/components/dashboard/firsttimer/ToolBox';
 import Header from '@/components/dashboard/firsttimer/Header';
+import { EmptyState } from '@/components/common/EmptyState';
 
+const INFORMATION_SECTIONS = [
+    PersonalInformation,
+    LocationContact,
+    VisitInformation,
+    SpiritualInformation,
+    FollowupDetails,
+    NotesAdditionalInformation,
+];
+
+const InformationPanel = ({ firstTimerData }) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+        {INFORMATION_SECTIONS.map((Section, index) => (
+            <Section key={index} firstTimerData={firstTimerData} />
+        ))}
+    </div>
+);
 
 const FirstTimerProfile = ({ firstTimerId }) => {
-    const { data: firstTimerData = {}, isLoading, isError, error } = useFirstTimer(firstTimerId)
+    const {
+        data: firstTimerData = {},
+        isLoading,
+        isError,
+        error
+    } = useFirstTimer(firstTimerId);
 
-    if (isError) return <Message data={error?.data} variant='error' />
-    if (isLoading) return <FirstTimerProfileSkeleton />
+    if (isError) {
+        return <Message data={error?.data} variant="error" />;
+    }
+
+    if (isLoading) {
+        return <FirstTimerProfileSkeleton />;
+    }
+
+    const isActive = firstTimerData?.status !== 'deactivated';
 
     return (
-        <div className="min-h-screen">
+        <div className="space-y-6">
             <Header firstTimerData={firstTimerData} />
-
             <ToolBox firstTimerData={firstTimerData} />
 
-            <div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
-                <div className="lg:col-span-1 space-y-6">
-                    <PersonalInformation firstTimerData={firstTimerData} />
-                    <LocationContact firstTimerData={firstTimerData} />
-                    <VisitInformation firstTimerData={firstTimerData} />
-                    <SpiritualInformation firstTimerData={firstTimerData} />
-                    <FollowupDetails firstTimerData={firstTimerData} />
-                    <NotesAdditionalInformation firstTimerData={firstTimerData} />
-                </div>
-                <FeedbackTimeline />
-            </div>
+            <InformationPanel firstTimerData={firstTimerData} />
+            {isActive ? <FeedbackTimeline firstTimerId={firstTimerId} /> : <EmptyState title='Followup deactivated' />}
         </div>
     );
 };

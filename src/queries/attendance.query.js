@@ -129,9 +129,7 @@ export const useUsersMonthlyAttendanceStats = (year, month) => {
       );
       return data;
     },
-    // enabled: !!id,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    // ...options,
+    staleTime: 0,
   });
 };
 

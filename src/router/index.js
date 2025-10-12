@@ -27,6 +27,7 @@ import AdminFollowupFeedbacksPage from '@/pages/Admin/AdminFollowupFeedbacksPage
 import LeadersDashboardPage from '@/pages/Leaders/LeadersDashboardPage';
 import LeadersProtectedRoute from '@/layout/Protected/LeadersProtectedRoute';
 import LeadersUnitPage from '@/pages/Leaders/LeadersUnitPage';
+import RegisterPage from '@/pages/Home/Auth/RegisterPage';
 
 const AppRoutes = [
   {
@@ -39,7 +40,10 @@ const AppRoutes = [
       },
       {
         Component: PublicRoute,
-        children: [{ path: 'login', Component: LoginPage }],
+        children: [
+          { path: 'login', Component: LoginPage },
+          { path: 'register', Component: RegisterPage },
+        ],
       },
       { path: 'forms', Component: Formspage },
       { path: 'first-timer/welcome', Component: FirstTimerPage },

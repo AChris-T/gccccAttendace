@@ -1,10 +1,23 @@
 export const UserRole = Object.freeze({
-  SUPER_ADMIN: 'super_admin',
   ADMIN: 'admin',
   LEADER: 'leader',
   MEMBER: 'member',
-  FIRST_TIMER: 'first_timer',
 });
+
+export const followupCommentTypes = [
+  { id: 'Pre-Service', name: 'Pre-Service' },
+  { id: 'Post-Service', name: 'Post-Service' },
+  { id: 'Admin', name: 'Admin' },
+  { id: 'Pastor', name: 'Pastor' },
+  { id: 'Unit-Leader', name: 'Unit-Leader' },
+  { id: 'Others', name: 'Others' },
+];
+
+export const UserRoles = [
+  { id: 1, name: 'admin' },
+  { id: 2, name: 'leader' },
+  { id: 3, name: 'member' },
+];
 
 export const Units = {
   PRAYER_WORSHIP: 'Prayer Worship',
@@ -46,14 +59,6 @@ export const monthNames = [
   'December',
 ];
 
-export const followupCommentTypes = [
-  'Pre-Service',
-  'Post-Service',
-  'Admin',
-  'Pastor',
-  'Unit-Leader',
-  'Others',
-];
 export const textColors = [
   'text-red-500',
   'text-orange-500',

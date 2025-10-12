@@ -6,6 +6,7 @@ export const EmptyState = ({
   description = 'There are no items to display at the moment.',
   actionLabel,
   onAction,
+  className,
   variant = 'default'
 }) => {
 
@@ -191,7 +192,7 @@ export const EmptyState = ({
   const currentVariant = variants[variant] || variants.default;
 
   return (
-    <div className={`w-full flex items-center justify-center p-5 bg-gradient-to-br ${currentVariant.container} rounded-2xl`}>
+    <div className={`w-full p-5 bg-gradient-to-br ${currentVariant.container} ${className} rounded-2xl`}>
       <div className={`w-full ${currentVariant.card}  p-6 md:p-10 text-center transition-all duration-300`}>
         {/* Animated Icon Container */}
         <div className="relative inline-flex items-center justify-center mb-8">
