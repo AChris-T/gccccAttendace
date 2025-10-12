@@ -117,12 +117,12 @@ const FeedbackTimeline = ({ firstTimerId }) => {
                     </div>
 
                     {/* Timeline Container */}
-                    <div className="relative rounded shadow py-5 pr-5">
+                    <div className="relative">
                         {/* Vertical Line */}
                         <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 via-purple-400 to-green-400 dark:from-blue-500 dark:via-purple-500 dark:to-green-500 opacity-30 dark:opacity-50" />
 
                         {/* Timeline Items */}
-                        <div className="space-y-6 sm:space-y-8">
+                        <div className="space-y-6 sm:space-y-8 rounded shadow py-5 pr-5">
                             {timelineData.map((item, index) => {
                                 const typeConfig = getTypeConfig(item.type);
                                 return (
