@@ -6,6 +6,7 @@ import { useGetFirstTimersFollowups } from '@/queries/firstTimer.query';
 import { useState } from 'react';
 import Modal from "@/components/ui/Modal";
 import Badge from '@/components/ui/Badge';
+import { TimelineSkeletonLoader } from '@/components/skeleton';
 
 // SVG Icons
 const ChevronDownIcon = ({ width = 24, height = 24, className = "w-6 h-6", fill = "currentColor" }) => (
