@@ -211,3 +211,36 @@ export function getFilteredCommentTypes({ isAdmin, isLeader, isMember }) {
 
   return [];
 }
+export const formatDateFull = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+export const formatFullDateTime = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
+export const getTypeConfig = (type) => {
+  const configs = {
+    'Pre-Service': { color: 'primary' },
+    'Post-Service': { color: 'success' },
+    Admin: { color: 'error' },
+    Pastor: { color: 'warning' },
+    'Unit-Leader': { color: 'info' },
+    Others: { color: 'light' },
+  };
+  return configs[type] || { color: 'light' };
+};

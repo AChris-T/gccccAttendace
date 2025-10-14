@@ -6,7 +6,7 @@ const SpiritualInformation = ({ firstTimerData }) => {
     return (
         <SectionCard title="Spiritual Information" icon={HeartIcon} isEdit={false}>
             <InfoField icon={HeartIcon} label="Are you Born Again?" value={firstTimerData.born_again} />
-            <InfoField icon={BookOpenIcon} label="Interest in becoming a consistent member" value={firstTimerData.interest} />
+            <InfoField icon={BookOpenIcon} label="Interest in becoming a consistent member" value={firstTimerData.membership_interest} />
             <InfoField icon={MessageSquareIcon} label="Prayer Request" value={firstTimerData.prayer_point} fullWidth />
         </SectionCard>
     )

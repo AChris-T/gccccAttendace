@@ -1,6 +1,5 @@
 import Message from '@/components/common/Message';
-import SelectForm from '@/components/form/SelectForm'
-import TextArea from '@/components/form/TextArea';
+import SelectForm from '@/components/form/useForm/SelectForm'
 import Button from '@/components/ui/Button';
 import { useCreateFirstTimersFollowups } from '@/queries/firstTimer.query';
 import { timelineSchema } from '@/schema';
@@ -9,6 +8,8 @@ import { getFilteredCommentTypes } from '@/utils/helper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import TextAreaForm from '@/components/form/TextAreaForm';
+import DateForm from '@/components/form/useForm/DateForm';
 
 const CreateTimeline = ({ firstTimerId, onClose }) => {
     const { isAdmin, isLeader, isMember, user } = useAuthStore()
@@ -18,10 +19,14 @@ const CreateTimeline = ({ firstTimerId, onClose }) => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(timelineSchema),
     });
+
+    const typeValue = watch('type');
+    const showServiceDate = typeValue?.toLowerCase().includes('service');
 
     const handleCreateTimeline = async (data) => {
         try {
@@ -30,7 +35,6 @@ const CreateTimeline = ({ firstTimerId, onClose }) => {
             onClose?.()
         } catch (error) { }
     }
-
 
     return (
         <div className='my-5'>
@@ -44,7 +48,16 @@ const CreateTimeline = ({ firstTimerId, onClose }) => {
                         error={errors.type?.message} />
                 </div>
 
-                <TextArea
+                {showServiceDate && (
+                    <DateForm
+                        label="Service Date"
+                        name="service_date"
+                        register={register}
+                        error={errors.service_date?.message}
+                    />
+                )}
+
+                <TextAreaForm
                     label="What is your prayer request ?"
                     name="note"
                     register={register}

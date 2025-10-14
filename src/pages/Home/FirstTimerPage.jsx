@@ -23,7 +23,7 @@ const SCROLLABLE_STEPS = [1, 4];
 const STEP_VALIDATION_FIELDS = {
   1: ['first_name', 'last_name', 'email', 'phone_number', 'gender'],
   2: ['data_of_friend_and_family', 'location'],
-  3: ['interest'],
+  3: ['membership_interest'],
   4: [], // Dynamic based on conditions
   5: ['service_experience', 'whatsapp_interest'],
 };
@@ -42,10 +42,10 @@ const createFormPayload = (data) => ({
         ? 'Female'
         : 'Other',
   located_in_ibadan: data.location === 'yes',
-  interest:
-    data.interest === 'yes'
+  membership_interest:
+    data.membership_interest === 'yes'
       ? 'Yes'
-      : data.interest === 'maybe'
+      : data.membership_interest === 'maybe'
         ? 'Maybe'
         : 'No',
   born_again: data.born_again === 'yes' ? 'Yes' : 'No',
@@ -92,7 +92,7 @@ const FirstTimerPage = () => {
   const isCompleteStep = useMemo(() => step === 'complete', [step]);
   const isLastStep = useMemo(() => step === TOTAL_STEPS, [step]);
   const containerClasses = useMemo(() => {
-    const baseClasses = 'max-w-3xl w-full p-6 bg-white shadow rounded-md';
+    const baseClasses = 'max-w-3xl w-full px-5 pt-6 bg-white shadow rounded-md';
     const scrollClasses = SCROLLABLE_STEPS.includes(step)
       ? 'h-auto overflow-y-auto'
       : '';
@@ -104,9 +104,9 @@ const FirstTimerPage = () => {
     (currentStep) => {
       if (currentStep === 4) {
         const location = getValues('location');
-        const interest = getValues('interest');
+        const membership_interest = getValues('membership_interest');
 
-        if (location === 'yes' && interest === 'yes') {
+        if (location === 'yes' && membership_interest === 'yes') {
           return ['address_in_ibadan', 'dob', 'occupation', 'born_again'];
         }
         return [];
@@ -134,7 +134,7 @@ const FirstTimerPage = () => {
 
   // Navigation logic
   const shouldSkipToStep5 = useCallback(() => {
-    return step === 3 && getValues('interest') === 'no';
+    return step === 3 && getValues('membership_interest') === 'no';
   }, [step, getValues]);
 
   const getNextStep = useCallback(() => {
@@ -143,7 +143,7 @@ const FirstTimerPage = () => {
   }, [step, shouldSkipToStep5]);
 
   const getPreviousStep = useCallback(() => {
-    if (step === 5 && getValues('interest') === 'no') return 3;
+    if (step === 5 && getValues('membership_interest') === 'no') return 3;
     return Math.max(1, step - 1);
   }, [step, getValues]);
 
@@ -166,7 +166,6 @@ const FirstTimerPage = () => {
         await createFirstTimer(payload);
         setStep('complete');
       } catch (err) {
-        console.log(err)
         const message = handleApiError(err);
         Toast.error(`Form submission failed: ${message}`);
       }
@@ -257,14 +256,14 @@ const FirstTimerPage = () => {
 
   const renderForm = () => (
     <>
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-5">
         <img src="/images/logo/logo2.png" alt="Logo" className="h-16 w-auto" />
       </div>
 
       {renderProgressBar()}
 
       <form
-        className="my-8"
+        className="my-1"
         onSubmit={handleSubmit(handleFormSubmit)}
         noValidate
       >
@@ -278,7 +277,7 @@ const FirstTimerPage = () => {
   );
 
   return (
-    <div className="flex mt-28 item-center justify-center px-4">
+    <div className="flex mb-5 mt-9 item-center justify-center px-4">
       <div className={containerClasses}>
         {isCompleteStep ? renderCompletionMessage() : renderForm()}
       </div>

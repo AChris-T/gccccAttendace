@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
-import { useAllAttendance, useUserAttendance } from '@/queries/attendance.query';
+import { useUserAttendance } from '@/queries/attendance.query';
 import { useServices } from '@/queries/service.query';
 import { LoadingIcon } from '@/icons';
 import AttendanceFilter from '@/components/dashboard/attendance/AttendanceFilter';
@@ -217,7 +217,8 @@ const AttendanceTable = () => {
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                             {error?.message || 'An unexpected error occurred'}
                         </p>
-                        <Button onClick={() => refetch()} variant="outline-danger" className='rounded'>
+
+                        <Button size='sm' onClick={() => refetch()} variant="outline-danger" className='rounded'>
                             Retry
                         </Button>
                     </div>
@@ -253,16 +254,16 @@ const AttendanceTable = () => {
                     </div>
                     <div className="flex gap-2 mb-4">
                         <Button
-                            variant='accent'
-                            className='rounded px-5'
+                            variant='primary'
+                            size='sm'
                             onClick={handleExportCSV}
                             disabled={isLoading || isFetching || !allAttendance?.length}
                         >
                             Download
                         </Button>
                         <Button
-                            className='rounded px-5'
-                            variant='ghost'
+                            size='sm'
+                            variant='neutral'
                             onClick={() => refetch()}
                             loading={isFetching}
                             disabled={isLoading}

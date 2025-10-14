@@ -1,7 +1,7 @@
 "use client";
 
 import { useModal } from "../../hooks/useModal";
-import InputForm from "../form/InputForm";
+import InputForm from "../form/useForm/InputForm";
 import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import { useForm } from "react-hook-form";

@@ -26,7 +26,7 @@ const EXTERNAL_LINKS = {
 };
 
 const LoadingState = ({ userName }) => (
-  <div className="flex items-center justify-center w-full min-h-screen px-2">
+  <div className="flex items-center justify-center w-full min-h-[80vh] px-2">
     <div className="flex flex-col items-center gap-3 mb-5">
       <p className="my-4 text-base text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
@@ -44,7 +44,7 @@ const LoadingState = ({ userName }) => (
 );
 
 const NoServiceState = ({ userName }) => (
-  <div className="flex items-center justify-center w-full min-h-screen px-2">
+  <div className="flex items-center justify-center w-full min-h-[80vh] px-2">
     <div className="flex flex-col items-center gap-3 mb-5">
       <p className="my-4 text-base text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
@@ -173,7 +173,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="flex items-center justify-center w-full min-h-screen px-2">
+    <div className="flex items-center justify-center w-full min-h-[80vh] px-2">
       <div className="flex flex-col items-center gap-3 mb-5">
         <p className="my-4 text-base text-white capitalize">
           Hello 👋, {user?.first_name ?? 'Friend'}

@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TextArea = ({
+const TextAreaForm = ({
   label,
   name,
   required = false,
-  register,
+  register = () => { },
   error,
   placeholder,
   rows = 4,
@@ -30,4 +30,4 @@ const TextArea = ({
   );
 };
 
-export default TextArea;
+export default TextAreaForm;

@@ -1,15 +1,27 @@
+import EditLocation from '@/components/dashboard/firsttimer/edit/EditLocation';
 import { InfoField } from '@/components/dashboard/firsttimer/InfoField'
 import { SectionCard } from '@/components/dashboard/firsttimer/SectionCard'
+import Modal from '@/components/ui/Modal';
+import { useModal } from '@/hooks/useModal';
 import { MapPinIcon, MessageSquareIcon } from '@/icons'
 
 const LocationContact = ({ firstTimerData }) => {
+    const { isOpen, openModal, closeModal } = useModal();
     return (
-        <> {/* Location & Contact */}
-            <SectionCard title="Location & Contact" icon={MapPinIcon} onEdit={() => console.log('Edit location')}>
+        <>
+            <SectionCard title="Location & Contact" icon={MapPinIcon} onEdit={openModal}>
                 <InfoField icon={MapPinIcon} label="Address" value={firstTimerData.address} fullWidth />
                 <InfoField icon={MapPinIcon} label="Located in Ibadan" value={firstTimerData.located_in_ibadan ? 'Yes' : 'No'} />
                 <InfoField icon={MessageSquareIcon} label="Interest in joining our community" value={firstTimerData.whatsapp_interest ? 'Yes' : 'No'} />
-            </SectionCard></>
+            </SectionCard>
+            <Modal
+                title={`Edit ${firstTimerData?.full_name}`}
+                isOpen={isOpen}
+                onClose={closeModal}
+            >
+                <EditLocation firstTimerData={firstTimerData} onClose={closeModal} />
+            </Modal>
+        </>
     )
 }
 

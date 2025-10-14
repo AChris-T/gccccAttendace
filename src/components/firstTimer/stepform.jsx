@@ -1,5 +1,5 @@
 import React from "react";
-import InputForm from "@/components/form/InputForm";
+import InputForm from "@/components/form/useForm/InputForm";
 import RadioGroup from "@/components/form/RadioGroup";
 
 export const Step1PersonalInfo = ({ register, errors }) => (
@@ -87,10 +87,10 @@ export const Step2FriendFamilyLocation = ({ register, errors }) => (
 export const Step3Interest = ({ register, errors }) => (
   <RadioGroup
     label="Would you be interested in becoming a consistent member of GCCC either online or onsite?"
-    name="interest"
+    name="membership_interest"
     type="radio"
     register={register}
-    error={errors.interest?.message}
+    error={errors.membership_interest?.message}
     required={true}
     options={[
       { label: "Yes", value: "yes" },

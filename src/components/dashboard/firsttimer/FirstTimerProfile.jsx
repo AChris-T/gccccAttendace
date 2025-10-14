@@ -5,12 +5,14 @@ import PersonalInformation from '@/components/dashboard/firsttimer/PersonalInfor
 import VisitInformation from '@/components/dashboard/firsttimer/VisitInformation';
 import SpiritualInformation from '@/components/dashboard/firsttimer/SpiritualInformation';
 import NotesAdditionalInformation from '@/components/dashboard/firsttimer/NotesAdditionalInformation';
-import FeedbackTimeline from '@/components/dashboard/timeline/Timeline';
+import FeedbackTimeline from '@/components/dashboard/timeline/FeedbackTimeline';
 import LocationContact from '@/components/dashboard/firsttimer/LocationContact';
 import FollowupDetails from '@/components/dashboard/firsttimer/FollowupDetails';
 import ToolBox from '@/components/dashboard/firsttimer/ToolBox';
 import Header from '@/components/dashboard/firsttimer/Header';
 import { EmptyState } from '@/components/common/EmptyState';
+import { useState } from 'react';
+import Animated from '@/components/common/Animated';
 
 const INFORMATION_SECTIONS = [
     PersonalInformation,
@@ -30,6 +32,8 @@ const InformationPanel = ({ firstTimerData }) => (
 );
 
 const FirstTimerProfile = ({ firstTimerId }) => {
+    const [showToolbox, setShowToolbox] = useState(false)
+    const [showProfile, setShowProfile] = useState(false)
     const {
         data: firstTimerData = {},
         isLoading,
@@ -44,16 +48,20 @@ const FirstTimerProfile = ({ firstTimerId }) => {
     if (isLoading) {
         return <FirstTimerProfileSkeleton />;
     }
-
     const isActive = firstTimerData?.status !== 'deactivated';
 
     return (
         <div className="space-y-6">
-            <Header firstTimerData={firstTimerData} />
-            <ToolBox firstTimerData={firstTimerData} />
-
-            <InformationPanel firstTimerData={firstTimerData} />
-            {isActive ? <FeedbackTimeline firstTimerId={firstTimerId} /> : <EmptyState title='Followup deactivated' />}
+            <Header
+                showToolbox={showToolbox}
+                setShowToolbox={setShowToolbox}
+                showProfile={showProfile}
+                setShowProfile={setShowProfile}
+                firstTimerData={firstTimerData}
+            />
+            {showToolbox && <Animated animation='fade-up' duration={0.7}><ToolBox firstTimerData={firstTimerData} /></Animated>}
+            {showProfile && <Animated animation='fade-up'> <InformationPanel firstTimerData={firstTimerData} /></Animated>}
+            {isActive ? <Animated animation='fade-up'> <FeedbackTimeline firstTimerId={firstTimerId} /></Animated> : <EmptyState title='Followup deactivated' />}
         </div>
     );
 };

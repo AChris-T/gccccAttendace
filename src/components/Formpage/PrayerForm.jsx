@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '../../components/form/TextArea';
 import Button from '../../components/ui/Button';
 import { useCreateFormMessages } from '@/queries/form.query';
+import TextAreaForm from '@/components/form/TextAreaForm';
+
 
 export default function PrayerForm() {
   const {
@@ -34,7 +35,7 @@ export default function PrayerForm() {
         prayer
       </h3>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <TextArea
+        <TextAreaForm
           label="What is your prayer request ?"
           name="message"
           register={register}

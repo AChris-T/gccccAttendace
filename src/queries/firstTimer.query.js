@@ -87,15 +87,14 @@ export const useUpdateFirstTimer = (options = {}) => {
       return await FirstTimerService.updateFirstTimer(payload);
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.FIRST_TIMERS.DETAIL(variables?.id?.toString()),
-        exact: true,
-      });
+      queryClient.setQueryData(
+        QUERY_KEYS.FIRST_TIMERS.DETAIL(variables?.id?.toString()),
+        data?.data || data
+      );
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {
-      console.log(error);
       const message = handleApiError(error);
       Toast.error(message || 'Failed to update first timer record');
       options.onError?.(new Error(message));
@@ -111,10 +110,10 @@ export const useFirstTimerWelcomeEmail = (options = {}) => {
       return await FirstTimerService.sendFirstTimerWelcomeEmail(payload);
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.FIRST_TIMERS.DETAIL(variables?.id?.toString()),
-        exact: true,
-      });
+      queryClient.setQueryData(
+        QUERY_KEYS.FIRST_TIMERS.DETAIL(variables?.id?.toString()),
+        data?.data || data
+      );
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },

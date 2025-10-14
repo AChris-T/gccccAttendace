@@ -215,7 +215,7 @@ const ToolBox = ({ firstTimerData }) => {
 
             {/* Modals */}
             <Modal
-                title={`Update ${firstTimerData?.name}'s status`}
+                title={`Update ${firstTimerData?.full_name}'s status`}
                 isOpen={isOpenUpdateStatusModal}
                 onClose={closeUpdateStatusModal}
             >
@@ -226,7 +226,7 @@ const ToolBox = ({ firstTimerData }) => {
             </Modal>
 
             <Modal
-                title={`Edit ${firstTimerData?.name}`}
+                title={`Edit ${firstTimerData?.full_name}`}
                 isOpen={isOpenEditModal}
                 onClose={closeEditModal}
             >

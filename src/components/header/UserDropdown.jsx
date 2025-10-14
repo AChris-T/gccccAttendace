@@ -22,10 +22,7 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center gap-2 text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        <div className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
-          {user?.avatar_url ? <Avatar size="xxlarge" src={user?.avatar_url} /> : <Avatar size="xxlarge" />}
-        </div>
-
+        {user?.avatar_url ? <Avatar size="sm" src={user?.avatar_url} /> : <Avatar size="sm" />}
         <span className="block mr-1 font-medium text-theme-sm">
           {user?.first_name}
         </span>

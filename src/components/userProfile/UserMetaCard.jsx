@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useModal } from "../../hooks/useModal";
 import { useAuthStore } from "../../store/auth.store";
-import InputForm from "../form/InputForm";
+import InputForm from "../form/useForm/InputForm";
 import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import {

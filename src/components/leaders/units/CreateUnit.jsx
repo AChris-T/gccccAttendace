@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import InputForm from '@/components/form/InputForm';
+import InputForm from '@/components/form/useForm/InputForm';
 import MultiSelect from '@/components/form/MultiSelect';
 import SingleSelect from '@/components/form/SingleSelect';
 import Button from '@/components/ui/Button';
@@ -14,6 +13,7 @@ import { useCreateUnit } from '@/queries/unit.query';
 import { unitSchema } from '@/schema';
 import { useAuthStore } from '@/store/auth.store';
 import { Toast } from '@/lib/toastify';
+import ButtonCard from '@/components/ui/ButtonCard';
 
 const CreateUnit = () => {
     const { isAdmin } = useAuthStore();
@@ -63,9 +63,11 @@ const CreateUnit = () => {
 
     return (
         <>
-            <Button onClick={openModal} startIcon={<PlusIcon />} variant="success">
-                Unit
-            </Button>
+            <div className='max-w-sm mb-5'>
+                <ButtonCard description={'Create new unit, add members and unit leader.'} icon={<PlusIcon />} size='sm' onClick={openModal} variant="success">
+                    Create Unit
+                </ButtonCard>
+            </div>
 
             <Modal maxWidth="max-w-md" title="New Unit" isOpen={isOpen} onClose={handleModalClose}>
                 <form className="flex flex-col mt-3 md:mt-5 gap-4" onSubmit={handleSubmit(handleCreateUnit)}>

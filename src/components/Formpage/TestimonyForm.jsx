@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
-import InputForm from '../form/InputForm';
+import InputForm from '../form/useForm/InputForm';
 import Button from '../ui/Button';
 import { useCreateFormMessages } from '@/queries/form.query';
-import TextArea from '../../components/form/TextArea';
+import TextAreaForm from '@/components/form/TextAreaForm';
 
 export default function TestimonyForm() {
   const {
@@ -61,7 +61,7 @@ export default function TestimonyForm() {
             />
           </div>
           <div className="md:col-span-2">
-            <TextArea
+            <TextAreaForm
               label="What are your questions?"
               name="message"
               register={register}

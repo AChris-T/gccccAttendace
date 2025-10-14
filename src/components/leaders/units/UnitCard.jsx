@@ -62,7 +62,7 @@ const MenuDropdown = ({ isAdmin, onEdit, onDelete, onClose }) => (
             {isAdmin && (
                 <button
                     onClick={onDelete}
-                    className="w-full flex items-center gap-3 p-3 text-left transition-colors duration-150 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-gray-100 dark:border-gray-600 border-b"
+                    className="w-full flex items-center gap-3 p-3 text-left transition-colors duration-150 text-red-600 dark:text-red-400 hover:bg-gray-300 dark:hover:bg-red-900/20 border-gray-100 dark:border-gray-600 border-b"
                 >
                     <DeleteIcon className="w-4 h-4" />
                     <span className="text-sm font-medium">Delete Unit</span>
@@ -79,7 +79,7 @@ const LeaderInfo = ({ leader, index, title, gradientSet }) => (
         </div>
         <div className="flex-1 min-w-0">
             <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">{title}</p>
-            <p className="text-gray-900 dark:text-white font-semibold truncate">{leader?.name}</p>
+            <p className="text-gray-900 dark:text-white font-semibold truncate">{leader?.full_name}</p>
         </div>
     </div>
 );

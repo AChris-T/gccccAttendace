@@ -92,9 +92,9 @@ const AttendanceAssignment = ({ services = [] }) => {
                 </div>
             </div>
 
-            <div className="border-t border-red-200 dark:border-green-800">
-                <div className="bg-green-50 border border-green-200 rounded-xl p-3 my-5">
-                    <div className="flex gap-3">
+            <div className="border-t border-green-200 dark:border-green-800">
+                <div className="bg-green-50 border border-green-200 rounded-xl p-2 my-5">
+                    <div className="flex gap-1">
                         <div className="flex-shrink-0">
                             <CloseIcon className="w-5 h-5 text-green-600" />
                         </div>

@@ -1,47 +1,144 @@
-const sizeClasses = {
-  xsmall: "h-6 w-6 max-w-6",
-  small: "h-8 w-8 max-w-8",
-  medium: "h-10 w-10 max-w-10",
-  large: "h-12 w-12 max-w-12",
-  xlarge: "h-14 w-14 max-w-14",
-  xxlarge: "h-16 w-16 max-w-16",
-};
-
-const statusSizeClasses = {
-  xsmall: "h-1.5 w-1.5 max-w-1.5",
-  small: "h-2 w-2 max-w-2",
-  medium: "h-2.5 w-2.5 max-w-2.5",
-  large: "h-3 w-3 max-w-3",
-  xlarge: "h-3.5 w-3.5 max-w-3.5",
-  xxlarge: "h-4 w-4 max-w-4",
-};
-
-const statusColorClasses = {
-  online: "bg-success-500",
-  offline: "bg-error-400",
-  busy: "bg-warning-500",
-};
+import { CameraIcon, LoadingIcon2, UserIcon } from '@/icons';
+import { useState, useRef } from 'react';
 
 const Avatar = ({
-  src = '/images/user/avatar.jpeg',
-  alt = "User Avatar",
-  size = "medium",
-  status = "none",
+  src,
+  alt = 'User avatar',
+  name = '',
+  size = 'md',
+  shape = 'circle',
+  onUpload,
+  className = '',
+  loading = false,
+  onError
 }) => {
-  return (
-    <div className={`relative  rounded-full ${sizeClasses[size]}`}>
-      {/* Avatar Image */}
-      <img src={src} alt={alt} className="object-cover rounded-full w-full h-full" />
+  const [imageError, setImageError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const fileInputRef = useRef(null);
 
-      {/* Status Indicator */}
-      {status !== "none" && (
-        <span
-          className={`absolute bottom-0 right-0 rounded-full border-[1.5px] border-white dark:border-gray-900 ${statusSizeClasses[size]
-            } ${statusColorClasses[status] || ""}`}
-        ></span>
-      )}
+  const sizeClasses = {
+    xs: 'w-8 h-8 text-xs',
+    sm: 'w-10 h-10 text-sm',
+    md: 'w-12 h-12 text-base',
+    lg: 'w-16 h-16 text-lg',
+    xl: 'w-20 h-20 text-xl',
+    '2xl': 'w-28 h-28 text-2xl',
+    '3xl': 'w-36 h-36 text-3xl'
+  };
+
+  const iconSizes = {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 20,
+    xl: 24,
+    '2xl': 32,
+    '3xl': 40
+  };
+
+  const shapeClasses = {
+    circle: 'rounded-full',
+    square: 'rounded-xl'
+  };
+
+  const handleClick = () => {
+    if (onUpload && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    const maxSize = 1.5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return onError('Image size must be less than 1MB. Please select a smaller image.');
+    }
+    if (file && onUpload) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onUpload(reader.result);
+        setImageError(false);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const showImage = src && !imageError;
+
+  return (
+    <div className="inline-block">
+      <div
+        className={`
+          relative overflow-hidden shadow
+          ${sizeClasses[size]}
+          ${shapeClasses[shape]}
+          ${onUpload ? 'cursor-pointer' : ''}
+          transition-all duration-300 ease-in-out
+          ${className}
+        `}
+        onClick={handleClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {showImage ? (
+          <img
+            src={src}
+            alt={alt}
+            className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600">
+            {name ? (
+              <span className="font-semibold text-white select-none">
+                {name}
+              </span>
+            ) : (
+              <UserIcon
+                size={iconSizes[size]}
+                className="text-white opacity-80"
+              />
+            )}
+          </div>
+        )}
+
+        {onUpload && (
+          <>
+            <div
+              className={`
+                absolute inset-0 bg-black/60 dark:bg-black/70
+                flex items-center justify-center
+                transition-opacity duration-300
+                ${isHovered ? 'opacity-100' : 'opacity-0'}
+              `}
+            >
+              <CameraIcon
+                size={iconSizes[size] * 0.8}
+                className="!text-white drop-shadow-lg"
+              />
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+              aria-label="Upload avatar image"
+            />
+          </>
+        )}
+        {loading &&
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
+            <LoadingIcon2 height={22} className='text-white' />
+          </div>
+        }
+      </div>
     </div>
   );
 };
-
 export default Avatar;

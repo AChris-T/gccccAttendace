@@ -161,15 +161,15 @@ const MembersTable = () => {
             </p>
             <div className="flex flex-wrap w-full gap-3 my-4">
                 <Button
-                    variant='outline-primary'
-                    className='rounded px-5'
+                    size='sm'
+                    variant='primary'
                     onClick={() => gridRef.current?.exportDataAsCsv()}
                 >
                     Export CSV
                 </Button>
                 <Button
-                    className='rounded px-5'
-                    variant='outline-dark'
+                    size='sm'
+                    variant='neutral'
                     onClick={() => refetch()}
                     loading={isLoading || isFetching}
                 >

@@ -170,15 +170,15 @@ const AttendanceFilter = ({
                 <div className="flex gap-3 mt-2 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <Button
                         variant="primary"
-                        className="rounded px-6"
+                        size="sm"
                         onClick={handleApply}
                         loading={loading}
                         disabled={loading || !hasActiveFilters}
                     >Filter
                     </Button>
                     <Button
+                        size="sm"
                         variant="outline-light"
-                        className="rounded px-6"
                         onClick={handleReset}
                         disabled={loading || !hasActiveFilters}
                     >

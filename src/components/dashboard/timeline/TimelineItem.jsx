@@ -1,0 +1,81 @@
+import { ChevronDownIcon, ChevronUpIcon } from "@/icons";
+import Avatar from "@/components/ui/Avatar";
+import Badge from "@/components/ui/Badge";
+import { formatDateFull, formatFullDateTime, getTypeConfig } from "@/utils/helper";
+import { CalendarIcon, ClockIcon, MailIcon } from "@/icons";
+import TimelineNoteSection from "@/components/dashboard/timeline/TimelineNoteSection";
+
+const TimelineItem = ({ item, isExpanded, onToggle }) => {
+    const typeConfig = getTypeConfig(item.type);
+    const showServiceDate = item?.type.toLowerCase().includes("service");
+
+    return (
+        <div className="relative pl-12 sm:pl-20">
+            <div className="absolute left-2.5 sm:left-6 top-1 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-white dark:bg-gray-900 ring-4 ring-blue-500 dark:ring-blue-400 shadow-lg animate-pulse" />
+
+            <div className="group bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-md dark:shadow-gray-900/50 border border-gray-200/80 dark:border-gray-700/80 overflow-hidden transition-all duration-300">
+                {/* Header */}
+                <div className="p-3 sm:p-4 cursor-pointer" onClick={onToggle}>
+                    <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                            <Avatar name={item.user.initials} src={item.user.avatar} />
+                            <div className="flex-1 min-w-0">
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                                    <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+                                        {item.user.full_name}
+                                    </h3>
+                                    <Badge color={typeConfig.color} size="md">
+                                        {item.type}
+                                    </Badge>
+                                    {showServiceDate && (
+                                        <Badge color="warning" size="md">
+                                            {formatFullDateTime(item.service_date)}
+                                        </Badge>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-2 mb-3">
+                                    <MailIcon className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                                        {item.user.email}
+                                    </p>
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+                                    <div className="flex items-center gap-1.5">
+                                        <ClockIcon className="w-4 h-4" />
+                                        <span className="font-medium">{item.created_at_human}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <CalendarIcon className="w-4 h-4" />
+                                        <span className="hidden sm:inline">
+                                            {formatDateFull(item.created_at)}
+                                        </span>
+                                        <span className="sm:hidden">
+                                            {new Date(item.created_at).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 active:scale-95"
+                            aria-label="Toggle details"
+                        >
+                            {isExpanded ? (
+                                <ChevronUpIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            ) : (
+                                <ChevronDownIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            )}
+                        </button>
+                    </div>
+                </div>
+
+                <TimelineNoteSection item={item} isExpanded={isExpanded} />
+            </div>
+        </div>
+    );
+};
+
+export default TimelineItem;

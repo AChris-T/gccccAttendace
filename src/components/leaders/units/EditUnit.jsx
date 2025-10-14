@@ -1,4 +1,4 @@
-import InputForm from '@/components/form/InputForm';
+import InputForm from '@/components/form/useForm/InputForm';
 import MultiSelect from '@/components/form/MultiSelect';
 import SingleSelect from '@/components/form/SingleSelect';
 import Button from '@/components/ui/Button';

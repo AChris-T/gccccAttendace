@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
-import TextArea from '../../components/form/TextArea';
+import TextArea from '../form/TextAreaForm';
 import Button from '../../components/ui/Button';
 import { useCreateFormMessages } from '@/queries/form.query';
+import TextAreaForm from '@/components/form/TextAreaForm';
+
 
 export default function QuestionForm() {
   const {
@@ -34,7 +36,7 @@ export default function QuestionForm() {
       </h3>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-        <TextArea
+        <TextAreaForm
           label="What are your questions ?"
           name="message"
           register={register}

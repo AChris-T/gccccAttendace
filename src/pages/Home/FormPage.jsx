@@ -79,8 +79,8 @@ export default function FormPage() {
   }, [activeTabConfig.component]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-full mx-2 md:max-w-3xl md:mx-auto h-auto custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 mt-20 mb-20 md:mt-20 lg:mt-20">
+    <div className="flex mb-5 mt-9 item-center justify-center px-4">
+      <div className="w-full md:max-w-2xl md:mx-auto h-auto custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 ">
         {/* Tab Image Header */}
         <Animated
           animation="fade-down"

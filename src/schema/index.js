@@ -42,9 +42,21 @@ export const registerSchema = yup.object({
   phone_number: yup.string().required('Phone number is required'),
   gender: yup.string().required('Gender is required'),
 });
+
 export const timelineSchema = yup.object({
   note: yup.string().required('Comment field is required'),
   type: yup.string().required('Type field is required'),
+  service_date: yup
+    .string()
+    .nullable()
+    .when('type', {
+      is: (type) => type && type.toLowerCase().includes('service'),
+      then: (schema) =>
+        schema.required(
+          'Service date is required when type contains "service"'
+        ),
+      otherwise: (schema) => schema.notRequired(),
+    }),
 });
 
 export const firstTimerSchema = yup.object({
@@ -58,19 +70,21 @@ export const firstTimerSchema = yup.object({
   phone_number: yup.string().required('Phone number is required'),
   gender: yup.string().required('Gender is required'),
   location: yup.string().required('Please select Yes or No'),
-  interest: yup.string().required('Please select Yes, Maybe or No'),
+  membership_interest: yup.string().required('Please select Yes, Maybe or No'),
 
   address_in_ibadan: yup
     .string()
     .trim()
-    .when(['location', 'interest'], {
-      is: (location, interest) => location === 'yes' && interest === 'yes',
+    .when(['location', 'membership_interest'], {
+      is: (location, membership_interest) =>
+        location === 'yes' && membership_interest === 'yes',
       then: (schema) => schema.min(5).required('Address in Ibadan is required'),
       otherwise: (schema) => schema.nullable().optional(),
     }),
 
-  dob: yup.string().when(['location', 'interest'], {
-    is: (location, interest) => location === 'yes' && interest === 'yes',
+  dob: yup.string().when(['location', 'membership_interest'], {
+    is: (location, membership_interest) =>
+      location === 'yes' && membership_interest === 'yes',
     then: (schema) =>
       schema
         .matches(
@@ -84,14 +98,16 @@ export const firstTimerSchema = yup.object({
   occupation: yup
     .string()
     .trim()
-    .when(['location', 'interest'], {
-      is: (location, interest) => location === 'yes' && interest === 'yes',
+    .when(['location', 'membership_interest'], {
+      is: (location, membership_interest) =>
+        location === 'yes' && membership_interest === 'yes',
       then: (schema) => schema.min(2).required('Occupation is required'),
       otherwise: (schema) => schema.nullable().optional(),
     }),
 
-  born_again: yup.string().when(['location', 'interest'], {
-    is: (location, interest) => location === 'yes' && interest === 'yes',
+  born_again: yup.string().when(['location', 'membership_interest'], {
+    is: (location, membership_interest) =>
+      location === 'yes' && membership_interest === 'yes',
     then: (schema) => schema.required('Please select an option'),
     otherwise: (schema) => schema.nullable().optional(),
   }),
@@ -102,4 +118,31 @@ export const firstTimerSchema = yup.object({
     .required('Please share what you enjoyed about the service'),
   prayer_point: yup.string().trim().nullable(),
   whatsapp_interest: yup.string().required('Please select Yes or No'),
+});
+
+export const updateFirstTimerProfileSchema = yup.object({
+  first_name: yup
+    .string()
+    .required('First name is required')
+    .min(2, 'Too short'),
+  last_name: yup.string().required('Last name is required').min(2, 'Too short'),
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Invalid email format'),
+  phone_number: yup.string().required('Phone number is required'),
+  gender: yup.string().required('Gender is required'),
+  date_of_birth: yup.string().nullable(),
+  occupation: yup.string().nullable(),
+  is_student: yup.boolean(),
+});
+export const communityFirstTimerSchema = yup.object({
+  address: yup.string().nullable(),
+  located_in_ibadan: yup.boolean(),
+  whatsapp_interest: yup.boolean(),
+});
+export const firstTimerNotesSchema = yup.object({
+  pastorate_call: yup.string().nullable(),
+  visitation_report: yup.string().nullable(),
+  notes: yup.string().nullable(),
 });

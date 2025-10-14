@@ -266,16 +266,16 @@ const AdminAttendanceTable = () => {
                     {/* Action Buttons */}
                     <div className="flex gap-2 mb-4">
                         <Button
-                            variant='accent'
-                            className='rounded px-5'
+                            size='sm'
+                            variant='primary'
                             onClick={handleExportCSV}
                             disabled={isLoading || isFetching || !allAttendance?.length}
                         >
                             Download
                         </Button>
                         <Button
-                            className='rounded px-5'
-                            variant='ghost'
+                            size='sm'
+                            variant='neutral'
                             onClick={() => refetch()}
                             loading={isFetching}
                             disabled={isLoading}

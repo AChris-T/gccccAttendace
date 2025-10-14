@@ -14,8 +14,8 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
 
     const [assignData, setAssignData] = useState({
         id: firstTimerData?.id,
-        assigned_to_member_id: firstTimerData?.assigned_to_member?.id || '',
-        follow_up_status_id: firstTimerData?.follow_up_status?.id || '',
+        assigned_to_member_id: firstTimerData?.assigned_to_member?.id,
+        follow_up_status_id: firstTimerData?.follow_up_status?.id,
     });
 
     const membersOptions = useMemo(() => {
@@ -33,7 +33,6 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
             text: status.title
         }));
     }, [members]);
-    console.log(firstTimerData?.assigned_to_member?.id, firstTimerData?.follow_up_status?.id)
     const handleFieldChange = (field, value) => {
         setAssignData(prev => ({ ...prev, [field]: value }));
     };
@@ -51,7 +50,7 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
         <div className='mt-5'>
             {isAdmin && <div>
                 <SingleSelect
-                    label="Member"
+                    label="Assign to member"
                     name="Assign to member"
                     options={membersOptions}
                     defaultValue={assignData.assigned_to_member_id}

@@ -1,28 +1,16 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Badge from '../../ui/Badge';
 import { Link } from "react-router-dom";
 import Button from '../../ui/Button';
-import { Toast } from '../../../lib/toastify';
 import { useFirstTimers } from '../../../queries/firstTimer.query';
-import { useFollowUpStatuses } from '../../../queries/followupstatus.query';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const FirstTimersTable = () => {
     const { data: firstTimers, isLoading, isFetching, isError, error, refetch } = useFirstTimers();
-    const { data: followupStatuses = [] } = useFollowUpStatuses()
-
     const gridRef = useRef(null);
-    const [selectedRowIds, setSelectedRowIds] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState(null);
-
-    useEffect(() => {
-        if (firstTimers) {
-            setSelectedRowIds([]);
-        }
-    }, [firstTimers]);
 
     const defaultColDef = useMemo(() => ({
         flex: 1,
@@ -32,8 +20,6 @@ const FirstTimersTable = () => {
         suppressPaste: false,
         floatingFilter: true,
         editable: false,
-        checkboxSelection: false,
-        headerCheckboxSelection: false,
     }), []);
 
     // Custom cell renderers
@@ -56,12 +42,10 @@ const FirstTimersTable = () => {
         );
     }, []);
 
-    // Value formatter for member name
     const memberNameFormatter = useCallback((params) => {
         return params?.value?.name || '';
     }, []);
 
-    // Date value formatter to ensure consistent display
     const dateValueFormatter = useCallback((params) => {
         if (!params.value) return '';
         const date = new Date(params.value);
@@ -69,22 +53,7 @@ const FirstTimersTable = () => {
         return date.toLocaleDateString();
     }, []);
 
-    // Column definitions with checkbox selection
     const columnDefs = useMemo(() => [
-        {
-            checkboxSelection: true,
-            headerCheckboxSelection: true,
-            width: 50,
-            pinned: 'left',
-            lockPosition: true,
-            suppressMenu: true,
-            suppressSizeToFit: true,
-            suppressResize: true,
-            suppressMovable: true,
-            editable: false,
-            filter: false,
-            sortable: false,
-        },
         {
             field: "id",
             headerName: "ID",
@@ -95,7 +64,7 @@ const FirstTimersTable = () => {
             editable: false,
         },
         {
-            field: "name",
+            field: "full_name",
             headerName: "Name",
             width: 150,
             cellClass: 'font-medium',
@@ -157,7 +126,6 @@ const FirstTimersTable = () => {
         },
     ], [LinkRenderer, memberNameFormatter, dateValueFormatter]);
 
-    // Grid options with row selection
     const gridOptions = useMemo(() => ({
         pagination: true,
         paginationPageSize: 200,
@@ -174,10 +142,8 @@ const FirstTimersTable = () => {
         suppressHorizontalScroll: false,
         alwaysShowHorizontalScroll: false,
         stopEditingWhenCellsLoseFocus: true,
-        rowSelection: 'multiple',
         suppressRowDeselection: false,
         suppressRowClickSelection: false,
-        rowMultiSelectWithClick: true,
         enableRangeSelection: false,
         getRowId: (params) => params.data.id,
     }), [defaultColDef, columnDefs, firstTimers, isLoading, isFetching]);
@@ -185,47 +151,6 @@ const FirstTimersTable = () => {
     const onGridReady = useCallback((params) => {
         gridRef.current = params.api;
     }, []);
-
-    // Handle selection changes
-    const onSelectionChanged = useCallback((event) => {
-        const selectedNodes = event.api.getSelectedNodes();
-        const selectedIds = selectedNodes.map(node => node.data.id);
-        setSelectedRowIds(selectedIds);
-    }, []);
-
-    // Function to get selected row data (can be called externally)
-    const getSelectedRowData = useCallback(() => {
-        if (gridRef.current) {
-            const selectedNodes = gridRef.current.getSelectedNodes();
-            return selectedNodes.map(node => node.data);
-        }
-        return [];
-    }, []);
-
-    // Function to clear all selections
-    const clearSelection = useCallback(() => {
-        if (gridRef.current) {
-            gridRef.current.deselectAll();
-        }
-    }, []);
-
-    // Function to select specific rows by IDs
-    const selectRowsByIds = useCallback((ids) => {
-        if (gridRef.current) {
-            gridRef.current.forEachNode((node) => {
-                if (ids.includes(node.data.id)) {
-                    node.setSelected(true);
-                }
-            });
-        }
-    }, []);
-
-    const handleBulkAction = useCallback(() => {
-        if (selectedRowIds.length === 0) {
-            Toast.info('Please select at least one row');
-            return;
-        }
-    }, [selectedRowIds, selectedStatus]);
 
     // Error state
     if (isError && error) {
@@ -254,68 +179,24 @@ const FirstTimersTable = () => {
 
     return (
         <div className="w-full">
-            <div className="flex justify-between items-center mb-4">
-                <p className="text-sm text-gray-600 ">
-                    <span>
-                        {firstTimers?.length || 0} records found
-                    </span>
-                    <span className='mx-2'>
-                        {selectedRowIds.length > 0 && (
-                            <Badge color='warning'>{selectedRowIds.length} selected</Badge>
-                        )}
-                    </span>
-                </p>
-            </div>
 
             <div className="flex flex-wrap justify-between w-full gap-2 my-4">
                 <div className='flex gap-2'>
                     <Button
-                        variant='outline-primary'
-                        className='rounded px-5'
+                        size='sm'
+                        variant='primary'
                         onClick={() => gridRef.current?.exportDataAsCsv()}
                     >
                         Export CSV
                     </Button>
                     <Button
-                        className='rounded px-5'
-                        variant='outline-dark'
+                        size='sm'
+                        variant='ghost'
                         onClick={() => refetch()}
                         loading={isFetching}
                     >
                         Refresh
-                    </Button></div>
-                <div className='flex gap-2'>
-                    {selectedRowIds.length > 0 && (
-                        <>
-                            <Button
-                                variant="outline-danger"
-                                onClick={clearSelection}
-                                className='rounded'
-                            >
-                                Clear
-                            </Button>
-                            <select
-                                onChange={(e) => setSelectedStatus(e.target.value)}
-                                value={selectedStatus}
-                                id="month-year"
-                                className="block px-2 py-2 text-gray-700 dark:text-white/90 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                                aria-label=""
-                            >
-                                {followupStatuses?.map((followupStatus) => (
-                                    <option key={followupStatus?.id} value={followupStatus?.id}>
-                                        {followupStatus?.title}
-                                    </option>
-                                )) || []}
-                            </select>
-                            <Button
-                                variant="success"
-                                className='rounded px-5'
-                                onClick={handleBulkAction}
-                            >
-                                Update status
-                            </Button>
-                        </>
-                    )}
+                    </Button>
                 </div>
             </div>
 
@@ -328,7 +209,6 @@ const FirstTimersTable = () => {
                     ref={gridRef}
                     {...gridOptions}
                     onGridReady={onGridReady}
-                    onSelectionChanged={onSelectionChanged}
                     loadingOverlayComponent="Loading..."
                     noRowsOverlayComponent="No first timers found"
                 />
@@ -346,47 +226,6 @@ const FirstTimersTable = () => {
             </>)}
         </div>
     );
-};
-//  These functions are available for external use:
-//     - getSelectedRowData(): Returns full data of selected rows
-//     - clearSelection(): Clears all selections
-//     - selectRowsByIds(ids): Selects rows by their IDs
-//     - selectedRowIds: Array of currently selected IDs
-
-// Export additional utilities if needed
-export { FirstTimersTable };
-
-
-export const useFirstTimersTableActions = (tableRef) => {
-    const getSelectedRowData = useCallback(() => {
-        if (tableRef.current) {
-            const selectedNodes = tableRef.current.getSelectedNodes();
-            return selectedNodes.map(node => node.data);
-        }
-        return [];
-    }, [tableRef]);
-
-    const clearSelection = useCallback(() => {
-        if (tableRef.current) {
-            tableRef.current.deselectAll();
-        }
-    }, [tableRef]);
-
-    const selectRowsByIds = useCallback((ids) => {
-        if (tableRef.current) {
-            tableRef.current.forEachNode((node) => {
-                if (ids.includes(node.data.id)) {
-                    node.setSelected(true);
-                }
-            });
-        }
-    }, [tableRef]);
-
-    return {
-        getSelectedRowData,
-        clearSelection,
-        selectRowsByIds,
-    };
 };
 
 export default FirstTimersTable;

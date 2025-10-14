@@ -4,8 +4,8 @@ import { registerSchema } from "@/schema";
 import { useRegister } from "@/queries/auth.query";
 import { UserRole, UserRoles } from "@/utils/constant";
 import { useState } from "react";
-import InputForm from "@/components/form/InputForm";
-import SelectForm from "@/components/form/SelectForm";
+import InputForm from "@/components/form/useForm/InputForm";
+import SelectForm from "@/components/form/useForm/SelectForm";
 import Button from "@/components/ui/Button";
 import Message from "@/components/common/Message";
 

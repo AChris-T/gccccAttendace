@@ -1,35 +1,14 @@
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/Table";
 import { useMemo } from "react";
 
-export const LoginLoader = () => {
+export function Skeleton({ className = "" }) {
   return (
-    <div className="max-w-[1940px] bg-[#24244e] mx-auto overflow-x-hidden">
-      <div className="flex items-center justify-center w-full px-4 md:px-0">
-        <div className="flex w-full justify-center items-center h-[100vh]">
-          <div className="flex flex-col items-center w-full railway">
-            {/* Logo Skeleton */}
-            <div className="w-[150px] h-[60px] bg-gray-600/50 rounded animate-pulse mb-3"></div>
+    <div
+      className={`animate-pulse bg-gray-200 dark:bg-gray-700 rounded-md ${className}`}
+    />
+  )
+}
 
-            {/* Text Skeleton */}
-            <div className="w-[250px] h-[18px] bg-gray-600/50 rounded animate-pulse mb-10"></div>
-
-            {/* Form Skeleton */}
-            <div className="flex flex-col gap-3 w-full md:w-[450px] md:px-[30px]">
-              {/* Input 1 */}
-              <div className="h-[48px] w-full bg-gray-600/50 rounded animate-pulse"></div>
-
-              {/* Input 2 */}
-              <div className="h-[48px] w-full bg-gray-600/50 rounded animate-pulse"></div>
-
-              {/* Button Skeleton */}
-              <div className="h-[50px] w-full bg-gray-600/50 rounded animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const SkeletonTableLoader = ({ columnCount = 10, rowCount = 50 }) => {
   return (
@@ -449,50 +428,58 @@ export function TableSkeletonLoader() {
 
 export const TimelineSkeletonLoader = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-      <div className="max-w-4xl mx-auto">
+    <div className="w-full mx-auto">
+      <div className="py-8 transition-colors duration-300">
         {/* Header Skeleton */}
-        <div className="mb-10 text-center">
-          <div className="h-10 bg-gray-200 dark:bg-gray-800 rounded-lg w-64 mx-auto mb-3 animate-pulse" />
-          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded-lg w-96 mx-auto animate-pulse" />
+        <div className="mb-10 space-y-3">
+          <div className="h-7 sm:h-8 w-52 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="h-4 sm:h-5 w-80 max-w-full rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="h-8 w-28 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
         </div>
 
-        {/* Timeline Container */}
+        {/* Timeline Loader */}
         <div className="relative">
           {/* Vertical Line */}
-          <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 via-gray-300 to-gray-300 dark:from-gray-700 dark:via-gray-700 dark:to-gray-700 opacity-30" />
+          <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-400 via-purple-400 to-green-400 opacity-25 dark:opacity-40" />
 
-          {/* Skeleton Items */}
-          <div className="space-y-6 sm:space-y-8">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="relative pl-12 sm:pl-20">
-                {/* Timeline Dot Skeleton */}
-                <div className="absolute left-2.5 sm:left-6 top-6 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gray-300 dark:bg-gray-700 animate-pulse" />
+          <div className="space-y-6 sm:space-y-8 py-5 pr-5">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="relative pl-12 sm:pl-20">
+                {/* Timeline Dot */}
+                <div className="absolute left-2.5 sm:left-6 top-6 w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-blue-400/70 dark:bg-blue-500/60 animate-pulse shadow-md" />
 
-                {/* Card Skeleton */}
-                <div className="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-md overflow-hidden border border-gray-200/80 dark:border-gray-700/80">
+                {/* Card */}
+                <div className="bg-white dark:bg-gray-800/80 rounded-2xl shadow-md border border-gray-200/80 dark:border-gray-700/80 overflow-hidden">
                   <div className="p-5 sm:p-6">
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-3 sm:gap-4 flex-1">
-                        {/* Avatar Skeleton */}
-                        <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0" />
+                      <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                        {/* Avatar */}
+                        <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
 
-                        {/* Content Skeleton */}
-                        <div className="flex-1 space-y-3">
-                          <div className="flex items-center gap-2">
-                            <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse" />
-                            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-24 animate-pulse" />
+                        {/* Content */}
+                        <div className="flex-1 min-w-0 space-y-3">
+                          {/* Name + Badge */}
+                          <div className="flex items-center gap-3">
+                            <div className="h-5 w-36 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                            <div className="h-5 w-20 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
                           </div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-48 animate-pulse" />
-                          <div className="flex gap-4">
-                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse" />
-                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse" />
+
+                          {/* Email */}
+                          <div className="flex items-center gap-2">
+                            <div className="h-4 w-5 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                            <div className="h-4 w-40 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                          </div>
+
+                          {/* Date and Time */}
+                          <div className="flex items-center gap-5">
+                            <div className="h-4 w-28 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
+                            <div className="h-4 w-24 rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse" />
                           </div>
                         </div>
                       </div>
 
-                      {/* Button Skeleton */}
-                      <div className="w-9 h-9 rounded-xl bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0" />
+                      {/* Expand Button */}
+                      <div className="w-8 h-8 rounded-xl bg-gray-200 dark:bg-gray-700 animate-pulse" />
                     </div>
                   </div>
                 </div>
@@ -504,8 +491,6 @@ export const TimelineSkeletonLoader = () => {
     </div>
   );
 };
-
-import React from 'react';
 
 const pulse = "animate-pulse bg-gray-200 dark:bg-gray-700";
 
@@ -538,56 +523,38 @@ const SectionSkeleton = ({ title = true, count = 4 }) => (
 
 export const FirstTimerProfileSkeleton = () => {
   return (
-    <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors space-y-8">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className={`w-16 h-16 rounded-full ${pulse}`} />
-            <div className="space-y-2">
-              <div className={`w-40 h-5 rounded ${pulse}`} />
-              <div className={`w-60 h-3 rounded ${pulse}`} />
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 animate-in fade-in">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        {/* Left section — Avatar + Info */}
+        <div className="flex items-center gap-4">
+          {/* Avatar Skeleton */}
+          <div className="w-24 h-24 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+
+          <div className="space-y-3">
+            {/* Name */}
+            <div className="h-6 w-40 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
+            {/* Email */}
+            <div className="h-4 w-56 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
+            {/* Badges */}
+            <div className="flex flex-wrap items-center gap-3 mt-2">
+              <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+              <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+              <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
             </div>
           </div>
-          <div className={`w-24 h-6 rounded-full ${pulse}`} />
         </div>
-      </div>
 
-      {/* Toolbox */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className={`w-8 h-8 rounded-lg ${pulse}`} />
-          <div className={`w-48 h-5 rounded ${pulse}`} />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              className={`p-4 rounded-lg border border-gray-200 dark:border-gray-600 ${pulse}`}
-            />
-          ))}
-        </div>
-        <div className="mt-6 bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
-          <div className={`w-32 h-3 mb-3 rounded ${pulse}`} />
-          <div className="space-y-2">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className={`w-full h-3 rounded ${pulse}`} />
-            ))}
+        {/* Right section — Switches */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
+            <div className="h-5 w-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
+            <div className="h-5 w-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
           </div>
         </div>
-      </div>
-
-      {/* Grid sections */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="space-y-6">
-          <SectionSkeleton count={6} />
-          <SectionSkeleton count={3} />
-          <SectionSkeleton count={5} />
-          <SectionSkeleton count={3} />
-          <SectionSkeleton count={5} />
-          <SectionSkeleton count={3} />
-        </div>
-        <div className={`h-[600px] w-full rounded-xl ${pulse}`} />
       </div>
     </div>
   );

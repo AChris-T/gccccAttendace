@@ -5,12 +5,12 @@ const Navbar = () => {
   const formattedDateTime = dayjs().format('dddd  [,] MMMM DD YYYY');
   const formattedTime = dayjs().format('hh:mm A ');
   return (
-    <div className="flex w-full  items-center z-50 relative  justify-between md:h-[108px] h-[59px] md:items-center p-4">
+    <div className="flex w-full  items-center z-50 relative  justify-between md:items-center px-4">
       <Link to='/' className='hidden md:flex'>
         <img
           src='/images/logo/logo.png'
           alt="menu"
-          className="w-[200px] object-contain"
+          className="w-[200px] h-[80px] object-contain"
         /></Link>
       <Link to='/' className='md:hidden'>
         <img

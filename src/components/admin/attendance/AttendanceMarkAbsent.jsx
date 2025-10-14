@@ -76,14 +76,13 @@ const AttendanceMarkAbsent = ({ services = [] }) => {
             <div className="border-t border-red-200 dark:border-red-800">
                 {isMarkError && <Message data={markError?.data} variant="error" />}
 
-                <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 my-5">
-                    <div className="flex gap-3">
+                <div className="bg-rose-50 border border-rose-200 rounded-xl p-2 my-5">
+                    <div className="flex gap-1">
                         <div className="flex-shrink-0">
                             <CloseIcon className="w-5 h-5 text-rose-600" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-rose-900">Admin Mark Attendance</p>
-                            <p className="text-xs text-rose-700 mt-1">Any user without a record will be automatically marked as Absent.</p>
+                            <p className="text-sm text-rose-900">Admin Mark Absent Members.</p>
                         </div>
                     </div>
                 </div>
