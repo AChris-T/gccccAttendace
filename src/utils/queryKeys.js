@@ -3,6 +3,10 @@ export const QUERY_KEYS = {
   FORM_MESSAGES: {
     ALL: ['form-messages'],
   },
+
+  FOLLOWUP_FEEDBACKS: {
+    FIRST_TIMERS: (id) => ['FOLLOWUP_FEEDBACKS', 'FIRST_TIMERS', id],
+  },
   // refactored
   FOLLOW_UP_STATUSES: {
     ALL: ['followup-status'],

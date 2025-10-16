@@ -54,7 +54,6 @@ const Button = ({
       "hover:bg-cyan-600 hover:shadow-md active:bg-cyan-700 " +
       "dark:bg-cyan-400 dark:hover:bg-cyan-500 dark:active:bg-cyan-600",
 
-    // Outline variants with modern styling
     "outline-primary":
       "bg-transparent border-2 border-blue-600 text-blue-600 rounded-lg " +
       "hover:bg-blue-50 hover:border-blue-700 active:bg-blue-100 " +
@@ -85,7 +84,6 @@ const Button = ({
       "hover:bg-cyan-50 hover:border-cyan-600 active:bg-cyan-100 " +
       "dark:border-cyan-400 dark:text-cyan-400 dark:hover:bg-cyan-950/30 dark:hover:border-cyan-300",
 
-    // Ghost variants - subtle background on hover
     ghost:
       "bg-transparent text-gray-700 rounded-lg " +
       "hover:bg-gray-100 active:bg-gray-200 " +

@@ -540,12 +540,6 @@ export default function EventsDisplay() {
                 status: "Preparation",
                 imageUrl: "/images/sod-2025.png",
                 ministers: ["Pst. Olakunle Zakariya", "Pst. Adesola Zakariya"],
-                highlights: [
-                    "Soul-stirring worship and music",
-                    "Deep sermons from respected pastors",
-                    "Community prayer sessions",
-                    "Deliverance and renewal sessions"
-                ]
             }
         ],
         ongoing: [],
@@ -646,19 +640,19 @@ export default function EventsDisplay() {
                                     </p>
 
                                     {/* Highlights */}
-                                    <div className="mb-4">
+                                    {/* <div className="mb-4">
                                         <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-2">
                                             Event Highlights
                                         </h4>
                                         <ul className="space-y-1">
-                                            {event.highlights.slice(0, 3).map((highlight, i) => (
+                                            {event?.highlights?.slice(0, 3)?.map((highlight, i) => (
                                                 <li key={i} className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-2">
                                                     <span className="text-blue-600 mt-0.5">•</span>
                                                     {highlight}
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div> */}
 
                                     <button
                                         onClick={() => setSelectedEvent(event)}

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useModal } from "@/hooks/useModal";
-import { useGetFirstTimersFollowups } from "@/queries/firstTimer.query";
 import { EmptyState } from "@/components/common/EmptyState";
 import { TimelineSkeletonLoader } from "@/components/skeleton";
 import { ClockIcon } from "@/icons";
@@ -8,11 +7,12 @@ import TimelineHeader from "@/components/dashboard/timeline/TimelineHeader";
 import CreateTimeline from "@/components/dashboard/timeline/CreateTimeline";
 import Modal from "@/components/ui/Modal";
 import TimelineContainer from "@/components/dashboard/timeline/TimelineContainer";
+import { useGetFollowUpsByFirstTimer } from "@/queries/followupFeedback.query";
 
 const FeedbackTimeline = ({ firstTimerId }) => {
     const [expandedItems, setExpandedItems] = useState({});
     const { data: timelineData = [], isLoading } =
-        useGetFirstTimersFollowups(firstTimerId);
+        useGetFollowUpsByFirstTimer(firstTimerId);
     const { isOpen, openModal, closeModal } = useModal();
 
     const toggleExpand = (id) => {
@@ -26,7 +26,7 @@ const FeedbackTimeline = ({ firstTimerId }) => {
 
     return (
         <>
-            <div className="w-full mx-auto py-8 transition-colors duration-300">
+            <div className="w-full mx-auto py-5 transition-colors duration-300">
                 <TimelineHeader openModal={openModal} />
                 {timelineData.length > 0 ? (
                     <TimelineContainer

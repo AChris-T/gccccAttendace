@@ -32,7 +32,7 @@ const TimelineNoteSection = ({ item, isExpanded }) => (
                             <span>
                                 Regarding{" "}
                                 <span className="font-semibold text-gray-700 dark:text-gray-300">
-                                    {item.first_timer.full_name}
+                                    {item.subject.full_name}
                                 </span>
                             </span>
                         </div>

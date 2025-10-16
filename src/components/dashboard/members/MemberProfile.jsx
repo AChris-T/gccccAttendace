@@ -28,7 +28,6 @@ const MemberProfile = ({ memberId }) => {
                         showToolbox={showToolbox}
                         showProfile={showProfile}
                     />
-
                     {showProfile && (
                         <Animated animation='fade-up' duration={0.7}>
                             <SocialMediaLinks socialLinks={userData.social_links} />
@@ -46,9 +45,8 @@ const MemberProfile = ({ memberId }) => {
                             </div>
                         </Animated>
                     )}
-
-                    <Animated animation='fade-up'> <FeedbackTimeline memberId={memberId} /></Animated>
                 </>}
+            <Animated animation='fade-up'> <FeedbackTimeline memberId={memberId} /></Animated>
         </div>
     );
 };

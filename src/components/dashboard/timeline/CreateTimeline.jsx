@@ -1,7 +1,6 @@
 import Message from '@/components/common/Message';
 import SelectForm from '@/components/form/useForm/SelectForm'
 import Button from '@/components/ui/Button';
-import { useCreateFirstTimersFollowups } from '@/queries/firstTimer.query';
 import { timelineSchema } from '@/schema';
 import { useAuthStore } from '@/store/auth.store';
 import { getFilteredCommentTypes } from '@/utils/helper';
@@ -10,6 +9,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import TextAreaForm from '@/components/form/TextAreaForm';
 import DateForm from '@/components/form/useForm/DateForm';
+import { useCreateFirstTimersFollowups } from '@/queries/followupFeedback.query';
 
 const CreateTimeline = ({ firstTimerId, onClose }) => {
     const { isAdmin, isLeader, isMember, user } = useAuthStore()
@@ -30,12 +30,11 @@ const CreateTimeline = ({ firstTimerId, onClose }) => {
 
     const handleCreateTimeline = async (data) => {
         try {
-            const payload = { ...data, first_timer_id: firstTimerId, user_id: user.id }
+            const payload = { ...data, subject_id: firstTimerId, subject_type: 'first_timer', user_id: user.id }
             await mutateAsync(payload);
             onClose?.()
         } catch (error) { }
     }
-
     return (
         <form onSubmit={handleSubmit(handleCreateTimeline)} className="space-y-5">
             <div className="relative">

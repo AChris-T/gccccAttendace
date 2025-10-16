@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { Link } from "react-router-dom";
 import { useMembers } from '@/queries/member.query';
@@ -11,6 +11,13 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const MembersTable = () => {
     const { data: members, isLoading, refetch, isError, error, isFetching } = useMembers();
     const gridRef = useRef(null);
+    const [isGridReady, setIsGridReady] = useState(false);
+
+    // Ensure members is always an array
+    const memberData = useMemo(() => {
+        if (!members) return [];
+        return Array.isArray(members) ? members : [];
+    }, [members]);
 
     const defaultColDef = useMemo(() => ({
         flex: 1,
@@ -109,7 +116,6 @@ const MembersTable = () => {
         },
     ], [LinkRenderer, dateValueFormatter]);
 
-    // Grid options - FIXED: Removed rowData from here
     const gridOptions = useMemo(() => ({
         pagination: true,
         paginationPageSize: 200,
@@ -129,8 +135,24 @@ const MembersTable = () => {
 
     const onGridReady = useCallback((params) => {
         gridRef.current = params.api;
-        params.api.sizeColumnsToFit();
+        setIsGridReady(true);
+
+        // Delay sizeColumnsToFit to ensure DOM is ready
+        setTimeout(() => {
+            if (params.api) {
+                params.api.sizeColumnsToFit();
+            }
+        }, 100);
     }, []);
+
+    // Force grid refresh when data changes
+    useEffect(() => {
+        if (isGridReady && gridRef.current && memberData.length > 0) {
+            gridRef.current.setGridOption('rowData', memberData);
+            // Refresh cells to ensure data is displayed
+            gridRef.current.refreshCells({ force: true });
+        }
+    }, [memberData, isGridReady]);
 
     const handleExportCSV = useCallback(() => {
         if (gridRef.current) {
@@ -159,8 +181,8 @@ const MembersTable = () => {
         );
     }
 
-    // Loading state - FIXED: Better loading condition
-    if (isLoading && !members?.length) {
+    // Initial loading state
+    if (isLoading && !memberData.length) {
         return (
             <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="text-center">
@@ -178,12 +200,13 @@ const MembersTable = () => {
                 <div className="flex items-center gap-3">
                     <p className="text-sm text-gray-600">
                         <span className="font-semibold text-gray-900">
-                            {members?.length || 0}
+                            {memberData.length}
                         </span>
-                        {' '}record{members?.length !== 1 ? 's' : ''} found
+                        {' '}record{memberData.length !== 1 ? 's' : ''} found
                     </p>
                     {isFetching && (
                         <span className="inline-flex items-center text-sm text-blue-600">
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
                             Syncing...
                         </span>
                     )}
@@ -196,7 +219,7 @@ const MembersTable = () => {
                     size='sm'
                     variant='primary'
                     onClick={handleExportCSV}
-                    disabled={!members?.length || isLoading}
+                    disabled={!memberData.length || isLoading}
                 >
                     Export CSV
                 </Button>
@@ -220,38 +243,39 @@ const MembersTable = () => {
                     ref={gridRef}
                     defaultColDef={defaultColDef}
                     columnDefs={columnDefs}
-                    rowData={members}
-                    {...gridOptions}
+                    rowData={memberData}
+                    gridOptions={gridOptions}
                     onGridReady={onGridReady}
-                    loading={isLoading || isFetching}
-                    loadingOverlayComponent={() => (
-                        <div className="flex items-center justify-center h-full">
-                            <div className="text-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                                <p className="text-gray-600 mt-2">Loading members...</p>
+                    suppressLoadingOverlay={false}
+                    suppressNoRowsOverlay={false}
+                    overlayLoadingTemplate={`
+                        <div class="flex items-center justify-center h-full">
+                            <div class="text-center">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                                <p class="text-gray-600 mt-2">Loading members...</p>
                             </div>
                         </div>
-                    )}
-                    noRowsOverlayComponent={() => (
-                        <div className="flex items-center justify-center h-full">
-                            <div className="text-center">
-                                <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    `}
+                    overlayNoRowsTemplate={`
+                        <div class="flex items-center justify-center h-full">
+                            <div class="text-center py-8">
+                                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <p className="text-gray-500 text-lg font-medium mb-2">
+                                <p class="text-gray-500 text-lg font-medium mb-2">
                                     No members found
                                 </p>
-                                <p className="text-gray-400 text-sm">
+                                <p class="text-gray-400 text-sm">
                                     Members will appear here once available
                                 </p>
                             </div>
                         </div>
-                    )}
+                    `}
                 />
             </div>
 
             {/* Footer */}
-            {members?.length > 0 && (
+            {memberData.length > 0 && (
                 <div className="mt-4 text-sm text-gray-500 flex justify-between items-center">
                     <span>Last updated: {new Date().toLocaleString()}</span>
                     <div className="flex items-center gap-2">

@@ -54,42 +54,6 @@ export const useFirstTimersWithFollowups = (options = {}) => {
     ...options,
   });
 };
-export const useGetFirstTimersFollowups = (id, options = {}) => {
-  return useQuery({
-    queryKey: QUERY_KEYS.FIRST_TIMERS.FOLLOWUPS(id),
-    queryFn: async () => {
-      const { data } = await FirstTimerService.getFirstTimersFollowups(id);
-      return data || [];
-    },
-    staleTime: 2 * 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
-    ...options,
-  });
-};
-
-export const useCreateFirstTimersFollowups = (options = {}) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (payload) => {
-      return await FirstTimerService.storeFirstTimersFollowups(payload);
-    },
-    onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.FIRST_TIMERS.FOLLOWUPS(
-          variables.first_timer_id?.toString()
-        ),
-      });
-      Toast.success(data?.message);
-      options.onSuccess?.(data, variables);
-    },
-    onError: (error) => {
-      const message = handleApiError(error);
-      Toast.error(message || 'Failed to save followup feedback.');
-      options.onError?.(new Error(message));
-    },
-  });
-};
 
 export const useUpdateFirstTimer = (options = {}) => {
   const queryClient = useQueryClient();
