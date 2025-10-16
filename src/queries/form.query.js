@@ -10,31 +10,17 @@ import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 
 // use to get all form messagess
-export const useAllFormMessages = (
-  formTypes = ['question', 'prayer', 'testimony']
-) => {
-  const results = useQueries({
-    queries: formTypes.map((type) => ({
-      queryKey: [...QUERY_KEYS.FORM_MESSAGES.ALL, { type }],
-      queryFn: async () => {
-        const { data } = await FormService.getFormMessages({ type });
-        return data || [];
-      },
-      staleTime: 2 * 60 * 1000,
-      cacheTime: 5 * 60 * 1000,
-    })),
+export const useAllFormMessages = (type, options = {}) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.FIRST_TIMERS.FIRSTTIMER_FOLLOWUPS, type],
+    queryFn: async () => {
+      const { data } = await FormService.getFormMessages({ type });
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    cacheTime: 5 * 60 * 1000, // 5 minutes
+    ...options,
   });
-  const categorized = formTypes.reduce((acc, type, i) => {
-    acc[type] = results[i]?.data || [];
-    return acc;
-  }, {});
-
-  return {
-    categorized,
-    isLoading: results.some((r) => r.isLoading),
-    isError: results.some((r) => r.isError),
-    error: results.find((r) => r.error)?.error ?? null,
-  };
 };
 
 // use to update form messages (mark as completed)

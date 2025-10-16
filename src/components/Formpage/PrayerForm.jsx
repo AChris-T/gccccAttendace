@@ -3,7 +3,6 @@ import Button from '../../components/ui/Button';
 import { useCreateFormMessages } from '@/queries/form.query';
 import TextAreaForm from '@/components/form/TextAreaForm';
 
-
 export default function PrayerForm() {
   const {
     register,
@@ -45,7 +44,7 @@ export default function PrayerForm() {
           placeholder="Type your message here..."
           error={errors.message?.message}
         />
-        <Button type="submit" loading={isPending} size="md" variant="accent">
+        <Button type="submit" loading={isPending} size="md" variant="primary">
           Submit
         </Button>
       </form>

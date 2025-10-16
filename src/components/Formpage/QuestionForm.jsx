@@ -46,7 +46,7 @@ export default function QuestionForm() {
           placeholder="Type your message here..."
           error={errors.message?.message}
         />
-        <Button type="submit" loading={isPending} size="md" variant="accent">
+        <Button type="submit" loading={isPending} size="md" variant="primary">
           Submit
         </Button>
       </form>
