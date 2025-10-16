@@ -15,7 +15,7 @@ const TimelineItem = ({ item, isExpanded, onToggle }) => {
 
             <div className="group bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-md dark:shadow-gray-900/50 border border-gray-200/80 dark:border-gray-700/80 overflow-hidden transition-all duration-300">
                 {/* Header */}
-                <div className="p-3 sm:p-4 cursor-pointer" onClick={onToggle}>
+                <div className="p-3 sm:p-4">
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
                             <Avatar name={item.user.initials} src={item.user.avatar} />
@@ -60,6 +60,7 @@ const TimelineItem = ({ item, isExpanded, onToggle }) => {
                         </div>
 
                         <button
+                            onClick={onToggle}
                             className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 active:scale-95"
                             aria-label="Toggle details"
                         >

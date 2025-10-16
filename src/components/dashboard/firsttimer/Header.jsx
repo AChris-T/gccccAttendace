@@ -6,14 +6,16 @@ import { Toast } from '@/lib/toastify'
 import { useUpdateFirstTimer } from '@/queries/firstTimer.query'
 
 const Header = ({ firstTimerData, showToolbox, setShowToolbox, showProfile, setShowProfile }) => {
-    const { mutate, isPending: isUpdateFirstTimerPending } = useUpdateFirstTimer()
+    const { mutateAsync, isPending: isUpdateFirstTimerPending } = useUpdateFirstTimer()
 
-    const handleUpdateFirstTimer = (avatar) => {
-        mutate({
-            id: firstTimerData.id,
-            avatar,
-            folder: 'firsttimers'
-        })
+    const handleUpdateFirstTimer = async (avatar) => {
+        try {
+            await mutateAsync({
+                id: firstTimerData.id,
+                avatar,
+                folder: 'firsttimers'
+            });
+        } catch (error) { }
     }
 
     return (

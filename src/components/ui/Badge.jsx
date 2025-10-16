@@ -25,10 +25,10 @@ const Badge = ({
     sm: "text-theme-xs", // Smaller padding and font size
     md: "text-sm", // Default padding and font size
   };
-
   // Define color styles for variants
   const variants = {
     light: {
+      purple: "text-gray-600 dark:text-gray-400 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300",
       primary:
         "bg-brand-50 text-brand-500 dark:bg-brand-500/15 dark:text-brand-400",
       success:

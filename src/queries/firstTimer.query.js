@@ -42,6 +42,18 @@ export const useGetFirstTimersAssigned = (options = {}) => {
   });
 };
 
+export const useFirstTimersWithFollowups = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FIRST_TIMERS.FIRSTTIMER_FOLLOWUPS,
+    queryFn: async () => {
+      const { data } = await FirstTimerService.getFirstTimersWithFollowups();
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
 export const useGetFirstTimersFollowups = (id, options = {}) => {
   return useQuery({
     queryKey: QUERY_KEYS.FIRST_TIMERS.FOLLOWUPS(id),

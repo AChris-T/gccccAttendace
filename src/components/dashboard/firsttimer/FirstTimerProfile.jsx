@@ -45,22 +45,23 @@ const FirstTimerProfile = ({ firstTimerId }) => {
         return <Message data={error?.data} variant="error" />;
     }
 
-    if (isLoading) {
-        return <FirstTimerProfileSkeleton />;
-    }
     const isActive = firstTimerData?.status !== 'deactivated';
 
     return (
         <div className="space-y-6">
-            <Header
-                showToolbox={showToolbox}
-                setShowToolbox={setShowToolbox}
-                showProfile={showProfile}
-                setShowProfile={setShowProfile}
-                firstTimerData={firstTimerData}
-            />
-            {showToolbox && <Animated animation='fade-up' duration={0.7}><ToolBox firstTimerData={firstTimerData} /></Animated>}
-            {showProfile && <Animated animation='fade-up'> <InformationPanel firstTimerData={firstTimerData} /></Animated>}
+            {isLoading ? <FirstTimerProfileSkeleton /> :
+                <>
+                    <Header
+                        showToolbox={showToolbox}
+                        setShowToolbox={setShowToolbox}
+                        showProfile={showProfile}
+                        setShowProfile={setShowProfile}
+                        firstTimerData={firstTimerData}
+                    />
+                    {showToolbox && <Animated animation='fade-up' duration={0.7}><ToolBox firstTimerData={firstTimerData} /></Animated>}
+                    {showProfile && <Animated animation='fade-up'> <InformationPanel firstTimerData={firstTimerData} /></Animated>}
+                </>
+            }
             {isActive ? <Animated animation='fade-up'> <FeedbackTimeline firstTimerId={firstTimerId} /></Animated> : <EmptyState title='Followup deactivated' />}
         </div>
     );

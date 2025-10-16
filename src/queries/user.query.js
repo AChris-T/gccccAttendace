@@ -3,84 +3,66 @@ import { QUERY_KEYS } from '../utils/queryKeys';
 import { UserService } from '../services/user.service';
 import { Toast } from '../lib/toastify';
 import { useAuthStore } from '@/store/auth.store';
-
-export const useUploadAvatar = (options = {}) => {
-  const queryClient = useQueryClient();
-  const { setUser } = useAuthStore();
-
-  return useMutation({
-    mutationKey: QUERY_KEYS.AUTH.AVATAR_UPLOAD,
-    mutationFn: UserService.uploadAvatar,
-
-    onSuccess: (response, variables) => {
-      Toast.success(response?.message || 'Avatar uploaded successfully ✅');
-
-      if (response?.data?.avatar_url) {
-        setUser((prev) => ({
-          ...prev,
-          avatar_url: response.data.avatar_url,
-          avatar: response.data.avatar,
-        }));
-      }
-
-      queryClient.invalidateQueries(QUERY_KEYS.AUTH.ME);
-      queryClient.invalidateQueries(QUERY_KEYS.AUTH.PROFILE);
-      options.onSuccess?.(response.data, variables);
-    },
-
-    onError: (error) => {
-      // ✅ Safely extract backend message
-      const message =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error?.message ||
-        'Failed to upload avatar.';
-
-      Toast.error(message);
-      options.onError?.(error);
-    },
-  });
-};
+import { handleApiError } from '@/utils/helper';
 
 export const useUpdateProfile = (options = {}) => {
-  const queryClient = useQueryClient();
-  const { setUser } = useAuthStore();
+  const { setAuthenticatedUser, user } = useAuthStore();
 
   return useMutation({
-    mutationKey: QUERY_KEYS.AUTH.UPDATE_PROFILE,
-    mutationFn: UserService.updateProfile,
-
-    onSuccess: (response, variables) => {
-      Toast.success(response?.message || 'Profile updated successfully');
-      const updatedUser =
-        response?.data?.user || response?.data || response?.user;
-
-      if (updatedUser) {
-        setUser((prev) => ({
-          ...prev,
-          ...updatedUser,
-        }));
-      } else {
+    mutationKey: undefined,
+    mutationFn: async (variables) => {
+      const data = await UserService.updateProfile(variables);
+      return data;
+    },
+    onMutate: async (variables) => {
+      if (variables.avatar) {
+        const optimisticUser = { ...user, avatar: variables.avatar };
+        setAuthenticatedUser({ user: optimisticUser });
       }
-
-      queryClient.invalidateQueries(QUERY_KEYS.AUTH.ME);
-      queryClient.invalidateQueries(QUERY_KEYS.AUTH.PROFILE);
-
-      options.onSuccess?.(response.data, variables);
+      return { previousUser: user };
+    },
+    onSuccess: ({ data }, variables, _) => {
+      const { user } = data;
+      requestAnimationFrame(() => {
+        setAuthenticatedUser({ user });
+        Toast.success(data?.message || 'Profile updated successfully');
+        options.onSuccess?.(data, variables);
+      });
     },
 
-    onError: (error) => {
-      const message =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        error?.message ||
-        'Failed to update profile.';
-
-      Toast.error(message);
+    onError: (error, _, context) => {
+      if (context?.previousUser) {
+        setAuthenticatedUser({ user: context.previousUser });
+      }
+      const message = handleApiError(error);
+      Toast.error(message || 'Failed to update user record');
       options.onError?.(error);
     },
   });
 };
+
+// export const useUpdateProfile = (options = {}) => {
+//   const queryClient = useQueryClient();
+//   const { setAuthenticatedUser } = useAuthStore();
+
+//   return useMutation({
+//     mutationKey: QUERY_KEYS.AUTH.PROFILE,
+//     mutationFn: UserService.updateProfile,
+
+//     onSuccess: ({ data }, variables) => {
+//       const { user } = data;
+//       setAuthenticatedUser({ user });
+//       Toast.success(data?.message || 'Profile updated successfully');
+//       options.onSuccess?.(data, variables);
+//     },
+
+//     onError: (error) => {
+//       const message = handleApiError(error);
+//       Toast.error(message || 'Failed to update user record');
+//       options.onError?.(error);
+//     },
+//   });
+// };
 
 export const useGetAssignedAbsentees = (options = {}) => {
   const { isAdmin, isLeader } = useAuthStore();

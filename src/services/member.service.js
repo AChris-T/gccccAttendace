@@ -14,13 +14,13 @@ export const MemberService = {
     return data;
   },
 
+  async getMemberById(memberId) {
+    const { data } = await $api.get(`/${MEMBERS}/${memberId}`);
+    return data;
+  },
+
   // async createMember(payload) {
   //   const { data } = await $api.post(`/${MEMBERS}`, payload);
-  //   return data;
-  // },
-
-  // async getMemberById(memberId) {
-  //   const { data } = await $api.get(`/${MEMBERS}/${memberId}`);
   //   return data;
   // },
 

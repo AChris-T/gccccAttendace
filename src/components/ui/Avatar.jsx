@@ -71,7 +71,7 @@ const Avatar = ({
   const showImage = src && !imageError;
 
   return (
-    <div className="inline-block">
+    <div className="inline-block relative">
       <div
         className={`
           relative overflow-hidden shadow
@@ -138,6 +138,9 @@ const Avatar = ({
           </div>
         }
       </div>
+      {name && <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg">
+        {name}
+      </div>}
     </div>
   );
 };

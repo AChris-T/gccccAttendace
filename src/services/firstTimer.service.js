@@ -37,6 +37,11 @@ export const FirstTimerService = {
     return data;
   },
 
+  getFirstTimersWithFollowups: async () => {
+    const { data } = await $api.get(`/${FIRST_TIMER}/followups`);
+    return data;
+  },
+
   getFirstTimersFollowups: async (id) => {
     const { data } = await $api.get(`/${FIRST_TIMER}/${id}/get-follow-ups`);
     return data;

@@ -2,14 +2,14 @@ import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useMemo, useRef } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { Link } from "react-router-dom";
-import Button from '../../ui/Button';
-import { useMembers } from '../../../queries/member.query';
-import Message from '../../common/Message';
+import { useMembers } from '@/queries/member.query';
+import Button from '@/components/ui/Button';
+import Message from '@/components/common/Message';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const MembersTable = () => {
-    const { data: members = [], isLoading, refetch, isError, error, isFetching } = useMembers()
+    const { data: members, isLoading, refetch, isError, error, isFetching } = useMembers();
     const gridRef = useRef(null);
 
     const defaultColDef = useMemo(() => ({
@@ -22,7 +22,6 @@ const MembersTable = () => {
         editable: false,
         minWidth: 100,
     }), []);
-
 
     const LinkRenderer = useCallback(({ value }) => {
         if (!value) return null;
@@ -38,14 +37,16 @@ const MembersTable = () => {
         );
     }, []);
 
-    // Date formatter
     const dateValueFormatter = useCallback((params) => {
         if (!params.value) return '';
         const date = new Date(params.value);
         if (isNaN(date.getTime())) return params.value;
-        return date.toLocaleDateString();
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
     }, []);
-
 
     const columnDefs = useMemo(() => [
         {
@@ -106,13 +107,9 @@ const MembersTable = () => {
             headerName: "Worker",
             width: 130,
         },
-    ],
-        [
-            LinkRenderer,
-            dateValueFormatter
-        ]);
+    ], [LinkRenderer, dateValueFormatter]);
 
-    // Grid options with performance optimizations
+    // Grid options - FIXED: Removed rowData from here
     const gridOptions = useMemo(() => ({
         pagination: true,
         paginationPageSize: 200,
@@ -120,10 +117,6 @@ const MembersTable = () => {
         suppressDragLeaveHidesColumns: true,
         animateRows: true,
         suppressCellFocus: false,
-        defaultColDef,
-        columnDefs,
-        rowData: members,
-        loading: isLoading || isFetching,
         suppressColumnVirtualisation: false,
         suppressRowVirtualisation: false,
         suppressHorizontalScroll: false,
@@ -132,18 +125,42 @@ const MembersTable = () => {
         suppressRowDeselection: false,
         rowMultiSelectWithClick: true,
         enableFillHandle: true,
-    }), [defaultColDef, columnDefs, members, isLoading, isFetching]);
+    }), []);
 
-    // Event handlers
     const onGridReady = useCallback((params) => {
         gridRef.current = params.api;
         params.api.sizeColumnsToFit();
     }, []);
 
+    const handleExportCSV = useCallback(() => {
+        if (gridRef.current) {
+            const timestamp = new Date().toISOString().split('T')[0];
+            gridRef.current.exportDataAsCsv({
+                fileName: `members-report-${timestamp}.csv`,
+            });
+        }
+    }, []);
 
-    if (isError) return <Message variant='error' data={error?.data} />
+    // Error state
+    if (isError) {
+        return (
+            <div className="w-full">
+                <Message variant='error' data={error?.data} />
+                <div className="mt-4">
+                    <Button
+                        size='sm'
+                        variant='primary'
+                        onClick={() => refetch()}
+                    >
+                        Retry
+                    </Button>
+                </div>
+            </div>
+        );
+    }
 
-    if (isLoading || isFetching && !members?.length) {
+    // Loading state - FIXED: Better loading condition
+    if (isLoading && !members?.length) {
         return (
             <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="text-center">
@@ -156,14 +173,30 @@ const MembersTable = () => {
 
     return (
         <div className="w-full">
-            <p className="text-sm text-gray-600">
-                {members?.length || 0} records found
-            </p>
-            <div className="flex flex-wrap w-full gap-3 my-4">
+            {/* Header Section */}
+            <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-3">
+                    <p className="text-sm text-gray-600">
+                        <span className="font-semibold text-gray-900">
+                            {members?.length || 0}
+                        </span>
+                        {' '}record{members?.length !== 1 ? 's' : ''} found
+                    </p>
+                    {isFetching && (
+                        <span className="inline-flex items-center text-sm text-blue-600">
+                            Syncing...
+                        </span>
+                    )}
+                </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap w-full gap-3 mb-4">
                 <Button
                     size='sm'
                     variant='primary'
-                    onClick={() => gridRef.current?.exportDataAsCsv()}
+                    onClick={handleExportCSV}
+                    disabled={!members?.length || isLoading}
                 >
                     Export CSV
                 </Button>
@@ -171,7 +204,8 @@ const MembersTable = () => {
                     size='sm'
                     variant='neutral'
                     onClick={() => refetch()}
-                    loading={isLoading || isFetching}
+                    loading={isFetching}
+                    disabled={isLoading}
                 >
                     Refresh
                 </Button>
@@ -184,19 +218,46 @@ const MembersTable = () => {
             >
                 <AgGridReact
                     ref={gridRef}
+                    defaultColDef={defaultColDef}
+                    columnDefs={columnDefs}
+                    rowData={members}
                     {...gridOptions}
                     onGridReady={onGridReady}
-                    loadingOverlayComponent="Loading members..."
-                    noRowsOverlayComponent="No members found"
+                    loading={isLoading || isFetching}
+                    loadingOverlayComponent={() => (
+                        <div className="flex items-center justify-center h-full">
+                            <div className="text-center">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                                <p className="text-gray-600 mt-2">Loading members...</p>
+                            </div>
+                        </div>
+                    )}
+                    noRowsOverlayComponent={() => (
+                        <div className="flex items-center justify-center h-full">
+                            <div className="text-center">
+                                <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                <p className="text-gray-500 text-lg font-medium mb-2">
+                                    No members found
+                                </p>
+                                <p className="text-gray-400 text-sm">
+                                    Members will appear here once available
+                                </p>
+                            </div>
+                        </div>
+                    )}
                 />
             </div>
 
+            {/* Footer */}
             {members?.length > 0 && (
                 <div className="mt-4 text-sm text-gray-500 flex justify-between items-center">
                     <span>Last updated: {new Date().toLocaleString()}</span>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
                         <span className="flex items-center gap-2">
-                            <span className={`text-green-500 `}>Live data</span>
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span className="text-green-600 font-medium">Live data</span>
                         </span>
                     </div>
                 </div>

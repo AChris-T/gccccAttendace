@@ -528,9 +528,9 @@ export const FirstTimerProfileSkeleton = () => {
         {/* Left section — Avatar + Info */}
         <div className="flex items-center gap-4">
           {/* Avatar Skeleton */}
-          <div className="w-24 h-24 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="w-36 h-36 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
 
-          <div className="space-y-3">
+          <div className="space-y-6">
             {/* Name */}
             <div className="h-6 w-40 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
             {/* Email */}
@@ -554,6 +554,71 @@ export const FirstTimerProfileSkeleton = () => {
             <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
             <div className="h-5 w-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const FollowupFeedbacksSkeletonLoader = () => {
+  return (
+    [1, 2, 3, 4, 5].map(() => <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 animate-pulse mb-5">
+      <div className="p-5 sm:p-6 flex items-start gap-4">
+        {/* Avatar Skeleton */}
+        <div className="relative flex-shrink-0">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-400 dark:bg-gray-600 rounded-full"></div>
+        </div>
+
+        {/* Main Info Skeleton */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex-1 min-w-0 space-y-2">
+              {/* Name */}
+              <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+
+              {/* Email and Phone */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-40"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-32"></div>
+              </div>
+            </div>
+
+            {/* Chevron */}
+            <div className="w-6 h-6 bg-gray-300 dark:bg-gray-700 rounded"></div>
+          </div>
+
+          {/* Badges Skeleton */}
+          <div className="flex flex-wrap items-center gap-2 mt-3">
+            <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded-full w-20"></div>
+            <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded-full w-28"></div>
+            <div className="h-6 bg-gray-300 dark:bg-gray-700 rounded-full w-24"></div>
+          </div>
+        </div>
+      </div>
+    </div>)
+  );
+};
+
+export const ProfileHeaderSkeleton = () => {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Skeleton className="w-32 h-32 rounded-2xl" variant="rectangular" />
+          <div className="space-y-3 flex-1">
+            <Skeleton className="h-8 w-48" variant="text" />
+            <Skeleton className="h-4 w-64" variant="text" />
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-20 rounded-full" variant="rectangular" />
+              <Skeleton className="h-6 w-20 rounded-full" variant="rectangular" />
+              <Skeleton className="h-6 w-20 rounded-full" variant="rectangular" />
+            </div>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <Skeleton className="h-10 w-40" variant="rectangular" />
+          <Skeleton className="h-10 w-40" variant="rectangular" />
         </div>
       </div>
     </div>

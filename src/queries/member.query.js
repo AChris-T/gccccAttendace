@@ -30,19 +30,19 @@ export function useMembersByRole(role) {
   });
 }
 
-// // Get member by ID
-// export const useMember = (memberId, options = {}) => {
-//   return useQuery({
-//     queryKey: QUERY_KEYS.MEMBERS.DETAIL(memberId),
-//     queryFn: async () => {
-//       const response = await MemberService.getMemberById(memberId);
-//       return response.data;
-//     },
-//     enabled: !!memberId,
-//     staleTime: 5 * 60 * 1000,
-//     ...options,
-//   });
-// };
+// Get member by ID
+export const useMember = (memberId, options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.MEMBERS.DETAIL(memberId),
+    queryFn: async () => {
+      const response = await MemberService.getMemberById(memberId);
+      return response.data;
+    },
+    enabled: !!memberId,
+    staleTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
 
 // // Create member mutation
 // export const useCreateMember = (options = {}) => {

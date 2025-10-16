@@ -25,6 +25,7 @@ export const QUERY_KEYS = {
   },
   FIRST_TIMERS: {
     ALL: ['first-timers'],
+    FIRSTTIMER_FOLLOWUPS: ['first-timers', 'FIRSTTIMER_FOLLOWUPS'],
     DETAIL: (id) => ['first-timers', id],
     FOLLOWUPS: (id) => ['FOLLOWUPS', id],
     FIRST_TIMERS_ANALYTICS: (params) => [
@@ -42,7 +43,6 @@ export const QUERY_KEYS = {
   AUTH: {
     ME: ['auth', 'me'],
     PROFILE: ['auth', 'profile'],
-    AVATAR_UPLOAD: ['auth', 'avatar-upload'],
   },
 
   ADMIN: {

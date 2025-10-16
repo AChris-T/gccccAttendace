@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Button from "../ui/Button";
-import { ArrowDownIcon, AttendanceIcon2, DashboardIcon, LogoutIcon, UserIcon2 } from "../../icons";
+import { ArrowDownIcon, AttendanceIcon2, DashboardIcon, LogoutIcon, UserIcon2 } from "@/icons";
 import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import { useLogout } from "@/queries/auth.query";
 import { useAuthStore } from "@/store/auth.store";
 import Badge from "@/components/ui/Badge";
 import Avatar from "@/components/ui/Avatar";
+import Button from "@/components/ui/Button";
 
 
 export default function UserDropdown() {
@@ -22,7 +22,9 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center gap-2 text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        {user?.avatar_url ? <Avatar size="sm" src={user?.avatar_url} /> : <Avatar size="sm" />}
+        <Avatar
+          size="sm" src={user?.avatar || ''} name={user?.initials || ''}
+        />
         <span className="block mr-1 font-medium text-theme-sm">
           {user?.first_name}
         </span>
@@ -83,6 +85,7 @@ export default function UserDropdown() {
         <Button
           loading={isPending}
           className="mt-2"
+          size="sm"
           onClick={mutate}
           variant="neutral"
           startIcon={<LogoutIcon width={18} height={18} />}
