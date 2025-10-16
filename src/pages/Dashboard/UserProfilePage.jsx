@@ -6,20 +6,19 @@ import UserMetaCard from '@/components/userProfile/UserMetaCard'
 import UserProfessionalCard from '@/components/userProfile/UserProfessionalCard'
 import UserChurchCard from '@/components/userProfile/UserChurchCard'
 import UserAchievement from '@/components/userProfile/UserAchievement'
+import { UserIcon } from '@/icons'
 const UserProfilePage = () => {
     return (
         <>
             <PageMeta title="Profile | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Profile" />
-            <div className="space-y-6">
-                <ComponentCard title="Dashboard">
-                    <UserMetaCard />
-                    <UserInfoCard />
-                    <UserProfessionalCard />
-                    <UserChurchCard />
-                    <UserAchievement />
-                </ComponentCard>
-            </div>
+            <PageBreadcrumb icon={UserIcon} pageTitle="Profile" description={'View and update your personal information and contact details.'} />
+            <ComponentCard>
+                <UserMetaCard />
+                <UserInfoCard />
+                <UserProfessionalCard />
+                <UserChurchCard />
+                <UserAchievement />
+            </ComponentCard>
         </>
     )
 }

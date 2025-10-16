@@ -7,12 +7,10 @@ const LeadersUnitPage = () => {
     return (
         <>
             <PageMeta title="Leaders: Units | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Leaders: Units" />
-            <div className="space-y-6">
-                <ComponentCard title="Units" desc="Manage all units and their members">
-                    <UnitDisplay />
-                </ComponentCard>
-            </div>
+            <PageBreadcrumb pageTitle="Leaders: Units" description={'Create, and manage all units and their members'} />
+            <ComponentCard>
+                <UnitDisplay />
+            </ComponentCard>
         </>
     )
 }

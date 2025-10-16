@@ -12,7 +12,7 @@ import MonthYearSelector from '@/components/common/MonthYearSelector';
 import Button from '@/components/ui/Button';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { useUsersMonthlyAttendanceStats } from '@/queries/attendance.query';
-import { CalenderIcon } from '@/icons';
+import { CalenderIcon, DashboardIcon } from '@/icons';
 import { useGetAssignedAbsentees } from '@/queries/user.query';
 import { TableSkeletonLoader } from '@/components/skeleton';
 import FirstTimerAssigned from '@/components/dashboard/assigned/FirstTimerAssigned';
@@ -138,13 +138,12 @@ const DashboardPage = () => {
   return (
     <>
       <PageMeta title="Dashboard | GCCC Ibadan" />
-
-      <PageBreadcrumb pageTitle="Dashboard">
-        <DateFilterDropdown
+      <PageBreadcrumb icon={DashboardIcon} pageTitle="Dashboard" description={'See your latest attendance summary, current giving status, and important community updates at a glance.'}>
+        {/* <DateFilterDropdown
           isOpen={isOpen}
           onToggle={toggleDropdown}
           onDateChange={handleDateChange}
-        />
+        /> */}
       </PageBreadcrumb>
 
       <main className="grid grid-cols-12 gap-4 md:gap-6">

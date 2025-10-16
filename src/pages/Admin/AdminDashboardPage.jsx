@@ -1,3 +1,4 @@
+import { AdminIcon } from "@/icons"
 import AdminAttendanceMonthlyStats from "../../components/admin/attendance/AdminAttendanceMonthlyStats"
 import AdminMetrics from "../../components/admin/dashboard/AdminMetrics"
 import FirstTimersCharts from "../../components/admin/firsttimer/FirstTimersCharts"
@@ -9,16 +10,13 @@ const AdminDashboardPage = () => {
     return (
         <>
             <PageMeta title="Admin: Dashboard | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Admin: Dashboard" />
-            <div className="space-y-6">
+            <PageBreadcrumb icon={AdminIcon} pageTitle="Admin: Dashboard" description={'View real-time statistics on attendance, new members, follow-up progress, and recent system activity.'} />
+
+            <ComponentCard title="First Timers Analytics" >
                 <AdminMetrics />
-                <ComponentCard title="First Timers Analytics" >
-                    <FirstTimersCharts />
-                </ComponentCard>
-                <ComponentCard title="Attendance Analytics" >
-                    <AdminAttendanceMonthlyStats />
-                </ComponentCard>
-            </div>
+                <FirstTimersCharts />
+                <AdminAttendanceMonthlyStats />
+            </ComponentCard>
         </>
     )
 }

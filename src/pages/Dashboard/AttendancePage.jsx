@@ -10,12 +10,10 @@ export default function AttendancePage() {
     return (
         <>
             <PageMeta title="Attendance | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Attendance" />
-            <div className="space-y-6">
-                <ComponentCard title="Attendance" icon={<AttendanceIcon2 className='text-white' />}>
-                    <AttendanceTable />
-                </ComponentCard>
-            </div>
+            <PageBreadcrumb icon={AttendanceIcon2} pageTitle="Attendance" description={'View your personal attendance history for all church services and events, and track your overall participation.'} />
+            <ComponentCard >
+                <AttendanceTable />
+            </ComponentCard>
         </>
     );
 }

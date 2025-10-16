@@ -7,12 +7,10 @@ const AdminFirstTimerPage = () => {
     return (
         <>
             <PageMeta title="Admin: First Timers | GCCC Ibadan" />
-            <PageBreadcrumb pageTitle="Admin: First Timers" />
-            <div className="space-y-6">
-                <ComponentCard title="First Timers Table">
-                    <FirstTimersTable />
-                </ComponentCard>
-            </div>
+            <PageBreadcrumb pageTitle="Admin: First Timers" description={'Log, track, and manage all first timer`s records, follow-up process and assign care tasks.'} />
+            <ComponentCard>
+                <FirstTimersTable />
+            </ComponentCard>
         </>
     )
 }
