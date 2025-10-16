@@ -76,7 +76,7 @@ const EditUnit = ({ unit, onClose }) => {
 
     return (
         <form
-            className="flex flex-col gap-4 mt-4 md:mt-6"
+            className="flex flex-col gap-4"
             onSubmit={handleSubmit(handleUpdateUnit)}
         >
             {/* Unit Name Input */}

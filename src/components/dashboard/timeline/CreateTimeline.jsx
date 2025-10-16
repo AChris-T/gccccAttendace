@@ -37,51 +37,49 @@ const CreateTimeline = ({ firstTimerId, onClose }) => {
     }
 
     return (
-        <div className='my-5'>
-            <p>Enter your followup feedback</p>
-            <form onSubmit={handleSubmit(handleCreateTimeline)} className="space-y-5">
-                <div className="relative">
-                    <SelectForm name="type"
-                        placeholder="Comment Type"
-                        register={register}
-                        options={followupCommentTypes}
-                        error={errors.type?.message} />
-                </div>
-
-                {showServiceDate && (
-                    <DateForm
-                        label="Service Date"
-                        name="service_date"
-                        register={register}
-                        error={errors.service_date?.message}
-                    />
-                )}
-
-                <TextAreaForm
-                    label="What is your prayer request ?"
-                    name="note"
+        <form onSubmit={handleSubmit(handleCreateTimeline)} className="space-y-5">
+            <div className="relative">
+                <SelectForm name="type"
+                    label='Comment type'
+                    placeholder="Comment Type"
                     register={register}
-                    required={true}
-                    rows={6}
-                    cols={40}
-                    placeholder="Type your message here..."
-                    error={errors.note?.message}
+                    options={followupCommentTypes}
+                    error={errors.type?.message} />
+            </div>
+
+            {showServiceDate && (
+                <DateForm
+                    label="Service Date"
+                    name="service_date"
+                    register={register}
+                    error={errors.service_date?.message}
                 />
+            )}
 
-                {isError && (
-                    <Message
-                        variant="error"
-                        data={error?.data}
-                    />
-                )}
+            <TextAreaForm
+                label="Followup feedback"
+                name="note"
+                register={register}
+                required={true}
+                rows={6}
+                cols={40}
+                placeholder="Type your message here..."
+                error={errors.note?.message}
+            />
 
-                <div>
-                    <Button loading={isPending} type="submit" variant='primary' size="md">
-                        Send
-                    </Button>
-                </div>
-            </form>
-        </div>
+            {isError && (
+                <Message
+                    variant="error"
+                    data={error?.data}
+                />
+            )}
+
+            <div>
+                <Button loading={isPending} type="submit" variant='primary' size="md">
+                    Send
+                </Button>
+            </div>
+        </form>
     )
 }
 

@@ -38,32 +38,30 @@ const EditPersonalInformation = ({ firstTimerData, onClose }) => {
     };
 
     return (
-        <div className="dark:bg-gray-900 mt-5 shadow-md rounded-2xl w-full">
-            <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InputForm label="First Name" name="first_name" register={register} error={errors.first_name?.message} required />
-                <InputForm label="Last Name" name="last_name" register={register} error={errors.last_name?.message} required />
-                <InputForm label="Email Address" name="email" type="email" register={register} error={errors.email?.message} required />
-                <InputForm label="Phone Number" name="phone_number" register={register} error={errors.phone_number?.message} required />
-                <SelectForm
-                    label="Gender"
-                    name="gender"
-                    register={register}
-                    error={errors.gender?.message}
-                    options={[
-                        { id: "Male", name: "Male" },
-                        { id: "Female", name: "Female" },
-                    ]}
-                    required
-                />
-                <InputForm label="Date of Birth" name="date_of_birth" type="date" register={register} error={errors.date_of_birth?.message} />
-                <InputForm label="Occupation" name="occupation" register={register} error={errors.occupation?.message} />
-                <CheckboxForm label="Student" name="is_student" register={register} error={errors.is_student?.message} />
+        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InputForm label="First Name" name="first_name" register={register} error={errors.first_name?.message} required />
+            <InputForm label="Last Name" name="last_name" register={register} error={errors.last_name?.message} required />
+            <InputForm label="Email Address" name="email" type="email" register={register} error={errors.email?.message} required />
+            <InputForm label="Phone Number" name="phone_number" register={register} error={errors.phone_number?.message} required />
+            <SelectForm
+                label="Gender"
+                name="gender"
+                register={register}
+                error={errors.gender?.message}
+                options={[
+                    { id: "Male", name: "Male" },
+                    { id: "Female", name: "Female" },
+                ]}
+                required
+            />
+            <InputForm label="Date of Birth" name="date_of_birth" type="date" register={register} error={errors.date_of_birth?.message} />
+            <InputForm label="Occupation" name="occupation" register={register} error={errors.occupation?.message} />
+            <CheckboxForm label="Student" name="is_student" register={register} error={errors.is_student?.message} />
 
-                <div className="sm:col-span-2">
-                    <Button loading={isPending} size="sm" type="submit">Update</Button>
-                </div>
-            </form>
-        </div>
+            <div className="sm:col-span-2">
+                <Button loading={isPending} size="sm" type="submit">Update</Button>
+            </div>
+        </form>
     );
 };
 

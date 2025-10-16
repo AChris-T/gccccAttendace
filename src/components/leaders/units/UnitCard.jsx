@@ -104,7 +104,7 @@ const MembersCount = ({ count, onClick, hasPermission }) => (
 );
 
 const MembersList = ({ members }) => (
-    <div className="my-5">
+    <div>
         {members?.length ? (
             members.map((member, index) => (
                 <div
@@ -129,7 +129,7 @@ const MembersList = ({ members }) => (
 );
 
 const DeleteConfirmation = ({ unitName, onDelete, isPending, isSuccess }) => (
-    <div className="my-5">
+    <div>
         <h3 className="text-base">Are you sure you want to delete this item?</h3>
         <p className="text-red-400 text-sm my-2">
             <b>Warning: </b>This action is permanent and cannot be undone. All associated data will be lost.

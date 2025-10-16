@@ -1,10 +1,12 @@
 import Animated from '@/components/common/Animated';
+import { EmptyState } from '@/components/common/EmptyState';
 import Message from '@/components/common/Message';
 import { PersonalInformation } from '@/components/dashboard/members/PersonalInformation';
 import { ProfessionalInformation } from '@/components/dashboard/members/ProfessionalInformation';
 import { ProfileHeader } from '@/components/dashboard/members/ProfileHeader';
 import { SocialMediaLinks } from '@/components/dashboard/members/SocialMediaLinks';
 import { UnitInformation } from '@/components/dashboard/members/UnitInformation';
+import FeedbackTimeline from '@/components/dashboard/timeline/FeedbackTimeline';
 import { ProfileHeaderSkeleton } from '@/components/skeleton';
 import { useMember } from '@/queries/member.query';
 import { useState } from 'react';
@@ -44,6 +46,8 @@ const MemberProfile = ({ memberId }) => {
                             </div>
                         </Animated>
                     )}
+
+                    <Animated animation='fade-up'> <FeedbackTimeline memberId={memberId} /></Animated>
                 </>}
         </div>
     );

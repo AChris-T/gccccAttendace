@@ -19,7 +19,7 @@ const UpdateFirstTimer = ({ firstTimerData, onClose }) => {
 
     return (
         <>
-            <div className='my-5'>
+            <div>
                 <p className="italic dark:text-gray-400">{firstTimerData?.first_name}'s record will be {isStatusActive ? 'archived' : 'un-archived'} and active followups will {isStatusActive ? 'be paused.' : 'resume.'} Are you sure you want to continue?</p>
             </div>
             <Button type="button" onClick={handleUpdateStatus} loading={isUpdateFirstTimerPending} variant="success" size="sm">Update</Button>

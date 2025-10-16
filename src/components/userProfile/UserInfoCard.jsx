@@ -258,133 +258,115 @@ export default function UserInfoCard() {
       </div>
 
       {/* Modal */}
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <div className="relative w-full p-4 overflow-y-auto bg-white rounded-3xl dark:bg-gray-900 lg:p-11">
-          <div className="px-2">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700">
-                <EditIcon width={24} className="text-white" fill="currentColor" />
-              </div>
+      <Modal isOpen={isOpen} description='Update your details to keep your profile up-to-date.' title={'Edit Personal Information'} onClose={closeModal}>
+        <form className="flex flex-col" onSubmit={handleSubmit(handleSave)}>
+          <div className="px-2 pb-3 custom-scrollbar">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+              <InputForm
+                label="First Name"
+                name="first_name"
+                type="text"
+                placeholder="Enter your first name"
+                register={register}
+                error={errors.first_name?.message}
+              />
+
+              <InputForm
+                label="Last Name"
+                name="last_name"
+                type="text"
+                placeholder="Enter your last name"
+                register={register}
+                error={errors.last_name?.message}
+              />
+
+              <InputForm
+                label="Email Address"
+                name="email"
+                type="email"
+                placeholder="your.email@example.com"
+                register={register}
+                error={errors.email?.message}
+                disabled
+              />
+
+              <InputForm
+                label="Phone Number"
+                name="phone_number"
+                type="text"
+                placeholder="+1 (555) 000-0000"
+                register={register}
+                error={errors.phone_number?.message}
+                disabled
+              />
+
               <div>
-                <h4 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                  Edit Personal Information
-                </h4>
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Gender
+                </label>
+                <select
+                  {...register("gender")}
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-sm dark:bg-gray-800 dark:text-white/90 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                {errors.gender && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.gender.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  {...register("date_of_birth")}
+                  className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-sm dark:bg-gray-800 dark:text-white/90 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+                {errors.date_of_birth && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {errors.date_of_birth.message}
+                  </p>
+                )}
               </div>
             </div>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7 pl-0.5">
-              Update your details to keep your profile up-to-date.
-            </p>
           </div>
 
-          <form className="flex flex-col" onSubmit={handleSubmit(handleSave)}>
-            <div className="px-2 pb-3 custom-scrollbar">
-              <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                <InputForm
-                  label="First Name"
-                  name="first_name"
-                  type="text"
-                  placeholder="Enter your first name"
-                  register={register}
-                  error={errors.first_name?.message}
-                />
-
-                <InputForm
-                  label="Last Name"
-                  name="last_name"
-                  type="text"
-                  placeholder="Enter your last name"
-                  register={register}
-                  error={errors.last_name?.message}
-                />
-
-                <InputForm
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  register={register}
-                  error={errors.email?.message}
-                  disabled
-                />
-
-                <InputForm
-                  label="Phone Number"
-                  name="phone_number"
-                  type="text"
-                  placeholder="+1 (555) 000-0000"
-                  register={register}
-                  error={errors.phone_number?.message}
-                  disabled
-                />
-
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Gender
-                  </label>
-                  <select
-                    {...register("gender")}
-                    className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-sm dark:bg-gray-800 dark:text-white/90 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                  {errors.gender && (
-                    <p className="mt-1 text-xs text-red-500">
-                      {errors.gender.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    {...register("date_of_birth")}
-                    className="w-full border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-sm dark:bg-gray-800 dark:text-white/90 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  />
-                  {errors.date_of_birth && (
-                    <p className="mt-1 text-xs text-red-500">
-                      {errors.date_of_birth.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button
-                size="sm"
-                type="button"
-                variant="outline-primary"
-                onClick={closeModal}
-                disabled={isPending}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                type="submit"
-                disabled={isPending}
-                className="min-w-[120px]"
-              >
-                {isPending ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Saving...
-                  </span>
-                ) : (
-                  "Save Changes"
-                )}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+            <Button
+              size="sm"
+              type="button"
+              variant="outline-primary"
+              onClick={closeModal}
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              type="submit"
+              disabled={isPending}
+              className="min-w-[120px]"
+            >
+              {isPending ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Saving...
+                </span>
+              ) : (
+                "Save Changes"
+              )}
+            </Button>
+          </div>
+        </form>
       </Modal>
     </>
   );

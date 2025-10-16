@@ -10,13 +10,13 @@ const PersonalInformation = ({ firstTimerData }) => {
     return (
         <>
             <SectionCard title="Personal Information" icon={UserIcon} onEdit={openModal}>
-                <InfoField icon={UserIcon} label="Full Name" value={firstTimerData.full_name} fullWidth />
+                <InfoField icon={UserIcon} label="Full Name" value={firstTimerData.full_name} />
+                <InfoField icon={BookOpenIcon} label="Student" value={firstTimerData.is_student ? 'Yes' : 'No'} />
                 <InfoField fullWidth icon={MailIcon} label="Email Address" value={firstTimerData.email} isEmail />
                 <InfoField icon={PhoneIcon} label="Phone Number" value={firstTimerData.phone_number} isPhone />
                 <InfoField icon={UserIcon} label="Gender" value={firstTimerData.gender} />
                 <InfoField icon={CalendarIcon} label="Date of Birth" value={firstTimerData.date_of_birth} />
                 <InfoField icon={BriefcaseIcon} label="Occupation" value={firstTimerData.occupation} />
-                <InfoField icon={BookOpenIcon} label="Student" value={firstTimerData.is_student ? 'Yes' : 'No'} />
             </SectionCard>
             <Modal
                 title={`Edit ${firstTimerData?.full_name}`}

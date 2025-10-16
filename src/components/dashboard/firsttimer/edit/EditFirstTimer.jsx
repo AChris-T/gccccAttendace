@@ -47,7 +47,7 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
     }
 
     return (
-        <div className='mt-5'>
+        <div>
             {isAdmin && <div>
                 <SingleSelect
                     label="Assign to member"

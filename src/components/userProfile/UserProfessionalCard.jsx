@@ -142,87 +142,68 @@ export default function UserProfessionalCard() {
         </div>
       </div>
 
-      {/* ✅ Modal for Editing */}
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <div className="relative w-full p-4 overflow-y-auto bg-white rounded-3xl dark:bg-gray-900 lg:p-11">
-          <div className="px-2">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 dark:from-indigo-600 dark:to-violet-700">
-                <EditIcon width={24} className="text-white" fill="currentColor" />
-              </div>
-              <div>
-                <h4 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                  Edit Professional Information
-                </h4>
-              </div>
+      <Modal description="Update your education, field of study, or occupation details." title={'Edit Professional Information'} isOpen={isOpen} onClose={closeModal}>
+        <form className="flex flex-col" onSubmit={handleSubmit(handleSave)}>
+          <div className="px-2 overflow-y-auto custom-scrollbar">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+              <InputForm
+                label="Education"
+                name="education"
+                type="text"
+                placeholder="e.g., Bachelor's Degree"
+                register={register}
+                error={errors.education?.message}
+              />
+              <InputForm
+                label="Field of Study"
+                name="field_of_study"
+                type="text"
+                placeholder="e.g., Computer Science"
+                register={register}
+                error={errors.field_of_study?.message}
+              />
+              <InputForm
+                label="Occupation"
+                name="occupation"
+                type="text"
+                placeholder="e.g., Software Engineer"
+                register={register}
+                error={errors.occupation?.message}
+                className="lg:col-span-2"
+              />
             </div>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7 pl-0.5">
-              Update your education, field of study, or occupation details.
-            </p>
           </div>
 
-          <form className="flex flex-col" onSubmit={handleSubmit(handleSave)}>
-            <div className="px-2 overflow-y-auto custom-scrollbar">
-              <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                <InputForm
-                  label="Education"
-                  name="education"
-                  type="text"
-                  placeholder="e.g., Bachelor's Degree"
-                  register={register}
-                  error={errors.education?.message}
-                />
-                <InputForm
-                  label="Field of Study"
-                  name="field_of_study"
-                  type="text"
-                  placeholder="e.g., Computer Science"
-                  register={register}
-                  error={errors.field_of_study?.message}
-                />
-                <InputForm
-                  label="Occupation"
-                  name="occupation"
-                  type="text"
-                  placeholder="e.g., Software Engineer"
-                  register={register}
-                  error={errors.occupation?.message}
-                  className="lg:col-span-2"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button
-                size="sm"
-                type="button"
-                variant="outline-primary"
-                onClick={closeModal}
-                disabled={isPending}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                type="submit"
-                disabled={isPending}
-                className="min-w-[120px]"
-              >
-                {isPending ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Saving...
-                  </span>
-                ) : (
-                  "Save Changes"
-                )}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+            <Button
+              size="sm"
+              type="button"
+              variant="outline-primary"
+              onClick={closeModal}
+              disabled={isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              type="submit"
+              disabled={isPending}
+              className="min-w-[120px]"
+            >
+              {isPending ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Saving...
+                </span>
+              ) : (
+                "Save Changes"
+              )}
+            </Button>
+          </div>
+        </form>
       </Modal>
     </>
   );

@@ -32,7 +32,7 @@ const EditLocation = ({ firstTimerData, onClose }) => {
     };
 
     return (
-        <div className="  dark:bg-gray-900 flex justify-center mt-5">
+        <div className=" dark:bg-gray-900 flex justify-center">
             <div className="bg-white dark:bg-gray-800 w-full">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <TextAreaForm

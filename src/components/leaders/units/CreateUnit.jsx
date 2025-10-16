@@ -70,7 +70,7 @@ const CreateUnit = () => {
             </div>
 
             <Modal maxWidth="max-w-md" title="New Unit" isOpen={isOpen} onClose={handleModalClose}>
-                <form className="flex flex-col mt-3 md:mt-5 gap-4" onSubmit={handleSubmit(handleCreateUnit)}>
+                <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleCreateUnit)}>
                     <InputForm
                         label="Unit Name"
                         name="name"

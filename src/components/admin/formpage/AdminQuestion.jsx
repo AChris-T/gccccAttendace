@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from '@/components/ui/Modal';
 import { useSelectableList } from '@/hooks/useSelectableList';
 import ListRender from '@/components/admin/formpage/ListRender';
+import Button from '@/components/ui/Button';
 
 export default function AdminQuestion({ items = [] }) {
   const {
@@ -103,20 +104,12 @@ export default function AdminQuestion({ items = [] }) {
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
         title="Confirm Delete"
-        actionButton={
-          <button
-            onClick={handleConfirmDelete}
-            disabled={deleteFormMessages.isLoading}
-            className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 disabled:opacity-50"
-          >
-            {deleteFormMessages.isLoading ? 'Deleting...' : 'Delete'}
-          </button>
-        }
       >
         <p className="text-sm text-gray-600">
           Are you sure you want to delete {selectedIds.length} message
           {selectedIds.length > 1 ? 's' : ''}? This action cannot be undone.
         </p>
+        <Button className='mt-3' onClick={handleConfirmDelete} variant='danger' loading={deleteFormMessages.isLoading} size='sm'>Delete</Button>
       </Modal>
     </div>
   );

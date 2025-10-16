@@ -1,11 +1,46 @@
+import { useState } from 'react';
 import EditNotesAdditionalInformation from "@/components/dashboard/firsttimer/edit/EditNotesAdditionalInformation";
-import { SectionCard } from "@/components/dashboard/firsttimer/SectionCard"
+import { SectionCard } from "@/components/dashboard/firsttimer/SectionCard";
 import Modal from "@/components/ui/Modal";
 import { useModal } from "@/hooks/useModal";
-import { ClipboardListIcon, MessageSquareIcon, PhoneIcon } from "@/icons"
+import { ClipboardListIcon, MessageSquareIcon, PhoneIcon } from "@/icons";
+
+// Reusable TruncatedText component
+const TruncatedText = ({ text, maxLength = 150, className = "" }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const shouldTruncate = text && text.length > maxLength;
+    const displayText = shouldTruncate && !isExpanded
+        ? text.slice(0, maxLength) + '...'
+        : text;
+
+    if (!text) return <p className={className}>N/A</p>;
+
+    return (
+        <div className="relative">
+            <p className={className}>
+                {displayText}
+            </p>
+            {shouldTruncate && (
+                <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="absolute bottom-0 right-0 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 bg-gray-50 dark:bg-gray-700/50 px-2 py-0.5 rounded transition-all duration-200 hover:shadow-sm"
+                    style={{
+                        transform: isExpanded ? 'translateY(100%)' : 'translateY(0)',
+                        marginTop: isExpanded ? '8px' : '0'
+                    }}
+                >
+                    {isExpanded ? 'Read Less' : 'Read More'}
+                </button>
+            )}
+        </div>
+    );
+};
 
 const NotesAdditionalInformation = ({ firstTimerData }) => {
     const { isOpen, openModal, closeModal } = useModal();
+
+    const textClasses = "text-xs text-gray-700 dark:text-gray-300 ml-6 leading-relaxed bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg transition-all duration-300";
+
     return (
         <>
             <SectionCard title="Notes & Additional Information" icon={ClipboardListIcon} onEdit={openModal}>
@@ -16,9 +51,11 @@ const NotesAdditionalInformation = ({ firstTimerData }) => {
                             Pastorate Call Report
                         </span>
                     </div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300 ml-6 leading-relaxed bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
-                        {firstTimerData.pastorate_call}
-                    </p>
+                    <TruncatedText
+                        text={firstTimerData.pastorate_call}
+                        maxLength={150}
+                        className={textClasses}
+                    />
                 </div>
                 <div className="col-span-2">
                     <div className="flex items-start gap-2 mb-2">
@@ -27,9 +64,11 @@ const NotesAdditionalInformation = ({ firstTimerData }) => {
                             Visitation Report
                         </span>
                     </div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300 ml-6 leading-relaxed bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
-                        {firstTimerData.visitation_report}
-                    </p>
+                    <TruncatedText
+                        text={firstTimerData.visitation_report}
+                        maxLength={150}
+                        className={textClasses}
+                    />
                 </div>
                 <div className="col-span-2">
                     <div className="flex items-start gap-2 mb-2">
@@ -38,9 +77,11 @@ const NotesAdditionalInformation = ({ firstTimerData }) => {
                             Notes
                         </span>
                     </div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300 ml-6 leading-relaxed bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
-                        {firstTimerData.notes}
-                    </p>
+                    <TruncatedText
+                        text={firstTimerData.notes}
+                        maxLength={150}
+                        className={textClasses}
+                    />
                 </div>
             </SectionCard>
             <Modal
@@ -51,7 +92,7 @@ const NotesAdditionalInformation = ({ firstTimerData }) => {
                 <EditNotesAdditionalInformation firstTimerData={firstTimerData} onClose={closeModal} />
             </Modal>
         </>
-    )
-}
+    );
+};
 
-export default NotesAdditionalInformation
+export default NotesAdditionalInformation;

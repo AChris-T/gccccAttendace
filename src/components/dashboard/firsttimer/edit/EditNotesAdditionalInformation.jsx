@@ -31,39 +31,37 @@ const EditNotesAdditionalInformation = ({ firstTimerData, onClose }) => {
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 shadow-md rounded-2xl w-full max-w-xl">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <TextAreaForm
-                    label="Pastorate Call Report"
-                    name="pastorate_call"
-                    register={register}
-                    error={errors.pastorate_call?.message}
-                    placeholder="Enter detailed report about the call..."
-                />
-                <TextAreaForm
-                    label="Visitation Report"
-                    name="visitation_report"
-                    register={register}
-                    error={errors.visitation_report?.message}
-                    placeholder="Enter detailed report about the visitation..."
-                />
-                <TextAreaForm
-                    label="Additional Notes"
-                    name="notes"
-                    register={register}
-                    error={errors.notes?.message}
-                    placeholder="Enter additional notes here..."
-                />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <TextAreaForm
+                label="Pastorate Call Report"
+                name="pastorate_call"
+                register={register}
+                error={errors.pastorate_call?.message}
+                placeholder="Enter detailed report about the call..."
+            />
+            <TextAreaForm
+                label="Visitation Report"
+                name="visitation_report"
+                register={register}
+                error={errors.visitation_report?.message}
+                placeholder="Enter detailed report about the visitation..."
+            />
+            <TextAreaForm
+                label="Additional Notes"
+                name="notes"
+                register={register}
+                error={errors.notes?.message}
+                placeholder="Enter additional notes here..."
+            />
 
-                <Button
-                    type="submit"
-                    loading={isSubmitting || isPending}
-                    size='sm'
-                >
-                    Update
-                </Button>
-            </form>
-        </div>
+            <Button
+                type="submit"
+                loading={isSubmitting || isPending}
+                size='sm'
+            >
+                Update
+            </Button>
+        </form>
     )
 }
 

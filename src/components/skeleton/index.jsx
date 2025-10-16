@@ -562,7 +562,7 @@ export const FirstTimerProfileSkeleton = () => {
 
 export const FollowupFeedbacksSkeletonLoader = () => {
   return (
-    [1, 2, 3, 4, 5].map(() => <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 animate-pulse mb-5">
+    [1, 2, 3, 4, 5].map((i) => <div key={i} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 animate-pulse mb-5">
       <div className="p-5 sm:p-6 flex items-start gap-4">
         {/* Avatar Skeleton */}
         <div className="relative flex-shrink-0">
