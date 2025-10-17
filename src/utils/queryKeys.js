@@ -5,8 +5,13 @@ export const QUERY_KEYS = {
   },
 
   FOLLOWUP_FEEDBACKS: {
-    FIRST_TIMERS: (id) => ['FOLLOWUP_FEEDBACKS', 'FIRST_TIMERS', id],
+    FIRST_TIMERS: ['followup-feedbacks', 'first-timers'],
+    ALL_MEMBERS: ['followup-feedbacks', 'all-members'],
+    ABSENT_MEMBERS: ['followup-feedbacks', 'absent-members'],
+    MEMBER: (id) => ['followup-feedbacks', 'member', id],
+    FIRST_TIMER: (id) => ['followup-feedbacks', 'first-timer', id],
   },
+
   // refactored
   FOLLOW_UP_STATUSES: {
     ALL: ['followup-status'],

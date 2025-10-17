@@ -1,6 +1,8 @@
 import Animated from '@/components/common/Animated';
 import { EmptyState } from '@/components/common/EmptyState';
 import Message from '@/components/common/Message';
+import ToolBox from '@/components/dashboard/firsttimer/ToolBox';
+import MemberToolbox from '@/components/dashboard/members/MemberToolbox';
 import { PersonalInformation } from '@/components/dashboard/members/PersonalInformation';
 import { ProfessionalInformation } from '@/components/dashboard/members/ProfessionalInformation';
 import { ProfileHeader } from '@/components/dashboard/members/ProfileHeader';
@@ -12,7 +14,7 @@ import { useMember } from '@/queries/member.query';
 import { useState } from 'react';
 
 const MemberProfile = ({ memberId }) => {
-    const { data: userData, isLoading, isError, error } = useMember(memberId)
+    const { data: memberData, isLoading, isError, error } = useMember(memberId)
     const [showToolbox, setShowToolbox] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
 
@@ -22,7 +24,7 @@ const MemberProfile = ({ memberId }) => {
             {isLoading ? <ProfileHeaderSkeleton /> :
                 <>
                     <ProfileHeader
-                        user={userData}
+                        user={memberData}
                         onToggleToolbox={setShowToolbox}
                         onToggleProfile={setShowProfile}
                         showToolbox={showToolbox}
@@ -30,23 +32,19 @@ const MemberProfile = ({ memberId }) => {
                     />
                     {showProfile && (
                         <Animated animation='fade-up' duration={0.7}>
-                            <SocialMediaLinks socialLinks={userData.social_links} />
-                            <PersonalInformation user={userData} />
-                            <ProfessionalInformation user={userData} />
-                            <UnitInformation user={userData} />
+                            <SocialMediaLinks socialLinks={memberData.social_links} />
+                            <PersonalInformation user={memberData} />
+                            <ProfessionalInformation user={memberData} />
+                            <UnitInformation user={memberData} />
                         </Animated>
                     )}
-
                     {showToolbox && (
                         <Animated animation='fade-up' duration={0.7}>
-                            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
-                                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Toolbox</h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Additional tools and actions will appear here</p>
-                            </div>
+                            <MemberToolbox memberData={memberData} />
                         </Animated>
                     )}
                 </>}
-            <Animated animation='fade-up'> <FeedbackTimeline memberId={memberId} /></Animated>
+            <Animated animation='fade-up'> <FeedbackTimeline /></Animated>
         </div>
     );
 };

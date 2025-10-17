@@ -1,14 +1,3 @@
-// type BadgeVariant = "light" | "solid";
-// type BadgeSize = "sm" | "md";
-// type BadgeColor =
-//   | "primary"
-//   | "success"
-//   | "error"
-//   | "warning"
-//   | "info"
-//   | "light"
-//   | "dark";
-
 const Badge = ({
   variant = "light",
   color = "primary",

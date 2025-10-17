@@ -1,5 +1,23 @@
 import { CameraIcon, LoadingIcon2, UserIcon } from '@/icons';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
+
+const AVATAR_SIZES = {
+  xs: { container: 'w-8 h-8', text: 'text-xs', icon: 12 },
+  sm: { container: 'w-10 h-10', text: 'text-sm', icon: 14 },
+  md: { container: 'w-12 h-12', text: 'text-base', icon: 16 },
+  lg: { container: 'w-16 h-16', text: 'text-lg', icon: 20 },
+  xl: { container: 'w-20 h-20', text: 'text-xl', icon: 24 },
+  '2xl': { container: 'w-28 h-28', text: 'text-2xl', icon: 32 },
+  '3xl': { container: 'w-36 h-36', text: 'text-3xl', icon: 40 }
+};
+
+const SHAPE_CLASSES = {
+  circle: 'rounded-full',
+  square: 'rounded-xl'
+};
+
+const MAX_FILE_SIZE = 1.5 * 1024 * 1024; // 1.5MB
+const ACCEPTED_IMAGE_TYPES = 'image/*';
 
 const Avatar = ({
   src,
@@ -16,132 +34,162 @@ const Avatar = ({
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef(null);
 
-  const sizeClasses = {
-    xs: 'w-8 h-8 text-xs',
-    sm: 'w-10 h-10 text-sm',
-    md: 'w-12 h-12 text-base',
-    lg: 'w-16 h-16 text-lg',
-    xl: 'w-20 h-20 text-xl',
-    '2xl': 'w-28 h-28 text-2xl',
-    '3xl': 'w-36 h-36 text-3xl'
-  };
+  const sizeConfig = useMemo(() => AVATAR_SIZES[size], [size]);
+  const shapeClass = useMemo(() => SHAPE_CLASSES[shape], [shape]);
+  const isUploadable = Boolean(onUpload);
+  const showImage = src && !imageError;
 
-  const iconSizes = {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 20,
-    xl: 24,
-    '2xl': 32,
-    '3xl': 40
-  };
 
-  const shapeClasses = {
-    circle: 'rounded-full',
-    square: 'rounded-xl'
-  };
+  const handleImageError = useCallback(() => {
+    setImageError(true);
+  }, []);
 
-  const handleClick = () => {
-    if (onUpload && fileInputRef.current) {
-      fileInputRef.current.click();
+  const handleClick = useCallback(() => {
+    if (isUploadable && !loading) {
+      fileInputRef.current?.click();
     }
-  };
+  }, [isUploadable, loading]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    const maxSize = 1.5 * 1024 * 1024;
-    if (file.size > maxSize) {
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return onError('Image size must be less than 1MB. Please select a smaller image.');
-    }
-    if (file && onUpload) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onUpload(reader.result);
-        setImageError(false);
+  const validateFile = useCallback((file) => {
+    if (!file) return { valid: false, error: 'No file selected' };
+
+    if (file.size > MAX_FILE_SIZE) {
+      return {
+        valid: false,
+        error: 'Image size must be less than 1.5MB. Please select a smaller image.'
       };
-      reader.readAsDataURL(file);
     }
 
+    return { valid: true };
+  }, []);
+
+  const handleFileChange = useCallback((e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const validation = validateFile(file);
+
+    if (!validation.valid) {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      onError?.(validation.error);
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      onUpload?.(reader.result);
+      setImageError(false);
+    };
+
+    reader.onerror = () => {
+      onError?.('Failed to read file. Please try again.');
+    };
+
+    reader.readAsDataURL(file);
+
+    // Reset input for same file reselection
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
+  }, [onUpload, onError, validateFile]);
 
-  const showImage = src && !imageError;
+  const containerClasses = useMemo(() => [
+    'relative overflow-hidden shadow transition-all duration-300 ease-in-out',
+    sizeConfig.container,
+    shapeClass,
+    isUploadable && !loading ? 'cursor-pointer hover:shadow-lg' : '',
+    className
+  ].filter(Boolean).join(' '), [sizeConfig, shapeClass, isUploadable, loading, className]);
 
   return (
     <div className="inline-block relative">
       <div
-        className={`
-          relative overflow-hidden shadow
-          ${sizeClasses[size]}
-          ${shapeClasses[shape]}
-          ${onUpload ? 'cursor-pointer' : ''}
-          transition-all duration-300 ease-in-out
-          ${className}
-        `}
+        className={containerClasses}
         onClick={handleClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => isUploadable && setIsHovered(true)}
+        onMouseLeave={() => isUploadable && setIsHovered(false)}
+        role={isUploadable ? 'button' : 'img'}
+        aria-label={isUploadable ? 'Upload avatar' : alt}
+        tabIndex={isUploadable && !loading ? 0 : -1}
+        onKeyDown={(e) => {
+          if (isUploadable && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
       >
         {showImage ? (
           <img
             src={src}
             alt={alt}
             className="w-full h-full object-cover"
-            onError={() => setImageError(true)}
+            onError={handleImageError}
+            draggable={false}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600">
             {name ? (
-              <span className="font-semibold text-white select-none">
+              <span className={`font-semibold text-white select-none ${sizeConfig.text}`}>
                 {name}
               </span>
             ) : (
               <UserIcon
-                size={iconSizes[size]}
+                size={sizeConfig.icon}
                 className="text-white opacity-80"
               />
             )}
           </div>
         )}
 
-        {onUpload && (
+        {isUploadable && (
           <>
             <div
               className={`
                 absolute inset-0 bg-black/60 dark:bg-black/70
                 flex items-center justify-center
                 transition-opacity duration-300
-                ${isHovered ? 'opacity-100' : 'opacity-0'}
+                ${isHovered && !loading ? 'opacity-100' : 'opacity-0'}
               `}
+              aria-hidden="true"
             >
               <CameraIcon
-                size={iconSizes[size] * 0.8}
+                size={sizeConfig.icon * 0.8}
                 className="!text-white drop-shadow-lg"
               />
             </div>
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept={ACCEPTED_IMAGE_TYPES}
               onChange={handleFileChange}
               className="hidden"
               aria-label="Upload avatar image"
+              disabled={loading}
             />
           </>
         )}
-        {loading &&
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
-            <LoadingIcon2 height={22} className='text-white' />
+
+        {loading && (
+          <div className={`absolute inset-0 flex items-center justify-center bg-black/50 ${shapeClass}`}>
+            <LoadingIcon2 height={22} className="text-white" />
           </div>
-        }
+        )}
       </div>
-      {name && <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg">
-        {name}
-      </div>}
+
+      {name && (
+        <div
+          className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg"
+          aria-label={`${name} badge`}
+        >
+          {name}
+        </div>
+      )}
     </div>
   );
 };
+
 export default Avatar;

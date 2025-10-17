@@ -30,7 +30,7 @@ export default function TestimonyForm() {
 
   return (
     <div className="">
-      <h3 className="text-[#24244e] text-[24px] font-bold ">Hi Friend</h3>
+      <h3 className="text-[#24244e] text-[24px] font-bold">Hi Friend</h3>
       <h3 className="text-sm mt-2">
         At the GCCC Ibadan, we have a culture of sharing with the family of God
         what the Lord has done.
@@ -62,13 +62,13 @@ export default function TestimonyForm() {
           </div>
           <div className="md:col-span-2">
             <TextAreaForm
-              label="What are your questions?"
+              label="What are your testimonies?"
               name="message"
               register={register}
               rows={6}
               required={true}
               cols={40}
-              placeholder="Type your message here..."
+              placeholder="Type your testimonies here..."
               error={errors.message?.message}
             />
           </div>

@@ -4,7 +4,7 @@ import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 import { FollowupFeedbacksService } from '@/services/followupFeedback.service';
 
-export const useCreateFirstTimersFollowups = (options = {}) => {
+export const useCreateFollowupsFeedbacks = (options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -12,11 +12,15 @@ export const useCreateFirstTimersFollowups = (options = {}) => {
       return await FollowupFeedbacksService.createFollowupFeedbacks(payload);
     },
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMERS(
-          variables.subject_id?.toString()
-        ),
-      });
+      const queryKey =
+        variables?.subject_type == 'members'
+          ? QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER(
+              variables.subject_id?.toString()
+            )
+          : QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMER(
+              variables.subject_id?.toString()
+            );
+      queryClient.invalidateQueries({ queryKey: queryKey });
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },
@@ -27,9 +31,21 @@ export const useCreateFirstTimersFollowups = (options = {}) => {
     },
   });
 };
+export const useGetFollowUpsByMember = (id, options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER(id),
+    queryFn: async () => {
+      const { data } = await FollowupFeedbacksService.getFollowUpsByMember(id);
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
 export const useGetFollowUpsByFirstTimer = (id, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMERS(id),
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMER(id),
     queryFn: async () => {
       const { data } = await FollowupFeedbacksService.getFollowUpsByFirstTimer(
         id
@@ -41,15 +57,41 @@ export const useGetFollowUpsByFirstTimer = (id, options = {}) => {
     ...options,
   });
 };
-// export const useFirstTimersWithFollowups = (options = {}) => {
-//   return useQuery({
-//     queryKey: QUERY_KEYS.FIRST_TIMERS.FIRSTTIMER_FOLLOWUPS,
-//     queryFn: async () => {
-//       const { data } = await FirstTimerService.getFirstTimersWithFollowups();
-//       return data || [];
-//     },
-//     staleTime: 2 * 60 * 1000,
-//     cacheTime: 5 * 60 * 1000,
-//     ...options,
-//   });
-// };
+export const useFirstTimersWithFollowups = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMERS,
+    queryFn: async () => {
+      const { data } =
+        await FollowupFeedbacksService.getFirstTimersWithFollowups();
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
+export const useMembersWithFollowups = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.ALL_MEMBERS,
+    queryFn: async () => {
+      const { data } = await FollowupFeedbacksService.getMembersWithFollowups();
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
+export const useAbsentMembersWithFollowups = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.ABSENT_MEMBERS,
+    queryFn: async () => {
+      const { data } =
+        await FollowupFeedbacksService.getAbsentMembersWithFollowups();
+      return data || [];
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};

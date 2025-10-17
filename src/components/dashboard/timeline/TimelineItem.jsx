@@ -1,14 +1,14 @@
-import { ChevronDownIcon, ChevronUpIcon } from "@/icons";
+import { ChevronDownIcon } from "@/icons";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
 import { formatDateFull, formatFullDateTime, getTypeConfig } from "@/utils/helper";
 import { CalendarIcon, ClockIcon, MailIcon } from "@/icons";
 import TimelineNoteSection from "@/components/dashboard/timeline/TimelineNoteSection";
-import Button from "@/components/ui/Button";
+import { useState } from "react";
 
-const TimelineItem = ({ item, isExpanded, onToggle }) => {
+const TimelineItem = ({ item }) => {
     const typeConfig = getTypeConfig(item.type);
-    const showServiceDate = item?.type.toLowerCase().includes("service");
+    const [isExpanded, setIsExpanded] = useState(false)
 
     return (
         <div className="relative pl-12 sm:pl-16">
@@ -28,7 +28,7 @@ const TimelineItem = ({ item, isExpanded, onToggle }) => {
                                     <Badge color={typeConfig.color} size="md">
                                         {item.type}
                                     </Badge>
-                                    {showServiceDate && (
+                                    {item.service_date && (
                                         <Badge color="warning" size="md">
                                             {formatFullDateTime(item.service_date)}
                                         </Badge>
@@ -60,17 +60,17 @@ const TimelineItem = ({ item, isExpanded, onToggle }) => {
                             </div>
                         </div>
 
-                        <Button variant="light" size='sm'
-                            onClick={onToggle}
-                            className="flex-shrink-0 p-2 hover:bg-gray-100 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 active:scale-9"
-                            aria-label="Toggle details"
+                        <button variant="light" size='sm'
+                            className="bg-gray-100 px-2 py-1 rounded shadow-2xl flex-shrink-0 hover:shadow-3xl transition-all duration-200"
+                            aria-label={isExpanded ? "Collapse details" : "Expand details"}
+                            aria-expanded={isExpanded}
+                            onClick={() => setIsExpanded(!isExpanded)}
                         >
-                            {isExpanded ? (
-                                <ChevronUpIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                            ) : (
-                                <ChevronDownIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                            )}
-                        </Button>
+                            <ChevronDownIcon
+                                className={`w-5 h-5 text-gray-500 dark:text-gray-400 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : 'rotate-0'
+                                    }`}
+                            />
+                        </button>
                     </div>
                 </div>
 

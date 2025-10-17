@@ -62,7 +62,7 @@ const FirstTimerProfile = ({ firstTimerId }) => {
                     {showProfile && <Animated animation='fade-up'> <InformationPanel firstTimerData={firstTimerData} /></Animated>}
                 </>
             }
-            {isActive ? <Animated animation='fade-up'> <FeedbackTimeline firstTimerId={firstTimerId} /></Animated> : <EmptyState title='Followup deactivated' />}
+            {isActive ? <Animated animation='fade-up'> <FeedbackTimeline /></Animated> : <EmptyState title='Followup deactivated' />}
         </div>
     );
 };

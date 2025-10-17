@@ -1,7 +1,7 @@
 import Avatar from '@/components/ui/Avatar';
 import Badge from '@/components/ui/Badge';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table'
-import { formatDate } from '@/utils/helper';
+import { formatDate, getTimeAgo } from '@/utils/helper';
 import { Link } from 'react-router-dom';
 
 const AssignedAbsentMembers = ({ assignedMembers }) => {
@@ -69,6 +69,12 @@ const AssignedAbsentMembers = ({ assignedMembers }) => {
                                     isHeader
                                     className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                                 >
+                                    Assigned Date
+                                </TableCell>
+                                <TableCell
+                                    isHeader
+                                    className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                                >
                                     Status
                                 </TableCell>
                             </TableRow>
@@ -78,16 +84,16 @@ const AssignedAbsentMembers = ({ assignedMembers }) => {
                             {assignedMembers?.map((member, index) => (
                                 <TableRow key={member.id} className="">
                                     <TableCell className="py-3">
-                                        <Link to={`/dashboard/members/${member.id}`} target="_blank" className='text-gray-500 text-theme-sm dark:text-gray-400'>
+                                        <Link to={`/dashboard/members/${member?.user_id}`} target="_blank" className='text-gray-500 text-theme-sm dark:text-gray-400'>
                                             {index + 1}
                                         </Link>
                                     </TableCell>
                                     <TableCell className="py-3">
-                                        <Link to={`/dashboard/members/${member.id}`} target="_blank" className='hover:underline'>
+                                        <Link to={`/dashboard/members/${member?.user_id}`} target="_blank" className='hover:underline'>
                                             <div className="flex items-center gap-3">
-                                                <Avatar />
+                                                <Avatar src={member?.avatar} name={member.initials} />
                                                 <p className="font-medium hover:text-blue-500 text-gray-800 text-theme-sm dark:text-white/90">
-                                                    {member.name}
+                                                    {member.full_name}
                                                 </p>
                                             </div>
                                         </Link>
@@ -117,6 +123,9 @@ const AssignedAbsentMembers = ({ assignedMembers }) => {
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                         <p>{formatDate(member?.attendance?.attendance_date)}</p>
+                                    </TableCell>
+                                    <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                        <p>{getTimeAgo(member?.updated_at)}</p>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                         <Badge

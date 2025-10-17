@@ -80,9 +80,9 @@ const FirstTimerAssigned = ({ firstTimers }) => {
                                     <TableCell className="py-3">
                                         <Link to={`/dashboard/first-timers/${firstTimer.id}`} target="_blank" className='hover:underline'>
                                             <div className="flex items-center gap-3">
-                                                <Avatar />
+                                                <Avatar src={firstTimer.avatar} name={firstTimer.initials} />
                                                 <p className="font-medium hover:text-blue-500 text-gray-800 text-theme-sm dark:text-white/90">
-                                                    {firstTimer.name}
+                                                    {firstTimer.full_name}
                                                 </p>
                                             </div>
                                         </Link>

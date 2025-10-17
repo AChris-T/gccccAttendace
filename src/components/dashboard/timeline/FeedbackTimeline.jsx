@@ -1,55 +1,53 @@
-import { useState } from "react";
-import { useModal } from "@/hooks/useModal";
 import { EmptyState } from "@/components/common/EmptyState";
-import { TimelineSkeletonLoader } from "@/components/skeleton";
-import { ClockIcon } from "@/icons";
-import TimelineHeader from "@/components/dashboard/timeline/TimelineHeader";
-import CreateTimeline from "@/components/dashboard/timeline/CreateTimeline";
-import Modal from "@/components/ui/Modal";
 import TimelineContainer from "@/components/dashboard/timeline/TimelineContainer";
-import { useGetFollowUpsByFirstTimer } from "@/queries/followupFeedback.query";
+import TimelineHeader from "@/components/dashboard/timeline/TimelineHeader";
+import { TimelineSkeletonLoader } from "@/components/skeleton";
+import { useSubjectFromRoute } from "@/hooks/useSubjectFromRoute";
+import { ClockIcon } from "@/icons";
+import {
+    useGetFollowUpsByFirstTimer,
+    useGetFollowUpsByMember,
+} from "@/queries/followupFeedback.query";
 
-const FeedbackTimeline = ({ firstTimerId }) => {
-    const [expandedItems, setExpandedItems] = useState({});
-    const { data: timelineData = [], isLoading } =
-        useGetFollowUpsByFirstTimer(firstTimerId);
-    const { isOpen, openModal, closeModal } = useModal();
+const SUBJECT_TYPES = {
+    MEMBERS: "members",
+    FIRST_TIMER: "first_timer",
+};
 
-    const toggleExpand = (id) => {
-        setExpandedItems((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }));
+const EMPTY_STATE_CONFIG = {
+    icon: <ClockIcon className="h-10 w-10 text-gray-400 dark:text-gray-500" />,
+    title: "No timeline entries yet",
+    description:
+        "Timeline entries will appear here as they are created. Start by adding your first activity.",
+};
+
+const FeedbackTimeline = () => {
+    const { subject_type, subject_id } = useSubjectFromRoute();
+
+    const queryHooks = {
+        [SUBJECT_TYPES.MEMBERS]: useGetFollowUpsByMember,
+        [SUBJECT_TYPES.FIRST_TIMER]: useGetFollowUpsByFirstTimer,
     };
 
-    if (isLoading) return <TimelineSkeletonLoader />;
+    const useActiveQuery = queryHooks[subject_type] || useGetFollowUpsByFirstTimer;
+    const { data: timelineData = [], isLoading } = useActiveQuery(subject_id);
+
+    if (isLoading) {
+        return <TimelineSkeletonLoader />;
+    }
+
+    const hasTimelineData = timelineData.length > 0;
 
     return (
-        <>
-            <div className="w-full mx-auto py-5 transition-colors duration-300">
-                <TimelineHeader openModal={openModal} />
-                {timelineData.length > 0 ? (
-                    <TimelineContainer
-                        data={timelineData}
-                        expandedItems={expandedItems}
-                        toggleExpand={toggleExpand}
-                    />
-                ) : (
-                    <EmptyState
-                        icon={<ClockIcon className="w-10 h-10 text-gray-400 dark:text-gray-500" />}
-                        title="No timeline entries yet"
-                        description="Timeline entries will appear here as they are created. Start by adding your first activity."
-                    />
-                )}
-            </div>
-            <Modal
-                title='New Feedback'
-                isOpen={isOpen}
-                onClose={closeModal}
-            >
-                <CreateTimeline firstTimerId={firstTimerId} onClose={closeModal} />
-            </Modal>
-        </>
+        <div className="mx-auto w-full py-5 transition-colors duration-300">
+            <TimelineHeader />
+
+            {hasTimelineData ? (
+                <TimelineContainer data={timelineData} />
+            ) : (
+                <EmptyState {...EMPTY_STATE_CONFIG} />
+            )}
+        </div>
     );
 };
 
