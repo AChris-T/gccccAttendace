@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import Avatar from '@/components/ui/Avatar';
 import Badge from '@/components/ui/Badge';
-import {
-  CalendarIcon,
-  ChevronDownIcon,
-  MessageIcon,
-  UserIcon,
-  PhoneIcon,
-} from '@/icons';
+import { CalendarIcon, ChevronDownIcon, MessageIcon, PhoneIcon } from '@/icons';
 import { getTimeAgo, formatFullDateTime } from '@/utils/helper';
 
 const typeColors = {
@@ -16,28 +10,53 @@ const typeColors = {
   testimony: 'success',
 };
 
-export default function FormCard({ person }) {
+export default function FormCard({ person, selected = false, onToggleSelect }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleSelect = () => {
+    onToggleSelect?.(!selected);
+  };
+
   return (
-    <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow transition-all duration-300 border border-gray-200 dark:border-gray-700">
+    <div
+      onClick={handleSelect}
+      className="relative bg-white dark:bg-gray-800 rounded-xl shadow transition-all duration-300 border border-gray-200 dark:border-gray-700"
+    >
       {/* Header */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => e.stopPropagation()}
+        onChange={(e) => onToggleSelect?.(e.target.checked)}
+        checked={!!selected}
         className="relative z-10 w-full p-5 sm:p-6 flex items-start gap-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 rounded-xl"
       >
-        {/* Avatar */}
-        <div className="relative flex-shrink-0">
-          <Avatar size="md" name={''} alt={''} />
+        <div  className="relative  flex-shrink-0 flex items-start gap-3">
+          <input
+            type="checkbox"
+            className="mt-1 h-4 w-4 accent-primary-600"
+            checked={!!selected}
+            onChange={(e) => onToggleSelect?.(e.target.checked)}
+            onClick={(e) => e.stopPropagation()}
+          />
+          {/*           <Avatar size="md" name={''} alt={''} />
+           */}{' '}
         </div>
 
         {/* Main Info */}
         <div className="flex-1 min-w-0 text-left">
           <div className="flex items-start justify-between gap-3 mb-2">
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1 truncate">
-                {person?.name || 'Anonymous User'}
-              </h3>
+              <div>
+                {person?.name ? (
+                  <h3 className="text-base sm:text-xl font-medium text-gray-900 dark:text-white mb-1 truncate">
+                    {person?.name}
+                  </h3>
+                ) : (
+                  ''
+                )}
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1 truncate">
+                  {person?.content}
+                </h3>
+              </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-gray-600 dark:text-gray-400">
                 {person?.phone_number ? (
                   <>
@@ -61,25 +80,33 @@ export default function FormCard({ person }) {
 
           {/* Type and Status */}
           <div className="flex flex-wrap items-center gap-2 mt-3">
-            <Badge size="sm" color={typeColors[person.type] || 'gray'}>
-              {person.type?.charAt(0).toUpperCase() + person.type?.slice(1)}
-            </Badge>
+            {person.wants_to_share_testimony ? (
+              <Badge size="sm" color={typeColors[person.type] || 'gray'}>
+                Want to share
+              </Badge>
+            ) : (
+              ''
+            )}
 
             <Badge size="sm" color="light">
               <CalendarIcon className="w-3.5 h-3.5" />
               <span>{formatFullDateTime(person.created_at)}</span>
             </Badge>
 
-            {!person.is_completed && (
+            {!person.is_completed ? (
               <Badge size="sm" color="warning">
                 Pending
+              </Badge>
+            ) : (
+              <Badge size="sm" color="success">
+                Completed
               </Badge>
             )}
           </div>
         </div>
       </button>
 
-      {/* Collapsible Content */}
+      {/* Collapsible Content
       <div
         className={`absolute left-0 right-0 top-full bg-white dark:bg-gray-800 rounded-b-xl border-t border-gray-200 dark:border-gray-700 shadow-lg transition-all duration-500 ease-in-out overflow-hidden ${
           isOpen
@@ -102,7 +129,8 @@ export default function FormCard({ person }) {
             </p>
           </div>
         </div>
-      </div>
+          </div>
+           */}
     </div>
   );
 }
