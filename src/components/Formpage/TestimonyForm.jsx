@@ -110,10 +110,11 @@ export default function TestimonyForm() {
             )}
           </div>
         </div>
-
-        <Button type="submit" loading={isPending} size="md" variant="accent">
-          Submit
-        </Button>
+        <div className="mt-5">
+          <Button type="submit" loading={isPending} size="md" variant="primary">
+            Submit
+          </Button>
+        </div>
       </form>
     </div>
   );

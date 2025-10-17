@@ -1,7 +1,8 @@
 export const QUERY_KEYS = {
   ////forms
   FORM_MESSAGES: {
-    ALL: ['form-messages'],
+    ALL: ['formMessages'],
+    DETAIL: (id) => ['formMessages', id],
   },
 
   FOLLOWUP_FEEDBACKS: {
