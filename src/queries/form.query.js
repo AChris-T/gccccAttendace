@@ -12,7 +12,7 @@ import { handleApiError } from '../utils/helper';
 // use to get all form messagess
 export const useAllFormMessages = (type, options = {}) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.FIRST_TIMERS.FIRSTTIMER_FOLLOWUPS, type],
+    queryKey: [QUERY_KEYS.FORM_MESSAGES.ALL, type],
     queryFn: async () => {
       const { data } = await FormService.getFormMessages({ type });
       return data || [];

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   useAllFormMessages,
   useUpdateFormMessages,
@@ -13,6 +13,16 @@ export function useFormMessagesSelection(type) {
   const allIds = useMemo(() => data.map((p) => p.id), [data]);
   const isAllSelected = selectedIds.length > 0 && selectedIds.length === allIds.length;
   const isIndeterminate = selectedIds.length > 0 && selectedIds.length < allIds.length;
+
+  // Clear selection whenever the active type (tab) changes
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [type]);
+
+  // Clamp selection to only IDs present in current data
+  useEffect(() => {
+    setSelectedIds((prev) => prev.filter((id) => allIds.includes(id)));
+  }, [allIds]);
 
   const toggleSelect = useCallback((id, checked) => {
     setSelectedIds((prev) => {
