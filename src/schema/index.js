@@ -141,8 +141,16 @@ export const communityFirstTimerSchema = yup.object({
   located_in_ibadan: yup.boolean(),
   whatsapp_interest: yup.boolean(),
 });
+
 export const firstTimerNotesSchema = yup.object({
   pastorate_call: yup.string().nullable(),
   visitation_report: yup.string().nullable(),
   notes: yup.string().nullable(),
+});
+
+export const testimonyFormSchema = yup.object({
+  content: yup.string().required(),
+  name: yup.string().required(),
+  phone_number: yup.string().required(),
+  wants_to_share_testimony: yup.boolean().nullable(),
 });

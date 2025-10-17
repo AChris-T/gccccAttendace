@@ -36,7 +36,7 @@ const FollowupFeedbacks = () => {
                 tabs={tabs}
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
-                className="justify-center"
+                className="justify-center mb-5"
             />
 
             {isLoading ? (

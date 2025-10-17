@@ -1,136 +1,158 @@
-import { useState } from 'react';
-import Avatar from '@/components/ui/Avatar';
-import Badge from '@/components/ui/Badge';
-import { CalendarIcon, ChevronDownIcon, MessageIcon, PhoneIcon } from '@/icons';
-import { getTimeAgo, formatFullDateTime } from '@/utils/helper';
+import Badge from "@/components/ui/Badge";
+import { CalendarIcon, CheckBadgeIcon, CheckCircleIcon, ChevronDownIcon, CircleIcon, DocumentIcon, PendingIcon, PhoneIcon, ShareIcon, UserIcon } from "@/icons";
+import { formatFullDateTime, getTimeAgo } from "@/utils/helper";
+import { useState } from "react";
 
 const typeColors = {
-  prayer: 'purple',
-  question: 'blue',
-  testimony: 'success',
+  prayer: "purple",
+  question: "primary",
+  testimony: "success",
 };
 
 export default function FormCard({ person, selected = false, onToggleSelect }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = () => {
+  const handleCardClick = (e) => {
+    if (e.target.closest("[data-expand-button]")) return;
     onToggleSelect?.(!selected);
   };
 
+  const handleExpandClick = (e) => {
+    e.stopPropagation();
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div
-      onClick={handleSelect}
-      className="relative bg-white dark:bg-gray-800 rounded-xl shadow transition-all duration-300 border border-gray-200 dark:border-gray-700"
-    >
-      {/* Header */}
-      <button
-        onClick={(e) => e.stopPropagation()}
-        onChange={(e) => onToggleSelect?.(e.target.checked)}
-        checked={!!selected}
-        className="relative z-10 w-full p-5 sm:p-6 flex items-start gap-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 rounded-xl"
-      >
-        <div  className="relative  flex-shrink-0 flex items-start gap-3">
-          <input
-            type="checkbox"
-            className="mt-1 h-4 w-4 accent-primary-600"
-            checked={!!selected}
-            onChange={(e) => onToggleSelect?.(e.target.checked)}
-            onClick={(e) => e.stopPropagation()}
-          />
-          {/*           <Avatar size="md" name={''} alt={''} />
-           */}{' '}
-        </div>
-
-        {/* Main Info */}
-        <div className="flex-1 min-w-0 text-left">
-          <div className="flex items-start justify-between gap-3 mb-2">
-            <div className="flex-1 min-w-0">
-              <div>
-                {person?.name ? (
-                  <h3 className="text-base sm:text-xl font-medium text-gray-900 dark:text-white mb-1 truncate">
-                    {person?.name}
-                  </h3>
-                ) : (
-                  ''
-                )}
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1 truncate">
-                  {person?.content}
-                </h3>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-gray-600 dark:text-gray-400">
-                {person?.phone_number ? (
-                  <>
-                    <PhoneIcon className="w-4 h-4" />
-                    <span>{person.phone_number}</span>
-                  </>
-                ) : (
-                  <span></span>
-                )}
-              </div>
-            </div>
-
-            <div
-              className={`transform transition-transform duration-300 ${
-                isOpen ? 'rotate-180' : ''
-              } flex-shrink-0`}
-            >
-              <ChevronDownIcon className="w-6 h-6 text-gray-400 dark:text-gray-500" />
-            </div>
-          </div>
-
-          {/* Type and Status */}
-          <div className="flex flex-wrap items-center gap-2 mt-3">
-            {person.wants_to_share_testimony ? (
-              <Badge size="sm" color={typeColors[person.type] || 'gray'}>
-                Want to share
-              </Badge>
-            ) : (
-              ''
-            )}
-
-            <Badge size="sm" color="light">
-              <CalendarIcon className="w-3.5 h-3.5" />
-              <span>{formatFullDateTime(person.created_at)}</span>
-            </Badge>
-
-            {!person.is_completed ? (
-              <Badge size="sm" color="warning">
-                Pending
-              </Badge>
-            ) : (
-              <Badge size="sm" color="success">
-                Completed
-              </Badge>
-            )}
-          </div>
-        </div>
-      </button>
-
-      {/* Collapsible Content
+    <>
       <div
-        className={`absolute left-0 right-0 top-full bg-white dark:bg-gray-800 rounded-b-xl border-t border-gray-200 dark:border-gray-700 shadow-lg transition-all duration-500 ease-in-out overflow-hidden ${
-          isOpen
-            ? 'max-h-[400px] overflow-y-auto opacity-100 translate-y-0'
-            : 'max-h-0 opacity-0 -translate-y-4 pointer-events-none'
-        }`}
-        style={{ zIndex: 20 }}
+        onClick={handleCardClick}
+        className={`group relative bg-white dark:bg-gray-800 rounded-xl shadow-sm border transition-all duration-200 cursor-pointer hover:shadow-md ${selected
+          ? "border-gray-300 dark:border-gray-600 shadow-md"
+          : "border-gray-200 dark:border-gray-700"
+          }`}
       >
-        <div className="px-5 sm:px-6 pb-6">
-          <div className="mt-5">
-            <h4 className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide flex items-center gap-2">
-              <MessageIcon className="w-4 h-4" />
-              Message Content
-            </h4>
-            <p className="mt-3 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              {person.content || 'No message content provided.'}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">
-              Submitted {getTimeAgo(person.created_at)}
-            </p>
+        <div className="p-4 sm:p-7">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            {/* Left Section */}
+            <div className="flex items-start sm:items-center gap-3 sm:flex-1 min-w-0">
+              {/* Checkbox */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleSelect?.(!selected);
+                }}
+                className="flex-shrink-0 transition-transform hover:scale-110"
+              >
+                {selected ? (
+                  <CheckCircleIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                ) : (
+                  <CircleIcon className="w-6 h-6 text-gray-300 dark:text-gray-600 hover:text-gray-400 dark:hover:text-gray-500" />
+                )}
+              </button>
+
+              {/* Name + Meta */}
+              <div className="flex-1 min-w-0">
+                {person?.name && (
+                  <div className="flex items-center gap-2 mb-1">
+                    <UserIcon className="w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+                    <span className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 truncate">
+                      {person.name}
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+                  {person?.phone_number && (
+                    <div className="flex items-center gap-1.5">
+                      <PhoneIcon className="w-3.5 h-3.5" />
+                      <span>{person.phone_number}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1.5">
+                    <CalendarIcon className="w-3.5 h-3.5" />
+                    <span>{getTimeAgo(person?.created_at)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Section */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2 sm:gap-3">
+              {person?.is_completed ? (
+                <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/30">
+                  <CheckBadgeIcon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                    Treated
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-amber-100 dark:bg-amber-900/30">
+                  <PendingIcon className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  <span className="text-xs font-medium text-amber-700 dark:text-amber-300">
+                    Pending
+                  </span>
+                </div>
+              )}
+
+              {person?.type && (
+                <Badge color={typeColors[person.type] || "gray"} size="sm">
+                  {person.type}
+                </Badge>
+              )}
+
+              {person?.wants_to_share_testimony && (
+                <div className="flex items-center gap-1.5">
+                  <ShareIcon className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+                  <span className="text-xs font-semibold text-purple-900 dark:text-purple-300">
+                    Wants to share
+                  </span>
+                </div>
+              )}
+
+              <button
+                data-expand-button
+                onClick={handleExpandClick}
+                className="absolute top-1 right-1 bg-gray-50 dark:bg-gray-700 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <ChevronDownIcon
+                  className={`w-4 h-4 text-gray-700 dark:text-gray-500 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                    }`}
+                />
+              </button>
+            </div>
           </div>
         </div>
+
+        {isOpen && (
+          <div className={`absolute left-0 right-0 top-full z-[10] animate-in fade-in slide-in-from-top-2 duration-200`}>
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-900 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <DocumentIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+                      Details
+                    </h4>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {formatFullDateTime(person.created_at)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4">
+                {person?.content && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                    <p className="text-sm text-gray-900 dark:text-gray-100 leading-relaxed whitespace-pre-wrap">
+                      {person.content}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-           */}
-    </div>
+        )}
+      </div>
+    </>
   );
 }

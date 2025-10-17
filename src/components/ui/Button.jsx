@@ -179,7 +179,7 @@ const Button = ({
       disabled={disabled || loading}
     >
       {loading ? (
-        <LoadingIcon2 />
+        size = "sm" ? <LoadingIcon2 width={18} height={18} /> : <LoadingIcon2 />
       ) : (
         <>
           {startIcon && <span className="flex items-center shrink-0">{startIcon}</span>}

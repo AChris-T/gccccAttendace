@@ -11,18 +11,25 @@ export function useFormMessagesSelection(type) {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const allIds = useMemo(() => data.map((p) => p.id), [data]);
-  const isAllSelected = selectedIds.length > 0 && selectedIds.length === allIds.length;
-  const isIndeterminate = selectedIds.length > 0 && selectedIds.length < allIds.length;
 
-  // Clear selection whenever the active type (tab) changes
+  const allIdsKey = useMemo(() => allIds.join(','), [allIds]);
+
+  const isAllSelected =
+    selectedIds.length > 0 && selectedIds.length === allIds.length;
+  const isIndeterminate =
+    selectedIds.length > 0 && selectedIds.length < allIds.length;
+
   useEffect(() => {
     setSelectedIds([]);
   }, [type]);
 
-  // Clamp selection to only IDs present in current data
   useEffect(() => {
-    setSelectedIds((prev) => prev.filter((id) => allIds.includes(id)));
-  }, [allIds]);
+    setSelectedIds((prev) => {
+      const filtered = prev.filter((id) => allIds.includes(id));
+      if (filtered.length === prev.length) return prev;
+      return filtered;
+    });
+  }, [allIdsKey]);
 
   const toggleSelect = useCallback((id, checked) => {
     setSelectedIds((prev) => {
@@ -42,31 +49,31 @@ export function useFormMessagesSelection(type) {
 
   const clearSelection = useCallback(() => setSelectedIds([]), []);
 
-  const { mutate: updateMessages, isLoading: isUpdating } = useUpdateFormMessages({
-    onSuccess: () => {
-      clearSelection();
-      refetch();
-    },
-  });
+  const { mutate: updateMessages, isPending: isUpdating } =
+    useUpdateFormMessages({
+      onSuccess: () => {
+        clearSelection();
+      },
+    });
 
-  const { mutate: deleteMessages, isLoading: isDeleting } = useDeleteFormMessages({
-    onSuccess: () => {
-      clearSelection();
-      refetch();
-    },
-  });
+  const { mutateAsync: deleteMessages, isPending: isDeleting } =
+    useDeleteFormMessages({
+      onSuccess: () => {
+        clearSelection();
+      },
+    });
 
   const updateSelected = useCallback(
     (attended) => {
       if (selectedIds.length === 0) return;
-      updateMessages({ ids: selectedIds, attended });
+      updateMessages({ ids: selectedIds, attended, type });
     },
     [selectedIds, updateMessages]
   );
 
-  const deleteSelected = useCallback(() => {
+  const deleteSelected = useCallback(async () => {
     if (selectedIds.length === 0) return;
-    deleteMessages({ ids: selectedIds });
+    await deleteMessages({ ids: selectedIds, type });
   }, [selectedIds, deleteMessages]);
 
   return {

@@ -624,3 +624,56 @@ export const ProfileHeaderSkeleton = () => {
     </div>
   );
 };
+
+export function FormCardSkeleton() {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 animate-pulse">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        {/* Left Section */}
+        <div className="flex items-start sm:items-center gap-3 sm:flex-1 min-w-0">
+          {/* Checkbox placeholder */}
+          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700" />
+
+          {/* Name + Meta */}
+          <div className="flex-1 min-w-0 space-y-2">
+            <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+              <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Section */}
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2 sm:gap-3">
+          <div className="h-5 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-5 w-10 bg-gray-200 dark:bg-gray-700 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function FormsSkeleton() {
+  return (
+    <div className="space-y-5">
+      {/* Top Control Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gray-50 dark:bg-gray-700/40 border border-gray-200 dark:border-gray-700 rounded-lg p-3 animate-pulse">
+        <div className="inline-flex items-center gap-2 bg-gray-200 dark:bg-gray-700 px-3 rounded py-1">
+          <div className="w-4 h-4 rounded bg-gray-300 dark:bg-gray-600" />
+          <div className="h-4 w-28 bg-gray-300 dark:bg-gray-600 rounded" />
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-24 bg-gray-300 dark:bg-gray-600 rounded" />
+          <div className="h-8 w-20 bg-gray-300 dark:bg-gray-600 rounded" />
+        </div>
+      </div>
+
+      {/* List of Cards */}
+      {[...Array(4)].map((_, i) => (
+        <FormCardSkeleton key={i} />
+      ))}
+    </div>
+  );
+}

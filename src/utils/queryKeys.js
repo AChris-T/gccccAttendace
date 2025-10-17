@@ -1,7 +1,6 @@
 export const QUERY_KEYS = {
-  ////forms
   FORM_MESSAGES: {
-    ALL: ['formMessages'],
+    ALL: (type) => ['formMessages', type],
     DETAIL: (id) => ['formMessages', id],
   },
 

@@ -73,7 +73,6 @@ export const useRegister = (options = {}) => {
     mutationFn: AuthService.register,
     onSuccess: ({ data }) => {
       const { token, user } = data;
-
       setAuthenticatedUser({ user });
       setToken({ token });
       queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);

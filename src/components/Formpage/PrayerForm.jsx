@@ -26,16 +26,23 @@ export default function PrayerForm() {
   };
 
   return (
-    <div className="">
-      <h3 className="text-[#24244e] text-[24px] font-bold ">Prayer Request</h3>
-      <h3 className="text-sm mt-2">
+    <div className="space-y-5 mt-5 text-gray-800 dark:text-gray-100">
+      <h3 className="text-[24px] font-bold text-[#24244e] dark:text-gray-100">
+        Prayer Request
+      </h3>
+
+      <h3 className="text-sm mt-2 text-gray-700 dark:text-gray-300">
         Send your prayer request(s), knowing that whatever we ask in His name,
         He will do it. Let's together glorify the Father through the power of
-        prayer
+        prayer.
       </h3>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm"
+      >
         <TextAreaForm
-          label="What is your prayer request ?"
+          label="What is your prayer request?"
           name="message"
           register={register}
           required={true}
@@ -44,7 +51,14 @@ export default function PrayerForm() {
           placeholder="Type your message here..."
           error={errors.message?.message}
         />
-        <Button type="submit" loading={isPending} size="md" variant="primary">
+
+        <Button
+          className="mt-5 w-full md:w-auto"
+          type="submit"
+          loading={isPending}
+          size="md"
+          variant="primary"
+        >
           Submit
         </Button>
       </form>

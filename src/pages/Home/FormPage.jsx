@@ -1,139 +1,75 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
 import QuestionForm from '../../components/Formpage/QuestionForm';
 import PrayerForm from '../../components/Formpage/PrayerForm';
 import TestimonyForm from '../../components/Formpage/TestimonyForm';
 import Animated from '../../components/common/Animated';
+import { Tabs } from '@/components/ui/tab/Tabs';
+import useQueryParam from '@/hooks/useQueryParam';
+import { PrayerIcon, QuestionIcon, TestimonyIcon } from '@/icons';
 
 const TABS_CONFIG = [
   {
-    id: 'question',
-    name: 'Question',
+    key: 'question',
+    label: 'Question',
+    icon: QuestionIcon,
     image: '/images/forms/question2.png',
-    component: QuestionForm,
   },
   {
-    id: 'prayer',
-    name: 'Prayer Request',
+    key: 'prayer',
+    label: 'Prayer Request',
+    icon: PrayerIcon,
     image: '/images/forms/prayer2.png',
-    component: PrayerForm,
   },
   {
-    id: 'testimony',
-    name: 'Testimony',
+    key: 'testimony',
+    label: 'Testimony',
+    icon: TestimonyIcon,
     image: '/images/forms/testimony2.png',
-    component: TestimonyForm,
   },
 ];
 
 const DEFAULT_TAB = 'question';
 
+const FORM_COMPONENTS = {
+  question: QuestionForm,
+  prayer: PrayerForm,
+  testimony: TestimonyForm,
+};
+
 export default function FormPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
+  const [activeTab, setActiveTab] = useQueryParam('tab', DEFAULT_TAB);
 
-  const activeTabConfig = useMemo(
-    () => TABS_CONFIG.find((tab) => tab.id === activeTab) || TABS_CONFIG[0],
-    [activeTab]
-  );
+  const ActiveFormComponent = useMemo(() => {
+    return FORM_COMPONENTS[activeTab] || FORM_COMPONENTS[DEFAULT_TAB];
+  }, [activeTab]);
 
-  useEffect(() => {
-    const tabFromUrl = searchParams.get('tab');
-    const validTabFromUrl = TABS_CONFIG.find((tab) => tab.id === tabFromUrl);
-
-    if (validTabFromUrl) {
-      setActiveTab(validTabFromUrl.id);
-    } else if (tabFromUrl && !validTabFromUrl) {
-      setSearchParams((prev) => {
-        const newParams = new URLSearchParams(prev);
-        newParams.set('tab', DEFAULT_TAB);
-        return newParams;
-      });
-    } else if (!tabFromUrl) {
-      setSearchParams((prev) => {
-        const newParams = new URLSearchParams(prev);
-        newParams.set('tab', DEFAULT_TAB);
-        return newParams;
-      });
-    }
-  }, [searchParams, setSearchParams]);
-
-  const handleTabChange = useCallback(
-    (tabId) => {
-      if (tabId === activeTab) return;
-
-      setActiveTab(tabId);
-
-      setSearchParams((prev) => {
-        const newParams = new URLSearchParams(prev);
-        newParams.set('tab', tabId);
-        return newParams;
-      });
-    },
-    [activeTab, setSearchParams]
-  );
-
-  const renderActiveForm = useCallback(() => {
-    const ActiveComponent = activeTabConfig.component;
-    return <ActiveComponent />;
-  }, [activeTabConfig.component]);
+  const validatedTab = TABS_CONFIG.some(tab => tab.key === activeTab)
+    ? activeTab
+    : DEFAULT_TAB;
 
   return (
-    <div className="flex mb-5 mt-9 item-center justify-center px-4">
-      <div className="w-full md:max-w-2xl md:mx-auto h-auto custom-scrollbar overflow-y-auto bg-white shadow rounded-md p-6 ">
-        {/* Tab Image Header */}
+    <div className="flex mb-5 mt-10 items-center justify-center px-4">
+      <div className="w-full md:max-w-xl md:mx-auto custom-scrollbar bg-white dark:bg-gray-900 shadow rounded-md p-6 transition-colors">
+
+        <Tabs
+          tabs={TABS_CONFIG}
+          activeTab={validatedTab}
+          onTabChange={setActiveTab}
+          className="justify-center"
+        />
         <Animated
-          animation="fade-down"
-          duration={0.5}
-          easing="ease-out"
-          className="mb-4 flex justify-center"
+          key={validatedTab}
+          animation="slide-up"
         >
-          <img
-            src={activeTabConfig.image}
-            alt={`${activeTabConfig.name} icon`}
-            className="h-32 w-xl object-contain"
-            loading="lazy"
-          />
-        </Animated>
 
-        {/* Tab Navigation */}
-        <nav className="flex space-x-0 border-b" role="tablist">
-          {TABS_CONFIG.map((tab) => {
-            const isActive = activeTab === tab.id;
-
-            return (
-              <button
-                key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`panel-${tab.id}`}
-                className={`px-2 md:px-6 py-2 -mb-px font-medium border-b-2 focus:outline-none transition-colors duration-200 hover:text-[#1a1a40] ${isActive
-                  ? 'border-[#24244e] text-[#24244e] font-medium'
-                  : 'border-transparent text-gray-700 hover:border-gray-300'
-                  }`}
-              >
-                {tab.name}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div
-          role="tabpanel"
-          id={`panel-${activeTab}`}
-          aria-labelledby={`tab-${activeTab}`}
-        >
-          <Animated
-            key={activeTab}
-            animation="slide-up"
-            duration={0.5}
-            easing="ease-out"
-            className="mt-6"
+          <div
+            role="tabpanel"
+            id={`panel-${validatedTab}`}
+            aria-labelledby={`tab-${validatedTab}`}
           >
-            {renderActiveForm()}
-          </Animated>
-        </div>
+            <ActiveFormComponent />
+          </div>
+        </Animated>
       </div>
     </div>
   );
