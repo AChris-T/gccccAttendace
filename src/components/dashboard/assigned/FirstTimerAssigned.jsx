@@ -91,7 +91,7 @@ const FirstTimerAssigned = ({ firstTimers }) => {
                                         <Link to={`mailto:${firstTimer.email}`}>{firstTimer.email}</Link>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        <Link to={`tel:${firstTimer.phone}`}>{firstTimer.phone || 'N/A'} </Link>
+                                        <Link to={`tel:${firstTimer.phone_number}`}>{firstTimer.phone_number || 'N/A'} </Link>
                                     </TableCell>
                                     <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                         <Badge

@@ -1,7 +1,7 @@
 import Switch from '@/components/form/Switch'
 import Avatar from '@/components/ui/Avatar'
 import Badge from '@/components/ui/Badge'
-import { CheckIcon, TrashIcon } from '@/icons'
+import { CheckIcon, TrashIcon, UserIcon } from '@/icons'
 import { Toast } from '@/lib/toastify'
 import { useUpdateFirstTimer } from '@/queries/firstTimer.query'
 
@@ -69,6 +69,9 @@ const Header = ({ firstTimerData, showToolbox, setShowToolbox, showProfile, setS
                                     Active
                                 </Badge>
                             )}
+                            {firstTimerData?.assigned_to_member && <Badge color='primary' size="sm">
+                                <UserIcon width={15} height={15} /> {firstTimerData?.assigned_to_member?.full_name}
+                            </Badge>}
                         </div>
                     </div>
                 </div>
