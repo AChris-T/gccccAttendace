@@ -1,4 +1,5 @@
 import { FollowupCard } from "@/components/admin/followups/FollowupCard";
+import { EmptyState } from "@/components/common/EmptyState";
 import { FollowupFeedbacksSkeletonLoader } from "@/components/skeleton";
 import { Tabs } from "@/components/ui/tab/Tabs";
 import useQueryParam from "@/hooks/useQueryParam";
@@ -41,17 +42,19 @@ const FollowupFeedbacks = () => {
 
             {isLoading ? (
                 <FollowupFeedbacksSkeletonLoader />
-            ) : (
-                <div className="space-y-5">
-                    {data.map((person) => (
-                        <FollowupCard
-                            key={person.id}
-                            activeTab={activeTab}
-                            person={person}
-                        />
-                    ))}
-                </div>
-            )}
+            ) :
+                data.length == 0 ? <EmptyState /> :
+                    (
+                        <div className="space-y-5">
+                            {data.map((person) => (
+                                <FollowupCard
+                                    key={person.id}
+                                    activeTab={activeTab}
+                                    person={person}
+                                />
+                            ))}
+                        </div>
+                    )}
         </div>
     );
 };

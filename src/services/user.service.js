@@ -11,4 +11,8 @@ export const UserService = {
     const { data } = await $api.get('/leaders/absentees');
     return data;
   },
+  getAssignedMembers: async () => {
+    const { data } = await $api.get('/members/assigned');
+    return data;
+  },
 };

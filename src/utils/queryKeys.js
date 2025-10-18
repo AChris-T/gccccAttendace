@@ -25,6 +25,7 @@ export const QUERY_KEYS = {
   },
   USER: {
     ABSENT: ['all_absent_members'],
+    ASSIGNED_MEMBER: ['assigned_members'],
   },
 
   SERVICES: {

@@ -1,7 +1,7 @@
 import Switch from "@/components/form/Switch";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
-import { CheckIcon } from "@/icons";
+import { CheckIcon, DeleteIcon, UserIcon } from "@/icons";
 
 const ROLE_CONFIG = {
     admin: { label: 'Admin', color: 'error' },
@@ -20,7 +20,7 @@ const UserInfo = ({ user }) => {
     const isActive = user.status === 'active';
 
     return (
-        <div>
+        <div className="truncate">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {user.full_name || 'N/A'}
             </h1>
@@ -31,11 +31,16 @@ const UserInfo = ({ user }) => {
                 <Badge size="sm" color={roleConfig.color}>
                     {roleConfig.label}
                 </Badge>
-                {isActive && (
+                {isActive ? (
                     <Badge startIcon={<CheckIcon />} size="sm" color="success">
                         Active
                     </Badge>
-                )}
+                ) : <Badge startIcon={<DeleteIcon height={15} />} size="sm" color="error">
+                    Deactivated
+                </Badge>}
+                {user?.assigned_to_member && <Badge color='primary' size="sm">
+                    <UserIcon width={15} height={15} /> {user?.assigned_to_member?.full_name}
+                </Badge>}
             </div>
         </div>
     );

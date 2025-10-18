@@ -44,6 +44,29 @@ export const useMember = (memberId, options = {}) => {
   });
 };
 
+export const useUpdateMember = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload) => {
+      return await MemberService.updateMember(payload);
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        QUERY_KEYS.MEMBERS.DETAIL(variables?.id?.toString()),
+        data?.data || data
+      );
+      Toast.success(data?.message);
+      options.onSuccess?.(response.data, variables);
+    },
+    onError: (error) => {
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message);
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};
+
 // // Create member mutation
 // export const useCreateMember = (options = {}) => {
 //   const queryClient = useQueryClient();
@@ -68,37 +91,6 @@ export const useMember = (memberId, options = {}) => {
 // };
 
 // // Update member mutation
-// export const useUpdateMember = (options = {}) => {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: ({ memberId, ...payload }) =>
-//       MemberService.updateMember(memberId, payload),
-//     onSuccess: (response, variables) => {
-//       const { memberId } = variables;
-
-//       // Update specific member in cache
-//       queryClient.setQueryData(
-//         QUERY_KEYS.MEMBERS.DETAIL(memberId),
-//         response.data
-//       );
-
-//       // Update member in the list
-//       queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, (oldData) =>
-//         oldData?.map((member) =>
-//           member.id === memberId ? response.data : member
-//         )
-//       );
-
-//       options.onSuccess?.(response.data, variables);
-//     },
-//     onError: (error) => {
-//       const errorDetails = handleApiError(error);
-//       Toast.error(errorDetails.message);
-//       options.onError?.(new Error(errorDetails.message));
-//     },
-//   });
-// };
 
 // // Delete member mutation with optimistic updates
 // export const useDeleteMember = (options = {}) => {

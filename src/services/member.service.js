@@ -19,13 +19,13 @@ export const MemberService = {
     return data;
   },
 
+  async updateMember(payload) {
+    const { data } = await $api.put(`/${MEMBERS}/${payload.id}`, payload);
+    return data;
+  },
+
   // async createMember(payload) {
   //   const { data } = await $api.post(`/${MEMBERS}`, payload);
-  //   return data;
-  // },
-
-  // async updateMember(memberId, payload) {
-  //   const { data } = await $api.put(`/${MEMBERS}/${memberId}`, payload);
   //   return data;
   // },
 

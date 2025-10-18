@@ -19,6 +19,8 @@ const MemberProfile = ({ memberId }) => {
     const [showProfile, setShowProfile] = useState(false);
 
     if (isError) return <Message data={error?.data} />
+    const isActive = memberData?.status !== 'deactivated';
+
     return (
         <div className="space-y-6">
             {isLoading ? <ProfileHeaderSkeleton /> :
@@ -43,8 +45,8 @@ const MemberProfile = ({ memberId }) => {
                             <MemberToolbox memberData={memberData} />
                         </Animated>
                     )}
+                    {isActive ? <Animated animation='fade-up'> <FeedbackTimeline /></Animated> : <EmptyState title='Followup deactivated' />}
                 </>}
-            <Animated animation='fade-up'> <FeedbackTimeline /></Animated>
         </div>
     );
 };

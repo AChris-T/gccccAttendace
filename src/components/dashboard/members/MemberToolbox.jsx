@@ -12,23 +12,17 @@ import {
     ToolboxIcon,
     WhatsAppIcon
 } from "@/icons";
-import { Toast } from "@/lib/toastify";
 import { normalizePhone } from "@/utils/helper";
 import UpdateFirstTimer from "@/components/dashboard/firsttimer/edit/UpdateFirstTimer";
+import AssignMember from "@/components/dashboard/members/AssignMember";
+import { useAuthStore } from "@/store/auth.store";
+import UpdateMemberStatus from "@/components/dashboard/members/UpdateMemberStatus";
 
 
 const MemberToolbox = ({ memberData }) => {
-    const {
-        isOpen: isOpenUpdateStatusModal,
-        openModal: openUpdateStatusModal,
-        closeModal: closeUpdateStatusModal,
-    } = useModal();
-
-    const {
-        isOpen: isOpenEditModal,
-        openModal: openEditModal,
-        closeModal: closeEditModal,
-    } = useModal();
+    const { isOpen: isOpenUpdateStatusModal, openModal: openUpdateStatusModal, closeModal: closeUpdateStatusModal } = useModal();
+    const { isOpen, openModal, closeModal, } = useModal();
+    const { isAdmin } = useAuthStore();
 
     const [toolboxOpen, setToolboxOpen] = useState(true);
 
@@ -120,11 +114,11 @@ const MemberToolbox = ({ memberData }) => {
                         <ButtonCard
                             color="purple"
                             icon={<EditIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
-                            description="Change Status, Reassign to a new member"
-                            onClick={openEditModal}
-                            disabled={memberData?.status == 'deactivated'}
+                            description="Assign to a new member to followup"
+                            onClick={openModal}
+                            disabled={memberData?.status == 'deactivated' || !isAdmin}
                         >
-                            Update Member
+                            Assign Member
                         </ButtonCard>
 
                         <ButtonCard
@@ -145,7 +139,7 @@ const MemberToolbox = ({ memberData }) => {
                 isOpen={isOpenUpdateStatusModal}
                 onClose={closeUpdateStatusModal}
             >
-                <UpdateFirstTimer
+                <UpdateMemberStatus
                     memberData={memberData}
                     onClose={closeUpdateStatusModal}
                 />
@@ -153,23 +147,16 @@ const MemberToolbox = ({ memberData }) => {
 
             <Modal
                 title={`Edit ${memberData?.full_name}`}
-                isOpen={isOpenEditModal}
-                onClose={closeEditModal}
+                isOpen={isOpen}
+                onClose={closeModal}
             >
-                <EditFirstTimer
+                <AssignMember
                     memberData={memberData}
-                    onClose={closeEditModal}
+                    onClose={closeModal}
                 />
             </Modal>
-        </div>
+        </div >
     );
 };
 
 export default MemberToolbox;
-// const  = () => {
-//     return (
-//         <div>MemberToolbox</div>
-//     )
-// }
-
-// export default MemberToolbox

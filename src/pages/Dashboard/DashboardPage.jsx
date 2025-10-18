@@ -13,10 +13,11 @@ import Button from '@/components/ui/Button';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { useUsersMonthlyAttendanceStats } from '@/queries/attendance.query';
 import { CalenderIcon, DashboardIcon } from '@/icons';
-import { useGetAssignedAbsentees } from '@/queries/user.query';
+import { useGetAssignedAbsentees, useGetAssignedMembers } from '@/queries/user.query';
 import { TableSkeletonLoader } from '@/components/skeleton';
 import FirstTimerAssigned from '@/components/dashboard/assigned/FirstTimerAssigned';
 import { useGetFirstTimersAssigned } from '@/queries/firstTimer.query';
+import AssignedMembers from '@/components/dashboard/assigned/AssignedMembers';
 
 // Constants
 const getCurrentDateParams = () => ({
@@ -48,13 +49,15 @@ const useDateFilter = () => {
 
 const useDashboardData = (year, month) => {
   const attendanceQuery = useUsersMonthlyAttendanceStats(year, month);
-  const assignedMembersQuery = useGetAssignedAbsentees();
+  const assignedAbsentMembersQuery = useGetAssignedAbsentees();
   const firstTimersQuery = useGetFirstTimersAssigned();
+  const assignednMembersQuery = useGetAssignedMembers();
 
   return {
     attendance: attendanceQuery,
-    assignedMembers: assignedMembersQuery,
+    assignedAbsentMembers: assignedAbsentMembersQuery,
     firstTimers: firstTimersQuery,
+    assignedMembers: assignednMembersQuery,
   };
 };
 
@@ -100,11 +103,18 @@ const LoadingSection = () => (
   </section>
 );
 
-const AssignedMembersSection = ({ data, isLoading }) => {
+const AssignedAbsentMembersSection = ({ data, isLoading }) => {
   if (isLoading) return <LoadingSection />;
   if (!data?.length) return null;
 
-  return <AssignedAbsentMembers assignedMembers={data} />;
+  return <AssignedAbsentMembers assignedAbsentMembers={data} />;
+};
+
+const AssignedMembersSection = ({ data, isLoading }) => {
+  if (isLoading) return <LoadingSection />;
+  if (!data?.assigned_users?.length) return null;
+
+  return <AssignedMembers assignedMembers={data} />;
 };
 
 const FirstTimersSection = ({ data, isLoading }) => {
@@ -120,8 +130,9 @@ const DashboardPage = () => {
 
   const {
     attendance,
-    assignedMembers,
+    assignedAbsentMembers,
     firstTimers,
+    assignedMembers
   } = useDashboardData(params.year, params.month);
 
   const attendanceProps = useMemo(
@@ -158,6 +169,11 @@ const DashboardPage = () => {
         <AssignedMembersSection
           data={assignedMembers.data}
           isLoading={assignedMembers.isLoading}
+        />
+
+        <AssignedAbsentMembersSection
+          data={assignedAbsentMembers.data}
+          isLoading={assignedAbsentMembers.isLoading}
         />
 
         <FirstTimersSection

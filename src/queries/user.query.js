@@ -79,3 +79,17 @@ export const useGetAssignedAbsentees = (options = {}) => {
     ...options,
   });
 };
+
+export const useGetAssignedMembers = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.USER.ASSIGNED_MEMBER,
+    queryFn: async () => {
+      const { data } = await UserService.getAssignedMembers();
+      return data;
+    },
+    staleTime: 10 * 60 * 1000,
+    cacheTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: true,
+    ...options,
+  });
+};
