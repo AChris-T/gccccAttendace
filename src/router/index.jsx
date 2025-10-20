@@ -2,10 +2,10 @@ import { lazy, Suspense } from 'react';
 import HomeLayout from '../layout/HomeLayout';
 import AppLayout from '../layout/AppLayout';
 
-import ProtectedRoute from '../layout/Protected/ProtectedRoute';
-import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
-import LeadersProtectedRoute from '../layout/Protected/LeadersProtectedRoute';
-import PublicRoute from '../layout/PublicRoute';
+import ProtectedRoute from '../layout/route/ProtectedRoute';
+import AdminProtectedRoute from '../layout/route/AdminProtectedRoute';
+import LeadersProtectedRoute from '../layout/route/LeadersProtectedRoute';
+import PublicRoute from '../layout/route/PublicRoute';
 import PageLoader from '@/components/ui/PageLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 

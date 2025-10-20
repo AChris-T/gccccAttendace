@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useSidebar } from '../context/SidebarContext';
 import {
   AdminIcon,
   AttendanceIcon2,
@@ -10,9 +9,10 @@ import {
   HorizontaLDotsIcon,
   UserIcon,
   LeaderIcon
-} from '../icons';
-import { useAuthStore } from '../store/auth.store';
-import { adminNavItems, leaderNavItems, navItems } from '../utils/data';
+} from '@/icons';
+import { adminNavItems, leaderNavItems, navItems } from '@/utils/data';
+import { useAuthStore } from '@/store/auth.store';
+import { useSidebar } from '@/context/SidebarContext';
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();

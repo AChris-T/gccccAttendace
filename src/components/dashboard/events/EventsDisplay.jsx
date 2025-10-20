@@ -585,9 +585,8 @@ export default function EventsDisplay() {
             <>
                 {events[activeTab].length > 0 ? (
                     events[activeTab].map((event) => (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div key={event.id} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div
-                                key={event.id}
                                 className="bg-white dark:bg-slate-800 rounded shadow overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                             >
                                 {/* Event Image/Banner */}

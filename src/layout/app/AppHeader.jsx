@@ -1,11 +1,11 @@
 import { useState } from "react";
 
 import { Link } from "react-router-dom";
-import { useSidebar } from "../context/SidebarContext";
-import UserDropdown from "../components/header/UserDropdown";
-import { ThemeToggleButton } from "../components/common/ThemeToggleButton";
-import { CloseIcon, CloseIcon2, HorizontaLDotsIcon, MenuIcon } from "../icons";
+import { CloseIcon, HorizontaLDotsIcon, MenuIcon } from "@/icons";
 import { useMe } from "@/queries/auth.query";
+import { useSidebar } from "@/context/SidebarContext";
+import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
+import UserDropdown from "@/components/header/UserDropdown";
 
 const AppHeader = () => {
   const { } = useMe()

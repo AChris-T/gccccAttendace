@@ -1,10 +1,11 @@
-import { SidebarProvider, useSidebar } from "../context/SidebarContext";
+import ProgressBar from "@/components/others/ProgressBar";
+import { ScrollToTop } from "@/components/others/ScrollToTop";
+import { SidebarProvider, useSidebar } from "@/context/SidebarContext";
+import AppHeader from "@/layout/app/AppHeader";
+import AppSidebar from "@/layout/app/AppSidebar";
+import Backdrop from "@/layout/app/Backdrop";
 import { Outlet } from "react-router-dom";
-import Backdrop from "./Backdrop";
-import AppSidebar from "./AppSidebar";
-import AppHeader from "./AppHeader";
-import { ScrollToTop } from "../components/others/ScrollToTop";
-import ProgressBar from "../components/others/ProgressBar";
+
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
