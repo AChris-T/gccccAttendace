@@ -46,10 +46,13 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': 'error', // Error for unused variables
-      'react/jsx-uses-react': 'error', // Prevent React from being marked as unused
+      'no-unused-vars': 'error',
+      'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
       'react-hooks/rules-of-hooks': 'error',
+      'no-undef': 'error',
+      'no-unused-vars': 'warn',
+      'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': [
         'warn',

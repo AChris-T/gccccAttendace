@@ -10,7 +10,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-fade';
 import Message from "@/components/common/Message";
 import { VideoCardSkeleton } from "@/components/skeleton";
-import { CalenderIcon, CloseIcon, LeftIcon, PlayIcon, RightIcon, UserIcon, UserIcon2 } from "@/icons";
+import { CalendarIcon, CalenderIcon, CloseIcon, LeftIcon, PlayIcon, RightIcon, } from "@/icons";
 import Badge from "@/components/ui/Badge";
 
 const VideoCarousel = () => {
@@ -190,7 +190,7 @@ const VideoCarousel = () => {
                             </div>
                         </div>
 
-                        <div className="p-8 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
+                        <div className="p-5 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
                             <h2 className="text-lg ms:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">
                                 {selectedVideo.title}
                             </h2>
@@ -201,15 +201,11 @@ const VideoCarousel = () => {
                             )}
                             <div className="flex items-center gap-6 text-sm">
                                 <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-950/30 px-4 py-2 rounded-full">
-                                    {/* <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" /> */}
-                                    <span className="text-blue-700 dark:text-blue-300 font-semibold">
+                                    <Badge color="primary" size="sm">
+                                        <CalendarIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                                         {formatDate(selectedVideo.published_at)}
-                                    </span>
+                                    </Badge>
                                 </div>
-                                <span className="text-slate-500 dark:text-slate-400">•</span>
-                                <span className="text-slate-600 dark:text-slate-400 font-medium">
-                                    {selectedVideo.channel_title}
-                                </span>
                             </div>
                         </div>
                     </div>

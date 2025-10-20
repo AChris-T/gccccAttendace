@@ -7,6 +7,7 @@ import AdminProtectedRoute from '../layout/Protected/AdminProtectedRoute';
 import LeadersProtectedRoute from '../layout/Protected/LeadersProtectedRoute';
 import PublicRoute from '../layout/PublicRoute';
 import PageLoader from '@/components/ui/PageLoader';
+import ErrorBoundary from '@/components/error/ErrorBoundary';
 
 const HomePage = lazy(() => import('../pages/Home/HomePage'));
 const LoginPage = lazy(() => import('../pages/Home/Auth/LoginPage'));
@@ -34,9 +35,11 @@ const LeadersUnitPage = lazy(() => import('../pages/Leaders/LeadersUnitPage'));
 const NotFoundPage = lazy(() => import('../pages/Error/NotfoundPage'));
 
 const withSuspense = (Component) => (
-  <Suspense fallback={<PageLoader />}>
-    <Component />
-  </Suspense>
+  <ErrorBoundary>
+    <Suspense fallback={<PageLoader />}>
+      <Component />
+    </Suspense>
+  </ErrorBoundary>
 );
 
 const AppRoutes = [

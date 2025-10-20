@@ -43,6 +43,11 @@ export const registerSchema = yup.object({
   gender: yup.string().required('Gender is required'),
 });
 
+export const loginSchema = yup.object({
+  username: yup.string().trim().required('Username is required'),
+  password: yup.string().trim().required('Password is required'),
+});
+
 export const timelineSchema = yup.object({
   note: yup.string().required('Comment field is required'),
   type: yup.string().required('Type field is required'),

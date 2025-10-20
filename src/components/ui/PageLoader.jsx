@@ -1,5 +1,5 @@
 export default function PageLoader({
-    logoSrc = '/images/logo/logo2.png',
+    logoSrc = '/images/logo/gccc.png',
     alt = 'App logo',
 }) {
     return (
@@ -42,7 +42,7 @@ export default function PageLoader({
                             <div
                                 className="relative z-10 flex items-center justify-center rounded-full
                            w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36
-                           bg-white dark:bg-gray-800"
+                           bg-white p-3 dark:bg-gray-800"
                             >
                                 <img
                                     src={logoSrc}

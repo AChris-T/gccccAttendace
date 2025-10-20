@@ -28,13 +28,11 @@ const AppSidebar = () => {
     [location.pathname]
   );
 
-  // Helper function to check if any submenu item is active for a given menu item
   const hasActiveSubmenuItem = useCallback((menuItem) => {
     if (!menuItem.subItems) return false;
     return menuItem.subItems.some(subItem => isActive(subItem.path));
   }, [isActive]);
 
-  // Helper function to find which submenu should be open based on active route
   const findActiveSubmenu = useCallback((items, menuType) => {
     for (let index = 0; index < items.length; index++) {
       const nav = items[index];
@@ -221,7 +219,7 @@ const AppSidebar = () => {
         lg:translate-x-0`}
     >
       <div
-        className={`py-8 flex ${!isExpanded ? 'lg:justify-center' : 'justify-start'
+        className={`pt-5 flex ${!isExpanded ? 'lg:justify-center' : 'justify-start'
           }`}
       >
         <Link to="/">
@@ -229,14 +227,14 @@ const AppSidebar = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo2.png"
+                src="/images/logo/logo-black.png"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo.png"
+                src="/images/logo/logo-white.png"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -253,7 +251,7 @@ const AppSidebar = () => {
         </Link>
       </div>
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
-        <nav className="mb-6">
+        <nav className="mt-10">
           <div className="flex flex-col gap-4">
             {isAdmin && (
               <div>

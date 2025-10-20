@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSidebar } from "../context/SidebarContext";
 import UserDropdown from "../components/header/UserDropdown";
 import { ThemeToggleButton } from "../components/common/ThemeToggleButton";
-import { CloseIcon2, HorizontaLDotsIcon, MenuIcon } from "../icons";
+import { CloseIcon, CloseIcon2, HorizontaLDotsIcon, MenuIcon } from "../icons";
 import { useMe } from "@/queries/auth.query";
 
 const AppHeader = () => {
@@ -34,23 +34,26 @@ const AppHeader = () => {
             aria-label="Toggle Sidebar"
           >
             {isMobileOpen ? (
-              <CloseIcon2 />
+              <CloseIcon />
             ) : (
               <MenuIcon />
             )}
-            {/* Cross Icon */}
           </button>
 
           <Link to="/" className="lg:hidden">
             <img
               className="dark:hidden"
-              src="/images/logo/logo2.png"
+              src="/images/logo/logo-black.png"
               alt="Logo"
+              width={150}
+              height={40}
             />
             <img
               className="hidden dark:block"
-              src="/images/logo/logo.png"
+              src="/images/logo/logo-white.png"
               alt="Logo"
+              width={150}
+              height={40}
             />
           </Link>
 

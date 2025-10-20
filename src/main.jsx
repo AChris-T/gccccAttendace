@@ -13,13 +13,16 @@ import { ThemeProvider } from './context/ThemeContext.tsx';
 import { ToastContainer } from 'react-toastify';
 import { AppWrapper } from './components/common/PageMeta.jsx';
 import { QueryProvider } from './providers/QueryProvider.jsx';
+import ErrorBoundary from '@/components/error/ErrorBoundary';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryProvider>
       <ThemeProvider>
         <AppWrapper>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
           <ToastContainer />
         </AppWrapper>
       </ThemeProvider>
