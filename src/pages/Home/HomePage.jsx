@@ -11,6 +11,7 @@ import { useAuthStore } from '../../store/auth.store';
 import { useTodaysService } from '../../queries/service.query';
 import { useMarkAttendance } from '../../queries/attendance.query';
 import { Toast } from '../../lib/toastify';
+import Button from '@/components/ui/Button';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(isoWeek);
@@ -27,8 +28,8 @@ const EXTERNAL_LINKS = {
 
 const LoadingState = ({ userName }) => (
   <div className="min-h-screen flex items-center justify-center px-3">
-    <div className="flex flex-col items-center gap-3 mb-5">
-      <p className="my-4 text-base text-white capitalize">
+    <div className="flex flex-col items-center space-y-5 md:space-y-10">
+      <p className="text-base text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
       </p>
       <Lottie
@@ -36,49 +37,43 @@ const LoadingState = ({ userName }) => (
         loop
         style={{ width: 150, height: 150 }}
       />
-      <div className="flex flex-col items-center gap-4 mx-4">
-        <p className="text-white">Loading service information...</p>
-      </div>
+      <p className="text-white">Loading service information...</p>
     </div>
   </div>
 );
 
 const NoServiceState = ({ userName }) => (
   <div className="min-h-screen flex items-center justify-center px-3">
-    <div className="flex flex-col items-center gap-3 mb-5">
-      <p className="my-4 text-base text-white capitalize">
+    <div className="max-w-md flex flex-col items-center space-y-5 md:space-y-10">
+      <p className="text-base text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
       </p>
-      <div className="flex flex-col items-center justify-center gap-16">
-        <p className="max-w-md text-center text-white">
-          We do not have a church service today, but you can catch up with
-          previous services on YouTube and download audio messages on Telegram.
-        </p>
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <a
-            href={EXTERNAL_LINKS.YOUTUBE}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors"
-          >
-            Watch on YouTube
-          </a>
-          <a
-            href={EXTERNAL_LINKS.TELEGRAM}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-colors"
-          >
-            Download on Telegram
-          </a>
-        </div>
+      <p className="text-center text-white">
+        We do not have a church service today, but you can catch up with
+        previous services on YouTube and download audio messages on Telegram.
+      </p>
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <Button variant='danger'
+          href={EXTERNAL_LINKS.YOUTUBE}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Watch on YouTube
+        </Button>
+        <Button variant='primary'
+          href={EXTERNAL_LINKS.TELEGRAM}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download on Telegram
+        </Button>
       </div>
     </div>
   </div>
 );
 
 const ClockInButton = ({ onClockIn, isPending }) => (
-  <div className="min-h-screen flex items-center justify-center px-3">
+  <div className="space-y-5 md:space-y-10">
     {!isPending ? (
       <div className="bg-[#3A4D70] rounded-full animate-pulse delay-150">
         <motion.button
@@ -97,7 +92,7 @@ const ClockInButton = ({ onClockIn, isPending }) => (
         >
           <span className="absolute inset-1 rounded-full border-4 border-[#202a46] opacity-90 animate-ping delay-1000" />
           <span className="absolute inset-1 rounded-full border-4 border-[#172346] opacity-90 animate-ping delay-10000" />
-          <HandIcon />
+          <HandIcon height={150} width={150} />
         </motion.button>
       </div>
     ) : (
@@ -107,17 +102,15 @@ const ClockInButton = ({ onClockIn, isPending }) => (
         style={{ width: 150, height: 150 }}
       />
     )}
-    <div className="my-3 text-center">
-      <p className="my-3 text-sm font-semibold text-white">
-        {isPending ? 'Submitting...' : 'Clock In'}
-      </p>
-    </div>
+    <p className="text-sm text-center font-semibold text-white">
+      {isPending ? 'Submitting...' : 'Clock In'}
+    </p>
   </div>
 );
 
 const AttendanceRecordedState = () => (
-  <div className="min-h-screen flex items-center justify-center px-3">
-    <CheckedIcon width={150} height={150} />
+  <div className='space-y-5 md:space-y-10'>
+    <CheckedIcon width={150} height={150} className='mx-auto' />
     <h3 className="text-center text-white">
       Your attendance has been recorded for today.
     </h3>
@@ -174,11 +167,11 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-3">
-      <div className="flex flex-col items-center gap-3">
-        <p className="my-4 text-base text-white capitalize">
+      <div className="flex flex-col items-center space-y-5 md:space-y-10">
+        <p className="text-base text-white capitalize">
           Hello 👋, {user?.first_name ?? 'Friend'}
         </p>
-        <div className="flex flex-col items-center gap-4 mx-4">
+        <div className="flex flex-col items-center">
           {canMark ? (
             <ClockInButton onClockIn={handleClockIn} isPending={isPending} />
           ) : (
