@@ -46,8 +46,9 @@ export default function FormPage() {
   const validatedTab = TABS_CONFIG.some(tab => tab.key === activeTab)
     ? activeTab
     : DEFAULT_TAB;
+
   return (
-    <div className="flex mb-5 mt-10 items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-3">
       <div className="w-full md:max-w-xl md:mx-auto custom-scrollbar bg-white dark:bg-gray-900 shadow rounded-md p-6 transition-colors">
         <Tabs
           tabs={TABS_CONFIG}

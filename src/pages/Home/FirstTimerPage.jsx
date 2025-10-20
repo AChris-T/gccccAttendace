@@ -24,7 +24,7 @@ const STEP_VALIDATION_FIELDS = {
   1: ['first_name', 'last_name', 'email', 'phone_number', 'gender'],
   2: ['data_of_friend_and_family', 'location'],
   3: ['membership_interest'],
-  4: [], // Dynamic based on conditions
+  4: [],
   5: ['service_experience', 'whatsapp_interest'],
 };
 
@@ -125,7 +125,7 @@ const FirstTimerPage = () => {
     const isValid = await trigger(fieldsToValidate);
 
     if (!isValid)
-      Toast.warning(
+      Toast.error(
         'Please fill in all required fields correctly before proceeding.'
       );
 
@@ -257,7 +257,7 @@ const FirstTimerPage = () => {
   const renderForm = () => (
     <>
       <div className="flex justify-center mb-5">
-        <img src="/images/logo/logo2.png" alt="Logo" className="h-16 w-auto" />
+        <img src="/images/logo/gccc.png" alt="Logo" className="h-16 w-auto" />
       </div>
 
       {renderProgressBar()}
@@ -277,7 +277,7 @@ const FirstTimerPage = () => {
   );
 
   return (
-    <div className="flex mb-5 mt-9 item-center justify-center px-4">
+    <div className="flex justify-center mt-20 px-3">
       <div className={containerClasses}>
         {isCompleteStep ? renderCompletionMessage() : renderForm()}
       </div>

@@ -20,7 +20,7 @@ export default function Message({ variant = "info", data, onClose, className, me
 
     return (
         <div
-            className={`relative p-4 mb-4 border rounded-lg ${className} ${variantStyles[variant]} shadow`}
+            className={`relative p-4 mb-4 border animate-shake rounded-lg ${className} ${variantStyles[variant]} shadow`}
             role="alert"
         >
             <p className="font-medium text-sm truncate">{data?.message}</p>

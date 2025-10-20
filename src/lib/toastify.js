@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 class ToastService {
   constructor() {
@@ -14,12 +14,8 @@ class ToastService {
 
   showToast(message, type = 'default', options = {}) {
     const toastOptions = {
-      position: 'top-right',
-      autoClose: 4000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
+      position: 'top-center',
+      duration: 5000,
       ...options,
     };
 
@@ -28,12 +24,11 @@ class ToastService {
     const toastHandlers = {
       success: toast.success,
       error: toast.error,
-      info: toast.info,
-      warning: toast.warning,
+      loading: toast.loading,
       default: toast,
     };
 
-    const toastHandler = toastHandlers[type];
+    const toastHandler = toastHandlers[type] || toast;
     const toastId = toastHandler(message, toastOptions);
     this.activeToastId = toastId;
     return toastId;
@@ -47,12 +42,8 @@ class ToastService {
     return this.showToast(message, 'error', options);
   }
 
-  info(message, options) {
-    return this.showToast(message, 'info', options);
-  }
-
-  warning(message, options) {
-    return this.showToast(message, 'warning', options);
+  loading(message, options) {
+    return this.showToast(message, 'loading', options);
   }
 
   default(message, options) {
@@ -61,6 +52,21 @@ class ToastService {
 
   dismiss() {
     this.dismissActiveToast();
+  }
+
+  promise(promise, messages, options = {}) {
+    this.dismissActiveToast();
+    const toastId = toast.promise(
+      promise,
+      {
+        loading: messages.loading || 'Loading...',
+        success: messages.success || 'Success!',
+        error: messages.error || 'Error occurred',
+      },
+      { position: 'top-right', ...options }
+    );
+    this.activeToastId = toastId;
+    return toastId;
   }
 }
 

@@ -77,7 +77,7 @@ const ToolBox = ({ firstTimerData }) => {
         try {
             await navigator.clipboard.writeText(welcomeMessage);
             setCopied(true);
-            Toast.info("Welcome message has been copied");
+            Toast.default("Welcome message has been copied");
             setTimeout(() => setCopied(false), COPY_TIMEOUT_MS);
         } catch (error) {
             Toast.error("Failed to copy message");

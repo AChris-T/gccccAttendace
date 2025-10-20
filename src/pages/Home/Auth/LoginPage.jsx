@@ -5,6 +5,7 @@ import { useLogin } from "@/queries/auth.query";
 import { loginSchema } from "@/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const TAGLINE = "Grow deeper in your commitment to God's house.";
 
@@ -24,17 +25,20 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-lg relative z-10">
+    <div className="min-h-screen flex items-center justify-center px-3">
+      <div className="w-full max-w-lg relative">
         <div className="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-10 backdrop-blur-sm border-2 border-white/20 dark:border-gray-700/50 transition-all duration-300 hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 hover:border-white/30 dark:hover:border-gray-600/50">
-          {/* Decorative Corner Elements */}
+
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 dark:from-blue-400/20 to-transparent rounded-bl-full"></div>
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/10 dark:from-purple-400/20 to-transparent rounded-tr-full"></div>
 
           {/* Header Section */}
-          <div className="text-center mb-10 relative">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent">
+          <div className="text-center mb-7 relative">
+            <div className="space-y-1">
+              <Link to='/' className="flex items-center justify-center">
+                <img width={55} src="/images/logo/gccc.png" alt="logo" />
+              </Link>
+              <h1 className="text-2xl  gap-1 font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent">
                 Welcome Back
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
@@ -51,34 +55,32 @@ const LoginPage = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(handleLogin)} className="space-y-1 relative">
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-5 relative">
             {isError && error && (
-              <div className="mb-6 animate-shake">
-                <Message variant="error" data={error?.data} />
-              </div>
+              <Message variant="error" data={error?.data} />
             )}
 
             <InputForm
-              label="Email or Phone Number"
-              name="username"
-              type="text"
+              label="Email"
+              name="email"
+              type="email"
               register={register}
-              error={null}
-              placeholder="Enter your email or phone"
+              error={errors.email?.message}
+              placeholder="Enter your email"
               required={true}
             />
 
             <InputForm
-              label="Password"
+              label="Password (Phone number)"
               name="password"
               type="password"
               register={register}
-              error={null}
+              error={errors.password?.message}
               placeholder="Enter your password"
               required={true}
             />
 
-            <div className="flex items-center justify-between pt-2">
+            <div className="">
               <a
                 href="/forgot-password"
                 className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold focus:outline-none focus:underline transition-colors relative group"
@@ -86,28 +88,13 @@ const LoginPage = () => {
                 Forgot password?
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
               </a>
-            </div>
-
-            <Button
-              className="w-full"
-              type="submit"
-              loading={isPending}
-            >
-              Sign In
-            </Button>
-
-            {/* Sign Up Link */}
-            <div className="text-center pt-6">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Don't have an account?{' '}
-                <a
-                  href="/register"
-                  className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors relative group"
-                >
-                  Sign up
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-                </a>
-              </p>
+              <Button
+                className="w-full mt-1"
+                type="submit"
+                loading={isPending}
+              >
+                Sign In
+              </Button>
             </div>
           </form>
         </div>

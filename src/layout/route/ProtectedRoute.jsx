@@ -11,7 +11,7 @@ function ProtectedRoute() {
 
     const handleUnauthorized = () => {
         resetAuthenticatedUser()
-        Toast.warning('Your session is invalid or has expired. Please log in.')
+        Toast.error('Your session is invalid or has expired. Please log in.')
         navigate(url, { replace: true })
     }
 

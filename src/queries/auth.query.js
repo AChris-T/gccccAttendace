@@ -100,7 +100,7 @@ export const useLogout = (options = {}) => {
       queryClient.clear();
       resetAuthenticatedUser();
 
-      Toast.info('You have been logged out successfully');
+      Toast.success('You have been logged out successfully');
       options.onSuccess?.();
     },
     onError: (error) => {

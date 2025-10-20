@@ -268,3 +268,8 @@ export const getTimeAgo = (dateString) => {
   }
   return 'just now';
 };
+
+export const formatPhoneNumber = (phone) => {
+  const trimmed = phone.trim();
+  return /^0\d+/.test(trimmed) ? trimmed.substring(1) : trimmed;
+};

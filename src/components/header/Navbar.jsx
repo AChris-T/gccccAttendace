@@ -13,7 +13,7 @@ const Navbar = () => {
   const formattedTime = dayjs().format('hh:mm A ');
   return (
     <>
-      <div className='z-50 container mx-auto'>
+      <div className='fixed top-0 right-0 left-0 z-50 container mx-auto'>
         <div className="flex w-full  items-center z-50 relative  justify-between md:items-center px-4">
           <Link to='/' className='hidden md:flex'>
             <img

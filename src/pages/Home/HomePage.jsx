@@ -26,7 +26,7 @@ const EXTERNAL_LINKS = {
 };
 
 const LoadingState = ({ userName }) => (
-  <div className="flex items-center justify-center w-full min-h-[80vh] px-2">
+  <div className="min-h-screen flex items-center justify-center px-3">
     <div className="flex flex-col items-center gap-3 mb-5">
       <p className="my-4 text-base text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
@@ -44,7 +44,7 @@ const LoadingState = ({ userName }) => (
 );
 
 const NoServiceState = ({ userName }) => (
-  <div className="flex items-center justify-center w-full min-h-[80vh] px-2">
+  <div className="min-h-screen flex items-center justify-center px-3">
     <div className="flex flex-col items-center gap-3 mb-5">
       <p className="my-4 text-base text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
@@ -78,7 +78,7 @@ const NoServiceState = ({ userName }) => (
 );
 
 const ClockInButton = ({ onClockIn, isPending }) => (
-  <div className="flex flex-col items-center justify-center gap-4">
+  <div className="min-h-screen flex items-center justify-center px-3">
     {!isPending ? (
       <div className="bg-[#3A4D70] rounded-full animate-pulse delay-150">
         <motion.button
@@ -116,7 +116,7 @@ const ClockInButton = ({ onClockIn, isPending }) => (
 );
 
 const AttendanceRecordedState = () => (
-  <div className="flex flex-col items-center justify-center gap-4">
+  <div className="min-h-screen flex items-center justify-center px-3">
     <CheckedIcon width={150} height={150} />
     <h3 className="text-center text-white">
       Your attendance has been recorded for today.
@@ -149,7 +149,7 @@ const HomePage = () => {
       e.preventDefault();
 
       if (!service?.id) {
-        Toast.warning('Service Day not found, please try again later.');
+        Toast.error('Service Day not found, please try again later.');
         return;
       }
 
@@ -173,8 +173,8 @@ const HomePage = () => {
   }
 
   return (
-    <div className="flex items-center justify-center w-full min-h-[80vh] px-2">
-      <div className="flex flex-col items-center gap-3 mb-5">
+    <div className="min-h-screen flex items-center justify-center px-3">
+      <div className="flex flex-col items-center gap-3">
         <p className="my-4 text-base text-white capitalize">
           Hello 👋, {user?.first_name ?? 'Friend'}
         </p>
