@@ -49,7 +49,7 @@ export default function FormPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-3">
-      <div className="w-full md:max-w-xl md:mx-auto custom-scrollbar bg-white dark:bg-gray-900 shadow rounded-md p-6 transition-colors">
+      <div className="w-full md:max-w-xl md:mx-auto custom-scrollbar bg-white dark:bg-gray-900 shadow rounded-lg p-6 transition-colors">
         <Tabs
           tabs={TABS_CONFIG}
           activeTab={validatedTab}
