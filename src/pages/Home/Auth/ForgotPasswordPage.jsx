@@ -105,9 +105,9 @@ const ForgotPasswordPage = () => {
     }), []);
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-3">
+        <div className="min-h-screen flex items-center justify-center px-4">
             <div className="w-full max-w-lg relative">
-                <div className="relative bg-white dark:bg-gray-900 rounded-lg shadow-2xl p-10 backdrop-blur-sm border-2 border-white/20 dark:border-gray-700/50 transition-all duration-300 hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 hover:border-white/30 dark:hover:border-gray-600/50">
+                <div className="relative bg-white dark:bg-gray-900 rounded-lg shadow-3xl py-8 px-6 md:p-10 backdrop-blur-sm border-2 border-white/20 dark:border-gray-700/50 transition-all duration-300 hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 hover:border-white/30 dark:hover:border-gray-600/50">
                     <button
                         onClick={goBack}
                         type="button"
