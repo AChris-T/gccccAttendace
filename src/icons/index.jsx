@@ -1,5 +1,5 @@
 // https://icon-sets.iconify.design
-export const HandIcon = ({ }) => {
+export const HandIcon = ({}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,7 @@ export const CheckedIcon = ({ width = 110, height = 110, className = '' }) => {
     </svg>
   );
 };
-export const AttendanceIcon = ({ }) => {
+export const AttendanceIcon = ({}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -781,6 +781,48 @@ export const CompletedIcon = ({
           fill={fill}
           fillRule="evenodd"
           d="M23 12c0 6.075-4.925 11-11 11S1 18.075 1 12S5.925 1 12 1s11 4.925 11 11M7 13l1.5-1.5l2 2l5-5L17 10l-6.5 6.5z"
+          clipRule="evenodd"
+        />
+      </svg>
+    </>
+  );
+};
+export const HamburgerIcon = ({
+  width = 24,
+  height = 24,
+  fill = 'currentColor',
+  className = '',
+}) => {
+  return (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-6 w-6"
+      >
+        <path d="M4 6.75A.75.75 0 0 1 4.75 6h14.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 6.75Zm0 5.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H4.75A.75.75 0 0 1 4 12Zm0 5.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H4.75a.75.75 0 0 1-.75-.75Z" />
+      </svg>
+    </>
+  );
+};
+export const CancelIcon = ({
+  width = 24,
+  height = 24,
+  fill = 'currentColor',
+  className = '',
+}) => {
+  return (
+    <>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-6 w-6"
+      >
+        <path
+          fillRule="evenodd"
+          d="M6.225 4.811a1 1 0 0 1 1.414 0L12 9.172l4.361-4.361a1 1 0 1 1 1.414 1.414L13.414 10.586l4.361 4.361a1 1 0 0 1-1.414 1.414L12 12l-4.361 4.361a1 1 0 1 1-1.414-1.414l4.361-4.361-4.361-4.361a1 1 0 0 1 0-1.414Z"
           clipRule="evenodd"
         />
       </svg>
@@ -2531,7 +2573,7 @@ export const TestimonyIcon = ({
     </svg>
   );
 };
-export const CheckCircleIcon = ({ className = "w-5 h-5" }) => (
+export const CheckCircleIcon = ({ className = 'w-5 h-5' }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 20 20">
     <path
       fillRule="evenodd"
@@ -2541,15 +2583,24 @@ export const CheckCircleIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const CircleIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+export const CircleIcon = ({ className = 'w-5 h-5' }) => (
+  <svg
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
     <circle cx="12" cy="12" r="9" strokeWidth="2" />
   </svg>
 );
 
-
-export const ShareIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+export const ShareIcon = ({ className = 'w-5 h-5' }) => (
+  <svg
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -2559,8 +2610,13 @@ export const ShareIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const CheckBadgeIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+export const CheckBadgeIcon = ({ className = 'w-5 h-5' }) => (
+  <svg
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -2570,8 +2626,13 @@ export const CheckBadgeIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const PendingIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+export const PendingIcon = ({ className = 'w-5 h-5' }) => (
+  <svg
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -2581,9 +2642,13 @@ export const PendingIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-
-export const DocumentIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+export const DocumentIcon = ({ className = 'w-5 h-5' }) => (
+  <svg
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -2593,6 +2658,17 @@ export const DocumentIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-export const BackIcon2 = ({ className = "w-5 h-5" }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4 10l-.707.707L2.586 10l.707-.707zm17 8a1 1 0 1 1-2 0zM8.293 15.707l-5-5l1.414-1.414l5 5zm-5-6.414l5-5l1.414 1.414l-5 5zM4 9h10v2H4zm17 7v2h-2v-2zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5z" /></svg>
+export const BackIcon2 = ({ className = 'w-5 h-5' }) => (
+  <svg
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <path
+      fill="currentColor"
+      d="m4 10l-.707.707L2.586 10l.707-.707zm17 8a1 1 0 1 1-2 0zM8.293 15.707l-5-5l1.414-1.414l5 5zm-5-6.414l5-5l1.414 1.414l-5 5zM4 9h10v2H4zm17 7v2h-2v-2zm-7-7a7 7 0 0 1 7 7h-2a5 5 0 0 0-5-5z"
+    />
+  </svg>
 );
