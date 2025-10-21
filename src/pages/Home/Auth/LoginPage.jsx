@@ -92,11 +92,12 @@ const LoginPage = () => {
             </Button>
 
             <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+              <span>Can't remember your password?  </span>
               <Link
                 to={`/forgot-password?email=${email}`}
                 className="text-red-600 dark:text-red-400 hover:underline font-medium"
               >
-                Forgot password?
+                Forgot password
               </Link>
             </div>
           </form>

@@ -1,3 +1,8 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import Message from "@/components/common/Message";
 import InputForm from "@/components/form/useForm/InputForm";
 import Button from "@/components/ui/Button";
@@ -5,16 +10,16 @@ import useGoBack from "@/hooks/useGoBack";
 import { BackIcon2 } from "@/icons";
 import { useResetPassword } from "@/queries/auth.query";
 import { resetPasswordSchema } from "@/schema";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { Link, useSearchParams } from "react-router-dom";
-
-const TAGLINE = ""; // short description on reset password (include email in the text)
+import { Toast } from "@/lib/toastify";
 
 const ResetPasswordPage = () => {
-    const { mutate, isPending, isError, error } = useResetPassword();
+    const { mutate, isPending, isError, isSuccess, error } = useResetPassword();
     const goBack = useGoBack();
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const email = searchParams.get('email');
     const token = searchParams.get('token');
@@ -23,14 +28,61 @@ const ResetPasswordPage = () => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
         resolver: yupResolver(resetPasswordSchema),
+        defaultValues: {
+            password: '',
+            password_confirmation: ''
+        }
     });
 
-    const handleResetPassword = async (data) => {
-        const payload = { ...data, email, token }
-        mutate(payload);
-    }
+    useEffect(() => {
+        if (!email || !token) {
+            Toast.error('Missing email or token parameters');
+            navigate('/forgot-password');
+        }
+    }, [email, token]);
+
+    const handleResetPassword = useCallback((data) => {
+        if (!email || !token) {
+            Toast.error('Cannot reset password without email and token');
+            return;
+        }
+
+        const payload = {
+            ...data,
+            email,
+            token
+        };
+        mutate(payload, {
+            onSuccess: () => {
+                reset();
+            }
+        });
+    }, [email, token, mutate, reset]);
+
+    const tagline = useMemo(() => {
+        if (email) {
+            return `Enter a new password for ${email}`;
+        }
+        return "Enter your new password below";
+    }, [email]);
+
+    const successMessage = useMemo(() => ({
+        message: "Password reset successful!",
+        details: "You will be redirected to the login page in a few seconds..."
+    }), []);
+
+    const togglePasswordVisibility = useCallback(() => {
+        setShowPassword(prev => !prev);
+    }, []);
+
+    const toggleConfirmPasswordVisibility = useCallback(() => {
+        setShowConfirmPassword(prev => !prev);
+    }, []);
+
+    const isFormValid = !isPending && email && token;
 
     return (
         <div className="min-h-screen flex items-center justify-center px-3">
@@ -46,20 +98,26 @@ const ResetPasswordPage = () => {
                         <BackIcon2 className="text-gray-700 dark:text-gray-200" />
                     </button>
 
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 dark:from-blue-400/20 to-transparent rounded-bl-full"></div>
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/10 dark:from-purple-400/20 to-transparent rounded-tr-full"></div>
+                    {/* Decorative Elements */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 dark:from-blue-400/20 to-transparent rounded-bl-full pointer-events-none"></div>
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/10 dark:from-purple-400/20 to-transparent rounded-tr-full pointer-events-none"></div>
 
                     {/* Header Section */}
                     <div className="text-center mb-7 relative">
                         <div className="space-y-1">
                             <Link to='/' className="flex items-center justify-center">
-                                <img width={55} src="/images/logo/gccc.png" alt="logo" />
+                                <img
+                                    width={55}
+                                    src="/images/logo/gccc.png"
+                                    alt="GCCC Logo"
+                                    className="object-contain"
+                                />
                             </Link>
-                            <h1 className="text-2xl  gap-1 font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent">
+                            <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent">
                                 Reset Password
                             </h1>
                             <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                                {TAGLINE}
+                                {tagline}
                             </p>
                         </div>
 
@@ -73,43 +131,69 @@ const ResetPasswordPage = () => {
 
                     {/* Form */}
                     <form onSubmit={handleSubmit(handleResetPassword)} className="space-y-5 relative">
+                        {/* Success Message */}
+                        {isSuccess && (
+                            <Message variant="success" data={successMessage} />
+                        )}
+
+                        {/* Error Message */}
                         {isError && error && (
                             <Message variant="error" data={error?.data} />
                         )}
 
-                        <InputForm
-                            label="Password"
-                            name="password"
-                            type="password"
-                            register={register}
-                            error={errors.password?.message}
-                            placeholder="Enter your password"
-                            required={true}
-                        />
-                        <InputForm
-                            label="Password Confirmation"
-                            name="password_confirmation"
-                            type="password"
-                            register={register}
-                            error={errors.password_confirmation?.message}
-                            placeholder="Confirm your password"
-                            required={true}
-                        />
+                        {/* Missing Parameters Warning */}
+                        {(!email || !token) && (
+                            <Message
+                                variant="error"
+                                data={{
+                                    message: "Invalid reset link",
+                                    details: "The password reset link is invalid or has expired. Please request a new one."
+                                }}
+                            />
+                        )}
+
+                        <div className="relative">
+                            <InputForm
+                                label="New Password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                register={register}
+                                error={errors.password?.message}
+                                placeholder="Enter your new password"
+                                required={true}
+                                autoComplete="new-password"
+                            />
+                        </div>
+
+                        <div className="relative">
+                            <InputForm
+                                label="Confirm New Password"
+                                name="password_confirmation"
+                                type={showConfirmPassword ? "text" : "password"}
+                                register={register}
+                                error={errors.password_confirmation?.message}
+                                placeholder="Confirm your new password"
+                                required={true}
+                                autoComplete="new-password"
+                            />
+                        </div>
 
                         <Button
                             className="w-full mt-1"
                             type="submit"
                             loading={isPending}
+                            disabled={!isFormValid}
                         >
-                            Reset
+                            {isPending ? "Resetting..." : "Reset Password"}
                         </Button>
 
                         <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+                            <span>Didn't receive the email? </span>
                             <Link
-                                to={`/forgot-password?email=${email}`}
-                                className="text-red-600 dark:text-red-400 hover:underline font-medium"
+                                to={`/forgot-password${email ? `?email=${email}` : ''}`}
+                                className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
                             >
-                                Forgot password?
+                                Request new link
                             </Link>
                         </div>
                     </form>
