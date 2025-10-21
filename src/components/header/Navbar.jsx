@@ -32,12 +32,12 @@ const Navbar = () => {
               />
             </Link>
 
-            <p className="text-[14px] flex items-center gap-2 text-white leading-6 font-normal">
+            {/* <p className="text-[14px] flex items-center gap-2 text-white leading-6 font-normal">
               {formattedTime} |{' '}
               <span className="text-[#86888A]">
                 {formattedDateTime}
               </span>{' '}
-            </p>
+            </p> */}
           </div>
 
 
