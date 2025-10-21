@@ -63,7 +63,7 @@ const InputForm = memo(({
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             aria-label={showPassword ? "Hide password" : "Show password"}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900"
           >
             {showPassword ? (
               <EyeIcon className="w-5 h-5 fill-gray-500 dark:fill-gray-400" />
@@ -77,7 +77,7 @@ const InputForm = memo(({
       {error && (
         <p
           id={`${name}-error`}
-          className="text-red-500 dark:text-red-400 text-xs mt-1.5"
+          className="text-red-500 dark:text-red-400 text-xs mt-1"
           role="alert"
         >
           {error}

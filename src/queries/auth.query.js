@@ -62,6 +62,41 @@ export const useLogin = (options = {}) => {
   });
 };
 
+export const useForgotPassword = (options = {}) => {
+  // const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: AuthService.sendResetLink,
+    onSuccess: (data) => {
+      // queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
+      Toast.success(data?.message);
+      options.onSuccess?.(data, credentials);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message);
+    },
+  });
+};
+export const useResetPassword = (options = {}) => {
+  // const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: AuthService.resetPassword,
+    onSuccess: (data) => {
+      // queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
+      Toast.success(data?.message);
+      navigate('/login');
+      options.onSuccess?.(data, credentials);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message);
+    },
+  });
+};
+
 export const useRegister = (options = {}) => {
   const queryClient = useQueryClient();
   const { setAuthenticatedUser, setToken } = useAuthStore();

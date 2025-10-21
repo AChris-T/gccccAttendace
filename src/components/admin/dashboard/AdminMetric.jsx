@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AttendanceIcon2, FirstTimerIcon, UnitIcon, UserIcon, VerticalDotsIcon } from "../../../icons"
-import Badge from "../../ui/Badge"
+import { FirstTimerIcon, FormIcon, UnitIcon, UserIcon, VerticalDotsIcon } from "../../../icons"
+// import Badge from "../../ui/Badge"
 import { Dropdown } from "../../ui/dropdown/Dropdown"
 import { DropdownItem } from "../../ui/dropdown/DropdownItem"
 import { getRandomTextColor, toSlug } from "../../../utils/helper"
@@ -14,7 +14,7 @@ const AdminMetric = ({ data }) => {
     const ICON_MAP = {
         Units: UnitIcon,
         Members: UserIcon,
-        Attendance: AttendanceIcon2,
+        Forms: FormIcon,
         Default: FirstTimerIcon,
     };
     const IconComponent = ICON_MAP[data?.name] || ICON_MAP.Default;
@@ -55,9 +55,9 @@ const AdminMetric = ({ data }) => {
                         </h4>
                     </div>
 
-                    <Badge color={`${!data?.growth ? 'error' : 'success'}`}>
+                    {/* <Badge color={`${!data?.growth ? 'error' : 'success'}`}>
                         {data?.growth}%
-                    </Badge>
+                    </Badge> */}
                 </div>
             </div>
         </>

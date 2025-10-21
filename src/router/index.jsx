@@ -9,11 +9,17 @@ import PublicRoute from '../layout/route/PublicRoute';
 import PageLoader from '@/components/ui/PageLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 
-const HomePage = lazy(() => import('../pages/Home/HomePage'));
+
 const LoginPage = lazy(() => import('../pages/Home/Auth/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/Home/Auth/RegisterPage'));
+const ResetPasswordPage = lazy(() => import('@/pages/Home/Auth/ResetPasswordPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/Home/Auth/ForgotPasswordPage'));
+
+const HomePage = lazy(() => import('../pages/Home/HomePage'));
 const FormPage = lazy(() => import('../pages/Home/FormPage'));
 const FirstTimerPage = lazy(() => import('../pages/Home/FirstTimerPage'));
+
+
 
 const DashboardPage = lazy(() => import('../pages/Dashboard/DashboardPage'));
 const AttendancePage = lazy(() => import('../pages/Dashboard/AttendancePage'));
@@ -56,6 +62,8 @@ const AppRoutes = [
         children: [
           { path: 'login', element: withSuspense(LoginPage) },
           { path: 'register', element: withSuspense(RegisterPage) },
+          { path: 'reset-password', element: withSuspense(ResetPasswordPage) },
+          { path: 'forgot-password', element: withSuspense(ForgotPasswordPage) },
         ],
       },
       { path: 'forms', element: withSuspense(FormPage) },

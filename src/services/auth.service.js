@@ -21,13 +21,13 @@ export const AuthService = {
     return data;
   },
 
-  // authenticated user
-  uploadAvatar: async (id, file) => {
-    const formData = new FormData();
-    formData.append('avatar', file);
-    const { data } = await $api.post(`/users/${id}/avatar`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+  async sendResetLink(payload) {
+    const { data } = await $api.post('/forgot-password', payload);
+    return data;
+  },
+
+  async resetPassword(payload) {
+    const { data } = await $api.post('/reset-password', payload);
     return data;
   },
 };

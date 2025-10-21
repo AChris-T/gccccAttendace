@@ -15,10 +15,13 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
+
+  const email = watch('email');
 
   const handleLogin = async (data) => {
     mutate(data);
@@ -80,21 +83,21 @@ const LoginPage = () => {
               required={true}
             />
 
-            <div className="">
-              <a
-                href="/forgot-password"
-                className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold focus:outline-none focus:underline transition-colors relative group"
+            <Button
+              className="w-full mt-1"
+              type="submit"
+              loading={isPending}
+            >
+              Sign In
+            </Button>
+
+            <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+              <Link
+                to={`/forgot-password?email=${email}`}
+                className="text-red-600 dark:text-red-400 hover:underline font-medium"
               >
                 Forgot password?
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-              </a>
-              <Button
-                className="w-full mt-1"
-                type="submit"
-                loading={isPending}
-              >
-                Sign In
-              </Button>
+              </Link>
             </div>
           </form>
         </div>

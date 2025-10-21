@@ -48,6 +48,18 @@ export const loginSchema = yup.object({
   password: yup.string().trim().required('Password is required'),
 });
 
+export const forgotPasswordSchema = yup.object({
+  email: yup.string().trim().email().required('Email is required'),
+});
+
+export const resetPasswordSchema = yup.object({
+  password: yup.string().trim().required('Password field is required'),
+  password_confirmation: yup
+    .string()
+    .trim()
+    .required('Password confirmation field is required'),
+});
+
 export const timelineSchema = yup.object({
   note: yup.string().required('Comment field is required'),
   type: yup.string().required('Type field is required'),
