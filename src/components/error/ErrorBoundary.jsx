@@ -1,3 +1,4 @@
+import { Toast } from '@/lib/toastify';
 import { Component } from 'react';
 
 const BugIcon = () => (
@@ -46,7 +47,7 @@ class ErrorBoundary extends Component {
             errorInfo
         });
 
-        console.error('Error Boundary Caught:', {
+        Toast.error('Error Boundary Caught:', {
             error,
             errorInfo,
             errorId: this.state.errorId,
@@ -73,7 +74,7 @@ class ErrorBoundary extends Component {
         //         url: window.location.href,
         //         userAgent: navigator.userAgent
         //     })
-        // }).catch(err => console.error('Failed to log error:', err));
+        // }).catch(err => Toast.error('Failed to log error:', err));
     };
 
     handleReset = () => {
