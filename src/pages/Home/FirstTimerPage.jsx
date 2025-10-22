@@ -39,15 +39,15 @@ const createFormPayload = (data) => ({
     data.gender === 'male'
       ? 'Male'
       : data.gender === 'female'
-      ? 'Female'
-      : 'Other',
+        ? 'Female'
+        : 'Other',
   located_in_ibadan: data.location === 'yes',
   membership_interest:
     data.membership_interest === 'yes'
       ? 'Yes'
       : data.membership_interest === 'maybe'
-      ? 'Maybe'
-      : 'No',
+        ? 'Maybe'
+        : 'No',
   born_again: data.born_again === 'yes' ? 'Yes' : 'No',
   whatsapp_interest: data.whatsapp_interest === 'yes',
   address: data.address_in_ibadan || '',
@@ -93,7 +93,7 @@ const FirstTimerPage = () => {
   const isLastStep = useMemo(() => step === TOTAL_STEPS, [step]);
   const containerClasses = useMemo(() => {
     const baseClasses =
-      'max-w-3xl max-h-[500px] mt-10 no-scrollbar w-full px-5 pt-6 bg-white shadow rounded-md';
+      'md:max-w-xl w-full p-6 bg-white shadow rounded-md';
     const scrollClasses = SCROLLABLE_STEPS.includes(step)
       ? 'h-auto overflow-y-auto'
       : '';
@@ -209,10 +209,10 @@ const FirstTimerPage = () => {
   };
 
   const renderActionButtons = () => (
-    <div className="flex justify-between my-6">
+    <div className="flex justify-between gap-10">
       {step > 1 && (
         <Button
-          className="px-6"
+          className="w-full sm:max-w-[200px]"
           type="button"
           onClick={handlePreviousStep}
           variant="ghost"
@@ -222,13 +222,13 @@ const FirstTimerPage = () => {
         </Button>
       )}
       <Button
+        className="w-full sm:max-w-[200px]"
         type="button"
         loading={isPending}
         onClick={handleButtonClick}
         variant="primary"
         size="md"
       >
-        {' '}
         {isLastStep ? 'Submit' : 'Next'}
       </Button>
     </div>
@@ -257,14 +257,14 @@ const FirstTimerPage = () => {
 
   const renderForm = () => (
     <>
-      <div className="flex justify-center mb-5">
+      <div className="flex justify-center">
         <img src="/images/logo/gccc.png" alt="Logo" className="h-16 w-auto" />
       </div>
 
       {renderProgressBar()}
 
       <form
-        className="my-1"
+        className="space-y-4"
         onSubmit={handleSubmit(handleFormSubmit)}
         noValidate
       >
@@ -278,7 +278,7 @@ const FirstTimerPage = () => {
   );
 
   return (
-    <div className="flex justify-center mt-20 px-3">
+    <div className="mt-28 mb-10 flex justify-center">
       <div className={containerClasses}>
         {isCompleteStep ? renderCompletionMessage() : renderForm()}
       </div>
