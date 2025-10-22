@@ -6,6 +6,7 @@ import Animated from '../../components/common/Animated';
 import { Tabs } from '@/components/ui/tab/Tabs';
 import useQueryParam from '@/hooks/useQueryParam';
 import { PrayerIcon, QuestionIcon, TestimonyIcon } from '@/icons';
+import Button from '@/components/ui/Button';
 
 const TABS_CONFIG = [
   {

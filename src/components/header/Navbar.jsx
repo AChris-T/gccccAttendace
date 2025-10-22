@@ -214,6 +214,7 @@ const Navbar = () => {
                   })}
               </nav>
 
+
               {isAuthenticated && (
                 <div className="relative" ref={dropdownRef}>
                   <button

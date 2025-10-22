@@ -91,14 +91,13 @@ const Avatar = ({
 
     reader.readAsDataURL(file);
 
-    // Reset input for same file reselection
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   }, [onUpload, onError, validateFile]);
 
   const containerClasses = useMemo(() => [
-    'relative overflow-hidden shadow transition-all duration-300 ease-in-out',
+    'relative overflow-hidden shadow-xl transition-all duration-300 ease-in-out ring-2 ring-white',
     sizeConfig.container,
     shapeClass,
     isUploadable && !loading ? 'cursor-pointer hover:shadow-lg' : '',

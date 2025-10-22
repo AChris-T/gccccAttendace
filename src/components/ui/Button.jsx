@@ -1,192 +1,234 @@
-import { LoadingIcon2 } from "@/icons";
+
+import { LoadingIcon2 } from '@/icons';
+import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 const Button = ({
   children,
-  size = "md",
   variant = "primary",
   startIcon,
   endIcon,
   onClick,
+  href,
   title,
   className = "",
   disabled = false,
   type = "button",
   loading = false,
+  target = "_self",
+  rel = "",
 }) => {
-  // Size Classes - Improved responsive sizing
-  const sizeClasses = {
-    sm: "h-8 sm:h-9 text-xs sm:text-sm px-3 sm:px-4 gap-1.5",
-    md: "h-10 sm:h-11 text-sm sm:text-base px-4 sm:px-5 gap-2",
-    lg: "h-12 sm:h-14 text-base sm:text-lg px-5 sm:px-6 gap-2.5",
-    xl: "h-14 sm:h-16 text-lg sm:text-xl px-6 sm:px-8 gap-3",
+  const [ripples, setRipples] = useState([]);
+  const buttonRef = useRef(null);
+
+  const createRipple = (event) => {
+    if (disabled || loading) return;
+
+    const button = buttonRef.current;
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+
+    const newRipple = {
+      x,
+      y,
+      size,
+      id: Date.now(),
+    };
+
+    setRipples((prev) => [...prev, newRipple]);
+
+    // Remove ripple after animation
+    setTimeout(() => {
+      setRipples((prev) => prev.filter((ripple) => ripple.id !== newRipple.id));
+    }, 600);
+
+    // Call the original onClick handler
+    if (onClick) onClick(event);
   };
 
-  // Modern Variant Classes with Dark Mode Support
+  const baseClasses = "h-10 sm:h-11 text-sm sm:text-base px-4 sm:px-5 gap-2 relative overflow-hidden";
+
   const variantClasses = {
-    // Solid variants with refined shadows and modern colors
     primary:
-      "bg-blue-600 text-white rounded-lg shadow-sm " +
-      "hover:bg-blue-700 hover:shadow-md active:bg-blue-800 " +
-      "dark:bg-blue-500 dark:hover:bg-blue-600 dark:active:bg-blue-700",
-
-    secondary:
-      "bg-gray-600 text-white rounded-lg shadow-sm " +
-      "hover:bg-gray-700 hover:shadow-md active:bg-gray-800 " +
-      "dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-800",
-
-    success:
-      "bg-green-600 text-white rounded-lg shadow-sm " +
-      "hover:bg-green-700 hover:shadow-md active:bg-green-800 " +
-      "dark:bg-green-500 dark:hover:bg-green-600 dark:active:bg-green-700",
-
-    danger:
-      "bg-red-600 text-white rounded-lg shadow-sm " +
-      "hover:bg-red-700 hover:shadow-md active:bg-red-800 " +
-      "dark:bg-red-500 dark:hover:bg-red-600 dark:active:bg-red-700",
-
-    warning:
-      "bg-amber-500 text-white rounded-lg shadow-sm " +
-      "hover:bg-amber-600 hover:shadow-md active:bg-amber-700 " +
-      "dark:bg-amber-400 dark:hover:bg-amber-500 dark:active:bg-amber-600",
-
-    info:
-      "bg-cyan-500 text-white rounded-lg shadow-sm " +
-      "hover:bg-cyan-600 hover:shadow-md active:bg-cyan-700 " +
-      "dark:bg-cyan-400 dark:hover:bg-cyan-500 dark:active:bg-cyan-600",
+      "bg-gradient-to-r from-[#119bd6] via-[#0d8ac0] to-[#0a7eb3] " +
+      "text-white rounded-lg shadow-md shadow-[#119bd6]/20 font-semibold " +
+      "hover:shadow-xl hover:shadow-[#119bd6]/40 hover:brightness-110 hover:-translate-y-0.5 " +
+      "active:brightness-95 active:scale-[0.97] active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:shadow-[#119bd6]/25 dark:hover:shadow-[#119bd6]/50",
 
     "outline-primary":
-      "bg-transparent border-2 border-blue-600 text-blue-600 rounded-lg " +
-      "hover:bg-blue-50 hover:border-blue-700 active:bg-blue-100 " +
-      "dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950/30 dark:hover:border-blue-300",
+      "bg-transparent border-2 border-[#119bd6] text-[#119bd6] rounded-lg font-semibold " +
+      "hover:bg-[#119bd6]/10 hover:border-[#0d8ac0] hover:shadow-md hover:shadow-[#119bd6]/20 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-[#119bd6]/20 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:border-[#119bd6] dark:text-[#119bd6] dark:hover:bg-[#119bd6]/15",
 
-    "outline-secondary":
-      "bg-transparent border-2 border-gray-600 text-gray-600 rounded-lg " +
-      "hover:bg-gray-50 hover:border-gray-700 active:bg-gray-100 " +
-      "dark:border-gray-400 dark:text-gray-400 dark:hover:bg-gray-800/30 dark:hover:border-gray-300",
-
-    "outline-success":
-      "bg-transparent border-2 border-green-600 text-green-600 rounded-lg " +
-      "hover:bg-green-50 hover:border-green-700 active:bg-green-100 " +
-      "dark:border-green-400 dark:text-green-400 dark:hover:bg-green-950/30 dark:hover:border-green-300",
+    danger:
+      "bg-gradient-to-r from-[#eb2225] via-[#d41e21] to-[#c11a1d] " +
+      "text-white rounded-lg shadow-md shadow-[#eb2225]/20 font-semibold " +
+      "hover:shadow-xl hover:shadow-[#eb2225]/40 hover:brightness-110 hover:-translate-y-0.5 " +
+      "active:brightness-95 active:scale-[0.97] active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:shadow-[#eb2225]/25 dark:hover:shadow-[#eb2225]/50",
 
     "outline-danger":
-      "bg-transparent border-2 border-red-600 text-red-600 rounded-lg " +
-      "hover:bg-red-50 hover:border-red-700 active:bg-red-100 " +
-      "dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950/30 dark:hover:border-red-300",
+      "bg-transparent border-2 border-[#eb2225] text-[#eb2225] rounded-lg font-semibold " +
+      "hover:bg-[#eb2225]/10 hover:border-[#d41e21] hover:shadow-md hover:shadow-[#eb2225]/20 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-[#eb2225]/20 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:border-[#eb2225] dark:text-[#eb2225] dark:hover:bg-[#eb2225]/15",
 
-    "outline-warning":
-      "bg-transparent border-2 border-amber-500 text-amber-600 rounded-lg " +
-      "hover:bg-amber-50 hover:border-amber-600 active:bg-amber-100 " +
-      "dark:border-amber-400 dark:text-amber-400 dark:hover:bg-amber-950/30 dark:hover:border-amber-300",
-
-    "outline-info":
-      "bg-transparent border-2 border-cyan-500 text-cyan-600 rounded-lg " +
-      "hover:bg-cyan-50 hover:border-cyan-600 active:bg-cyan-100 " +
-      "dark:border-cyan-400 dark:text-cyan-400 dark:hover:bg-cyan-950/30 dark:hover:border-cyan-300",
-
-    ghost:
-      "bg-transparent text-gray-700 rounded-lg " +
-      "hover:bg-gray-100 active:bg-gray-200 " +
-      "dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700",
-
-    "ghost-primary":
-      "bg-transparent text-blue-600 rounded-lg " +
-      "hover:bg-blue-50 active:bg-blue-100 " +
-      "dark:text-blue-400 dark:hover:bg-blue-950/30 dark:active:bg-blue-950/50",
-
-    "ghost-danger":
-      "bg-transparent text-red-600 rounded-lg " +
-      "hover:bg-red-50 active:bg-red-100 " +
-      "dark:text-red-400 dark:hover:bg-red-950/30 dark:active:bg-red-950/50",
-
-    // Soft variants - light background with matching text
-    "soft-primary":
-      "bg-blue-100 text-blue-700 rounded-lg " +
-      "hover:bg-blue-200 active:bg-blue-300 " +
-      "dark:bg-blue-950/40 dark:text-blue-300 dark:hover:bg-blue-950/60",
-
-    "soft-success":
-      "bg-green-100 text-green-700 rounded-lg " +
-      "hover:bg-green-200 active:bg-green-300 " +
-      "dark:bg-green-950/40 dark:text-green-300 dark:hover:bg-green-950/60",
-
-    "soft-danger":
-      "bg-red-100 text-red-700 rounded-lg " +
-      "hover:bg-red-200 active:bg-red-300 " +
-      "dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-950/60",
-
-    // Light/Dark variants
     light:
-      "bg-gray-100 text-gray-900 rounded-lg shadow-sm " +
-      "hover:bg-gray-200 active:bg-gray-300 " +
-      "dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700",
+      "bg-white text-gray-700 rounded-lg shadow-md shadow-gray-200/80 border border-gray-200 font-semibold " +
+      "hover:shadow-lg hover:shadow-gray-300/60 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-gray-100 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 " +
+      "dark:shadow-gray-900/40 dark:hover:shadow-gray-900/60 dark:hover:bg-gray-750 dark:hover:border-gray-600",
+
+    "outline-light":
+      "bg-transparent border-2 border-gray-300 text-gray-600 rounded-lg font-semibold " +
+      "hover:bg-gray-100 hover:border-gray-400 hover:shadow-md hover:shadow-gray-200/50 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-gray-200 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:border-gray-500",
 
     dark:
-      "bg-gray-900 text-white rounded-lg shadow-sm " +
-      "hover:bg-gray-800 active:bg-gray-950 " +
-      "dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200",
+      "bg-gradient-to-r from-[#101828] via-[#1a2235] to-[#0f1624] " +
+      "text-white rounded-lg shadow-md shadow-gray-900/40 font-semibold " +
+      "hover:shadow-xl hover:shadow-gray-900/60 hover:brightness-125 hover:-translate-y-0.5 " +
+      "active:brightness-100 active:scale-[0.97] active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:from-gray-700 dark:via-gray-650 dark:to-gray-700 dark:shadow-gray-950/50",
 
-    // Neutral with subtle styling
-    neutral:
-      "bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm " +
-      "hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100 " +
-      "dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 " +
-      "dark:hover:bg-gray-750 dark:hover:border-gray-600",
+    "outline-dark":
+      "bg-transparent border-2 border-gray-600 text-gray-700 rounded-lg font-semibold " +
+      "hover:bg-gray-100 hover:border-gray-700 hover:shadow-md hover:shadow-gray-400/30 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-gray-200 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:border-gray-400",
 
-    // Accent - brand color
-    accent:
-      "bg-purple-600 text-white rounded-lg shadow-sm " +
-      "hover:bg-purple-700 hover:shadow-md active:bg-purple-800 " +
-      "dark:bg-purple-500 dark:hover:bg-purple-600 dark:active:bg-purple-700",
-
-    // Link style
-    link:
-      "bg-transparent text-blue-600 rounded-lg underline-offset-4 " +
-      "hover:underline hover:text-blue-700 active:text-blue-800 " +
-      "dark:text-blue-400 dark:hover:text-blue-300",
-
-    // Gradient variants
-    gradient:
-      "bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-sm " +
-      "hover:from-blue-700 hover:to-purple-700 hover:shadow-md " +
-      "dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600",
+    ghost:
+      "bg-gray-200/90 text-gray-700 rounded-lg font-semibold " +
+      "hover:bg-gray-300 hover:shadow-md hover:shadow-gray-300/50 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-gray-400/80 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:shadow-gray-900/40",
   };
 
-  // Disabled state classes
-  const disabledClasses = disabled || loading
-    ? "cursor-not-allowed opacity-50 pointer-events-none"
-    : "cursor-pointer";
+  const disabledClasses =
+    disabled || loading
+      ? "cursor-not-allowed opacity-50"
+      : "cursor-pointer";
 
-  // Focus visible styles
   const focusClasses =
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 " +
-    "focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400 dark:focus-visible:ring-offset-gray-900";
+    "focus-visible:ring-[#119bd6] dark:focus-visible:ring-[#119bd6] dark:focus-visible:ring-offset-gray-900";
+
+  const combinedClasses = `
+    inline-flex items-center justify-center
+    ${baseClasses}
+    ${variantClasses[variant] || variantClasses['primary']}
+    ${disabledClasses}
+    ${focusClasses}
+    ${className}
+  `
+    .trim()
+    .replace(/\s+/g, " ");
+
+  const renderStartIcon = () => {
+    if (loading) return <LoadingIcon2 />;
+    if (startIcon) return <span className="flex items-center shrink-0">{startIcon}</span>;
+    return null;
+  };
+
+  const renderEndIcon = () => {
+    if (endIcon && !loading) {
+      return <span className="flex items-center shrink-0">{endIcon}</span>;
+    }
+    return null;
+  };
+
+  const RippleEffect = () => (
+    <>
+      {ripples.map((ripple) => (
+        <span
+          key={ripple.id}
+          className="absolute rounded-full bg-white/30 pointer-events-none"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            width: ripple.size,
+            height: ripple.size,
+            transform: 'scale(0)',
+            animation: 'ripple 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes ripple {
+          to {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }
+      `}</style>
+    </>
+  );
+
+  const ButtonContent = () => (
+    <>
+      {renderStartIcon()}
+      {!loading && <span className="truncate font-semibold">{children}</span>}
+      {renderEndIcon()}
+      <RippleEffect />
+    </>
+  );
+
+  if (href && !disabled && !loading) {
+    const isExternal = href.startsWith('http') || href.startsWith('//');
+    const finalRel = rel || (target === "_blank" ? "noopener noreferrer" : "");
+
+    return (
+      isExternal ?
+        <a
+          ref={buttonRef}
+          href={href}
+          target={target}
+          rel={finalRel}
+          title={title || ""}
+          className={`group ${combinedClasses}`}
+          onClick={createRipple}
+        >
+          <ButtonContent />
+        </a> :
+        <Link
+          ref={buttonRef}
+          to={href}
+          target={target}
+          rel={finalRel}
+          title={title || ""}
+          className={`group ${combinedClasses}`}
+          onClick={createRipple}
+        >
+          <ButtonContent />
+        </Link>
+    );
+  }
 
   return (
     <button
+      ref={buttonRef}
       title={title || ""}
       type={type}
-      className={`
-        inline-flex items-center justify-center font-medium
-        transition-all duration-200 ease-in-out
-        ${sizeClasses[size]}
-        ${variantClasses[variant]}
-        ${disabledClasses}
-        ${focusClasses}
-        ${className}
-      `.trim().replace(/\s+/g, ' ')}
-      onClick={onClick}
+      className={`group ${combinedClasses}`}
+      onClick={createRipple}
       disabled={disabled || loading}
     >
-      {loading ? (
-        size = "sm" ? <LoadingIcon2 width={18} height={18} /> : <LoadingIcon2 />
-      ) : (
-        <>
-          {startIcon && <span className="flex items-center shrink-0">{startIcon}</span>}
-          <span className="truncate">{children}</span>
-          {endIcon && <span className="flex items-center shrink-0">{endIcon}</span>}
-        </>
-      )}
+      <ButtonContent />
     </button>
   );
 };

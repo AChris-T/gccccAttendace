@@ -1,5 +1,5 @@
 // https://icon-sets.iconify.design
-export const HandIcon = ({}) => {
+export const HandIcon = ({ }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,7 @@ export const CheckedIcon = ({ width = 110, height = 110, className = '' }) => {
     </svg>
   );
 };
-export const AttendanceIcon = ({}) => {
+export const AttendanceIcon = ({ }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -96,31 +96,21 @@ export const LoadingIcon = ({
     </>
   );
 };
-export const LoadingIcon2 = ({
-  width = 24,
-  height = 24,
-  fill = 'currentColor',
-  className = '',
-}) => {
+export const LoadingIcon2 = ({ className = '' }) => {
   return (
-    <>
-      {/* text-purple-600 dark:text-purple-200 */}
-      <svg
-        width={width}
-        height={height}
-        className={`${className} animate-spin group-hover:rotate-180 transition-transform duration-500`}
-        fill="none"
-        stroke={fill}
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-        />
-      </svg>
-    </>
+    <svg
+      className={`w-[1.125em] h-[1.125em] ${className} animate-spin`}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+      />
+    </svg>
   );
 };
 export const CloseIcon = ({
