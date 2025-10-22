@@ -39,15 +39,15 @@ const createFormPayload = (data) => ({
     data.gender === 'male'
       ? 'Male'
       : data.gender === 'female'
-        ? 'Female'
-        : 'Other',
+      ? 'Female'
+      : 'Other',
   located_in_ibadan: data.location === 'yes',
   membership_interest:
     data.membership_interest === 'yes'
       ? 'Yes'
       : data.membership_interest === 'maybe'
-        ? 'Maybe'
-        : 'No',
+      ? 'Maybe'
+      : 'No',
   born_again: data.born_again === 'yes' ? 'Yes' : 'No',
   whatsapp_interest: data.whatsapp_interest === 'yes',
   address: data.address_in_ibadan || '',
@@ -92,7 +92,8 @@ const FirstTimerPage = () => {
   const isCompleteStep = useMemo(() => step === 'complete', [step]);
   const isLastStep = useMemo(() => step === TOTAL_STEPS, [step]);
   const containerClasses = useMemo(() => {
-    const baseClasses = 'max-w-3xl w-full px-5 pt-6 bg-white shadow rounded-md';
+    const baseClasses =
+      'max-w-3xl max-h-[500px] mt-10 no-scrollbar w-full px-5 pt-6 bg-white shadow rounded-md';
     const scrollClasses = SCROLLABLE_STEPS.includes(step)
       ? 'h-auto overflow-y-auto'
       : '';
