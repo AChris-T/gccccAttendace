@@ -77,31 +77,72 @@ export const timelineSchema = yup.object({
 });
 
 export const firstTimerSchema = yup.object({
-  email: yup
+  email: yup.string().trim().email('Please enter a valid email').nullable(),
+  first_name: yup
     .string()
     .trim()
-    .email('Please enter a valid email')
-    .required('Email is required'),
-  first_name: yup.string().trim().min(2).required('First name is required'),
-  last_name: yup.string().trim().min(2).required('Last name is required'),
+    .min(2, 'First name must be at least 2 characters')
+    .required('First name is required'),
+  last_name: yup
+    .string()
+    .trim()
+    .min(2, 'Last name must be at least 2 characters')
+    .required('Last name is required'),
   phone_number: yup.string().required('Phone number is required'),
   gender: yup.string().required('Gender is required'),
-  location: yup.string().required('Please select Yes or No'),
-  membership_interest: yup.string().required('Please select Yes, Maybe or No'),
 
-  address_in_ibadan: yup
+  how_did_you_learn: yup
+    .string()
+    .required('Field is required')
+    .test('other-validation', 'Please specify your answer', function (value) {
+      if (value === 'other') {
+        const otherText = this.parent.how_did_you_learn_other_text;
+        return otherText && otherText.trim().length >= 2;
+      }
+      return true;
+    }),
+
+  how_did_you_learn_other_text: yup
     .string()
     .trim()
-    .when(['location', 'membership_interest'], {
-      is: (location, membership_interest) =>
-        location === 'yes' && membership_interest === 'yes',
-      then: (schema) => schema.min(5).required('Address in Ibadan is required'),
+    .when('how_did_you_learn', {
+      is: 'other',
+      then: (schema) =>
+        schema
+          .min(2, 'Please provide at least 2 characters')
+          .required('Please specify your answer'),
       otherwise: (schema) => schema.nullable().optional(),
     }),
 
-  dob: yup.string().when(['location', 'membership_interest'], {
-    is: (location, membership_interest) =>
-      location === 'yes' && membership_interest === 'yes',
+  invited_by: yup
+    .string()
+    .trim()
+    .when('how_did_you_learn', {
+      is: 'Friend/Family',
+      then: (schema) =>
+        schema
+          .min(2, 'Name must be at least 2 characters')
+          .required('Please enter the name of the person who invited you'),
+      otherwise: (schema) => schema.nullable().optional(),
+    }),
+
+  located_in_ibadan: yup.boolean().required('Please select Yes or No'),
+  membership_interest: yup.string().required('Please select Yes, Maybe or No'),
+
+  address: yup
+    .string()
+    .trim()
+    .when('membership_interest', {
+      is: (val) => val !== 'No',
+      then: (schema) =>
+        schema
+          .min(5, 'Address must be at least 5 characters')
+          .required('Address in Ibadan is required'),
+      otherwise: (schema) => schema.nullable().optional(),
+    }),
+
+  date_of_birth: yup.string().when('membership_interest', {
+    is: (val) => val !== 'No',
     then: (schema) =>
       schema
         .matches(
@@ -115,16 +156,17 @@ export const firstTimerSchema = yup.object({
   occupation: yup
     .string()
     .trim()
-    .when(['location', 'membership_interest'], {
-      is: (location, membership_interest) =>
-        location === 'yes' && membership_interest === 'yes',
-      then: (schema) => schema.min(2).required('Occupation is required'),
+    .when('membership_interest', {
+      is: (val) => val !== 'No',
+      then: (schema) =>
+        schema
+          .min(2, 'Occupation must be at least 2 characters')
+          .required('Occupation is required'),
       otherwise: (schema) => schema.nullable().optional(),
     }),
 
-  born_again: yup.string().when(['location', 'membership_interest'], {
-    is: (location, membership_interest) =>
-      location === 'yes' && membership_interest === 'yes',
+  born_again: yup.string().when('membership_interest', {
+    is: (val) => val !== 'No',
     then: (schema) => schema.required('Please select an option'),
     otherwise: (schema) => schema.nullable().optional(),
   }),
@@ -134,7 +176,7 @@ export const firstTimerSchema = yup.object({
     .trim()
     .required('Please share what you enjoyed about the service'),
   prayer_point: yup.string().trim().nullable(),
-  whatsapp_interest: yup.string().required('Please select Yes or No'),
+  whatsapp_interest: yup.boolean().required('Please select Yes or No'),
 });
 
 export const updateFirstTimerProfileSchema = yup.object({

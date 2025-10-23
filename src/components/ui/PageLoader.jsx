@@ -21,7 +21,7 @@ export default function PageLoader({
                         />
                         <div
                             className="relative flex items-center justify-center rounded-full
-                         w-35 h-35 sm:w-40 sm:h-40 md:w-45 md:h-45
+                         w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32
                          bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900
                          border border-gray-100 dark:border-gray-700
                          shadow-lg"
@@ -41,7 +41,7 @@ export default function PageLoader({
 
                             <div
                                 className="relative z-10 flex items-center justify-center rounded-full
-                           w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36
+                           w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32
                            bg-white p-3 dark:bg-gray-800"
                             >
                                 <img

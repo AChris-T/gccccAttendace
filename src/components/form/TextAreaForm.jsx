@@ -1,6 +1,6 @@
-import React from 'react';
+import { memo } from "react";
 
-const TextAreaForm = ({
+const TextAreaForm = memo(({
   label,
   name,
   required = false,
@@ -8,26 +8,73 @@ const TextAreaForm = ({
   error,
   placeholder,
   rows = 4,
-  cols = 50,
+  disabled = false,
+  maxLength,
+  showCharCount = false,
 }) => {
+  const textareaId = `textarea-${name}`;
+  const errorId = `${textareaId}-error`;
+
   return (
-    <div>
-      {label && <p className="block font-medium mb-1 text-sm">{label}</p>}
+    <div className="mb-4">
+      <div className="flex items-center justify-between mb-1">
+        {label && (
+          <label
+            htmlFor={textareaId}
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+        )}
+        {showCharCount && maxLength && (
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {/* Character count would be managed by parent component state */}
+            0 / {maxLength}
+          </span>
+        )}
+      </div>
 
       <textarea
-        id={name}
+        id={textareaId}
         rows={rows}
-        cols={cols}
-        {...register(name, {
-          required: required ? `${label} is required` : false,
-        })}
-        className={`w-full text-xs font-light rounded-lg p-3 focus:outline-gray-200 focus:outline border ${error ? 'border-red-500' : 'border-gray-300'
-          }`}
+        maxLength={maxLength}
+        disabled={disabled}
         placeholder={placeholder}
+        aria-invalid={error ? "true" : "false"}
+        aria-describedby={error ? errorId : undefined}
+        {...register(name, {
+          required: required ? `${label || 'This field'} is required` : false,
+          maxLength: maxLength ? {
+            value: maxLength,
+            message: `Maximum ${maxLength} characters allowed`
+          } : undefined,
+        })}
+        className={`
+          w-full text-sm rounded-lg px-3 py-3
+          bg-white dark:bg-gray-800
+          text-gray-900 dark:text-gray-100
+          border ${error ? "border-red-500 dark:border-red-400" : "border-gray-300 dark:border-gray-600"}
+          placeholder:text-gray-400 dark:placeholder:text-gray-500
+          focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600
+          disabled:bg-gray-100 dark:disabled:bg-gray-900 disabled:cursor-not-allowed disabled:text-gray-500 dark:disabled:text-gray-500
+          resize-y
+          transition-colors duration-200
+        `}
       />
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+
+      {error && (
+        <p
+          id={errorId}
+          className="text-red-500 dark:text-red-400 text-xs mt-1"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
-};
+});
 
+TextAreaForm.displayName = "TextAreaForm";
 export default TextAreaForm;

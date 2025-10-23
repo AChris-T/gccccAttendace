@@ -5,6 +5,7 @@ import {
   monthNames,
   textColors,
 } from './constant';
+import { Toast } from '@/lib/toastify';
 
 export const formatDisplayDate = (date) => dayjs(date).format('DD MMM, YYYY');
 
@@ -272,4 +273,20 @@ export const getTimeAgo = (dateString) => {
 export const formatPhoneNumber = (phone) => {
   const trimmed = phone.trim();
   return /^0\d+/.test(trimmed) ? trimmed.substring(1) : trimmed;
+};
+
+export const formatBirthDate = (dateStr) => {
+  if (!dateStr) return null;
+  try {
+    const [day, month] = dateStr.split('/').map(Number);
+    if (!day || !month) return null;
+    const currentYear = dayjs().year();
+    const formatted = dayjs(`${currentYear}-${month}-${day}`).format(
+      'YYYY-MM-DD'
+    );
+    return formatted;
+  } catch (error) {
+    Toast.error('Error formatting birth date:', error);
+    return null;
+  }
 };

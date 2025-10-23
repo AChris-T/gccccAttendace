@@ -1,4 +1,3 @@
-'use client';
 import { useState, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,59 +14,51 @@ import Message from '../../components/common/Message';
 import Button from '../../components/ui/Button';
 import { CompletedIcon } from '../../icons';
 import { Toast } from '../../lib/toastify';
-import { handleApiError } from '../../utils/helper';
+import { formatBirthDate, handleApiError } from '../../utils/helper';
+import { ProgressIndicator } from '@/components/firstTimer/ProgressIndicator';
+import SuccessCompletion from '@/components/firstTimer/SuccessCompletion';
 
 // Constants
 const TOTAL_STEPS = 5;
-const SCROLLABLE_STEPS = [1, 4];
 const STEP_VALIDATION_FIELDS = {
   1: ['first_name', 'last_name', 'email', 'phone_number', 'gender'],
-  2: ['data_of_friend_and_family', 'location'],
-  3: ['membership_interest'],
-  4: [],
+  2: ['how_did_you_learn'],
+  3: ['membership_interest', 'located_in_ibadan'],
+  4: ['address', 'date_of_birth', 'occupation', 'born_again'],
   5: ['service_experience', 'whatsapp_interest'],
 };
 
-// Helper functions
-const createFormPayload = (data) => ({
-  name: `${data.first_name} ${data.last_name}`,
-  first_name: data.first_name,
-  last_name: data.last_name,
-  phone_number: data.phone_number,
-  email: data.email,
-  gender:
-    data.gender === 'male'
-      ? 'Male'
-      : data.gender === 'female'
-        ? 'Female'
-        : 'Other',
-  located_in_ibadan: data.location === 'yes',
-  membership_interest:
-    data.membership_interest === 'yes'
-      ? 'Yes'
-      : data.membership_interest === 'maybe'
-        ? 'Maybe'
-        : 'No',
-  born_again: data.born_again === 'yes' ? 'Yes' : 'No',
-  whatsapp_interest: data.whatsapp_interest === 'yes',
-  address: data.address_in_ibadan || '',
-  date_of_birth: data.dob
-    ? new Date(data.dob.split('/').reverse().join('-')).toISOString()
-    : null,
-  date_of_visit: new Date().toISOString(),
-  occupation: data.occupation || '',
-  service_experience: data.service_experience,
-  prayer_point: data.prayer_point || '',
-  friend_family: data.data_of_friend_and_family || '',
-  notes: '',
-  visitation_report: '',
-  status: 'active',
-  pastorate_call: '',
-  how_did_you_learn: '',
-});
+const createFormPayload = (data) => {
+  const howDidYouLearnValue = data.how_did_you_learn === 'other'
+    ? data.how_did_you_learn_other_text?.trim()
+    : data.how_did_you_learn;
+
+  return {
+    first_name: data.first_name,
+    last_name: data.last_name,
+    phone_number: data.phone_number || `${data.first_name}${data.last_name}${new Date().getTime()}`,
+    email: data.email || `${data.first_name}${data.last_name}${new Date().getTime()}@gmail.com`,
+    gender: data.gender,
+    located_in_ibadan: data.located_in_ibadan,
+    membership_interest: data.membership_interest,
+    is_student: data.occupation?.contains('student'),
+    born_again: data.born_again || null,
+    whatsapp_interest: data.whatsapp_interest,
+    address: data.address || null,
+    date_of_birth: formatBirthDate(data.date_of_birth),
+    date_of_visit: new Date().toISOString(),
+    occupation: data.occupation || null,
+    service_experience: data.service_experience,
+    prayer_point: data.prayer_point || null,
+    invited_by: data.invited_by || null,
+    status: 'active',
+    how_did_you_learn: howDidYouLearnValue,
+  };
+};
 
 const FirstTimerPage = () => {
   const [step, setStep] = useState(1);
+
   const {
     mutateAsync: createFirstTimer,
     isPending,
@@ -85,31 +76,44 @@ const FirstTimerPage = () => {
     handleSubmit,
     trigger,
     getValues,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
 
-  // Memoized computed values
   const isCompleteStep = useMemo(() => step === 'complete', [step]);
   const isLastStep = useMemo(() => step === TOTAL_STEPS, [step]);
-  const containerClasses = useMemo(() => {
-    const baseClasses =
-      'md:max-w-xl w-full p-6 bg-white shadow rounded-md';
-    const scrollClasses = SCROLLABLE_STEPS.includes(step)
-      ? 'h-auto overflow-y-auto'
-      : '';
-    return `${baseClasses} ${scrollClasses}`;
-  }, [step]);
 
-  // Step validation logic
+
+  const shouldShowStep4 = useCallback(() => {
+    const membershipInterest = getValues('membership_interest');
+    return membershipInterest !== 'No';
+  }, [getValues]);
+
+
   const getValidationFields = useCallback(
     (currentStep) => {
-      if (currentStep === 4) {
-        const location = getValues('location');
-        const membership_interest = getValues('membership_interest');
+      if (currentStep === 2) {
+        const howDidYouLearn = getValues('how_did_you_learn');
+        const baseFields = ['how_did_you_learn'];
 
-        if (location === 'yes' && membership_interest === 'yes') {
-          return ['address_in_ibadan', 'dob', 'occupation', 'born_again'];
+        if (howDidYouLearn === 'other') {
+          return [...baseFields, 'how_did_you_learn_other_text'];
         }
+        if (howDidYouLearn === 'Friend/Family') {
+          return [...baseFields, 'invited_by'];
+        }
+
+        return baseFields;
+      }
+
+      if (currentStep === 4) {
+        const membershipInterest = getValues('membership_interest');
+
+        if (membershipInterest !== 'No') {
+          return ['address', 'date_of_birth', 'occupation', 'born_again'];
+        }
+
         return [];
       }
 
@@ -125,30 +129,39 @@ const FirstTimerPage = () => {
 
     const isValid = await trigger(fieldsToValidate);
 
-    if (!isValid)
+    if (!isValid) {
       Toast.error(
         'Please fill in all required fields correctly before proceeding.'
       );
+    }
 
     return isValid;
   }, [step, getValidationFields, trigger]);
 
-  // Navigation logic
-  const shouldSkipToStep5 = useCallback(() => {
-    return step === 3 && getValues('membership_interest') === 'no';
-  }, [step, getValues]);
 
   const getNextStep = useCallback(() => {
-    if (shouldSkipToStep5()) return 5;
+    if (step === 3) {
+      const membershipInterest = getValues('membership_interest');
+      if (membershipInterest === 'No') {
+        return 5;
+      }
+      return 4;
+    }
     return step + 1;
-  }, [step, shouldSkipToStep5]);
+  }, [step, getValues]);
+
 
   const getPreviousStep = useCallback(() => {
-    if (step === 5 && getValues('membership_interest') === 'no') return 3;
+    if (step === 5) {
+      const membershipInterest = getValues('membership_interest');
+      if (membershipInterest === 'No') {
+        return 3;
+      }
+      return 4;
+    }
     return Math.max(1, step - 1);
   }, [step, getValues]);
 
-  // Event handlers
   const handleNextStep = useCallback(async () => {
     const isValid = await validateCurrentStep();
     if (!isValid) return;
@@ -164,6 +177,7 @@ const FirstTimerPage = () => {
     async (data) => {
       try {
         const payload = createFormPayload(data);
+        console.log('Form Payload:', payload);
         await createFirstTimer(payload);
         setStep('complete');
       } catch (err) {
@@ -182,24 +196,17 @@ const FirstTimerPage = () => {
     }
   }, [isLastStep, handleSubmit, handleFormSubmit, handleNextStep]);
 
-  const renderProgressBar = () => (
-    <div className="mb-6 mt-4">
-      <div className="text-sm text-gray-600 font-semibold mb-2">
-        Step {step} of {TOTAL_STEPS}
-      </div>
-      <div className="w-full bg-gray-200 h-2 rounded">
-        <div
-          className="h-2 bg-[#24244e] rounded transition-all duration-300"
-          style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-        />
-      </div>
-    </div>
-  );
-
   const renderStepContent = () => {
     const stepComponents = {
       1: <Step1PersonalInfo register={register} errors={errors} />,
-      2: <Step2FriendFamilyLocation register={register} errors={errors} />,
+      2: (
+        <Step2FriendFamilyLocation
+          watch={watch}
+          register={register}
+          errors={errors}
+          setValue={setValue}
+        />
+      ),
       3: <Step3Interest register={register} errors={errors} />,
       4: <Step4Details register={register} errors={errors} />,
       5: <Step5Experience register={register} errors={errors} />,
@@ -209,10 +216,13 @@ const FirstTimerPage = () => {
   };
 
   const renderActionButtons = () => (
-    <div className="flex justify-between gap-10">
+    <div
+      className={`${step > 1 ? 'justify-between' : 'justify-end'
+        } flex gap-4 border-t border-gray-200 dark:border-gray-700 pt-6 mt-6`}
+    >
       {step > 1 && (
         <Button
-          className="w-full sm:max-w-[200px]"
+          className="w-full sm:w-auto sm:min-w-[140px]"
           type="button"
           onClick={handlePreviousStep}
           variant="ghost"
@@ -222,7 +232,7 @@ const FirstTimerPage = () => {
         </Button>
       )}
       <Button
-        className="w-full sm:max-w-[200px]"
+        className="w-full sm:w-auto sm:min-w-[140px]"
         type="button"
         loading={isPending}
         onClick={handleButtonClick}
@@ -235,52 +245,34 @@ const FirstTimerPage = () => {
   );
 
   const renderCompletionMessage = () => (
-    <div className="text-center">
-      <img
-        src="/images/logo/gccc.png"
-        alt="Logo"
-        className="h-16 w-auto mx-auto"
-      />
-      <div className="text-lg font-semibold text-green-600">
-        <p>Thank you! Your response has been received.</p>
-        <Button
-          variant="success"
-          startIcon={<CompletedIcon />}
-          className="rounded my-5 px-5"
-          onClick={() => window.location.reload()}
-        >
-          Done
-        </Button>
-      </div>
-    </div>
+    <SuccessCompletion />
   );
 
   const renderForm = () => (
     <>
-      <div className="flex justify-center">
-        <img src="/images/logo/gccc.png" alt="Logo" className="h-16 w-auto" />
-      </div>
-
-      {renderProgressBar()}
-
+      <ProgressIndicator currentStep={step} totalSteps={TOTAL_STEPS} />
       <form
-        className="space-y-4"
+        className="space-y-5 bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm"
         onSubmit={handleSubmit(handleFormSubmit)}
         noValidate
       >
-        {renderStepContent()}
-
-        {isError && <Message variant="error" data={error?.data} />}
-
+        <div className="space-y-5">{renderStepContent()}</div>
+        {isError && (
+          <div className="mt-4">
+            <Message variant="error" data={error?.data} />
+          </div>
+        )}
         {renderActionButtons()}
       </form>
     </>
   );
 
   return (
-    <div className="mt-28 mb-10 flex justify-center">
-      <div className={containerClasses}>
-        {isCompleteStep ? renderCompletionMessage() : renderForm()}
+    <div className="mt-28 mb-10 flex justify-center px-3">
+      <div className="w-full md:max-w-xl">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 md:p-7">
+          {isCompleteStep ? renderCompletionMessage() : renderForm()}
+        </div>
       </div>
     </div>
   );
