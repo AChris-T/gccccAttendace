@@ -1,7 +1,7 @@
-import { useRef, useEffect, useCallback } from "react";
-import { createPortal } from "react-dom";
-import Animated from "@/components/common/Animated";
-import { CloseIcon } from "@/icons";
+import { useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import Animated from '@/components/common/Animated';
+import { CloseIcon } from '@/icons';
 
 const Modal = ({
   isOpen,
@@ -9,7 +9,7 @@ const Modal = ({
   onClose,
   title,
   children,
-  maxWidth = "max-w-lg",
+  maxWidth = 'max-w-lg',
   closeOnOutsideClick = true,
 }) => {
   const modalRef = useRef(null);
@@ -20,7 +20,11 @@ const Modal = ({
 
   const handleBackdropClick = useCallback(
     (e) => {
-      if (closeOnOutsideClick && modalRef.current && !modalRef.current.contains(e.target)) {
+      if (
+        closeOnOutsideClick &&
+        modalRef.current &&
+        !modalRef.current.contains(e.target)
+      ) {
         handleClose();
       }
     },
@@ -29,19 +33,19 @@ const Modal = ({
 
   useEffect(() => {
     const handleEscapeKey = (event) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         handleClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscapeKey);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscapeKey);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
-      document.body.style.overflow = "";
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.body.style.overflow = '';
     };
   }, [isOpen, handleClose]);
 
@@ -50,15 +54,15 @@ const Modal = ({
   return createPortal(
     <div
       onClick={handleBackdropClick}
-      className="fixed inset-0 z-[1000000] flex items-center justify-center bg-gray-900/40 dark:bg-black/60 backdrop-blur-sm p-3"
+      className="fixed inset-0 z-99999  flex items-center justify-center bg-gray-900/40 dark:bg-black/60 backdrop-blur-sm p-3"
       role="dialog"
       aria-modal="true"
-      aria-labelledby={title ? "modal-title" : undefined}
+      aria-labelledby={title ? 'modal-title' : undefined}
     >
       <Animated
         ref={modalRef}
-        animation='zoom-in'
-        className={`relative w-full ${maxWidth} bg-white dark:bg-gray-800 rounded-lg shadow-xl`}
+        animation="zoom-in"
+        className={`relative w-full ${maxWidth} max-h-[500px] overflow-scroll no-scrollbar bg-white dark:bg-gray-800 rounded-lg shadow-xl`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -70,7 +74,11 @@ const Modal = ({
             >
               {title}
             </h2>
-            {description && <p className="text-[13px] text-gray-800 dark:text-gray-400">{description}</p>}
+            {description && (
+              <p className="text-[13px] text-gray-800 dark:text-gray-400">
+                {description}
+              </p>
+            )}
           </div>
           <button
             onClick={handleClose}
@@ -81,9 +89,7 @@ const Modal = ({
         </div>
 
         {/* Content */}
-        <div className="p-6 text-gray-700 dark:text-gray-300">
-          {children}
-        </div>
+        <div className="p-6 text-gray-700 dark:text-gray-300">{children}</div>
       </Animated>
     </div>,
     document.body

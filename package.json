@@ -19,6 +19,7 @@
     "ag-grid-react": "^34.2.0",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
+    "country-state-city": "^3.2.1",
     "dayjs": "^1.11.18",
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
