@@ -1,3 +1,4 @@
+
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
@@ -5,22 +6,40 @@ import { Link } from "react-router-dom";
 import { useMembers } from '@/queries/member.query';
 import Button from '@/components/ui/Button';
 import Message from '@/components/common/Message';
+import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const MembersTable = () => {
+// Constants
+const PAGINATION_PAGE_SIZES = [25, 50, 100, 200];
+const DEFAULT_PAGE_SIZE = 200;
+const MIN_TABLE_HEIGHT = 400;
+const MAX_TABLE_HEIGHT = 800;
+const ROW_HEIGHT = 42;
+const HEADER_HEIGHT = 56;
+const PAGINATION_HEIGHT = 60;
+
+const AdminMembersTable = () => {
     const { data: members, isLoading, refetch, isError, error, isFetching } = useMembers();
     const gridRef = useRef(null);
     const [isGridReady, setIsGridReady] = useState(false);
 
-    // Ensure members is always an array
+    // Memoized member data with safe array conversion
     const memberData = useMemo(() => {
         if (!members) return [];
         return Array.isArray(members) ? members : [];
     }, [members]);
 
+    // Calculate dynamic table height based on content
+    const tableHeight = useMemo(() => {
+        if (memberData.length === 0) return MIN_TABLE_HEIGHT;
+
+        const contentHeight = (memberData.length * ROW_HEIGHT) + HEADER_HEIGHT + PAGINATION_HEIGHT;
+        return Math.min(Math.max(contentHeight, MIN_TABLE_HEIGHT), MAX_TABLE_HEIGHT);
+    }, [memberData.length]);
+
+    // Default column definition with auto-sizing
     const defaultColDef = useMemo(() => ({
-        flex: 1,
         filter: true,
         sortable: true,
         resizable: true,
@@ -28,15 +47,18 @@ const MembersTable = () => {
         floatingFilter: true,
         editable: false,
         minWidth: 100,
+        autoHeaderHeight: true,
+        wrapHeaderText: true,
     }), []);
 
+    // Link cell renderer component
     const LinkRenderer = useCallback(({ value }) => {
         if (!value) return null;
         return (
             <Link
                 target="_blank"
                 to={`/dashboard/members/${value}`}
-                className="text-blue-600 hover:text-blue-800 underline"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors"
                 rel="noopener noreferrer"
             >
                 {value}
@@ -44,6 +66,7 @@ const MembersTable = () => {
         );
     }, []);
 
+    // Date formatter
     const dateValueFormatter = useCallback((params) => {
         if (!params.value) return '';
         const date = new Date(params.value);
@@ -55,71 +78,67 @@ const MembersTable = () => {
         });
     }, []);
 
+    // Column definitions with pinned ID and Name columns
     const columnDefs = useMemo(() => [
         {
             field: "id",
             headerName: "ID",
             cellRenderer: LinkRenderer,
-            width: 80,
             pinned: 'left',
             cellClass: 'font-medium',
             editable: false,
+            suppressAutoSize: false,
         },
         {
             field: "first_name",
             headerName: "First Name",
-            width: 180,
+            pinned: 'left',
+            lockPinned: true,
             cellClass: 'font-medium',
         },
         {
             field: "last_name",
             headerName: "Last Name",
-            width: 180,
+            pinned: 'left',
             cellClass: 'font-medium',
         },
         {
             field: "phone_number",
             headerName: "Phone Number",
-            width: 130,
         },
         {
             field: "email",
             headerName: "Email",
-            width: 200,
-            cellClass: 'text-blue-600',
+            cellClass: 'text-blue-600 dark:text-blue-400',
         },
         {
             field: "gender",
             headerName: "Gender",
-            width: 90,
         },
         {
             field: "address",
             headerName: "Address",
-            width: 200,
         },
         {
             field: "date_of_birth",
             headerName: "Date of Birth",
-            width: 130,
             valueFormatter: dateValueFormatter,
         },
         {
             field: "community",
             headerName: "Community",
-            width: 130,
         },
         {
             field: "worker",
             headerName: "Worker",
-            width: 130,
         },
     ], [LinkRenderer, dateValueFormatter]);
 
+    // Grid options configuration
     const gridOptions = useMemo(() => ({
         pagination: true,
-        paginationPageSize: 200,
-        paginationPageSizeSelector: [25, 50, 100, 200],
+        paginationPageSize: DEFAULT_PAGE_SIZE,
+        paginationPageSizeSelector: PAGINATION_PAGE_SIZES,
         suppressDragLeaveHidesColumns: true,
         animateRows: true,
         suppressCellFocus: false,
@@ -131,66 +150,74 @@ const MembersTable = () => {
         suppressRowDeselection: false,
         rowMultiSelectWithClick: true,
         enableFillHandle: true,
+        enableCellTextSelection: true,
+        ensureDomOrder: true,
     }), []);
 
+    // Auto-size columns based on content
+    const autoSizeColumns = useCallback(() => {
+        if (!gridRef.current) return;
+
+        const allColumnIds = columnDefs.map(col => col.field);
+
+        // Auto-size all columns to fit content
+        gridRef.current.autoSizeColumns(allColumnIds, false);
+    }, [columnDefs]);
+
+    // Grid ready callback
     const onGridReady = useCallback((params) => {
         gridRef.current = params.api;
         setIsGridReady(true);
 
-        // Delay sizeColumnsToFit to ensure DOM is ready
+        // Auto-size columns after grid is ready
         setTimeout(() => {
-            if (params.api) {
-                params.api.sizeColumnsToFit();
-            }
+            autoSizeColumns();
         }, 100);
-    }, []);
+    }, [autoSizeColumns]);
 
-    // Force grid refresh when data changes
+    // Auto-size columns when data changes
     useEffect(() => {
         if (isGridReady && gridRef.current && memberData.length > 0) {
             gridRef.current.setGridOption('rowData', memberData);
-            // Refresh cells to ensure data is displayed
             gridRef.current.refreshCells({ force: true });
-        }
-    }, [memberData, isGridReady]);
 
-    const handleExportCSV = useCallback(() => {
-        if (gridRef.current) {
-            const timestamp = new Date().toISOString().split('T')[0];
-            gridRef.current.exportDataAsCsv({
-                fileName: `members-report-${timestamp}.csv`,
-            });
+            // Auto-size columns after data update
+            setTimeout(() => {
+                autoSizeColumns();
+            }, 150);
         }
+    }, [memberData, isGridReady, autoSizeColumns]);
+
+    // CSV export handler
+    const handleExportCSV = useCallback(() => {
+        if (!gridRef.current) return;
+
+        const timestamp = new Date().toISOString().split('T')[0];
+        gridRef.current.exportDataAsCsv({
+            fileName: `members-report-${timestamp}.csv`,
+        });
     }, []);
 
-    // Error state
+    // Refresh handler
+    const handleRefresh = useCallback(() => {
+        refetch();
+    }, [refetch]);
+
     if (isError) {
         return (
-            <div className="w-full">
-                <Message variant='error' data={error?.data} />
-                <div className="mt-4">
-                    <Button
-                        size='sm'
-                        variant='primary'
-                        onClick={() => refetch()}
-                    >
-                        Retry
-                    </Button>
-                </div>
-            </div>
+            <Message className={'max-w-md'} variant='error' data={error?.data} actionButton={<Button
+                variant='outline-danger'
+                onClick={handleRefresh}
+                className='mt-2'
+                loading={isFetching}
+            >
+                Retry
+            </Button>} />
         );
     }
 
-    // Initial loading state
     if (isLoading && !memberData.length) {
-        return (
-            <div className="flex items-center justify-center h-64 bg-gray-50 border border-gray-200 rounded-lg">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="text-gray-600 mt-2">Loading members...</p>
-                </div>
-            </div>
-        );
+        return <TableLoadingSkeleton title={'members'} />;
     }
 
     return (
@@ -198,25 +225,19 @@ const MembersTable = () => {
             {/* Header Section */}
             <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-3">
-                    <p className="text-sm text-gray-600">
-                        <span className="font-semibold text-gray-900">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">
                             {memberData.length}
                         </span>
                         {' '}record{memberData.length !== 1 ? 's' : ''} found
                     </p>
-                    {isFetching && (
-                        <span className="inline-flex items-center text-sm text-blue-600">
-                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
-                            Syncing...
-                        </span>
-                    )}
+                    {isFetching && <InlineLoader />}
                 </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap w-full gap-3 mb-4">
                 <Button
-                    size='sm'
                     variant='primary'
                     onClick={handleExportCSV}
                     disabled={!memberData.length || isLoading}
@@ -224,20 +245,26 @@ const MembersTable = () => {
                     Export CSV
                 </Button>
                 <Button
-                    size='sm'
-                    variant='neutral'
-                    onClick={() => refetch()}
+                    variant='ghost'
+                    onClick={handleRefresh}
                     loading={isFetching}
                     disabled={isLoading}
                 >
                     Refresh
                 </Button>
+                <Button
+                    variant='ghost'
+                    onClick={autoSizeColumns}
+                    disabled={!memberData.length || isLoading}
+                >
+                    Re-size Columns
+                </Button>
             </div>
 
-            {/* AG Grid Table */}
+            {/* AG Grid Table with Dark Mode Support */}
             <div
-                className="ag-theme-alpine border border-gray-200 rounded-lg shadow-sm overflow-hidden"
-                style={{ width: "100%", height: "1000px" }}
+                className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
+                style={{ width: "100%", height: `${tableHeight}px` }}
             >
                 <AgGridReact
                     ref={gridRef}
@@ -251,21 +278,24 @@ const MembersTable = () => {
                     overlayLoadingTemplate={`
                         <div class="flex items-center justify-center h-full">
                             <div class="text-center">
-                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                                <p class="text-gray-600 mt-2">Loading members...</p>
+                                <div class="relative inline-block">
+                                    <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 dark:border-t-blue-500 rounded-full animate-spin"></div>
+                                </div>
+                                <p class="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading members...</p>
                             </div>
                         </div>
                     `}
                     overlayNoRowsTemplate={`
-                        <div class="flex items-center justify-center h-full">
+                        <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
                             <div class="text-center py-8">
-                                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <p class="text-gray-500 text-lg font-medium mb-2">
+                                <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
                                     No members found
                                 </p>
-                                <p class="text-gray-400 text-sm">
+                                <p class="text-gray-400 dark:text-gray-500 text-sm">
                                     Members will appear here once available
                                 </p>
                             </div>
@@ -274,14 +304,14 @@ const MembersTable = () => {
                 />
             </div>
 
-            {/* Footer */}
+            {/* Footer with Dark Mode Support */}
             {memberData.length > 0 && (
-                <div className="mt-4 text-sm text-gray-500 flex justify-between items-center">
+                <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
                     <span>Last updated: {new Date().toLocaleString()}</span>
                     <div className="flex items-center gap-2">
                         <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            <span className="text-green-600 font-medium">Live data</span>
+                            <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
+                            <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
                         </span>
                     </div>
                 </div>
@@ -290,4 +320,4 @@ const MembersTable = () => {
     );
 };
 
-export default MembersTable;
+export default AdminMembersTable;

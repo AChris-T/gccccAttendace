@@ -64,7 +64,7 @@ const PageBreadcrumb = ({ pageTitle, description, icon: PageIcon }) => {
               </h1>
             </div>
             {description && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                 {description}
               </p>
             )}

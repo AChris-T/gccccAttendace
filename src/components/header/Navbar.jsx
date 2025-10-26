@@ -18,6 +18,7 @@ import { useLogout } from '@/queries/auth.query';
 import { useAuthStore } from '@/store/auth.store';
 import { Toast } from '@/lib/toastify';
 import { ThemeToggleButton } from '@/components/common/ThemeToggleButton';
+import RoleBadge from '@/components/userProfile/RoleBadge';
 
 const Navbar = () => {
   const { mutateAsync: logout, isPending: isLoggingOut } = useLogout();
@@ -241,9 +242,10 @@ const Navbar = () => {
                         <p className="text-sm text-white/90 font-medium truncate">
                           {user?.full_name}
                         </p>
-                        <p className="text-xs text-white/50 mt-0.5 truncate">
+                        <p className="text-xs text-white/50 mt-0.5 mb-1 truncate">
                           {user?.email}
                         </p>
+                        <RoleBadge showIcon />
                       </div>
                       <div className="p-3 space-y-1 border-b border-white/10">
                         <Link
@@ -352,9 +354,10 @@ const Navbar = () => {
                   <p className="text-sm text-white/90 font-medium truncate">
                     {user?.full_name}
                   </p>
-                  <p className="text-xs text-white/50 mt-0.5 truncate">
+                  <p className="text-xs text-white/50 mt-0.5 mb-1 truncate">
                     {user?.email}
                   </p>
+                  <RoleBadge showIcon />
                 </div>
                 <Link
                   to='/dashboard'

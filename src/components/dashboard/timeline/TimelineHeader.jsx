@@ -15,7 +15,7 @@ const TimelineHeader = () => {
                 <p className="text-base text-gray-600 dark:text-gray-400">
                     Track all interactions and follow-ups.
                 </p>
-                <Button onClick={openModal} className="mt-2" variant="neutral" size="sm">
+                <Button onClick={openModal} className="mt-2" variant="ghost">
                     + New feedback
                 </Button>
             </div>

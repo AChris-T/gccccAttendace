@@ -2,8 +2,7 @@ import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputForm from '@/components/form/useForm/InputForm';
-import MultiSelect from '@/components/form/MultiSelect';
-import SingleSelect from '@/components/form/SingleSelect';
+import SingleSelect from '@/components/form/useForm/SingleSelectForm';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 import { useModal } from '@/hooks/useModal';
@@ -14,6 +13,7 @@ import { unitSchema } from '@/schema';
 import { useAuthStore } from '@/store/auth.store';
 import { Toast } from '@/lib/toastify';
 import ButtonCard from '@/components/ui/ButtonCard';
+import MultiSelectForm from '@/components/form/useForm/MultiSelectForm';
 
 const CreateUnit = () => {
     const { isAdmin } = useAuthStore();
@@ -70,7 +70,7 @@ const CreateUnit = () => {
             </div>
 
             <Modal maxWidth="max-w-md" title="New Unit" isOpen={isOpen} onClose={handleModalClose}>
-                <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleCreateUnit)}>
+                <form className="w-full space-y-5" onSubmit={handleSubmit(handleCreateUnit)}>
                     <InputForm
                         label="Unit Name"
                         name="name"
@@ -80,12 +80,14 @@ const CreateUnit = () => {
                         error={errors.name?.message}
                     />
 
-                    <MultiSelect
+                    <MultiSelectForm
                         label="Unit Members"
                         name="member_ids"
+                        expandParent
                         options={memberOptions}
-                        defaultValue={watch('member_ids')}
-                        onChange={(value) => setValue('member_ids', value)}
+                        register={register}
+                        setValue={setValue}
+                        error={errors.member_ids?.message}
                         disabled={isLoadingMembers}
                         placeholder="Select members..."
                     />
@@ -95,28 +97,40 @@ const CreateUnit = () => {
                             <SingleSelect
                                 label="Unit Leader"
                                 name="leader_id"
+                                expandParent
+                                register={register}
+                                setValue={setValue}
                                 options={memberOptions}
-                                defaultValue={watch('leader_id')}
-                                onChange={(value) => setValue('leader_id', value)}
                                 disabled={isLoadingMembers}
                                 placeholder="Select leader..."
                             />
 
                             <SingleSelect
+                                expandParent
+                                register={register}
+                                setValue={setValue}
                                 label="Unit Assistant Leader"
                                 name="assistant_leader_id"
                                 options={memberOptions}
-                                defaultValue={watch('assistant_leader_id')}
-                                onChange={(value) => setValue('assistant_leader_id', value)}
                                 disabled={isLoadingMembers}
                                 placeholder="Select assistant leader..."
                             />
                         </>
                     )}
+                    <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
+                        <Button
+                            variant='ghost'
+                            onClick={closeModal}
+                            disabled={isPending}
+                            className="flex-1"
+                        >
+                            Cancel
+                        </Button>
+                        <Button className="flex-1" loading={isPending} type="submit">
+                            Create
+                        </Button>
 
-                    <Button loading={isPending} size="sm" type="submit">
-                        Create
-                    </Button>
+                    </div>
                 </form>
             </Modal>
         </>

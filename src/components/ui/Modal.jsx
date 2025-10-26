@@ -11,6 +11,7 @@ const Modal = ({
   children,
   maxWidth = 'max-w-lg',
   closeOnOutsideClick = true,
+  headerIcon = null
 }) => {
   const modalRef = useRef(null);
 
@@ -62,34 +63,42 @@ const Modal = ({
       <Animated
         ref={modalRef}
         animation="zoom-in"
-        className={`relative w-full ${maxWidth} max-h-[500px] overflow-scroll no-scrollbar bg-white dark:bg-gray-800 rounded-lg shadow-xl`}
+        className={`relative w-full ${maxWidth} bg-white dark:bg-gray-800 rounded-lg shadow-xl`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
-          <div>
-            <h2
-              id="modal-title"
-              className="text-xl font-semibold text-gray-900 dark:text-gray-100"
+        <div className="flex items-start gap-2 p-4 border-b shadow border-gray-200 dark:border-gray-700">
+
+          {headerIcon &&
+            <div className="shrink-0">
+              {headerIcon}
+            </div>
+          }
+          <div className="flex items-center justify-between">
+            <div>
+              <h2
+                id="modal-title"
+                className="text-xl font-semibold text-gray-900 dark:text-gray-100"
+              >
+                {title}
+              </h2>
+              {description && (
+                <p className="text-sm text-gray-800 dark:text-gray-400">
+                  {description}
+                </p>
+              )}
+            </div>
+            <button
+              onClick={handleClose}
+              className="absolute top-1 right-1 z-10 bg-red-50 border-red-200 hover:bg-red-100 dark:bg-white/10 dark:hover:bg-white/20 backdrop-blur-sm text-white shadow-2xl p-1 transition-all duration-300 hover:scale-110 border rounded-full"
             >
-              {title}
-            </h2>
-            {description && (
-              <p className="text-[13px] text-gray-800 dark:text-gray-400">
-                {description}
-              </p>
-            )}
+              <CloseIcon className=" text-red-400" />
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="absolute top-1 right-1 z-10 bg-red-50 border-red-200 hover:bg-red-100 dark:bg-white/10 dark:hover:bg-white/20 backdrop-blur-sm text-white shadow-2xl p-1 transition-all duration-300 hover:scale-110 border rounded-lg"
-          >
-            <CloseIcon className=" text-red-400" />
-          </button>
+
         </div>
 
         {/* Content */}
-        <div className="p-6 text-gray-700 dark:text-gray-300">{children}</div>
+        <div className="p-6 text-gray-700 dark:text-gray-300 max-h-[70vh] overflow-y-auto">{children}</div>
       </Animated>
     </div>,
     document.body

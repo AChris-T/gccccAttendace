@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
 export const EmptyState = ({
-  icon = 'inbox',
+  icon = 'folder',
   title = 'No items found',
   description = 'There are no items to display at the moment.',
-  actionLabel,
-  onAction,
   className,
   variant = 'default'
 }) => {
@@ -201,7 +199,7 @@ export const EmptyState = ({
           <div className={`absolute inset-0 ${currentVariant.pulse} rounded-full animate-pulse`}></div>
 
           {/* Icon */}
-          <div className={`relative w-24 h-24 md:w-28 md:h-28 ${currentVariant.iconBg} ${currentVariant.iconColor} rounded-3xl shadow-2xl p-6 transform transition-transform duration-300 hover:scale-110 hover:rotate-3`}>
+          <div className={`relative w-16 h-16 md:w-20 md:h-20 ${currentVariant.iconBg} ${currentVariant.iconColor} rounded-3xl shadow-2xl p-3 md:p-5 transform transition-transform duration-300 hover:scale-110 hover:rotate-3`}>
             {icons[icon] || icons.inbox}
           </div>
         </div>
@@ -212,22 +210,9 @@ export const EmptyState = ({
         </h3>
 
         {/* Description */}
-        <p className="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed animate-[fadeIn_0.7s_ease-in-out]">
+        <p className="text-slate-600 dark:text-slate-400 leading-relaxed animate-[fadeIn_0.7s_ease-in-out]">
           {description}
         </p>
-
-        {/* Optional Action Button */}
-        {actionLabel && onAction && (
-          <button
-            onClick={onAction}
-            className={`inline-flex items-center gap-2 px-6 py-3 ${currentVariant.iconBg} text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-200 hover:scale-105 active:scale-95`}
-          >
-            {actionLabel}
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </button>
-        )}
       </div>
 
       {/* Custom animations */}

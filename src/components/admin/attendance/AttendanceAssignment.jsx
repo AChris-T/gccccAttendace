@@ -2,13 +2,13 @@ import { useCallback, useMemo, useState, useEffect } from 'react';
 import DatePicker from 'react-multi-date-picker';
 import Animated from '@/components/common/Animated';
 import Message from '@/components/common/Message';
-import MultiSelect from '@/components/form/MultiSelect';
 import Button from '@/components/ui/Button';
 import { useAssignAbsenteesToLeaders } from '@/queries/attendance.query';
 import { useMembersByRole } from '@/queries/member.query';
 import { UserRole } from '@/utils/constant';
 import { getMatchingServiceId } from '@/utils/helper';
 import { CloseIcon } from '@/icons';
+import MultiSelectForm from '@/components/form/useForm/MultiSelectForm';
 
 const INITIAL_DATA = {
     service_id: null,
@@ -105,7 +105,7 @@ const AttendanceAssignment = ({ services = [] }) => {
                 </div>
 
                 <div className="w-full">
-                    <MultiSelect
+                    <MultiSelectForm
                         label=""
                         name="leaders"
                         options={leaderOptions}

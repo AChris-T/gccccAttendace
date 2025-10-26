@@ -1,4 +1,4 @@
-import SingleSelect from '@/components/form/SingleSelect';
+import SingleSelect from '@/components/form/useForm/SingleSelectForm';
 import Button from '@/components/ui/Button';
 import { Toast } from '@/lib/toastify';
 import { useMembers, useUpdateMember } from '@/queries/member.query';
@@ -10,7 +10,7 @@ const AssignMember = ({ memberData, onClose }) => {
 
     const [assignData, setAssignData] = useState({
         id: memberData?.id,
-        assigned_to_user_id: memberData?.assignedTo?.id,
+        followup_by_id: memberData?.assignedTo?.id,
     });
 
     const membersOptions = useMemo(() => {
@@ -40,8 +40,8 @@ const AssignMember = ({ memberData, onClose }) => {
                 label="Assign to member"
                 name="Assign to member"
                 options={membersOptions}
-                defaultValue={assignData.assigned_to_user_id}
-                onChange={(value) => handleFieldChange('assigned_to_user_id', value)}
+                defaultValue={assignData.followup_by_id}
+                onChange={(value) => handleFieldChange('followup_by_id', value)}
                 disabled={isLoading}
                 placeholder="Select a member..."
             />

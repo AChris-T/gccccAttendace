@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/Table";
+import { LoadingIcon2 } from "@/icons";
 import { useMemo } from "react";
 
 export function Skeleton({ className = "" }) {
@@ -677,3 +678,26 @@ export function FormsSkeleton() {
     </div>
   );
 }
+
+export const TableLoadingSkeleton = ({ title }) => {
+  return (
+    <div className="flex flex-col items-center py-10 space-y-2 justify-center  backdrop-blur-sm w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+      <div className="relative flex justify-center items-center">
+        <LoadingIcon2 className='h-10 w-10 dark:text-gray-300' />
+      </div>
+      <p className="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading {title}...</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Please wait while we fetch the data</p>
+    </div>
+  );
+};
+
+
+export const InlineLoader = ({ text = "Syncing..." }) => (
+  <span className="inline-flex items-center text-sm text-blue-600 dark:text-blue-400">
+    <svg className="animate-spin h-3 w-3 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    {text}
+  </span>
+);

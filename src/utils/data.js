@@ -20,7 +20,6 @@ export const navItems = [
     path: '/dashboard/profile',
   },
 ];
-
 export const adminNavItems = [
   {
     icon: 'AdminIcon',

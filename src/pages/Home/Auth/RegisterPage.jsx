@@ -8,6 +8,7 @@ import InputForm from "@/components/form/useForm/InputForm";
 import SelectForm from "@/components/form/useForm/SelectForm";
 import Button from "@/components/ui/Button";
 import Message from "@/components/common/Message";
+import Animated from "@/components/common/Animated";
 
 export default function RegisterPage() {
     const { mutate, isPending, isError, error } = useRegister();
@@ -28,7 +29,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="my-48 flex items-center justify-center">
+        <Animated animation={'zoom-in'} className="my-48 flex items-center justify-center">
 
             <div className="flex flex-col justify-center flex-1 w-full max-w-lg mx-auto shadow px-10 py-2 bg-white dark:bg-gray-800 rounded-lg border-1">
                 <div className="my-3">
@@ -121,6 +122,6 @@ export default function RegisterPage() {
 
                 </div>
             </div >
-        </div >
+        </Animated >
     );
 }

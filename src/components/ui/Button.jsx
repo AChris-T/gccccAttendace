@@ -117,6 +117,12 @@ const Button = ({
       "active:scale-[0.97] active:bg-gray-400/80 active:translate-y-0 " +
       "transition-all duration-200 ease-out " +
       "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:shadow-gray-900/40",
+    neutral:
+      "bg-gray-200/90 text-gray-700 rounded-lg font-semibold " +
+      "hover:bg-gray-300 hover:shadow-md hover:shadow-gray-300/50 hover:-translate-y-0.5 " +
+      "active:scale-[0.97] active:bg-gray-400/80 active:translate-y-0 " +
+      "transition-all duration-200 ease-out " +
+      "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:shadow-gray-900/40",
   };
 
   const disabledClasses =
@@ -130,7 +136,7 @@ const Button = ({
 
   const combinedClasses = `
     inline-flex items-center justify-center
-    ${baseClasses}
+    ${variant !== 'neutral' ? baseClasses : 'text-xs p-2 gap-1 relative overflow-hidden'}
     ${variantClasses[variant] || variantClasses['primary']}
     ${disabledClasses}
     ${focusClasses}
@@ -182,7 +188,7 @@ const Button = ({
   const ButtonContent = () => (
     <>
       {renderStartIcon()}
-      {!loading && <span className="truncate font-semibold">{children}</span>}
+      {!loading && <span className="truncate flex items-center gap-1 font-semibold">{children}</span>}
       {renderEndIcon()}
       <RippleEffect />
     </>

@@ -76,7 +76,7 @@ export default function UserProfessionalCard() {
     <>
       <div className="overflow-hidden border border-gray-200 rounded-2xl dark:border-gray-700/60 bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-colors mb-6">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700/60 lg:px-6 lg:pt-6">
+        <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700/60 lg:px-6 lg:pt-6">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Professional Information
@@ -85,21 +85,11 @@ export default function UserProfessionalCard() {
               Your educational and career details
             </p>
           </div>
-          {/* <Button
-            variant="neutral"
-            size="sm"
-            className="flex items-center  transition-all hover:scale-105"
-            onClick={handleEdit}
-            startIcon={<EditIcon width={18} />}
-          ></Button> */}
           <Button
             variant="neutral"
-            size="sm"
-            className="flex items-center gap-2 transition-all hover:scale-105"
             onClick={handleEdit}
-            startIcon={<EditIcon width={18} />}
           >
-            {' '}
+            <EditIcon width={16} height={16} className="text-gray-700 dark:text-gray-300" />
           </Button>
         </div>
 
@@ -157,54 +147,51 @@ export default function UserProfessionalCard() {
         isOpen={isOpen}
         onClose={closeModal}
       >
-        <form className="flex flex-col" onSubmit={handleSubmit(handleSave)}>
-          <div className="px-2 overflow-y-auto custom-scrollbar">
-            <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-              <InputForm
-                label="Education"
-                name="education"
-                type="text"
-                placeholder="e.g., Bachelor's Degree"
-                register={register}
-                error={errors.education?.message}
-              />
-              <InputForm
-                label="Field of Study"
-                name="field_of_study"
-                type="text"
-                placeholder="e.g., Computer Science"
-                register={register}
-                error={errors.field_of_study?.message}
-              />
-              <InputForm
-                label="Occupation"
-                name="occupation"
-                type="text"
-                placeholder="e.g., Software Engineer"
-                register={register}
-                error={errors.occupation?.message}
-                className="lg:col-span-2"
-              />
-            </div>
+        <form className="space-y-5" onSubmit={handleSubmit(handleSave)}>
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <InputForm
+              label="Education"
+              name="education"
+              type="text"
+              placeholder="e.g., Bachelor's Degree"
+              register={register}
+              error={errors.education?.message}
+            />
+            <InputForm
+              label="Field of Study"
+              name="field_of_study"
+              type="text"
+              placeholder="e.g., Computer Science"
+              register={register}
+              error={errors.field_of_study?.message}
+            />
+            <InputForm
+              label="Occupation"
+              name="occupation"
+              type="text"
+              placeholder="e.g., Software Engineer"
+              register={register}
+              error={errors.occupation?.message}
+              className="lg:col-span-2"
+            />
           </div>
 
-          <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+          <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
             <Button
-              size="sm"
               type="button"
-              variant="outline-primary"
+              variant="ghost"
               onClick={closeModal}
               disabled={isPending}
+              className="flex-1"
             >
               Cancel
             </Button>
 
             <Button
-              size="sm"
               type="submit"
               loading={isPending}
               disabled={isPending}
-              className="min-w-[120px]"
+              className="flex-1"
             >
               Save Changes
             </Button>

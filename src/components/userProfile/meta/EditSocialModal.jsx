@@ -16,27 +16,24 @@ const EditSocialModal = ({
     isOpen={isOpen}
     onClose={onClose}
   >
-    <form className="flex flex-col" onSubmit={onSubmit}>
-      <div className="px-2 overflow-y-auto custom-scrollbar">
-        <SocialMediaForm register={register} errors={errors} />
-      </div>
+    <form className="space-y-5" onSubmit={onSubmit}>
+      <SocialMediaForm register={register} errors={errors} />
 
-      <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+      <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
         <Button
-          size="sm"
+          className='flex-1'
           type="button"
-          variant="outline-primary"
+          variant="ghost"
           onClick={onClose}
           disabled={isPending}
         >
           Cancel
         </Button>
         <Button
-          size="sm"
+          className='flex-1'
           type="submit"
           loading={isPending}
           disabled={isPending}
-          className="min-w-[120px]"
         >
           Save Changes
         </Button>

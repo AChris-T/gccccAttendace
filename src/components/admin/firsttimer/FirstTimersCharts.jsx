@@ -4,7 +4,6 @@ import { AgCharts } from "ag-charts-react";
 import { generateChartSeries } from "../../../utils/helper";
 import { years } from "../../../utils/constant";
 import { useFirstTimersAnalytics } from "../../../queries/firstTimer.query";
-import React from "react";
 
 const FirstTimersCharts = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));
@@ -26,11 +25,17 @@ const FirstTimersCharts = () => {
 
     const chartOptions = useMemo(() => {
         const statusPerMonthOptions = {
+            title: {
+                text: `First timers' status in a year`,
+            },
             data: statusesPerMonth,
             series: generateChartSeries(statusesPerMonth)
         };
 
         const totalFirstTimerOptions = {
+            title: {
+                text: `Total First Timers`,
+            },
             data: totalFirstTimers,
             series: [
                 {
@@ -44,6 +49,9 @@ const FirstTimersCharts = () => {
         };
 
         const integratedFirstTimerOptions = {
+            title: {
+                text: `Integrated First Timers`,
+            },
             data: integratedFirstTimers,
             series: [
                 {
@@ -57,6 +65,9 @@ const FirstTimersCharts = () => {
         };
 
         const statusPerMonthOptionsPie = {
+            title: {
+                text: `First timers' status in a month.`,
+            },
             data: getStatusDataForMonth(selectedMonth, statusesPerMonth),
             series: [
                 {
@@ -95,13 +106,13 @@ const FirstTimersCharts = () => {
 
     const MonthlyChartsSection = () => (
         <div className="grid grid-cols-1 lg:grid-cols-2">
-            <ChartContainer title="Monthly First Timers">
+            <ChartContainer title="Total First Timers">
                 <AgCharts
                     options={chartOptions.totalFirstTimerOptions}
                     {...commonChartProps} style={{ height: "500px" }}
                 />
             </ChartContainer>
-            <ChartContainer title="Monthly Integrated First Timers">
+            <ChartContainer title="Total Integrated First Timers">
                 <AgCharts style={{ height: "500px" }}
                     options={chartOptions.integratedFirstTimerOptions}
                     {...commonChartProps}
@@ -113,27 +124,27 @@ const FirstTimersCharts = () => {
     const StatusReportSection = () => (
         <>
             <MonthSelector />
-            <div className="grid grid-cols-1 lg:grid-cols-4 my-2">
-                <div className="col-span-1 lg:col-span-2 my-7">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+                <ChartContainer title="First Timers' Status /  Month">
                     <AgCharts
                         style={{ height: "500px" }}
                         options={chartOptions.statusPerMonthOptionsPie}
                     />
-                </div>
-                <div className="col-span-1 lg:col-span-2 my-7">
+                </ChartContainer>
+                <ChartContainer title="First Timers' Status / Year">
                     <AgCharts
                         style={{ height: "500px" }}
                         options={chartOptions.statusPerMonthOptions}
                         {...commonChartProps}
                     />
-                </div>
+                </ChartContainer>
             </div>
         </>
     );
 
-    const ChartContainer = ({ title, children, titleMarginBottom = "mb-3" }) => (
+    const ChartContainer = ({ title, children }) => (
         <div className="mb-7">
-            <p className={titleMarginBottom}>{title}</p>
+            <p className={`text-gray-700 mb-2 dark:text-gray-400 text-lg font-semibold`}>{title}</p>
             {children}
         </div>
     );

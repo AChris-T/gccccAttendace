@@ -14,6 +14,7 @@ const initialState = {
   isSuperAdmin: false,
   isLeader: false,
   isMember: false,
+  isFirstTimer: false,
   userRoles: [],
   userUnits: [],
 };
@@ -33,8 +34,10 @@ export const useAuthStore = create()(
       },
 
       setAuthenticatedUser: ({ user }) => {
-        const { isAdmin, isLeader, isMember } = getUserRoles(user?.roles);
-        set({ user, isAdmin, isLeader, isMember });
+        const { isAdmin, isLeader, isMember, isFirstTimer } = getUserRoles(
+          user?.roles
+        );
+        set({ user, isAdmin, isLeader, isMember, isFirstTimer });
       },
       setToken: ({ token }) => {
         set({ token, isAuthenticated: true });
@@ -62,6 +65,7 @@ export const useAuthStore = create()(
         isAdmin: state.isAdmin,
         isLeader: state.isLeader,
         isMember: state.isMember,
+        isFirstTimer: state.isFirstTimer,
         isAuthenticated: state.isAuthenticated,
         userRoles: [],
         userUnits: [],

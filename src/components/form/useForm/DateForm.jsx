@@ -26,7 +26,7 @@ const DateForm = memo(({
         />
 
         {error && (
-            <p id={`${name}-error`} className="text-red-500 text-xs mt-[1px]" role="alert">
+            <p id={`${name}-error`} className="text-red-500 text-xs mt-px" role="alert">
                 {error}
             </p>
         )}

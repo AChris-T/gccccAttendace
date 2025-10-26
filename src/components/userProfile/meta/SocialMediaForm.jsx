@@ -14,10 +14,10 @@ const SOCIAL_PLATFORMS = [
 ];
 
 const SocialMediaForm = ({ register, errors }) => (
-  <div className="grid grid-cols-1 gap-5">
+  <div className="grid grid-cols-1 space-y-5">
     {SOCIAL_PLATFORMS.map(({ platform, Icon, label }) => (
       <div key={platform} className="relative">
-        <div className="absolute right-3  top-[38px] z-10">
+        <div className="absolute right-3 top-[38px] z-10">
           <Icon width={18} height={18} className="text-gray-400" />
         </div>
         <InputForm
@@ -27,7 +27,6 @@ const SocialMediaForm = ({ register, errors }) => (
           placeholder={`https://${platform}.com/yourprofile`}
           register={register}
           error={errors[platform]?.message}
-          className="pl-11"
         />
       </div>
     ))}

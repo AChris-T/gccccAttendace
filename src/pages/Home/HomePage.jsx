@@ -44,8 +44,8 @@ const LoadingState = ({ userName }) => (
 
 const NoServiceState = ({ userName }) => (
   <div className="min-h-screen flex items-center justify-center px-3">
-    <div className="max-w-md flex flex-col items-center space-y-5 md:space-y-10">
-      <p className="text-base text-white capitalize">
+    <div className="max-w-lg text-lg font-normal flex flex-col items-center space-y-5 md:space-y-10">
+      <p className="text-white capitalize">
         Hello 👋, {userName ?? 'Friend'}
       </p>
       <p className="text-center text-white">

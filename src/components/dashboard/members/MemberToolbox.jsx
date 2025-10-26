@@ -1,19 +1,16 @@
 import { useState, useCallback, useMemo } from "react";
-import EditFirstTimer from "@/components/dashboard/firsttimer/edit/EditFirstTimer";
 import ButtonCard from "@/components/ui/ButtonCard";
 import Modal from "@/components/ui/Modal";
 import { useModal } from "@/hooks/useModal";
 import {
     CheckIcon,
     ChevronDownIcon,
-    ChevronUpIcon,
     EditIcon2,
     PhoneIcon2,
     ToolboxIcon,
     WhatsAppIcon
 } from "@/icons";
 import { normalizePhone } from "@/utils/helper";
-import UpdateFirstTimer from "@/components/dashboard/firsttimer/edit/UpdateFirstTimer";
 import AssignMember from "@/components/dashboard/members/AssignMember";
 import { useAuthStore } from "@/store/auth.store";
 import UpdateMemberStatus from "@/components/dashboard/members/UpdateMemberStatus";
@@ -66,12 +63,8 @@ const MemberToolbox = ({ memberData }) => {
                         Action Toolbox
                     </h2>
                 </div>
-                <div className="transition-transform duration-300 ease-in-out">
-                    {toolboxOpen ? (
-                        <ChevronUpIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                    ) : (
-                        <ChevronDownIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                    )}
+                <div>
+                    <ChevronDownIcon className={`transition-transform duration-300 ease-in-out w-5 h-5 text-gray-600 dark:text-gray-400 ${toolboxOpen ? 'rotate-180' : 'rotate-0'}`} />
                 </div>
             </button>
 
@@ -126,6 +119,7 @@ const MemberToolbox = ({ memberData }) => {
                             icon={<CheckIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
                             description={statusButtonConfig.description}
                             onClick={openUpdateStatusModal}
+                            disabled={!isAdmin}
                         >
                             {statusButtonConfig.label} Member
                         </ButtonCard>

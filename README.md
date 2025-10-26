@@ -1,2 +1,1 @@
-   <!-- "moduleResolution": "Node",
-    "include": ["src/**/*"], -->
+<!-- GCCC Ibadan -->

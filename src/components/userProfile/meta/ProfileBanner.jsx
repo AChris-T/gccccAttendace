@@ -9,11 +9,9 @@ const ProfileBanner = ({ roleConfig, onEdit }) => (
     <div className="absolute top-4 right-4">
       <Button
         variant="neutral"
-        size="sm"
         onClick={onEdit}
-        className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-900 shadow-lg"
       >
-        <EditIcon width={16} className="text-gray-700 dark:text-gray-300" />
+        <EditIcon width={16} height={16} className="text-gray-700 dark:text-gray-300" />
       </Button>
     </div>
   </div>

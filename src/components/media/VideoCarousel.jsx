@@ -36,7 +36,7 @@ const VideoCarousel = () => {
                 {/* Custom Navigation Buttons */}
                 <button
                     onClick={() => swiperRef?.slidePrev()}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-20 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
                     aria-label="Previous slide"
                 >
                     <LeftIcon className="w-6 h-6 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
@@ -44,7 +44,7 @@ const VideoCarousel = () => {
 
                 <button
                     onClick={() => swiperRef?.slideNext()}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-20 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
                     aria-label="Next slide"
                 >
                     <RightIcon className="w-6 h-6 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />

@@ -1,8 +1,8 @@
 import { AttendanceIcon } from "@/icons"
-import AdminAttendanceTable from "../../components/admin/attendance/AdminAttendanceTable"
 import ComponentCard from "../../components/common/ComponentCard"
 import PageBreadcrumb from "../../components/common/PageBreadCrumb"
 import PageMeta from "../../components/common/PageMeta"
+import AdminAttendanceTable from "@/components/admin/attendance/AdminAttendanceTable"
 
 const AdminAttendancePage = () => {
     return (

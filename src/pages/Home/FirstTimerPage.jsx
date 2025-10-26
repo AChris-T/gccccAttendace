@@ -41,7 +41,7 @@ const createFormPayload = (data) => {
     gender: data.gender,
     located_in_ibadan: data.located_in_ibadan,
     membership_interest: data.membership_interest,
-    is_student: data.occupation?.contains('student'),
+    is_student: data?.occupation?.toLowerCase()?.includes('student'),
     born_again: data.born_again || null,
     whatsapp_interest: data.whatsapp_interest,
     address: data.address || null,
@@ -177,7 +177,6 @@ const FirstTimerPage = () => {
     async (data) => {
       try {
         const payload = createFormPayload(data);
-        console.log('Form Payload:', payload);
         await createFirstTimer(payload);
         setStep('complete');
       } catch (err) {
@@ -222,7 +221,7 @@ const FirstTimerPage = () => {
     >
       {step > 1 && (
         <Button
-          className="w-full sm:w-auto sm:min-w-[140px]"
+          className="w-full flex-1"
           type="button"
           onClick={handlePreviousStep}
           variant="ghost"
@@ -232,7 +231,7 @@ const FirstTimerPage = () => {
         </Button>
       )}
       <Button
-        className="w-full sm:w-auto sm:min-w-[140px]"
+        className="w-full flex-1"
         type="button"
         loading={isPending}
         onClick={handleButtonClick}

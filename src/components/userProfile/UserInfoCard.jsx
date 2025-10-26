@@ -160,7 +160,7 @@ export default function UserInfoCard() {
     <>
       <div className="overflow-hidden border border-gray-200 rounded-2xl dark:border-gray-700/60 bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-colors mb-6">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700/60 lg:px-6 lg:pt-6">
+        <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700/60 lg:px-6 lg:pt-6">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Personal Information
@@ -171,12 +171,9 @@ export default function UserInfoCard() {
           </div>
           <Button
             variant="neutral"
-            size="sm"
-            className="flex items-center gap-2 transition-all hover:scale-105"
             onClick={handleEdit}
-            startIcon={<EditIcon width={18} />}
           >
-            {' '}
+            <EditIcon width={16} height={16} className="text-gray-700 dark:text-gray-300" />
           </Button>
         </div>
 

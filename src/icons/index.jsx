@@ -99,7 +99,7 @@ export const LoadingIcon = ({
 export const LoadingIcon2 = ({ className = '' }) => {
   return (
     <svg
-      className={`w-[1.125em] h-[1.125em] ${className} animate-spin`}
+      className={`${className} w-[1.125em] h-[1.125em]  animate-spin`}
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -611,7 +611,7 @@ export const ArrowDownIcon = ({
   return (
     <>
       <svg
-        className={`${className} ${isOpen ? 'rotate-180' : ''}`}
+        className={className}
         width={width}
         height={height}
         viewBox="0 0 18 20"
@@ -2760,5 +2760,28 @@ export const BuildingIcon = ({
     <path d="M16 14h.01" />
     <path d="M8 10h.01" />
     <path d="M8 14h.01" />
+  </svg>
+);
+export const AlertTriangleIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+);
+
+export const ArchiveIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="21 8 21 21 3 21 3 8" />
+    <rect x="1" y="3" width="22" height="5" />
+    <line x1="10" y1="12" x2="14" y2="12" />
+  </svg>
+);
+
+export const ArchiveRestoreIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="1" y="3" width="22" height="5" />
+    <polyline points="21 8 21 21 3 21 3 8" />
+    <polyline points="10 12 14 16 10 20" />
   </svg>
 );

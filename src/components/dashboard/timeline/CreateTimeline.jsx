@@ -75,8 +75,16 @@ const CreateTimeline = ({ onClose }) => {
                 />
             )}
 
-            <div>
-                <Button loading={isPending} type="submit" variant='primary' size="md">
+            <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
+                <Button
+                    variant='ghost'
+                    onClick={onClose}
+                    disabled={isPending}
+                    className="flex-1"
+                >
+                    Cancel
+                </Button>
+                <Button className="flex-1" loading={isPending} type="submit" variant='primary'>
                     Send
                 </Button>
             </div>

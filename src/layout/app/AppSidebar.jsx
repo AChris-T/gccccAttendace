@@ -103,57 +103,29 @@ const AppSidebar = () => {
     });
   };
 
-  const renderMenuItems = (items, menuType) => (
-    <ul className="flex flex-col gap-4">
-      {items.map((nav, index) => {
-        const Icon = iconMap[nav.icon];
-        const isSubmenuOpen = openSubmenu?.type === menuType && openSubmenu?.index === index;
-        const hasActiveSubItem = hasActiveSubmenuItem(nav);
+  const renderMenuItems = (items, menuType) => {
+    return (
+      <ul className="flex flex-col gap-4">
+        {items?.map((nav, index) => {
+          const Icon = iconMap[nav.icon];
+          const isSubmenuOpen = openSubmenu?.type === menuType && openSubmenu?.index === index;
+          const hasActiveSubItem = hasActiveSubmenuItem(nav);
 
-        return (
-          <li key={nav.name}>
-            {nav.subItems ? (
-              <button
-                onClick={() => handleSubmenuToggle(index, menuType)}
-                className={`menu-item group ${isSubmenuOpen || hasActiveSubItem
-                  ? "menu-item-active"
-                  : "menu-item-inactive"
-                  } cursor-pointer ${!isExpanded ? "lg:justify-center" : "lg:justify-start"
-                  }`}
-              >
-                <span
-                  className={`menu-item-icon-size ${isSubmenuOpen || hasActiveSubItem
-                    ? "menu-item-icon-active"
-                    : "menu-item-icon-inactive"
-                    }`}
-                >
-                  <Icon width={30} height={30} />
-                </span>
-                {(isExpanded || isMobileOpen) && (
-                  <span className="menu-item-text">{nav.name}</span>
-                )}
-                {(isExpanded || isMobileOpen) && (
-                  <ChevronDownIcon
-                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${isSubmenuOpen
-                      ? "rotate-180 text-brand-500"
-                      : ""
-                      }`}
-                  />
-                )}
-              </button>
-            ) : (
-              nav.path && (
-                <Link
-                  to={nav.path}
-                  className={`menu-item group ${isActive(nav.path)
-                    ? 'menu-item-active'
-                    : 'menu-item-inactive'
+          return (
+            <li key={nav.name}>
+              {nav.subItems ? (
+                <button
+                  onClick={() => handleSubmenuToggle(index, menuType)}
+                  className={`menu-item group ${isSubmenuOpen || hasActiveSubItem
+                    ? "menu-item-active"
+                    : "menu-item-inactive"
+                    } cursor-pointer ${!isExpanded ? "lg:justify-center" : "lg:justify-start"
                     }`}
                 >
                   <span
-                    className={`menu-item-icon-size ${isActive(nav.path)
-                      ? 'menu-item-icon-active'
-                      : 'menu-item-icon-inactive'
+                    className={`menu-item-icon-size ${isSubmenuOpen || hasActiveSubItem
+                      ? "menu-item-icon-active"
+                      : "menu-item-icon-inactive"
                       }`}
                   >
                     <Icon width={30} height={30} />
@@ -161,55 +133,87 @@ const AppSidebar = () => {
                   {(isExpanded || isMobileOpen) && (
                     <span className="menu-item-text">{nav.name}</span>
                   )}
-                </Link>
-              )
-            )}
-            {nav.subItems && (isExpanded || isMobileOpen) && (
-              <div
-                ref={(el) => {
-                  subMenuRefs.current[`${menuType}-${index}`] = el;
-                }}
-                className="overflow-hidden transition-all duration-300"
-                style={{
-                  height: isSubmenuOpen
-                    ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                    : "0px",
-                }}
-              >
-                <ul className="mt-2 space-y-1 ml-9">
-                  {nav.subItems.map((subItem) => (
-                    <li key={subItem.name}>
-                      <Link
-                        to={subItem.path}
-                        className={`menu-dropdown-item ${isActive(subItem.path)
-                          ? 'menu-dropdown-item-active'
-                          : 'menu-dropdown-item-inactive'
-                          }`}
-                      >
-                        {subItem.name}
-                        <span className="flex items-center gap-1 ml-auto">
-                          {subItem.pro && (
-                            <span
-                              className={`ml-auto ${isActive(subItem.path)
-                                ? 'menu-dropdown-badge-active'
-                                : 'menu-dropdown-badge-inactive'
-                                } menu-dropdown-badge`}
-                            >
-                              <AdminIcon width={13} height={13} />
-                            </span>
-                          )}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  );
+                  {(isExpanded || isMobileOpen) && (
+                    <ChevronDownIcon
+                      className={`ml-auto w-5 h-5 transition-transform duration-200 ${isSubmenuOpen
+                        ? "rotate-180 text-brand-500"
+                        : ""
+                        }`}
+                    />
+                  )}
+                </button>
+              ) : (
+                nav.path && (
+                  <Link
+                    to={nav.path}
+                    className={`menu-item group ${isActive(nav.path)
+                      ? 'menu-item-active'
+                      : 'menu-item-inactive'
+                      }`}
+                  >
+                    <span
+                      className={`menu-item-icon-size ${isActive(nav.path)
+                        ? 'menu-item-icon-active'
+                        : 'menu-item-icon-inactive'
+                        }`}
+                    >
+                      <Icon width={30} height={30} />
+                    </span>
+                    {(isExpanded || isMobileOpen) && (
+                      <span className="menu-item-text">{nav.name}</span>
+                    )}
+                  </Link>
+                )
+              )}
+              {nav.subItems && (isExpanded || isMobileOpen) && (
+                <div
+                  ref={(el) => {
+                    subMenuRefs.current[`${menuType}-${index}`] = el;
+                  }}
+                  className="overflow-hidden transition-all duration-300"
+                  style={{
+                    height: isSubmenuOpen
+                      ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                      : "0px",
+                  }}
+                >
+                  <ul className="mt-2 space-y-1 ml-9">
+                    {nav.subItems.map((subItem) => (
+                      <li key={subItem.name}>
+                        <Link
+                          to={subItem.path}
+                          className={`menu-dropdown-item ${isActive(subItem.path)
+                            ? 'menu-dropdown-item-active'
+                            : 'menu-dropdown-item-inactive'
+                            }`}
+                        >
+                          {subItem.name}
+                          <span className="flex items-center gap-1 ml-auto">
+                            {subItem.pro && (
+                              <span
+                                className={`ml-auto ${isActive(subItem.path)
+                                  ? 'menu-dropdown-badge-active'
+                                  : 'menu-dropdown-badge-inactive'
+                                  } menu-dropdown-badge`}
+                              >
+                                <AdminIcon width={13} height={13} />
+                              </span>
+                            )}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+
 
   return (
     <aside

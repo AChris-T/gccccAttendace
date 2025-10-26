@@ -19,6 +19,10 @@ import { useFirstTimerWelcomeEmail } from "@/queries/firstTimer.query";
 import UpdateFirstTimer from "@/components/dashboard/firsttimer/edit/UpdateFirstTimer";
 
 const COPY_TIMEOUT_MS = 2000;
+const MESSAGE_TYPES = {
+    EMAIL: 'email',
+    SMS: 'sms'
+};
 
 const ToolBox = ({ firstTimerData }) => {
     const { mutate: sendWelcomeEmailMutation, isPending: isSendingEmail } = useFirstTimerWelcomeEmail();
@@ -37,9 +41,16 @@ const ToolBox = ({ firstTimerData }) => {
 
     const [copied, setCopied] = useState(false);
     const [toolboxOpen, setToolboxOpen] = useState(true);
+    const [messageType, setMessageType] = useState(MESSAGE_TYPES.EMAIL);
 
+    // Computed values
     const isStatusActive = useMemo(
         () => firstTimerData?.status === 'active',
+        [firstTimerData?.status]
+    );
+
+    const isDeactivated = useMemo(
+        () => firstTimerData?.status === 'deactivated',
         [firstTimerData?.status]
     );
 
@@ -48,17 +59,27 @@ const ToolBox = ({ firstTimerData }) => {
         [firstTimerData?.follow_up_status?.title]
     );
 
-    const welcomeMessage = useMemo(
+    const welcomeMessageEmail = useMemo(
         () => getWelcomeMessage(firstTimerData?.first_name),
         [firstTimerData?.first_name]
+    );
+
+    const welcomeMessageSMS = useMemo(
+        () => getWelcomeMessage(firstTimerData?.first_name, 'sms'),
+        [firstTimerData?.first_name]
+    );
+
+    const currentWelcomeMessage = useMemo(
+        () => messageType === MESSAGE_TYPES.EMAIL ? welcomeMessageEmail : welcomeMessageSMS,
+        [messageType, welcomeMessageEmail, welcomeMessageSMS]
     );
 
     const whatsappLink = useMemo(
         () =>
             `https://wa.me/${normalizePhone(firstTimerData?.phone_number)}?text=${encodeURIComponent(
-                welcomeMessage
+                welcomeMessageEmail
             )}`,
-        [firstTimerData?.phone_number, welcomeMessage]
+        [firstTimerData?.phone_number, welcomeMessageEmail]
     );
 
     const statusButtonConfig = useMemo(() => ({
@@ -69,20 +90,27 @@ const ToolBox = ({ firstTimerData }) => {
             }`
     }), [isStatusActive, firstTimerData?.first_name]);
 
+    // Event handlers
     const toggleToolbox = useCallback(() => {
         setToolboxOpen(prev => !prev);
     }, []);
 
+    const toggleMessageType = useCallback(() => {
+        setMessageType(prev =>
+            prev === MESSAGE_TYPES.EMAIL ? MESSAGE_TYPES.SMS : MESSAGE_TYPES.EMAIL
+        );
+    }, []);
+
     const copyToClipboard = useCallback(async () => {
         try {
-            await navigator.clipboard.writeText(welcomeMessage);
+            await navigator.clipboard.writeText(currentWelcomeMessage);
             setCopied(true);
             Toast.default("Welcome message has been copied");
             setTimeout(() => setCopied(false), COPY_TIMEOUT_MS);
         } catch (error) {
             Toast.error("Failed to copy message");
         }
-    }, [welcomeMessage]);
+    }, [currentWelcomeMessage]);
 
     const handleSendWelcomeEmail = useCallback(() => {
         if (!canSendWelcomeEmail) return;
@@ -94,7 +122,7 @@ const ToolBox = ({ firstTimerData }) => {
         };
 
         sendWelcomeEmailMutation(payload);
-    }, [canSendWelcomeEmail, firstTimerData.id, firstTimerData.email, firstTimerData.first_name, sendWelcomeEmailMutation]);
+    }, [canSendWelcomeEmail, firstTimerData, sendWelcomeEmailMutation]);
 
     const handleKeyDown = useCallback((e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -104,7 +132,7 @@ const ToolBox = ({ firstTimerData }) => {
     }, [copyToClipboard]);
 
     return (
-        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
             {/* Toolbox Header */}
             <button
                 onClick={toggleToolbox}
@@ -122,11 +150,7 @@ const ToolBox = ({ firstTimerData }) => {
                     </h2>
                 </div>
                 <div className="transition-transform duration-300 ease-in-out">
-                    {toolboxOpen ? (
-                        <ChevronUpIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                    ) : (
-                        <ChevronDownIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                    )}
+                    <ChevronDownIcon className={`w-5 h-5 text-gray-600 dark:text-gray-400 transform transition-transform duration-300 ${toolboxOpen ? 'rotate-180' : 'rotate-0'}`} />
                 </div>
             </button>
 
@@ -147,7 +171,7 @@ const ToolBox = ({ firstTimerData }) => {
                             description="Compose welcome message"
                             onClick={handleSendWelcomeEmail}
                             loading={isSendingEmail}
-                            disabled={!canSendWelcomeEmail || firstTimerData?.status == 'deactivated'}
+                            disabled={!canSendWelcomeEmail || isDeactivated}
                         >
                             Send Welcome Email
                         </ButtonCard>
@@ -159,7 +183,7 @@ const ToolBox = ({ firstTimerData }) => {
                             href={whatsappLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            disabled={firstTimerData?.status == 'deactivated'}
+                            disabled={isDeactivated}
                         >
                             WhatsApp Message
                         </ButtonCard>
@@ -169,7 +193,7 @@ const ToolBox = ({ firstTimerData }) => {
                             icon={<EditIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                             description="Change Follow-up Status, Reassign to Member"
                             onClick={openEditModal}
-                            disabled={firstTimerData?.status == 'deactivated'}
+                            disabled={isDeactivated}
                         >
                             Update First Timer
                         </ButtonCard>
@@ -186,27 +210,51 @@ const ToolBox = ({ firstTimerData }) => {
 
                     {/* Welcome Message Preview */}
                     <div className="bg-white dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
-                        <div className="flex items-center gap-2 mb-3">
-                            <MessageSquareIcon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
-                                Welcome Message Preview
-                            </span>
-                            {copied && (
-                                <span className="inline-block text-xs text-green-600 dark:text-green-400 font-medium animate-fade-in">
-                                    ✓ Copied!
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <MessageSquareIcon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                                <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                                    Welcome Message Preview
                                 </span>
-                            )}
+                                {copied && (
+                                    <span className="inline-block text-xs text-green-600 dark:text-green-400 font-medium animate-fade-in">
+                                        ✓ Copied!
+                                    </span>
+                                )}
+                            </div>
+
+                            {/* Message Type Toggle */}
+                            <button
+                                onClick={toggleMessageType}
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-indigo-100 dark:bg-gray-600 hover:bg-indigo-200 dark:hover:bg-gray-500 transition-colors duration-150"
+                                aria-label="Toggle message type"
+                            >
+                                <span className="text-xs font-medium text-indigo-700 dark:text-indigo-300">
+                                    {messageType === MESSAGE_TYPES.EMAIL ? 'Email' : 'SMS'}
+                                </span>
+                                <div className="flex items-center gap-1">
+                                    <div className={`w-1.5 h-1.5 rounded-full transition-colors ${messageType === MESSAGE_TYPES.EMAIL
+                                        ? 'bg-indigo-600 dark:bg-indigo-400'
+                                        : 'bg-gray-400 dark:bg-gray-500'
+                                        }`} />
+                                    <div className={`w-1.5 h-1.5 rounded-full transition-colors ${messageType === MESSAGE_TYPES.SMS
+                                        ? 'bg-indigo-600 dark:bg-indigo-400'
+                                        : 'bg-gray-400 dark:bg-gray-500'
+                                        }`} />
+                                </div>
+                            </button>
                         </div>
+
                         <div
                             onClick={copyToClipboard}
                             className="cursor-pointer bg-gray-50 dark:bg-gray-800 rounded-lg p-4 max-h-48 overflow-y-auto hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors duration-150"
                             role="button"
                             tabIndex={0}
                             onKeyDown={handleKeyDown}
-                            aria-label="Click to copy welcome message"
+                            aria-label={`Click to copy ${messageType} welcome message`}
                         >
                             <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
-                                {welcomeMessage}
+                                {currentWelcomeMessage}
                             </p>
                         </div>
                     </div>

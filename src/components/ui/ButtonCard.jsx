@@ -97,7 +97,7 @@ const ButtonCard = ({
 
     // Common classes for both button and anchor
     const baseClasses = `
-    flex items-center group w-full
+    flex items-start group w-full
     gap-2 sm:gap-3 
     p-3 sm:p-4 
     bg-white dark:bg-gray-700 
@@ -136,11 +136,11 @@ const ButtonCard = ({
 
             {/* Text Content - Responsive typography */}
             <div className="text-left flex-1 min-w-0">
-                <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">
                     {children}
                 </h3>
                 {description && (
-                    <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
                         {description}
                     </p>
                 )}

@@ -8,7 +8,7 @@ const variantStyles = {
     info: "bg-blue-100 border-blue-400 text-blue-800",
 };
 
-export default function Message({ variant = "info", data, onClose, className, message = null }) {
+export default function Message({ variant = "info", data, onClose, className, message = null, actionButton = null }) {
     const [visible, setVisible] = useState(true);
 
     if (!visible) return null;
@@ -26,7 +26,7 @@ export default function Message({ variant = "info", data, onClose, className, me
             <p className="font-medium text-sm truncate">{data?.message}</p>
             {message && <p className="font-medium text-sm truncate">{message}</p>}
             {data?.errors && (
-                <ul className="mt-2 list-disc list-inside space-y-1 text-sm break-words">
+                <ul className="mt-2 list-disc list-inside space-y-1 text-sm wrap-break-word">
                     {Object.entries(data.errors).map(([field, messages]) => {
                         const msgs = Array.isArray(messages) ? messages : [messages];
 
@@ -39,17 +39,7 @@ export default function Message({ variant = "info", data, onClose, className, me
                 </ul>
             )}
 
-            {/* {data?.errors &&
-                <ul className="mt-2 list-disc list-inside space-y-1 text-sm truncate">
-                    {Object.entries(data?.errors).map(([field, messages]) =>
-                        messages?.map((msg, i) => (
-                            <li key={`${field}-${i}`}>
-                                <span>{field}</span>: {msg}
-                            </li>
-                        ))
-                    )}
-                </ul>
-            } */}
+            {actionButton && actionButton}
 
             <button
                 type="button"

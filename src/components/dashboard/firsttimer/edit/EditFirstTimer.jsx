@@ -1,10 +1,14 @@
-import SingleSelect from '@/components/form/SingleSelect';
 import Button from '@/components/ui/Button';
 import { useUpdateFirstTimer } from '@/queries/firstTimer.query';
 import { useFollowUpStatuses } from '@/queries/followupstatus.query'
 import { useMembers } from '@/queries/member.query';
 import { useAuthStore } from '@/store/auth.store';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { updateFirstTimerStatusSchema } from "@/schema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import SingleSelectForm from '@/components/form/useForm/SingleSelectForm';
+import { Toast } from '@/lib/toastify';
 
 const EditFirstTimer = ({ firstTimerData, onClose }) => {
     const { mutateAsync: updateFirstTimer, isPending: isUpdateFirstTimerPending } = useUpdateFirstTimer()
@@ -12,11 +16,21 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
     const { data: members = [], isLoading } = useMembers()
     const { isAdmin } = useAuthStore();
 
-    const [assignData, setAssignData] = useState({
-        id: firstTimerData?.id,
-        assigned_to_member_id: firstTimerData?.assigned_to_member?.id,
-        follow_up_status_id: firstTimerData?.follow_up_status?.id,
+
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(updateFirstTimerStatusSchema),
+        defaultValues: {
+            followup_by_id: firstTimerData?.assigned_to_member?.id || '',
+            follow_up_status_id: firstTimerData?.follow_up_status?.id || '',
+            id: firstTimerData?.id,
+        }
     });
+
 
     const membersOptions = useMemo(() => {
         if (!members) return [];
@@ -33,13 +47,11 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
             text: status.title
         }));
     }, [members]);
-    const handleFieldChange = (field, value) => {
-        setAssignData(prev => ({ ...prev, [field]: value }));
-    };
 
-    const handleEditFirstTimer = async () => {
+
+    const handleEditFirstTimer = async (data) => {
         try {
-            await updateFirstTimer(assignData)
+            await updateFirstTimer(data)
             onClose?.()
         } catch (error) {
             Toast.error(error?.data?.message)
@@ -47,31 +59,49 @@ const EditFirstTimer = ({ firstTimerData, onClose }) => {
     }
 
     return (
-        <div>
+        <form onSubmit={handleSubmit(handleEditFirstTimer)} className='w-full space-y-5'>
             {isAdmin && <div>
-                <SingleSelect
+                <SingleSelectForm
                     label="Assign to member"
-                    name="Assign to member"
+                    name="followup_by_id"
+                    register={register}
+                    setValue={setValue}
+                    error={errors.followup_by_id?.message}
+                    searchable={true}
+                    expandParent={true}
                     options={membersOptions}
-                    defaultValue={assignData.assigned_to_member_id}
-                    onChange={(value) => handleFieldChange('assigned_to_member_id', value)}
                     disabled={isLoading}
                     placeholder="Select a member..."
+                    defaultValue={firstTimerData?.assigned_to_member?.id}
                 />
             </div>}
             <div>
-                <SingleSelect
+                <SingleSelectForm
                     label="Followup Status"
-                    name="followup status"
+                    name="follow_up_status_id"
                     options={followupStatusesOption}
-                    defaultValue={assignData.follow_up_status_id}
-                    onChange={(value) => handleFieldChange('follow_up_status_id', value)}
+                    register={register}
+                    setValue={setValue}
+                    error={errors.follow_up_status_id?.message}
+                    searchable={true}
+                    expandParent={true}
                     disabled={isLoading}
                     placeholder="Select new status..."
+                    defaultValue={firstTimerData?.follow_up_status?.id}
                 />
             </div>
-            <Button onClick={handleEditFirstTimer} size='sm' loading={isUpdateFirstTimerPending}>Update</Button>
-        </div>
+            <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
+                <Button
+                    variant='ghost'
+                    onClick={onClose}
+                    disabled={isUpdateFirstTimerPending}
+                    className="flex-1"
+                >
+                    Cancel
+                </Button>
+                <Button type='submit' className="flex-1" loading={isUpdateFirstTimerPending}>Update</Button>
+            </div>
+        </form>
     )
 }
 

@@ -2,6 +2,7 @@ export const UserRole = Object.freeze({
   ADMIN: 'admin',
   LEADER: 'leader',
   MEMBER: 'member',
+  FIRST_TIMER: 'firstTimer',
 });
 
 export const followupCommentTypes = [
@@ -17,6 +18,7 @@ export const UserRoles = [
   { id: 1, name: 'admin' },
   { id: 2, name: 'leader' },
   { id: 3, name: 'member' },
+  { id: 3, name: 'firstTimer' },
 ];
 
 export const Units = {

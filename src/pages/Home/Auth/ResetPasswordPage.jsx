@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,15 +11,13 @@ import { BackIcon2 } from "@/icons";
 import { useResetPassword } from "@/queries/auth.query";
 import { resetPasswordSchema } from "@/schema";
 import { Toast } from "@/lib/toastify";
+import Animated from "@/components/common/Animated";
 
 const ResetPasswordPage = () => {
     const { mutate, isPending, isError, isSuccess, error } = useResetPassword();
     const goBack = useGoBack();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const email = searchParams.get('email');
     const token = searchParams.get('token');
@@ -74,18 +72,10 @@ const ResetPasswordPage = () => {
         details: "You will be redirected to the login page in a few seconds..."
     }), []);
 
-    const togglePasswordVisibility = useCallback(() => {
-        setShowPassword(prev => !prev);
-    }, []);
-
-    const toggleConfirmPasswordVisibility = useCallback(() => {
-        setShowConfirmPassword(prev => !prev);
-    }, []);
-
     const isFormValid = !isPending && email && token;
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
+        <Animated animation={'zoom-in'} className="min-h-screen flex items-center justify-center px-4">
             <div className="w-full max-w-lg relative">
                 <div className="relative bg-white dark:bg-gray-900 rounded-lg shadow-2xl shadow-3xl py-8 px-6 md:p-10 backdrop-blur-sm border-2 border-white/20 dark:border-gray-700/50 transition-all duration-300 hover:shadow-blue-500/10 dark:hover:shadow-blue-400/20 hover:border-white/30 dark:hover:border-gray-600/50">
 
@@ -156,7 +146,7 @@ const ResetPasswordPage = () => {
                             <InputForm
                                 label="New Password"
                                 name="password"
-                                type={showPassword ? "text" : "password"}
+                                type={"password"}
                                 register={register}
                                 error={errors.password?.message}
                                 placeholder="Enter your new password"
@@ -169,7 +159,7 @@ const ResetPasswordPage = () => {
                             <InputForm
                                 label="Confirm New Password"
                                 name="password_confirmation"
-                                type={showConfirmPassword ? "text" : "password"}
+                                type={"password"}
                                 register={register}
                                 error={errors.password_confirmation?.message}
                                 placeholder="Confirm your new password"
@@ -199,7 +189,7 @@ const ResetPasswordPage = () => {
                     </form>
                 </div>
             </div>
-        </div>
+        </Animated>
     );
 };
 

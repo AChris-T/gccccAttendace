@@ -1,19 +1,32 @@
 import { AgGridReact } from 'ag-grid-react';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
-import Badge from '../../ui/Badge';
-import Button from '../../ui/Button';
+import Badge from '@/components/ui/Badge';
+import Button from '@/components/ui/Button';
 import { useAllAttendance } from '@/queries/attendance.query';
 import { useServices } from '@/queries/service.query';
-import { LoadingIcon } from '@/icons';
+import { AttendanceIcon2, FilterIcon } from '@/icons';
 import AttendanceMarkAbsent from '@/components/admin/attendance/AttendanceMarkAbsent';
 import AttendanceAssignment from '@/components/admin/attendance/AttendanceAssignment';
-import AdminAttendanceFilter from './AdminAttendanceFilter';
+import AdminAttendanceFilter from '@/components/admin/attendance/AdminAttendanceFilter';
+import ButtonSwitch from '@/components/ui/ButtonSwitch';
+import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
+import Message from '@/components/common/Message';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+// Constants
+const PAGINATION_PAGE_SIZES = [25, 50, 100, 200];
+const DEFAULT_PAGE_SIZE = 200;
+const MIN_TABLE_HEIGHT = 400;
+const MAX_TABLE_HEIGHT = 800;
+const ROW_HEIGHT = 42;
+const HEADER_HEIGHT = 56;
+const PAGINATION_HEIGHT = 60;
+
 const AdminAttendanceTable = () => {
     const gridRef = useRef(null);
+    const [isGridReady, setIsGridReady] = useState(false);
 
     // Filter state
     const [activeFilters, setActiveFilters] = useState({
@@ -22,6 +35,11 @@ const AdminAttendanceTable = () => {
         status: '',
         mode: ''
     });
+
+    // UI state
+    const [showFilter, setShowFilter] = useState(false);
+    const [showMark, setShowMark] = useState(false);
+    const [showAssign, setShowAssign] = useState(false);
 
     // Data fetching hooks
     const {
@@ -35,15 +53,31 @@ const AdminAttendanceTable = () => {
 
     const { data: services = [] } = useServices();
 
-    // Default column definitions
+    // Memoized attendance data with safe array conversion
+    const attendanceData = useMemo(() => {
+        if (!allAttendance) return [];
+        return Array.isArray(allAttendance) ? allAttendance : [];
+    }, [allAttendance]);
+
+    // Calculate dynamic table height based on content
+    const tableHeight = useMemo(() => {
+        if (attendanceData.length === 0) return MIN_TABLE_HEIGHT;
+
+        const contentHeight = (attendanceData.length * ROW_HEIGHT) + HEADER_HEIGHT + PAGINATION_HEIGHT;
+        return Math.min(Math.max(contentHeight, MIN_TABLE_HEIGHT), MAX_TABLE_HEIGHT);
+    }, [attendanceData.length]);
+
+    // Default column definitions with auto-sizing
     const defaultColDef = useMemo(() => ({
-        flex: 1,
         filter: true,
         sortable: true,
         resizable: true,
         suppressPaste: false,
         floatingFilter: true,
         editable: false,
+        minWidth: 100,
+        autoHeaderHeight: true,
+        wrapHeaderText: true,
     }), []);
 
     // Cell Renderers
@@ -101,57 +135,53 @@ const AdminAttendanceTable = () => {
         return params.data?.service?.name || 'N/A';
     }, []);
 
-    // Column Definitions
+    // Column Definitions with pinned ID column
     const columnDefs = useMemo(() => [
         {
             field: "id",
             headerName: "ID",
-            width: 80,
             pinned: 'left',
+            // lockPinned: true,
             cellClass: 'font-medium',
             editable: false,
+            suppressAutoSize: false,
         },
         {
             headerName: "Name",
+            lockPinned: true,
             valueFormatter: nameFormatter,
-            width: 180,
+            cellClass: 'font-medium',
         },
         {
             headerName: "Email",
             valueFormatter: emailFormatter,
-            width: 220,
             cellClass: 'text-blue-600 dark:text-blue-400',
         },
         {
             headerName: "Phone",
             valueFormatter: phoneFormatter,
-            width: 140,
         },
         {
             headerName: "Service",
             valueFormatter: serviceFormatter,
-            width: 150,
             cellClass: 'font-medium',
         },
         {
             field: "attendance_date",
             headerName: "Date",
             valueFormatter: dateFormatter,
-            width: 120,
             filter: false,
         },
         {
             field: "status",
             headerName: "Status",
             cellRenderer: StatusRenderer,
-            width: 110,
             editable: false,
         },
         {
             field: "mode",
             headerName: "Mode",
             cellRenderer: ModeRenderer,
-            width: 110,
             editable: false,
         },
     ], [StatusRenderer, ModeRenderer, dateFormatter, nameFormatter, emailFormatter, phoneFormatter, serviceFormatter]);
@@ -159,180 +189,266 @@ const AdminAttendanceTable = () => {
     // Grid Options
     const gridOptions = useMemo(() => ({
         pagination: true,
-        paginationPageSize: 200,
-        paginationPageSizeSelector: [25, 50, 100, 200],
+        paginationPageSize: DEFAULT_PAGE_SIZE,
+        paginationPageSizeSelector: PAGINATION_PAGE_SIZES,
         suppressDragLeaveHidesColumns: true,
         animateRows: true,
         suppressCellFocus: false,
-        defaultColDef,
-        columnDefs,
-        rowData: allAttendance,
-        loading: isLoading || isFetching,
         suppressColumnVirtualisation: false,
         suppressRowVirtualisation: false,
         suppressHorizontalScroll: false,
         alwaysShowHorizontalScroll: false,
-    }), [defaultColDef, columnDefs, allAttendance, isLoading, isFetching]);
+        rowSelection: 'multiple',
+        suppressRowDeselection: false,
+        rowMultiSelectWithClick: true,
+        enableFillHandle: true,
+        enableCellTextSelection: true,
+        ensureDomOrder: true,
+    }), []);
 
-    const onGridReady = useCallback((params) => {
-        gridRef.current = params.api;
+    // Auto-size columns based on content
+    const autoSizeColumns = useCallback(() => {
+        if (!gridRef.current) return;
+
+        // Get all column IDs - use getColumns() or getAllDisplayedColumns()
+        const allColumns = gridRef.current.getColumns?.() || gridRef.current.getAllDisplayedColumns?.();
+        if (!allColumns || allColumns.length === 0) return;
+
+        const allColumnIds = allColumns.map(col => col.getColId());
+        gridRef.current.autoSizeColumns(allColumnIds, false);
     }, []);
 
+    // Grid ready callback
+    const onGridReady = useCallback((params) => {
+        gridRef.current = params.api;
+        setIsGridReady(true);
+
+        // Auto-size columns after grid is ready
+        setTimeout(() => {
+            autoSizeColumns();
+        }, 100);
+    }, [autoSizeColumns]);
+
+    // Auto-size columns when data changes
+    useEffect(() => {
+        if (isGridReady && attendanceData.length > 0) {
+            // Auto-size columns after data update
+            setTimeout(() => {
+                autoSizeColumns();
+            }, 150);
+        }
+    }, [attendanceData, isGridReady, autoSizeColumns]);
+
+    // Handlers
     const handleApplyFilters = useCallback((filters) => {
         setActiveFilters(filters);
-    }, [activeFilters]);
+    }, []);
 
     const handleResetFilters = useCallback((filters) => {
         setActiveFilters(filters);
     }, []);
 
-    // Export handler
     const handleExportCSV = useCallback(() => {
-        if (gridRef.current) {
-            const timestamp = new Date().toISOString().split('T')[0];
-            gridRef.current.exportDataAsCsv({
-                fileName: `attendance-report-${timestamp}.csv`,
-            });
-        }
+        if (!gridRef.current) return;
+
+        const timestamp = new Date().toISOString().split('T')[0];
+        gridRef.current.exportDataAsCsv({
+            fileName: `attendance-report-${timestamp}.csv`,
+        });
     }, []);
 
+    const handleRefresh = useCallback(() => {
+        refetch();
+    }, [refetch]);
+
     // Check if any filters are active
-    const hasActiveFilters =
+    const hasActiveFilters = useMemo(() =>
         activeFilters.service_id ||
         activeFilters.attendance_date?.length > 0 ||
         activeFilters.status ||
-        activeFilters.mode;
+        activeFilters.mode
+        , [activeFilters]);
+
+    // Error state
+    if (isError) {
+        return (
+            <Message
+                className='max-w-md'
+                variant='error'
+                data={error?.data}
+                actionButton={
+                    <Button
+                        variant='outline-danger'
+                        onClick={handleRefresh}
+                        className='mt-2'
+                        loading={isFetching}
+                    >
+                        Retry
+                    </Button>
+                }
+            />
+        );
+    }
+
 
     return (
-        <div className="w-full animate-fadeIn">
-            <div className='mb-14 flex flex-col md:flex-row md:space-x-5 space-y-4 md:space-y-0'>
-                <AdminAttendanceFilter
-                    services={services}
-                    initialFilters={activeFilters}
-                    onApply={handleApplyFilters}
-                    onReset={handleResetFilters}
-                    loading={isFetching}
-                />
-                <AttendanceMarkAbsent services={services} />
-                <AttendanceAssignment services={services} />
+        <>
+            {/* Action Cards */}
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-3 mb-5'>
+                <ButtonSwitch
+                    onChange={() => setShowFilter(!showFilter)}
+                    checked={showFilter}
+                    color="primary"
+                    type='button'
+                    icon={<FilterIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    description="Filter attendance record"
+                >
+                    Filter
+                </ButtonSwitch>
+                <ButtonSwitch
+                    onChange={() => setShowMark(!showMark)}
+                    color="orange"
+                    checked={showMark}
+                    type='button'
+                    icon={<AttendanceIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    description="Mark attendance for absent or present members"
+                >
+                    Mark Attendance
+                </ButtonSwitch>
+                <ButtonSwitch
+                    onChange={() => setShowAssign(!showAssign)}
+                    color="green"
+                    checked={showAssign}
+                    type='button'
+                    icon={<AttendanceIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    description="Assign absent members to leaders for active followups"
+                >
+                    Assign Absent Members
+                </ButtonSwitch>
             </div>
 
-            {isError && error ? <>
-                <div className="flex items-center justify-center h-64 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg animate-fadeIn">
-                    <div className="text-center">
-                        <svg className="w-16 h-16 mx-auto text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div className="text-red-600 dark:text-red-400 mb-4 font-semibold">
-                            Error loading attendance data
-                        </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            {error?.message || 'An unexpected error occurred'}
-                        </p>
-                        <Button onClick={() => refetch()} variant="outline-danger" className='rounded'>
-                            Retry
-                        </Button>
-                    </div>
-                </div>
-            </> : isLoading || (isFetching && !allAttendance?.length) ?
-                <>
-                    <div className="flex items-center justify-center h-64 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg animate-fadeIn">
-                        <LoadingIcon width={40} height={40} />
-                        <p>Fetching attendance records</p>
-                    </div>
-                </> :
-                <>
-                    {/* Header Section */}
-                    <div className="flex justify-between items-center my-3">
-                        <div className="flex items-center gap-3">
-                            <p className="text-sm text-blue-600 dark:text-gray-400">
-                                <span className="font-semibold text-blue-900 dark:text-white">
-                                    {allAttendance?.length || 0}
-                                </span>
-                                {' '}record{allAttendance?.length !== 1 ? 's' : ''} found
-                            </p>
-                            {hasActiveFilters && (
-                                <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-blue-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800">
-                                    Filtered
-                                </span>
-                            )}
-                            {(isFetching) && (
-                                <span className="inline-flex items-center text-sm text-green-600 dark:text-blue-400">
-                                    Syncing...
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    {/* Action Buttons */}
-                    <div className="flex gap-2 mb-4">
-                        <Button
-                            size='sm'
-                            variant='primary'
-                            onClick={handleExportCSV}
-                            disabled={isLoading || isFetching || !allAttendance?.length}
-                        >
-                            Download
-                        </Button>
-                        <Button
-                            size='sm'
-                            variant='neutral'
-                            onClick={() => refetch()}
+            {/* Conditional Action Panels */}
+            {(showFilter || showMark || showAssign) && (
+                <div className='p-4 dark:bg-gray-800 bg-white shadow rounded-lg mb-5'>
+                    {showFilter && (
+                        <AdminAttendanceFilter
+                            services={services}
+                            initialFilters={activeFilters}
+                            onApply={handleApplyFilters}
+                            onReset={handleResetFilters}
                             loading={isFetching}
-                            disabled={isLoading}
-                        >
-                            Refresh
-                        </Button>
-                    </div>
+                        />
+                    )}
+                    {showMark && <AttendanceMarkAbsent services={services} />}
+                    {showAssign && <AttendanceAssignment services={services} />}
+                </div>
+            )}
 
-                    {/* AG Grid Table */}
+            {/* Header Section */}
+            <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center gap-3">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">
+                            {attendanceData.length}
+                        </span>
+                        {' '}record{attendanceData.length !== 1 ? 's' : ''} found
+                    </p>
+                    {hasActiveFilters && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800">
+                            Filtered
+                        </span>
+                    )}
+                    {isFetching && <InlineLoader />}
+                </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap w-full gap-3 mb-4">
+                <Button
+                    variant='primary'
+                    onClick={handleExportCSV}
+                    disabled={!attendanceData.length || isLoading}
+                >
+                    Export CSV
+                </Button>
+                <Button
+                    variant='ghost'
+                    onClick={handleRefresh}
+                    loading={isFetching}
+                    disabled={isLoading}
+                >
+                    Refresh
+                </Button>
+                <Button
+                    variant='ghost'
+                    onClick={autoSizeColumns}
+                    disabled={!attendanceData.length || isLoading}
+                >
+                    Re-size Columns
+                </Button>
+            </div>
+
+            {/* AG Grid Table with Dark Mode Support */}
+            {isLoading && !attendanceData.length ?
+                <TableLoadingSkeleton title='attendance' /> :
+                <>
                     <div
-                        className="ag-theme-alpine dark:ag-theme-alpine-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg overflow-hidden"
-                        style={{ width: "100%", height: "1000px" }}
+                        className="ag-theme-alpine dark:ag-theme-alpine-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors"
+                        style={{ width: "100%", height: `${tableHeight}px` }}
                     >
                         <AgGridReact
                             ref={gridRef}
-                            {...gridOptions}
+                            defaultColDef={defaultColDef}
+                            columnDefs={columnDefs}
+                            rowData={attendanceData}
+                            gridOptions={gridOptions}
                             onGridReady={onGridReady}
-                            loadingOverlayComponent={() => (
-                                <div className="flex items-center justify-center h-full">
-                                    <LoadingIcon width={40} height={40} />
-                                    <p>Fetching attendance records</p>
+                            suppressLoadingOverlay={false}
+                            suppressNoRowsOverlay={false}
+                            overlayLoadingTemplate={`
+                        <div class="flex items-center justify-center h-full">
+                            <div class="text-center">
+                                <div class="relative inline-block">
+                                    <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 dark:border-t-blue-500 rounded-full animate-spin"></div>
                                 </div>
-                            )}
-                            noRowsOverlayComponent={() => (
-                                <div className="flex items-center justify-center h-full">
-                                    <div className="text-center">
-                                        <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        <p className="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
-                                            No attendance records found
-                                        </p>
-                                        <p className="text-gray-400 dark:text-gray-500 text-sm">
-                                            {hasActiveFilters
-                                                ? 'Try adjusting your filters or reset them to see all records'
-                                                : 'Records will appear here once available'}
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
+                                <p class="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading attendance...</p>
+                            </div>
+                        </div>
+                    `}
+                            overlayNoRowsTemplate={`
+                        <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
+                            <div class="text-center py-8">
+                                <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
+                                    No attendance records found
+                                </p>
+                                <p class="text-gray-400 dark:text-gray-500 text-sm">
+                                    ${hasActiveFilters
+                                    ? 'Try adjusting your filters or reset them to see all records'
+                                    : 'Records will appear here once available'}
+                                </p>
+                            </div>
+                        </div>
+                    `}
                         />
                     </div>
-
-                    {/* Footer Section */}
-                    {allAttendance?.length > 0 && (
-                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center animate-fadeIn">
+                    {/* Footer with Dark Mode Support */}
+                    {attendanceData.length > 0 && (
+                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
                             <span>Last updated: {new Date().toLocaleString()}</span>
                             <div className="flex items-center gap-2">
                                 <span className="flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                    <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
                                     <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
                                 </span>
                             </div>
                         </div>
                     )}
                 </>}
-        </div>
+        </>
     );
 };
 

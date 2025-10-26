@@ -1,36 +1,27 @@
 import InputForm from '@/components/form/useForm/InputForm';
-import MultiSelect from '@/components/form/MultiSelect';
-import SingleSelect from '@/components/form/SingleSelect';
 import Button from '@/components/ui/Button';
 import { Toast } from '@/lib/toastify';
 import { useMembers } from '@/queries/member.query';
-import { useUpdateUnit } from '@/queries/unit.query'; // Changed from useCreateUnit
-import { unitSchema } from '@/schema';
+import { useUpdateUnit } from '@/queries/unit.query';
+import { updateUnitSchema } from '@/schema';
 import { useAuthStore } from '@/store/auth.store';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import MultiSelectForm from '@/components/form/useForm/MultiSelectForm';
+import SingleSelectForm from '@/components/form/useForm/SingleSelectForm';
 
 const EditUnit = ({ unit, onClose }) => {
     const { isAdmin } = useAuthStore();
 
-    // Memoize initial member IDs to prevent array reference changes
     const initialMemberIds = useMemo(() =>
         unit?.members?.map(member => member.id) || [],
         [unit?.members]
     );
 
-    // Initialize state with unit data properly
-    const [assignData, setAssignData] = useState({
-        member_ids: initialMemberIds,
-        leader_id: unit?.leader_id || null,
-        assistant_leader_id: unit?.assistant_leader_id || null
-    });
-
     const { data: members, isLoading: isLoadingMembers } = useMembers();
-    const { mutateAsync, isPending } = useUpdateUnit(unit?.id); // Use update mutation with unit ID
+    const { mutateAsync, isPending } = useUpdateUnit();
 
-    // Memoized member options for dropdowns
     const filteredMembers = useMemo(() => {
         if (!members) return [];
         return members.map(member => ({
@@ -39,35 +30,25 @@ const EditUnit = ({ unit, onClose }) => {
         }));
     }, [members]);
 
-    // Form setup with proper default values
     const {
         register,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(unitSchema),
+        resolver: yupResolver(updateUnitSchema),
         defaultValues: {
-            name: unit?.name || ''
+            name: unit?.name || '',
+            member_ids: initialMemberIds,
+            leader_id: unit?.leader_id || '',
+            assistant_leader_id: unit?.assistant_leader_id || '',
         }
     });
 
-    // Optimized update handler
-    const handleFieldChange = (field, value) => {
-        setAssignData(prev => ({ ...prev, [field]: value }));
-    };
 
-    // Submit handler
-    const handleUpdateUnit = async (formData) => {
-        const payload = {
-            id: unit.id,
-            name: formData.name,
-            member_ids: assignData.member_ids,
-            leader_id: assignData.leader_id,
-            assistant_leader_id: assignData.assistant_leader_id,
-        };
-
+    const handleUpdateUnit = async (data) => {
         try {
-            await mutateAsync(payload);
+            await mutateAsync({ ...data, id: unit.id });
             onClose?.();
         } catch (error) {
             Toast.error('Failed to update unit:', error)
@@ -76,70 +57,72 @@ const EditUnit = ({ unit, onClose }) => {
 
     return (
         <form
-            className="flex flex-col gap-4"
+            className='w-full space-y-5'
             onSubmit={handleSubmit(handleUpdateUnit)}
         >
-            {/* Unit Name Input */}
-            <div>
-                <InputForm
-                    label="Unit Name"
-                    name="name"
-                    type="text"
-                    placeholder="Enter unit name"
-                    register={register}
-                    error={errors.name?.message}
-                />
-            </div>
+            <InputForm
+                label="Unit Name"
+                name="name"
+                type="text"
+                placeholder="Enter unit name"
+                register={register}
+                error={errors.name?.message}
+            />
 
-            {/* Unit Members Multi-Select */}
-            <div>
-                <MultiSelect
-                    label="Unit Members"
-                    name="members"
-                    options={filteredMembers}
-                    defaultSelected={initialMemberIds}
-                    onChange={(value) => handleFieldChange('member_ids', value)}
-                    disabled={isLoadingMembers}
-                    placeholder="Select members..."
-                />
-            </div>
+            <MultiSelectForm
+                label="Unit Members"
+                name="member_ids"
+                expandParent
+                register={register}
+                setValue={setValue}
+                options={filteredMembers}
+                error={errors.member_ids?.message}
+                defaultValue={initialMemberIds}
+                disabled={isLoadingMembers}
+                placeholder="Select members..."
+            />
 
-            {/* Admin-only fields */}
             {isAdmin && (
                 <>
-                    <div>
-                        <SingleSelect
-                            label="Unit Leader"
-                            name="leader"
-                            options={filteredMembers}
-                            defaultValue={assignData.leader_id}
-                            onChange={(value) => handleFieldChange('leader_id', value)}
-                            disabled={isLoadingMembers}
-                            placeholder="Select a leader..."
-                        />
-                    </div>
-
-                    <div>
-                        <SingleSelect
-                            label="Assistant Leader"
-                            name="assistant_leader"
-                            options={filteredMembers}
-                            defaultValue={assignData.assistant_leader_id}
-                            onChange={(value) => handleFieldChange('assistant_leader_id', value)}
-                            disabled={isLoadingMembers}
-                            placeholder="Select an assistant leader..."
-                        />
-                    </div>
+                    <SingleSelectForm
+                        label="Unit Leader"
+                        name="leader_id"
+                        expandParent
+                        register={register}
+                        setValue={setValue}
+                        options={filteredMembers}
+                        defaultValue={unit?.leader_id}
+                        disabled={isLoadingMembers}
+                        error={errors.leader_id?.message}
+                        placeholder="Select a leader..."
+                    />
+                    <SingleSelectForm
+                        expandParent
+                        register={register}
+                        setValue={setValue}
+                        label="Assistant Leader"
+                        name="assistant_leader_id"
+                        options={filteredMembers}
+                        defaultValue={unit?.assistant_leader_id}
+                        disabled={isLoadingMembers}
+                        error={errors.assistant_leader_id?.message}
+                        placeholder="Select an assistant leader..."
+                    />
                 </>
             )}
-
-            {/* Submit Button */}
-            <div className="mt-2">
+            <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
+                <Button
+                    variant='ghost'
+                    onClick={onClose}
+                    disabled={isPending}
+                    className="flex-1"
+                >
+                    Cancel
+                </Button>
                 <Button
                     loading={isPending}
-                    size="sm"
                     type="submit"
-                    className="w-full md:w-auto"
+                    className="flex-1"
                 >
                     Update Unit
                 </Button>

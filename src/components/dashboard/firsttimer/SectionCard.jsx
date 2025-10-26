@@ -10,14 +10,14 @@ export const SectionCard = ({ title, icon: Icon, children, onEdit, isEdit = true
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h3>
             </div>
-            {isEdit && <Button variant="neutral" size="sm" className="p-0 m-0"
+            {isEdit && <Button variant="neutral"
                 onClick={onEdit}
             >
-                <EditIcon2 />
+                <EditIcon2 className="h-5 w-5" />
             </Button>}
 
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {children}
         </div>
     </div>

@@ -2,6 +2,7 @@ import Switch from "@/components/form/Switch";
 import Avatar from "@/components/ui/Avatar";
 import Badge from "@/components/ui/Badge";
 import { CheckIcon, DeleteIcon, UserIcon } from "@/icons";
+import { Link } from "react-router-dom";
 
 const ROLE_CONFIG = {
     admin: { label: 'Admin', color: 'error' },
@@ -24,21 +25,21 @@ const UserInfo = ({ user }) => {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {user.full_name || 'N/A'}
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <Link to={`mailto:${user?.email}`} className="hover:underline text-sm block text-gray-500 dark:text-gray-400">
                 {user.email || 'No email provided'}
-            </p>
+            </Link>
             <div className="flex flex-wrap items-center gap-3 mt-2">
                 <Badge size="sm" color={roleConfig.color}>
                     {roleConfig.label}
                 </Badge>
                 {isActive ? (
-                    <Badge startIcon={<CheckIcon />} size="sm" color="success">
+                    <Badge startIcon={<CheckIcon />} size="md" color="success">
                         Active
                     </Badge>
-                ) : <Badge startIcon={<DeleteIcon height={15} />} size="sm" color="error">
+                ) : <Badge startIcon={<DeleteIcon height={15} />} size="md" color="error">
                     Deactivated
                 </Badge>}
-                {user?.assigned_to_member && <Badge color='primary' size="sm">
+                {user?.assigned_to_member && <Badge color='primary' size="md">
                     <UserIcon width={15} height={15} /> {user?.assigned_to_member?.full_name}
                 </Badge>}
             </div>
@@ -47,7 +48,7 @@ const UserInfo = ({ user }) => {
 };
 
 const SettingsPanel = ({ onToggleToolbox, onToggleProfile, showToolbox, showProfile }) => (
-    <div className="space-y-3">
+    <div className="space-y-2">
         <Switch
             onChange={onToggleToolbox}
             defaultChecked={showToolbox}
@@ -70,15 +71,14 @@ export const ProfileHeader = ({
 }) => {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex items-center gap-4">
+            <div className="flex justify-between items-start">
+                <div>
                     <Avatar
                         size="3xl"
                         shape="square"
                         src={user.avatar}
                         name={user.initials}
                     />
-                    <UserInfo user={user} />
                 </div>
                 <SettingsPanel
                     onToggleToolbox={onToggleToolbox}
@@ -87,6 +87,7 @@ export const ProfileHeader = ({
                     showProfile={showProfile}
                 />
             </div>
+            <UserInfo user={user} />
         </div>
     );
 };

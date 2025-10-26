@@ -5,7 +5,6 @@ import Modal from "@/components/ui/Modal";
 import { useModal } from "@/hooks/useModal";
 import { ClipboardListIcon, MessageSquareIcon, PhoneIcon } from "@/icons";
 
-// Reusable TruncatedText component
 const TruncatedText = ({ text, maxLength = 150, className = "" }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const shouldTruncate = text && text.length > maxLength;

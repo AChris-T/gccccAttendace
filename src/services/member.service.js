@@ -28,9 +28,4 @@ export const MemberService = {
   //   const { data } = await $api.post(`/${MEMBERS}`, payload);
   //   return data;
   // },
-
-  // async deleteMember(memberId) {
-  //   const { data } = await $api.delete(`/${MEMBERS}/${memberId}`);
-  //   return data;
-  // },
 };

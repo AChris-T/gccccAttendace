@@ -213,3 +213,56 @@ export const testimonyFormSchema = yup.object({
   phone_number: yup.string().required(),
   wants_to_share_testimony: yup.boolean().nullable(),
 });
+
+export const updateFirstTimerStatusSchema = yup.object({
+  id: yup.number().required(),
+  followup_by_id: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) =>
+      originalValue === '' ? null : Number(originalValue)
+    ),
+  follow_up_status_id: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) =>
+      originalValue === '' ? null : Number(originalValue)
+    ),
+});
+
+export const updateUnitSchema = yup.object({
+  name: yup.string().nullable(),
+  member_ids: yup.array().of(yup.string()).nullable().default([]),
+  assistant_leader_id: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) =>
+      !originalValue ? null : Number(originalValue)
+    ),
+  leader_id: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) =>
+      !originalValue ? null : Number(originalValue)
+    ),
+});
+
+export const filterAttendanceSchema = yup.object({
+  service_id: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) =>
+      originalValue === '' || originalValue === null
+        ? null
+        : Number(originalValue)
+    ),
+  mode: yup
+    .string()
+    .nullable()
+    .transform((value) => value || null),
+  attendance_date: yup.array().of(yup.string()).nullable().default([]),
+  status: yup
+    .string()
+    .nullable()
+    .transform((value) => value || null),
+});

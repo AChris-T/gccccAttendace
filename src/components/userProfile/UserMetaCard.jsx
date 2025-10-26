@@ -112,7 +112,7 @@ export default function UserMetaCard() {
               onUpload={handleUpdateUserAvatar}
               isUploading={isPending}
             />
-            <ProfileInfo user={user} roleConfig={roleConfig} />
+            <ProfileInfo user={user} />
           </div>
 
           <SocialMediaSection user={user} />

@@ -22,41 +22,77 @@ const Switch = ({
     color === "blue"
       ? {
         background: isChecked
-          ? "bg-brand-500 "
-          : "bg-gray-200 dark:bg-white/10", // Blue version
+          ? "bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-500"
+          : "bg-gray-200 dark:bg-gray-700/50",
+        track: isChecked
+          ? "shadow-[inset_0_2px_8px_rgba(0,0,0,0.2)]"
+          : "shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)]",
         knob: isChecked
-          ? "translate-x-full bg-white"
-          : "translate-x-0 bg-white",
+          ? "bg-white shadow-[0_2px_8px_rgba(99,102,241,0.4),0_0_0_1px_rgba(255,255,255,0.1)] dark:shadow-[0_2px_12px_rgba(99,102,241,0.6)]"
+          : "bg-white shadow-[0_2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)]",
+        glow: isChecked
+          ? "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-blue-400 before:to-indigo-500 before:opacity-20 before:blur-md"
+          : "",
       }
       : {
         background: isChecked
-          ? "bg-gray-800 dark:bg-white/10"
-          : "bg-gray-200 dark:bg-white/10", // Gray version
+          ? "bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-300 dark:to-gray-100"
+          : "bg-gray-200 dark:bg-gray-700/50",
+        track: isChecked
+          ? "shadow-[inset_0_2px_8px_rgba(0,0,0,0.3)]"
+          : "shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)]",
         knob: isChecked
-          ? "translate-x-full bg-white"
-          : "translate-x-0 bg-white",
+          ? "bg-white dark:bg-gray-800 shadow-[0_2px_8px_rgba(0,0,0,0.2),0_0_0_1px_rgba(255,255,255,0.1)]"
+          : "bg-white shadow-[0_2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)]",
+        glow: isChecked
+          ? "before:absolute before:inset-0 before:rounded-full before:bg-gray-400 before:opacity-10 before:blur-md dark:before:bg-gray-300"
+          : "",
       };
 
   return (
     <label
-      className={`flex cursor-pointer select-none items-center gap-3 text-sm font-medium ${disabled ? "text-gray-400" : "text-gray-700 dark:text-gray-400"
+      className={`flex flex-col cursor-pointer select-none ${disabled ? "opacity-40 cursor-not-allowed" : ""
         }`}
-      onClick={handleToggle}
     >
-      {label}
-      <div className="relative">
-        <div
-          className={`block transition duration-150 ease-linear h-6 w-11 rounded-full ${disabled
-            ? "bg-gray-100 pointer-events-none dark:bg-gray-800"
-            : switchColors.background
+      {label && (
+        <span
+          className={`text-sm font-semibold tracking-tight transition-all duration-200 ${disabled
+            ? "text-gray-400 dark:text-gray-400"
+            : "text-gray-600 dark:text-gray-100"
             }`}
-        ></div>
-        <div
-          className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full shadow-theme-sm duration-150 ease-linear transform ${switchColors.knob}`}
-        ></div>
-      </div>
+        >
+          {label}
+        </span>
+      )}
+      <button
+        type="button"
+        role="switch"
+        aria-checked={isChecked}
+        disabled={disabled}
+        onClick={handleToggle}
+        className={`group relative inline-flex h-7 w-12 shrink-0 rounded-full transition-all duration-300 ease-out focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 dark:focus-visible:ring-blue-400/30 ${disabled ? "cursor-not-allowed" : "hover:scale-105 active:scale-95"
+          } ${switchColors.background} ${switchColors.track} ${switchColors.glow}`}
+      >{''}
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full ring-0 transition-all duration-300 ease-out ${isChecked ? "translate-x-6 rotate-180" : "translate-x-1 rotate-0"
+            } ${switchColors.knob} ${isChecked ? "mt-1 scale-110" : "mt-1 scale-100"
+            } ${disabled
+              ? ""
+              : "group-hover:scale-110 group-active:scale-95"
+            }`}
+        >
+          {/* Inner glow dot */}
+          <span
+            className={`absolute inset-0 m-auto h-1.5 w-1.5 rounded-full transition-all duration-300 ${isChecked
+              ? "bg-gradient-to-br from-blue-400 to-indigo-600 opacity-60 blur-[2px]"
+              : "bg-gray-300 opacity-0"
+              }`}
+          />
+        </span>
+      </button>
     </label>
   );
 };
 
-export default Switch;
+export default Switch

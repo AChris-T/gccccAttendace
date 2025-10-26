@@ -4,16 +4,16 @@ import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import { useLogout } from "@/queries/auth.query";
 import { useAuthStore } from "@/store/auth.store";
-import Badge from "@/components/ui/Badge";
 import Avatar from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
+import RoleBadge from "@/components/userProfile/RoleBadge";
 
 
 export default function UserDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, isAdmin, isLeader } = useAuthStore();
+  const { user } = useAuthStore();
   const { mutate, isPending } = useLogout();
 
+  const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
@@ -28,7 +28,7 @@ export default function UserDropdown() {
         <span className="block mr-1 font-medium text-theme-sm">
           {user?.first_name}
         </span>
-        <ArrowDownIcon isOpen={isOpen} />
+        <ArrowDownIcon className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`} />
       </button>
 
       <Dropdown
@@ -43,7 +43,7 @@ export default function UserDropdown() {
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             {user?.email}
           </span>
-          <Badge size="sm" color={isAdmin ? 'error' : isLeader ? 'warning' : 'primary'}>{isAdmin ? 'Admin' : isLeader ? 'Leader' : 'Member'}</Badge>
+          <RoleBadge showIcon />
         </div>
 
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
@@ -51,7 +51,7 @@ export default function UserDropdown() {
             <DropdownItem
               onItemClick={toggleDropdown}
               tag="a"
-              to={`${isAdmin ? "/dashboard/admin" : "/dashboard"}`}
+              to='/dashboard'
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               <DashboardIcon className="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300" />
@@ -84,10 +84,9 @@ export default function UserDropdown() {
 
         <Button
           loading={isPending}
-          className="mt-2"
-          size="sm"
           onClick={mutate}
-          variant="neutral"
+          className="mt-3"
+          variant="ghost"
           startIcon={<LogoutIcon width={18} height={18} />}
         >
           Sign out

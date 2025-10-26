@@ -1,14 +1,17 @@
 import ProgressBar from "@/components/others/ProgressBar";
 import { ScrollToTop } from "@/components/others/ScrollToTop";
+import ProfileCompletionBanner from "@/components/userProfile/ProfileCompletionBanner";
 import { SidebarProvider, useSidebar } from "@/context/SidebarContext";
 import AppHeader from "@/layout/app/AppHeader";
 import AppSidebar from "@/layout/app/AppSidebar";
 import Backdrop from "@/layout/app/Backdrop";
+import { useAuthStore } from "@/store/auth.store";
 import { Outlet } from "react-router-dom";
 
 
 const LayoutContent = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const { user } = useAuthStore()
 
   return (
     <>
@@ -23,6 +26,7 @@ const LayoutContent = () => {
         >
           <AppHeader />
           <div className="p-4 md:p-6 mx-auto">
+            {!user?.profile_completed && <ProfileCompletionBanner completion_percent={user?.completion_percent} />}
             <Outlet />
           </div>
         </div>

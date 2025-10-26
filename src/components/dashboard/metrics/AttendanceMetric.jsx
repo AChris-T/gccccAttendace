@@ -40,7 +40,7 @@ const AttendanceMetric = ({ data, type }) => {
     }, [data?.present_percentage, data?.absent_percentage, type]);
 
     return (
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+        <div className="relative rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
             <div className="flex justify-between">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800">
                     <AttendanceIcon2

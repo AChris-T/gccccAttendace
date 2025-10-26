@@ -66,7 +66,7 @@ export const Step1PersonalInfo = ({ register, errors }) => (
       label="Gender"
       name="gender"
       type="radio"
-      layout="horizontal"
+      layout="grid"
       placeholder="gender"
       register={register}
       error={errors.gender?.message}
@@ -151,18 +151,15 @@ export const Step3Interest = ({ register, errors }) => (
       register={register}
       error={errors.located_in_ibadan?.message}
       required
-      className='w-100'
-      layout="horizontal"
+      layout="grid"
       options={[
         {
           value: true,
           label: "Yes",
-          description: "Yes"
         },
         {
           value: false,
           label: "No",
-          description: "No"
         },
       ]}
     />
@@ -275,7 +272,7 @@ export const Step5Experience = ({ register, errors }) => (
       name="whatsapp_interest"
       type="radio"
       register={register}
-      layout="horizontal"
+      layout="grid"
       error={errors.whatsapp_interest?.message}
       required
       options={[
