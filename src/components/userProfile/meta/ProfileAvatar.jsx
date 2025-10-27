@@ -55,7 +55,7 @@ const ProfileAvatar = ({ user, roleConfig, onUpload, isUploading }) => {
         className="ring-4 ring-white dark:ring-gray-800 shadow-xl"
       />
       {user?.roles?.includes('admin') && (
-        <div className="absolute top-0 left-0">
+        <div onClick={handleDownload} className="absolute top-0 left-0">
           <DownloadIcon
             onClick={handleDownload}
             width={20}
