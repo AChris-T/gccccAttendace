@@ -110,7 +110,7 @@ const AdminAttendanceFilter = ({
     return (
         <Animated
             animation="fade-up"
-            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow animate-fadeIn w-full transition-all duration-300"
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow w-full"
         >
             <form onSubmit={handleApply} className="p-5">
                 <div className="grid gap-x-3 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">

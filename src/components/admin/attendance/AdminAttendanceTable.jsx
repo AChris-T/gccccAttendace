@@ -5,13 +5,14 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { useAllAttendance } from '@/queries/attendance.query';
 import { useServices } from '@/queries/service.query';
-import { AttendanceIcon2, FilterIcon } from '@/icons';
+import { AttendanceIcon2, ExpandFullScreenIcon, FilterIcon } from '@/icons';
 import AttendanceMarkAbsent from '@/components/admin/attendance/AttendanceMarkAbsent';
 import AttendanceAssignment from '@/components/admin/attendance/AttendanceAssignment';
 import AdminAttendanceFilter from '@/components/admin/attendance/AdminAttendanceFilter';
 import ButtonSwitch from '@/components/ui/ButtonSwitch';
 import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
 import Message from '@/components/common/Message';
+import { Link } from 'react-router-dom';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -93,6 +94,12 @@ const AdminAttendanceTable = () => {
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
+    const LinkRenderer = useCallback(({ data }) => {
+        if (!data) return <span className="text-gray-400 text-center">--</span>;
+        const value = data?.user
+        return <Link target='_blank' className='text-blue-500 underline' to={`/dashboard/members/${value?.id}`}>{`${value?.first_name} ${value?.last_name}` || 'N/A'}</Link>;
+    }, []);
+
     const ModeRenderer = useCallback(({ value }) => {
         if (!value) return <span className="text-gray-400 text-center">--</span>;
 
@@ -117,12 +124,6 @@ const AdminAttendanceTable = () => {
         });
     }, []);
 
-    const nameFormatter = useCallback((params) => {
-        if (!params.data?.user) return 'N/A';
-        const { first_name = '', last_name = '' } = params.data.user;
-        return `${first_name} ${last_name}`.trim() || 'N/A';
-    }, []);
-
     const emailFormatter = useCallback((params) => {
         return params.data?.user?.email || 'N/A';
     }, []);
@@ -141,15 +142,14 @@ const AdminAttendanceTable = () => {
             field: "id",
             headerName: "ID",
             pinned: 'left',
-            // lockPinned: true,
             cellClass: 'font-medium',
             editable: false,
             suppressAutoSize: false,
         },
         {
             headerName: "Name",
-            lockPinned: true,
-            valueFormatter: nameFormatter,
+            pinned: 'left',
+            cellRenderer: LinkRenderer,
             cellClass: 'font-medium',
         },
         {
@@ -184,7 +184,7 @@ const AdminAttendanceTable = () => {
             cellRenderer: ModeRenderer,
             editable: false,
         },
-    ], [StatusRenderer, ModeRenderer, dateFormatter, nameFormatter, emailFormatter, phoneFormatter, serviceFormatter]);
+    ], [StatusRenderer, ModeRenderer, dateFormatter, LinkRenderer, emailFormatter, phoneFormatter, serviceFormatter]);
 
     // Grid Options
     const gridOptions = useMemo(() => ({
@@ -292,9 +292,9 @@ const AdminAttendanceTable = () => {
 
 
     return (
-        <>
+        <div className="w-full space-y-10">
             {/* Action Cards */}
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-3 mb-5'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
                 <ButtonSwitch
                     onChange={() => setShowFilter(!showFilter)}
                     checked={showFilter}
@@ -329,7 +329,7 @@ const AdminAttendanceTable = () => {
 
             {/* Conditional Action Panels */}
             {(showFilter || showMark || showAssign) && (
-                <div className='p-4 dark:bg-gray-800 bg-white shadow rounded-lg mb-5'>
+                <div className='p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
                     {showFilter && (
                         <AdminAttendanceFilter
                             services={services}
@@ -344,8 +344,7 @@ const AdminAttendanceTable = () => {
                 </div>
             )}
 
-            {/* Header Section */}
-            <div className="flex justify-between items-center mb-3">
+            <div className='space-y-3'>
                 <div className="flex items-center gap-3">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         <span className="font-semibold text-gray-900 dark:text-gray-100">
@@ -360,52 +359,54 @@ const AdminAttendanceTable = () => {
                     )}
                     {isFetching && <InlineLoader />}
                 </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap w-full gap-3 mb-4">
-                <Button
-                    variant='primary'
-                    onClick={handleExportCSV}
-                    disabled={!attendanceData.length || isLoading}
-                >
-                    Export CSV
-                </Button>
-                <Button
-                    variant='ghost'
-                    onClick={handleRefresh}
-                    loading={isFetching}
-                    disabled={isLoading}
-                >
-                    Refresh
-                </Button>
-                <Button
-                    variant='ghost'
-                    onClick={autoSizeColumns}
-                    disabled={!attendanceData.length || isLoading}
-                >
-                    Re-size Columns
-                </Button>
-            </div>
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3 justify-between w-full">
+                    <div className='flex flex-wrap gap-3'>
+                        <Button
+                            variant='primary'
+                            onClick={handleExportCSV}
+                            disabled={!attendanceData.length || isLoading}
+                        >
+                            Export CSV
+                        </Button>
+                        <Button
+                            variant='ghost'
+                            onClick={handleRefresh}
+                            loading={isFetching}
+                            disabled={isLoading}
+                        >
+                            Refresh
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            variant='light'
+                            onClick={autoSizeColumns}
+                            disabled={!attendanceData.length || isLoading}
+                        >
+                            <ExpandFullScreenIcon className='h-4 w-4 md:h-5 md:w-5' />
+                        </Button>
+                    </div>
+                </div>
 
-            {/* AG Grid Table with Dark Mode Support */}
-            {isLoading && !attendanceData.length ?
-                <TableLoadingSkeleton title='attendance' /> :
-                <>
-                    <div
-                        className="ag-theme-alpine dark:ag-theme-alpine-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors"
-                        style={{ width: "100%", height: `${tableHeight}px` }}
-                    >
-                        <AgGridReact
-                            ref={gridRef}
-                            defaultColDef={defaultColDef}
-                            columnDefs={columnDefs}
-                            rowData={attendanceData}
-                            gridOptions={gridOptions}
-                            onGridReady={onGridReady}
-                            suppressLoadingOverlay={false}
-                            suppressNoRowsOverlay={false}
-                            overlayLoadingTemplate={`
+                {isLoading && !attendanceData.length ?
+                    <TableLoadingSkeleton title='attendance' /> :
+                    <>
+                        <div
+                            className="ag-theme-alpine dark:ag-theme-alpine-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors"
+                            style={{ width: "100%", height: `${tableHeight}px` }}
+                        >
+                            <AgGridReact
+                                ref={gridRef}
+                                defaultColDef={defaultColDef}
+                                columnDefs={columnDefs}
+                                rowData={attendanceData}
+                                gridOptions={gridOptions}
+                                onGridReady={onGridReady}
+                                suppressLoadingOverlay={false}
+                                suppressNoRowsOverlay={false}
+                                overlayLoadingTemplate={`
                         <div class="flex items-center justify-center h-full">
                             <div class="text-center">
                                 <div class="relative inline-block">
@@ -416,7 +417,7 @@ const AdminAttendanceTable = () => {
                             </div>
                         </div>
                     `}
-                            overlayNoRowsTemplate={`
+                                overlayNoRowsTemplate={`
                         <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
                             <div class="text-center py-8">
                                 <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -427,28 +428,29 @@ const AdminAttendanceTable = () => {
                                 </p>
                                 <p class="text-gray-400 dark:text-gray-500 text-sm">
                                     ${hasActiveFilters
-                                    ? 'Try adjusting your filters or reset them to see all records'
-                                    : 'Records will appear here once available'}
+                                        ? 'Try adjusting your filters or reset them to see all records'
+                                        : 'Records will appear here once available'}
                                 </p>
                             </div>
                         </div>
                     `}
-                        />
-                    </div>
-                    {/* Footer with Dark Mode Support */}
-                    {attendanceData.length > 0 && (
-                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
-                            <span>Last updated: {new Date().toLocaleString()}</span>
-                            <div className="flex items-center gap-2">
-                                <span className="flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
-                                    <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
-                                </span>
-                            </div>
+                            />
                         </div>
-                    )}
-                </>}
-        </>
+                        {/* Footer with Dark Mode Support */}
+                        {attendanceData.length > 0 && (
+                            <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
+                                <span>Last updated: {new Date().toLocaleString()}</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
+                                        <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                    </>}
+            </div>
+        </div>
     );
 };
 

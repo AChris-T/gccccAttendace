@@ -7,6 +7,7 @@ import { useMembers } from '@/queries/member.query';
 import Button from '@/components/ui/Button';
 import Message from '@/components/common/Message';
 import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
+import { ExpandFullScreenIcon } from '@/icons';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -29,7 +30,6 @@ const AdminMembersTable = () => {
         if (!members) return [];
         return Array.isArray(members) ? members : [];
     }, [members]);
-
     // Calculate dynamic table height based on content
     const tableHeight = useMemo(() => {
         if (memberData.length === 0) return MIN_TABLE_HEIGHT;
@@ -90,15 +90,8 @@ const AdminMembersTable = () => {
             suppressAutoSize: false,
         },
         {
-            field: "first_name",
-            headerName: "First Name",
-            pinned: 'left',
-            lockPinned: true,
-            cellClass: 'font-medium',
-        },
-        {
-            field: "last_name",
-            headerName: "Last Name",
+            field: "full_name",
+            headerName: "Name",
             pinned: 'left',
             cellClass: 'font-medium',
         },
@@ -154,15 +147,16 @@ const AdminMembersTable = () => {
         ensureDomOrder: true,
     }), []);
 
-    // Auto-size columns based on content
     const autoSizeColumns = useCallback(() => {
         if (!gridRef.current) return;
 
-        const allColumnIds = columnDefs.map(col => col.field);
+        // Get all column IDs - use getColumns() or getAllDisplayedColumns()
+        const allColumns = gridRef.current.getColumns?.() || gridRef.current.getAllDisplayedColumns?.();
+        if (!allColumns || allColumns.length === 0) return;
 
-        // Auto-size all columns to fit content
+        const allColumnIds = allColumns.map(col => col.getColId());
         gridRef.current.autoSizeColumns(allColumnIds, false);
-    }, [columnDefs]);
+    }, []);
 
     // Grid ready callback
     const onGridReady = useCallback((params) => {
@@ -175,12 +169,8 @@ const AdminMembersTable = () => {
         }, 100);
     }, [autoSizeColumns]);
 
-    // Auto-size columns when data changes
     useEffect(() => {
-        if (isGridReady && gridRef.current && memberData.length > 0) {
-            gridRef.current.setGridOption('rowData', memberData);
-            gridRef.current.refreshCells({ force: true });
-
+        if (isGridReady && memberData.length > 0) {
             // Auto-size columns after data update
             setTimeout(() => {
                 autoSizeColumns();
@@ -216,106 +206,108 @@ const AdminMembersTable = () => {
         );
     }
 
-    if (isLoading && !memberData.length) {
-        return <TableLoadingSkeleton title={'members'} />;
-    }
-
     return (
-        <div className="w-full">
+        <div className="w-full space-y-3">
             {/* Header Section */}
-            <div className="flex justify-between items-center mb-3">
-                <div className="flex items-center gap-3">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">
-                            {memberData.length}
-                        </span>
-                        {' '}record{memberData.length !== 1 ? 's' : ''} found
-                    </p>
-                    {isFetching && <InlineLoader />}
-                </div>
+            <div className="flex items-center gap-3">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">
+                        {memberData.length}
+                    </span>
+                    {' '}record{memberData.length !== 1 ? 's' : ''} found
+                </p>
+                {isFetching && <InlineLoader />}
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap w-full gap-3 mb-4">
-                <Button
-                    variant='primary'
-                    onClick={handleExportCSV}
-                    disabled={!memberData.length || isLoading}
-                >
-                    Export CSV
-                </Button>
-                <Button
-                    variant='ghost'
-                    onClick={handleRefresh}
-                    loading={isFetching}
-                    disabled={isLoading}
-                >
-                    Refresh
-                </Button>
-                <Button
-                    variant='ghost'
-                    onClick={autoSizeColumns}
-                    disabled={!memberData.length || isLoading}
-                >
-                    Re-size Columns
-                </Button>
-            </div>
-
-            {/* AG Grid Table with Dark Mode Support */}
-            <div
-                className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
-                style={{ width: "100%", height: `${tableHeight}px` }}
-            >
-                <AgGridReact
-                    ref={gridRef}
-                    defaultColDef={defaultColDef}
-                    columnDefs={columnDefs}
-                    rowData={memberData}
-                    gridOptions={gridOptions}
-                    onGridReady={onGridReady}
-                    suppressLoadingOverlay={false}
-                    suppressNoRowsOverlay={false}
-                    overlayLoadingTemplate={`
-                        <div class="flex items-center justify-center h-full">
-                            <div class="text-center">
-                                <div class="relative inline-block">
-                                    <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
-                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 dark:border-t-blue-500 rounded-full animate-spin"></div>
-                                </div>
-                                <p class="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading members...</p>
-                            </div>
-                        </div>
-                    `}
-                    overlayNoRowsTemplate={`
-                        <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
-                            <div class="text-center py-8">
-                                <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
-                                    No members found
-                                </p>
-                                <p class="text-gray-400 dark:text-gray-500 text-sm">
-                                    Members will appear here once available
-                                </p>
-                            </div>
-                        </div>
-                    `}
-                />
-            </div>
-
-            {/* Footer with Dark Mode Support */}
-            {memberData.length > 0 && (
-                <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
-                    <span>Last updated: {new Date().toLocaleString()}</span>
-                    <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
-                            <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
-                        </span>
-                    </div>
+            <div className="flex flex-wrap gap-3 justify-between w-full">
+                <div className='flex flex-wrap gap-3'>
+                    <Button
+                        variant='primary'
+                        onClick={handleExportCSV}
+                        disabled={!memberData.length || isLoading}
+                    >
+                        Export CSV
+                    </Button>
+                    <Button
+                        variant='ghost'
+                        onClick={handleRefresh}
+                        loading={isFetching}
+                        disabled={isLoading}
+                    >
+                        Refresh
+                    </Button>
                 </div>
-            )}
+                <div>
+                    <Button
+                        variant='ghost'
+                        onClick={autoSizeColumns}
+                        disabled={!memberData.length || isLoading}
+                    >
+                        <ExpandFullScreenIcon className='h-4 w-4 md:h-5 md:w-5' />
+                    </Button>
+                </div>
+            </div>
+
+            {isLoading && !memberData.length ?
+                <TableLoadingSkeleton title={'members'} />
+                :
+                <>
+                    <div
+                        className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
+                        style={{ width: "100%", height: `${tableHeight}px` }}
+                    >
+                        <AgGridReact
+                            ref={gridRef}
+                            defaultColDef={defaultColDef}
+                            columnDefs={columnDefs}
+                            rowData={memberData}
+                            gridOptions={gridOptions}
+                            onGridReady={onGridReady}
+                            suppressLoadingOverlay={false}
+                            suppressNoRowsOverlay={false}
+                            overlayLoadingTemplate={`
+                         <div class="flex items-center justify-center h-full">
+                             <div class="text-center">
+                                 <div class="relative inline-block">
+                                     <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+                                     <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 dark:border-t-blue-500 rounded-full animate-spin"></div>
+                                 </div>
+                                 <p class="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading members...</p>
+                             </div>
+                         </div>
+                     `}
+                            overlayNoRowsTemplate={`
+                         <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
+                             <div class="text-center py-8">
+                                 <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                 </svg>
+                                 <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
+                                     No members found
+                                 </p>
+                                 <p class="text-gray-400 dark:text-gray-500 text-sm">
+                                     Members will appear here once available
+                                 </p>
+                             </div>
+                         </div>
+                     `}
+                        />
+                    </div>
+                    {/* Footer with Dark Mode Support */}
+                    {memberData.length > 0 && (
+                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
+                            <span>Last updated: {new Date().toLocaleString()}</span>
+                            <div className="flex items-center gap-2">
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
+                                    <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </>
+            }
         </div>
     );
 };

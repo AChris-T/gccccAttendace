@@ -7,6 +7,7 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Message from '@/components/common/Message';
 import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
+import { ExpandFullScreenIcon } from '@/icons';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -111,6 +112,7 @@ const AdminFirstTimersTable = () => {
             suppressAutoSize: false,
         },
         {
+            pinned: 'left',
             field: "full_name",
             headerName: "Name",
             cellClass: 'font-medium',
@@ -189,11 +191,13 @@ const AdminFirstTimersTable = () => {
     const autoSizeColumns = useCallback(() => {
         if (!gridRef.current) return;
 
-        const allColumnIds = columnDefs.map(col => col.field);
+        // Get all column IDs - use getColumns() or getAllDisplayedColumns()
+        const allColumns = gridRef.current.getColumns?.() || gridRef.current.getAllDisplayedColumns?.();
+        if (!allColumns || allColumns.length === 0) return;
 
-        // Auto-size all columns to fit content
+        const allColumnIds = allColumns.map(col => col.getColId());
         gridRef.current.autoSizeColumns(allColumnIds, false);
-    }, [columnDefs]);
+    }, []);
 
     // Grid ready callback
     const onGridReady = useCallback((params) => {
@@ -208,10 +212,7 @@ const AdminFirstTimersTable = () => {
 
     // Auto-size columns when data changes
     useEffect(() => {
-        if (isGridReady && gridRef.current && firstTimersData.length > 0) {
-            gridRef.current.setGridOption('rowData', firstTimersData);
-            gridRef.current.refreshCells({ force: true });
-
+        if (isGridReady && firstTimersData.length > 0) {
             // Auto-size columns after data update
             setTimeout(() => {
                 autoSizeColumns();
@@ -254,66 +255,67 @@ const AdminFirstTimersTable = () => {
         );
     }
 
-    if (isLoading && !firstTimersData.length) {
-        return <TableLoadingSkeleton title={'first timers'} />;
-    }
-
     return (
-        <div className="w-full">
+        <div className="w-full space-y-3">
             {/* Header Section */}
-            <div className="flex justify-between items-center mb-3">
-                <div className="flex items-center gap-3">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">
-                            {firstTimersData.length}
-                        </span>
-                        {' '}record{firstTimersData.length !== 1 ? 's' : ''} found
-                    </p>
-                    {isFetching && <InlineLoader />}
-                </div>
+            <div className="flex items-center gap-3">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">
+                        {firstTimersData.length}
+                    </span>
+                    {' '}record{firstTimersData.length !== 1 ? 's' : ''} found
+                </p>
+                {isFetching && <InlineLoader />}
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap w-full gap-3 mb-4">
-                <Button
-                    variant='primary'
-                    onClick={handleExportCSV}
-                    disabled={!firstTimersData.length || isLoading}
-                >
-                    Export CSV
-                </Button>
-                <Button
-                    variant='ghost'
-                    onClick={handleRefresh}
-                    loading={isFetching}
-                    disabled={isLoading}
-                >
-                    Refresh
-                </Button>
-                <Button
-                    variant='ghost'
-                    onClick={autoSizeColumns}
-                    disabled={!firstTimersData.length || isLoading}
-                >
-                    Re-size Columns
-                </Button>
+            <div className="flex flex-wrap gap-3 justify-between w-full">
+                <div className='flex flex-wrap gap-3'>
+                    <Button
+                        variant='primary'
+                        onClick={handleExportCSV}
+                        disabled={!firstTimersData.length || isLoading}
+                    >
+                        Export CSV
+                    </Button>
+                    <Button
+                        variant='ghost'
+                        onClick={handleRefresh}
+                        loading={isFetching}
+                        disabled={isLoading}
+                    >
+                        Refresh
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        variant='ghost'
+                        onClick={autoSizeColumns}
+                        disabled={!firstTimersData.length || isLoading}
+                    >
+                        <ExpandFullScreenIcon className='h-4 w-4 md:h-5 md:w-5' />
+                    </Button>
+                </div>
             </div>
 
-            {/* AG Grid Table with Dark Mode Support */}
-            <div
-                className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
-                style={{ width: "100%", height: `${tableHeight}px` }}
-            >
-                <AgGridReact
-                    ref={gridRef}
-                    defaultColDef={defaultColDef}
-                    columnDefs={columnDefs}
-                    rowData={firstTimersData}
-                    gridOptions={gridOptions}
-                    onGridReady={onGridReady}
-                    suppressLoadingOverlay={false}
-                    suppressNoRowsOverlay={false}
-                    overlayLoadingTemplate={`
+            {isLoading && !firstTimersData.length ?
+                <TableLoadingSkeleton title={'first timers'} /> :
+                <>
+                    {/* AG Grid Table with Dark Mode Support */}
+                    <div
+                        className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
+                        style={{ width: "100%", height: `${tableHeight}px` }}
+                    >
+                        <AgGridReact
+                            ref={gridRef}
+                            defaultColDef={defaultColDef}
+                            columnDefs={columnDefs}
+                            rowData={firstTimersData}
+                            gridOptions={gridOptions}
+                            onGridReady={onGridReady}
+                            suppressLoadingOverlay={false}
+                            suppressNoRowsOverlay={false}
+                            overlayLoadingTemplate={`
                         <div class="flex items-center justify-center h-full">
                             <div class="text-center">
                                 <div class="relative inline-block">
@@ -324,7 +326,7 @@ const AdminFirstTimersTable = () => {
                             </div>
                         </div>
                     `}
-                    overlayNoRowsTemplate={`
+                            overlayNoRowsTemplate={`
                         <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
                             <div class="text-center py-8">
                                 <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -339,21 +341,23 @@ const AdminFirstTimersTable = () => {
                             </div>
                         </div>
                     `}
-                />
-            </div>
-
-            {/* Footer with Dark Mode Support */}
-            {firstTimersData.length > 0 && (
-                <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
-                    <span>Last updated: {new Date().toLocaleString()}</span>
-                    <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
-                            <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
-                        </span>
+                        />
                     </div>
-                </div>
-            )}
+
+                    {/* Footer with Dark Mode Support */}
+                    {firstTimersData.length > 0 && (
+                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
+                            <span>Last updated: {new Date().toLocaleString()}</span>
+                            <div className="flex items-center gap-2">
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
+                                    <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </>
+            }
         </div>
     );
 };

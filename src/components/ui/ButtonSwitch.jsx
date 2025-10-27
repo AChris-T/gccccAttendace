@@ -109,7 +109,7 @@ const ButtonSwitch = ({
             type="button"
             title={title || ""}
             className={`
-                flex items-center group w-full
+                flex items-start group w-full
                 gap-2 sm:gap-3 
                 p-3 sm:p-4 
                 bg-white dark:bg-gray-700 
