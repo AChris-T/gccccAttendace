@@ -13,6 +13,10 @@ import ButtonSwitch from '@/components/ui/ButtonSwitch';
 import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
 import Message from '@/components/common/Message';
 import { Link } from 'react-router-dom';
+import ButtonCard from '@/components/ui/ButtonCard';
+import { useModal } from '@/hooks/useModal';
+import Modal from '@/components/ui/Modal';
+
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -39,10 +43,9 @@ const AdminAttendanceTable = () => {
 
     // UI state
     const [showFilter, setShowFilter] = useState(false);
-    const [showMark, setShowMark] = useState(false);
-    const [showAssign, setShowAssign] = useState(false);
+    const { isOpen: isOpenMarkModal, openModal: openMarkModal, closeModal: closeMarkModal } = useModal();
+    const { isOpen: isOpenAssignModal, openModal: openAssignModal, closeModal: closeAssignModal } = useModal();
 
-    // Data fetching hooks
     const {
         data: allAttendance = [],
         isError,
@@ -294,7 +297,7 @@ const AdminAttendanceTable = () => {
     return (
         <div className="w-full space-y-10">
             {/* Action Cards */}
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                 <ButtonSwitch
                     onChange={() => setShowFilter(!showFilter)}
                     checked={showFilter}
@@ -305,49 +308,56 @@ const AdminAttendanceTable = () => {
                 >
                     Filter
                 </ButtonSwitch>
-                <ButtonSwitch
-                    onChange={() => setShowMark(!showMark)}
+                <ButtonCard
+                    onClick={openMarkModal}
                     color="orange"
-                    checked={showMark}
                     type='button'
                     icon={<AttendanceIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                     description="Mark attendance for absent or present members"
                 >
                     Mark Attendance
-                </ButtonSwitch>
-                <ButtonSwitch
-                    onChange={() => setShowAssign(!showAssign)}
+                </ButtonCard>
+                <ButtonCard
+                    onClick={openAssignModal}
                     color="green"
-                    checked={showAssign}
                     type='button'
                     icon={<AttendanceIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                     description="Assign absent members to leaders for active followups"
                 >
                     Assign Absent Members
-                </ButtonSwitch>
+                </ButtonCard>
             </div>
 
-            {/* Conditional Action Panels */}
-            {(showFilter || showMark || showAssign) && (
+            {showFilter && (
                 <div className='p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
-                    {showFilter && (
-                        <AdminAttendanceFilter
-                            services={services}
-                            initialFilters={activeFilters}
-                            onApply={handleApplyFilters}
-                            onReset={handleResetFilters}
-                            loading={isFetching}
-                        />
-                    )}
-                    {showMark && <AttendanceMarkAbsent services={services} />}
-                    {showAssign && <AttendanceAssignment services={services} />}
+                    <AdminAttendanceFilter
+                        services={services}
+                        initialFilters={activeFilters}
+                        onApply={handleApplyFilters}
+                        onReset={handleResetFilters}
+                        loading={isFetching}
+                    />
                 </div>
             )}
+            <Modal
+                title={`Assign Absent Members`}
+                isOpen={isOpenAssignModal}
+                onClose={closeAssignModal}
+            >
+                <AttendanceAssignment services={services} onClose={closeMarkModal} />
+            </Modal>
+            <Modal
+                title={`Mark Attendance`}
+                isOpen={isOpenMarkModal}
+                onClose={closeMarkModal}
+            >
+                <AttendanceMarkAbsent services={services} onClose={closeMarkModal} />
+            </Modal>
 
             <div className='space-y-3'>
                 <div className="flex items-center gap-3">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">
+                    <p className="text-sm text-green-600 dark:text-green-400">
+                        <span className="font-semibold text-green-900 dark:text-green-100">
                             {attendanceData.length}
                         </span>
                         {' '}record{attendanceData.length !== 1 ? 's' : ''} found

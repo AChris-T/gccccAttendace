@@ -240,7 +240,7 @@ const AdminMembersTable = () => {
                 </div>
                 <div>
                     <Button
-                        variant='ghost'
+                        variant='light'
                         onClick={autoSizeColumns}
                         disabled={!memberData.length || isLoading}
                     >

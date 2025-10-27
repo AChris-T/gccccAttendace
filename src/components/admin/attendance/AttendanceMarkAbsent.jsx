@@ -12,7 +12,7 @@ const INITIAL_DATA = {
     attendance_date: null,
 };
 
-const AttendanceMarkAbsent = ({ services = [] }) => {
+const AttendanceMarkAbsent = ({ services = [], onClose }) => {
     const [data, setData] = useState(INITIAL_DATA);
     const {
         mutate: markAbsentees,
@@ -57,11 +57,25 @@ const AttendanceMarkAbsent = ({ services = [] }) => {
     return (
         <Animated
             animation="fade-up"
-            className="md:w-1/2 lg:w-1/2 xl:w-1/4 bg-white p-4 border border-gray-300 dark:bg-gray-900 dark:border-gray-700 rounded-lg shadow animate-fadeIn w-full transition-all duration-300"
+            className="space-y-5 bg-white dark:bg-gray-900  w-full"
         >
+            <div className="">
+                {isMarkError && <Message data={markError?.data} variant="error" />}
+
+                <div className="bg-rose-50 border border-rose-200 rounded-xl p-3">
+                    <div className="flex gap-1">
+                        <div className="shrink-0">
+                            <CloseIcon className="w-5 h-5 text-rose-600" />
+                        </div>
+                        <div>
+                            <p className="text-sm text-rose-900">Admin Mark Absent Members.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="flex gap-2">
                 <div className="flex-1">
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-400">
                         Service Date
                     </label>
                     <DatePicker
@@ -73,25 +87,22 @@ const AttendanceMarkAbsent = ({ services = [] }) => {
                 </div>
             </div>
 
-            <div className="border-t border-red-200 dark:border-red-800">
-                {isMarkError && <Message data={markError?.data} variant="error" />}
 
-                <div className="bg-rose-50 border border-rose-200 rounded-xl p-2 my-5">
-                    <div className="flex gap-1">
-                        <div className="flex-shrink-0">
-                            <CloseIcon className="w-5 h-5 text-rose-600" />
-                        </div>
-                        <div>
-                            <p className="text-sm text-rose-900">Admin Mark Absent Members.</p>
-                        </div>
-                    </div>
-                </div>
+            <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
+                <Button
+                    variant='ghost'
+                    onClick={onClose}
+                    disabled={isMarkingAbsentees}
+                    className="flex-1"
+                >
+                    Cancel
+                </Button>
                 <Button
                     variant="danger"
                     onClick={handleMarkAbsentees}
                     loading={isMarkingAbsentees}
                     disabled={isActionDisabled}
-                    className="w-full shadow"
+                    className="flex-1"
                 >
                     Mark
                 </Button>

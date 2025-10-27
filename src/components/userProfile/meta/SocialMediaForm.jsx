@@ -17,7 +17,7 @@ const SocialMediaForm = ({ register, errors }) => (
   <div className="grid grid-cols-1 space-y-5">
     {SOCIAL_PLATFORMS.map(({ platform, Icon, label }) => (
       <div key={platform} className="relative">
-        <div className="absolute right-3 top-[38px] z-10">
+        <div className="absolute right-3 top-9 z-10">
           <Icon width={18} height={18} className="text-gray-400" />
         </div>
         <InputForm

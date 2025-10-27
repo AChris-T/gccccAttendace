@@ -289,7 +289,7 @@ const AdminFirstTimersTable = () => {
                 </div>
                 <div>
                     <Button
-                        variant='ghost'
+                        variant='light'
                         onClick={autoSizeColumns}
                         disabled={!firstTimersData.length || isLoading}
                     >
