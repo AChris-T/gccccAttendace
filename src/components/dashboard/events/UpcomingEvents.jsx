@@ -1,14 +1,10 @@
 import { EmptyState } from '@/components/common/EmptyState';
 import React, { useState, useMemo } from 'react';
-import { useAuthStore } from '@/store/auth.store';
-import usePayment from '@/hooks/usePayment';
 import EventCard from './EventCard';
 import EventCalculator from './EventCalculator';
 
-export default function UpcomingEvents({ onSuccess }) {
+export default function UpcomingEvents() {
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const { user } = useAuthStore();
-  const { openPaystack } = usePayment();
   const events = [
     {
       id: 1,
@@ -32,24 +28,6 @@ export default function UpcomingEvents({ onSuccess }) {
         event={selectedEvent}
         onBack={() => setSelectedEvent(null)}
         enableCouples
-        onSuccess={async (registration) => {
-          const email = user?.email || user?.username || 'user@example.com';
-          const reference = `EVT-${selectedEvent.id}-${Date.now()}`;
-          const metadata = {
-            eventId: selectedEvent.id,
-            eventTitle: selectedEvent.title,
-            dates: registration.selectedDates,
-          };
-          // Open Paystack inline immediately after save
-          await openPaystack({
-            email,
-            amount: registration.total,
-            reference,
-            metadata,
-          });
-          // Also bubble up to parent if provided
-          onSuccess?.({ email, amount: registration.total, reference, metadata });
-        }}
       />
     );
   }
