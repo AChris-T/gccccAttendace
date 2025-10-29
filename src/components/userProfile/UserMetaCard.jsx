@@ -1,38 +1,18 @@
-"use client";
+'use client';
 
-import { ShieldIcon, StarIcon, UsersIcon } from "@/icons";
-import { useAuthStore } from "@/store/auth.store";
-import { useUpdateProfile } from "@/queries/user.query";
-import { Toast } from "@/lib/toastify";
-import { useModal } from "@/hooks/useModal";
-import { useForm } from "react-hook-form";
-import { useMemo } from "react";
-import ProfileBanner from "@/components/userProfile/meta/ProfileBanner";
-import ProfileAvatar from "@/components/userProfile/meta/ProfileAvatar";
-import ProfileInfo from "@/components/userProfile/meta/ProfileInfo";
-import SocialMediaSection from "@/components/userProfile/meta/SocialMediaSection";
-import EditSocialModal from "@/components/userProfile/meta/EditSocialModal";
-
-const ROLE_CONFIGS = {
-  admin: {
-    label: "Admin",
-    color: "error",
-    icon: ShieldIcon,
-    bgClass: "from-slate-700 to-slate-900 dark:from-slate-800 dark:to-slate-950",
-  },
-  leader: {
-    label: "Leader",
-    color: "warning",
-    icon: StarIcon,
-    bgClass: "from-indigo-600 to-purple-700 dark:from-indigo-700 dark:to-purple-800",
-  },
-  member: {
-    label: "Member",
-    color: "primary",
-    icon: UsersIcon,
-    bgClass: "from-blue-600 to-cyan-600 dark:from-blue-700 dark:to-cyan-700",
-  },
-};
+import { ShieldIcon, StarIcon, UsersIcon } from '@/icons';
+import { useAuthStore } from '@/store/auth.store';
+import { useUpdateProfile } from '@/queries/user.query';
+import { Toast } from '@/lib/toastify';
+import { useModal } from '@/hooks/useModal';
+import { useForm } from 'react-hook-form';
+import { useMemo } from 'react';
+import ProfileBanner from '@/components/userProfile/meta/ProfileBanner';
+import ProfileAvatar from '@/components/userProfile/meta/ProfileAvatar';
+import ProfileInfo from '@/components/userProfile/meta/ProfileInfo';
+import SocialMediaSection from '@/components/userProfile/meta/SocialMediaSection';
+import EditSocialModal from '@/components/userProfile/meta/EditSocialModal';
+import { ROLE_CONFIGS } from '@/utils/data';
 
 export default function UserMetaCard() {
   const { user, isAdmin, isLeader, setUser } = useAuthStore();
@@ -46,10 +26,10 @@ export default function UserMetaCard() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      facebook: user?.facebook || "",
-      twitter: user?.twitter || "",
-      linkedin: user?.linkedin || "",
-      instagram: user?.instagram || "",
+      facebook: user?.facebook || '',
+      twitter: user?.twitter || '',
+      linkedin: user?.linkedin || '',
+      instagram: user?.instagram || '',
     },
   });
 
@@ -64,20 +44,20 @@ export default function UserMetaCard() {
       await mutateAsync({
         id: user?.id,
         avatar,
-        folder: "users",
+        folder: 'users',
       });
-      Toast.success("Avatar updated successfully");
+      Toast.success('Avatar updated successfully');
     } catch (error) {
-      Toast.error("Failed to update avatar");
+      Toast.error('Failed to update avatar');
     }
   };
 
   const handleEdit = () => {
     reset({
-      facebook: user?.facebook || "",
-      twitter: user?.twitter || "",
-      linkedin: user?.linkedin || "",
-      instagram: user?.instagram || "",
+      facebook: user?.facebook || '',
+      twitter: user?.twitter || '',
+      linkedin: user?.linkedin || '',
+      instagram: user?.instagram || '',
     });
     openModal();
   };
@@ -92,10 +72,10 @@ export default function UserMetaCard() {
         setUser(response.data);
       }
 
-      Toast.success("Social links updated successfully");
+      Toast.success('Social links updated successfully');
       closeModal();
     } catch (error) {
-      Toast.error("Failed to update social links");
+      Toast.error('Failed to update social links');
     }
   };
 
