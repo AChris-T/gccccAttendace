@@ -155,7 +155,7 @@ export default function EventCalculator({
                 <span className="text-blue-600">
                   <CoupleIcon />
                 </span>
-                Couples Room (Optional)
+                Accommodation Type
               </h2>{' '}
               <div className="flex flex-col justify-between gap-3 md:items-center md:flex-row">
                 <Switch
