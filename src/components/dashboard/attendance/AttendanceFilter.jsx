@@ -125,6 +125,9 @@ const AttendanceFilter = ({
                             render={({ field: { onChange, value } }) => (
                                 <DatePicker
                                     format="YYYY/MM/DD"
+                                    containerStyle={{
+                                        width: '100%'
+                                    }}
                                     multiple
                                     value={value || []}
                                     onChange={(dates) => handleDateChange(dates, onChange)}

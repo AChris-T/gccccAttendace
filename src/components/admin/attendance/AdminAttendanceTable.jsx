@@ -5,22 +5,21 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { useAllAttendance } from '@/queries/attendance.query';
 import { useServices } from '@/queries/service.query';
-import { AttendanceIcon2, ExpandFullScreenIcon, FilterIcon } from '@/icons';
+import { AttendanceIcon2, ExpandFullScreenIcon, FilterIcon, LeaderIcon2 } from '@/icons';
 import AttendanceMarkAbsent from '@/components/admin/attendance/AttendanceMarkAbsent';
 import AttendanceAssignment from '@/components/admin/attendance/AttendanceAssignment';
 import AdminAttendanceFilter from '@/components/admin/attendance/AdminAttendanceFilter';
 import ButtonSwitch from '@/components/ui/ButtonSwitch';
-import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
+import { TableSkeletonLoader } from '@/components/skeleton';
 import Message from '@/components/common/Message';
 import { Link } from 'react-router-dom';
 import ButtonCard from '@/components/ui/ButtonCard';
 import { useModal } from '@/hooks/useModal';
 import Modal from '@/components/ui/Modal';
-
+import AttendanceMarkPresent from '@/components/admin/attendance/AttendanceMarkPresent';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// Constants
 const PAGINATION_PAGE_SIZES = [25, 50, 100, 200];
 const DEFAULT_PAGE_SIZE = 200;
 const MIN_TABLE_HEIGHT = 400;
@@ -29,21 +28,20 @@ const ROW_HEIGHT = 42;
 const HEADER_HEIGHT = 56;
 const PAGINATION_HEIGHT = 60;
 
+const DEFAULT_FILTERS = {
+    service_id: '',
+    attendance_date: [],
+    status: '',
+    mode: ''
+};
+
 const AdminAttendanceTable = () => {
     const gridRef = useRef(null);
     const [isGridReady, setIsGridReady] = useState(false);
-
-    // Filter state
-    const [activeFilters, setActiveFilters] = useState({
-        service_id: '',
-        attendance_date: [],
-        status: '',
-        mode: ''
-    });
-
-    // UI state
+    const [activeFilters, setActiveFilters] = useState(DEFAULT_FILTERS);
     const [showFilter, setShowFilter] = useState(false);
     const { isOpen: isOpenMarkModal, openModal: openMarkModal, closeModal: closeMarkModal } = useModal();
+    const { isOpen: isOpenMarkPresentModal, openModal: openMarkPresentModal, closeModal: closeMarkPresentModal } = useModal();
     const { isOpen: isOpenAssignModal, openModal: openAssignModal, closeModal: closeAssignModal } = useModal();
 
     const {
@@ -57,21 +55,17 @@ const AdminAttendanceTable = () => {
 
     const { data: services = [] } = useServices();
 
-    // Memoized attendance data with safe array conversion
     const attendanceData = useMemo(() => {
         if (!allAttendance) return [];
         return Array.isArray(allAttendance) ? allAttendance : [];
     }, [allAttendance]);
 
-    // Calculate dynamic table height based on content
     const tableHeight = useMemo(() => {
         if (attendanceData.length === 0) return MIN_TABLE_HEIGHT;
-
         const contentHeight = (attendanceData.length * ROW_HEIGHT) + HEADER_HEIGHT + PAGINATION_HEIGHT;
         return Math.min(Math.max(contentHeight, MIN_TABLE_HEIGHT), MAX_TABLE_HEIGHT);
     }, [attendanceData.length]);
 
-    // Default column definitions with auto-sizing
     const defaultColDef = useMemo(() => ({
         filter: true,
         sortable: true,
@@ -84,38 +78,26 @@ const AdminAttendanceTable = () => {
         wrapHeaderText: true,
     }), []);
 
-    // Cell Renderers
     const StatusRenderer = useCallback(({ value }) => {
         if (!value) return <span className="text-gray-400 text-center">--</span>;
-
-        const colorMap = {
-            present: 'success',
-            absent: 'error',
-        };
+        const colorMap = { present: 'success', absent: 'error' };
         const color = colorMap[value.toLowerCase()];
-
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
     const LinkRenderer = useCallback(({ data }) => {
         if (!data) return <span className="text-gray-400 text-center">--</span>;
-        const value = data?.user
+        const value = data?.user;
         return <Link target='_blank' className='text-blue-500 underline' to={`/dashboard/members/${value?.id}`}>{`${value?.first_name} ${value?.last_name}` || 'N/A'}</Link>;
     }, []);
 
     const ModeRenderer = useCallback(({ value }) => {
         if (!value) return <span className="text-gray-400 text-center">--</span>;
-
-        const colorMap = {
-            onsite: 'primary',
-            online: 'warning',
-        };
+        const colorMap = { onsite: 'primary', online: 'warning' };
         const color = colorMap[value.toLowerCase()];
-
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
-    // Value Formatters
     const dateFormatter = useCallback((params) => {
         if (!params.value) return '';
         const date = new Date(params.value);
@@ -139,7 +121,6 @@ const AdminAttendanceTable = () => {
         return params.data?.service?.name || 'N/A';
     }, []);
 
-    // Column Definitions with pinned ID column
     const columnDefs = useMemo(() => [
         {
             field: "id",
@@ -189,7 +170,6 @@ const AdminAttendanceTable = () => {
         },
     ], [StatusRenderer, ModeRenderer, dateFormatter, LinkRenderer, emailFormatter, phoneFormatter, serviceFormatter]);
 
-    // Grid Options
     const gridOptions = useMemo(() => ({
         pagination: true,
         paginationPageSize: DEFAULT_PAGE_SIZE,
@@ -209,40 +189,30 @@ const AdminAttendanceTable = () => {
         ensureDomOrder: true,
     }), []);
 
-    // Auto-size columns based on content
     const autoSizeColumns = useCallback(() => {
         if (!gridRef.current) return;
-
-        // Get all column IDs - use getColumns() or getAllDisplayedColumns()
         const allColumns = gridRef.current.getColumns?.() || gridRef.current.getAllDisplayedColumns?.();
         if (!allColumns || allColumns.length === 0) return;
-
         const allColumnIds = allColumns.map(col => col.getColId());
         gridRef.current.autoSizeColumns(allColumnIds, false);
     }, []);
 
-    // Grid ready callback
     const onGridReady = useCallback((params) => {
         gridRef.current = params.api;
         setIsGridReady(true);
-
-        // Auto-size columns after grid is ready
         setTimeout(() => {
             autoSizeColumns();
         }, 100);
     }, [autoSizeColumns]);
 
-    // Auto-size columns when data changes
     useEffect(() => {
         if (isGridReady && attendanceData.length > 0) {
-            // Auto-size columns after data update
             setTimeout(() => {
                 autoSizeColumns();
             }, 150);
         }
     }, [attendanceData, isGridReady, autoSizeColumns]);
 
-    // Handlers
     const handleApplyFilters = useCallback((filters) => {
         setActiveFilters(filters);
     }, []);
@@ -251,9 +221,15 @@ const AdminAttendanceTable = () => {
         setActiveFilters(filters);
     }, []);
 
+    const handleToggleFilter = useCallback(() => {
+        if (showFilter) {
+            setActiveFilters(DEFAULT_FILTERS);
+        }
+        setShowFilter(!showFilter);
+    }, [showFilter]);
+
     const handleExportCSV = useCallback(() => {
         if (!gridRef.current) return;
-
         const timestamp = new Date().toISOString().split('T')[0];
         gridRef.current.exportDataAsCsv({
             fileName: `attendance-report-${timestamp}.csv`,
@@ -264,7 +240,6 @@ const AdminAttendanceTable = () => {
         refetch();
     }, [refetch]);
 
-    // Check if any filters are active
     const hasActiveFilters = useMemo(() =>
         activeFilters.service_id ||
         activeFilters.attendance_date?.length > 0 ||
@@ -272,7 +247,6 @@ const AdminAttendanceTable = () => {
         activeFilters.mode
         , [activeFilters]);
 
-    // Error state
     if (isError) {
         return (
             <Message
@@ -293,15 +267,13 @@ const AdminAttendanceTable = () => {
         );
     }
 
-
     return (
         <div className="w-full space-y-10">
-            {/* Action Cards */}
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3'>
                 <ButtonSwitch
-                    onChange={() => setShowFilter(!showFilter)}
+                    onChange={handleToggleFilter}
                     checked={showFilter}
-                    color="primary"
+                    color="pink"
                     type='button'
                     icon={<FilterIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
                     description="Filter attendance record"
@@ -313,15 +285,24 @@ const AdminAttendanceTable = () => {
                     color="orange"
                     type='button'
                     icon={<AttendanceIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
-                    description="Mark attendance for absent or present members"
+                    description="Mark attendance for absent members"
                 >
-                    Mark Attendance
+                    Mark Attendance (Absent)
                 </ButtonCard>
                 <ButtonCard
-                    onClick={openAssignModal}
+                    onClick={openMarkPresentModal}
                     color="green"
                     type='button'
                     icon={<AttendanceIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    description="Mark attendance for present members"
+                >
+                    Mark Attendance (Present)
+                </ButtonCard>
+                <ButtonCard
+                    onClick={openAssignModal}
+                    color="blue"
+                    type='button'
+                    icon={<LeaderIcon2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                     description="Assign absent members to leaders for active followups"
                 >
                     Assign Absent Members
@@ -339,25 +320,36 @@ const AdminAttendanceTable = () => {
                     />
                 </div>
             )}
+
             <Modal
                 title={`Assign Absent Members`}
+                description='Assign absent members to leaders'
                 isOpen={isOpenAssignModal}
                 onClose={closeAssignModal}
             >
-                <AttendanceAssignment services={services} onClose={closeMarkModal} />
+                <AttendanceAssignment services={services} onClose={closeAssignModal} />
             </Modal>
             <Modal
                 title={`Mark Attendance`}
                 isOpen={isOpenMarkModal}
+                description='Admin Mark Absent Members.'
                 onClose={closeMarkModal}
             >
-                <AttendanceMarkAbsent services={services} onClose={closeMarkModal} />
+                <AttendanceMarkAbsent activeFilters={activeFilters} services={services} onClose={closeMarkModal} />
+            </Modal>
+            <Modal
+                title={`Mark Attendance`}
+                isOpen={isOpenMarkPresentModal}
+                description='Admin Mark Present Members.'
+                onClose={closeMarkPresentModal}
+            >
+                <AttendanceMarkPresent activeFilters={activeFilters} services={services} onClose={closeMarkPresentModal} />
             </Modal>
 
             <div className='space-y-3'>
                 <div className="flex items-center gap-3">
                     <p className="text-sm text-green-600 dark:text-green-400">
-                        <span className="font-semibold text-green-900 dark:text-green-100">
+                        <span className="font-semibold text-green-500 dark:text-green-500">
                             {attendanceData.length}
                         </span>
                         {' '}record{attendanceData.length !== 1 ? 's' : ''} found
@@ -367,10 +359,8 @@ const AdminAttendanceTable = () => {
                             Filtered
                         </span>
                     )}
-                    {isFetching && <InlineLoader />}
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex flex-wrap gap-3 justify-between w-full">
                     <div className='flex flex-wrap gap-3'>
                         <Button
@@ -401,7 +391,7 @@ const AdminAttendanceTable = () => {
                 </div>
 
                 {isLoading && !attendanceData.length ?
-                    <TableLoadingSkeleton title='attendance' /> :
+                    <TableSkeletonLoader /> :
                     <>
                         <div
                             className="ag-theme-alpine dark:ag-theme-alpine-dark border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors"
@@ -420,23 +410,23 @@ const AdminAttendanceTable = () => {
                         <div class="flex items-center justify-center h-full">
                             <div class="text-center">
                                 <div class="relative inline-block">
-                                    <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
-                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 dark:border-t-blue-500 rounded-full animate-spin"></div>
+                                    <div class="w-12 h-12 border-4 border-gray-200  rounded-full"></div>
+                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600  rounded-full animate-spin"></div>
                                 </div>
-                                <p class="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading attendance...</p>
+                                <p class="text-gray-700 mt-4 font-medium">Loading attendance...</p>
                             </div>
                         </div>
                     `}
                                 overlayNoRowsTemplate={`
-                        <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
+                        <div class="flex items-center justify-center h-full bg-white ">
                             <div class="text-center py-8">
-                                <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-16 h-16 mx-autotext-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
-                                <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
+                                <p class="text-gray-500 text-lg font-medium mb-2">
                                     No attendance records found
                                 </p>
-                                <p class="text-gray-400 dark:text-gray-500 text-sm">
+                                <p class="text-gray-400 text-sm">
                                     ${hasActiveFilters
                                         ? 'Try adjusting your filters or reset them to see all records'
                                         : 'Records will appear here once available'}
@@ -446,7 +436,6 @@ const AdminAttendanceTable = () => {
                     `}
                             />
                         </div>
-                        {/* Footer with Dark Mode Support */}
                         {attendanceData.length > 0 && (
                             <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
                                 <span>Last updated: {new Date().toLocaleString()}</span>

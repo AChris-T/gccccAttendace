@@ -112,6 +112,7 @@ export function getMatchingServiceId(services, selectedDate) {
 
   return match ? match.id : null;
 }
+
 export const formatDate = (dateString) => {
   if (!dateString) return null;
   const date = new Date(dateString);
@@ -164,37 +165,37 @@ export function getMonthName(monthNumber) {
 export function getWelcomeMessage(name, type = 'mail') {
   if (type == 'mail') {
     return `*Dear ${name},*
-  
+
   We are glad you attended our service at GCCC Ibadan. Family is the core of what we stand for in GCCC, and we'd genuinely love for you to become a part of our community.
-  
+
   We look forward to having you around again.
-  
+
   Here's a little detail about our meeting days:
-  
+
   At Glory Centre Community Church Ibadan, we meet by 5:30 pm on Tuesdays and Fridays, and 8:00 am on Sundays.
-  
+
   You can also be a part of our online community.
-  
+
   Connect with us on:
   Instagram: https://instagram.com/gcccibadan
   Facebook: https://m.facebook.com/GCCCIBADAN
   Mixlr: https://gcccibadan.mixlr.com/
   YouTube: https://www.youtube.com/@Gccc_Ibadan
   Telegram: https://t.me/Pastoropeyemipeter to access life transforming messages.
-  
+
   We will keep sharing content that we hope will bless and encourage you. Hope to see you again soon!
-  
+
   Have a wonderful day. Cheers!
-  
+
   Regards,
   GCCC IBADAN`;
   } else {
     return `Dear ${name},
-  
+
   We are glad you attended our service at GCCC Ibadan. Family is the core of what we stand for in GCCC, and we'd genuinely love for you to become a part of our community.
-  
+
   We look forward to having you around again.
-  
+
   Regards,
   GCCC IBADAN`;
   }

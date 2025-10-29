@@ -195,13 +195,9 @@ layer(base);
 
 /* datepicker  */
 .rmdp-input {
-  padding: 20px !important;
-  margin-bottom: 17px !important;
-  max-width: 315px !important;
-  min-width: 100px !important;
-  @apply w-full text-sm font-light rounded-lg border shadow border-gray-300 focus:border-blue-500 focus:ring-blue-200 dark:border-gray-700 dark:focus:border-blue-400;
-  @apply p-5 shadow text-gray-700 dark:text-gray-400;
+  @apply w-full! text-sm font-normal rounded-lg! px-4! py-2.5! transition-colors duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border focus:outline-none focus:ring-1 h-auto! border-gray-300 dark:border-gray-600 focus:ring-blue-200 dark:focus:ring-blue-900 focus:border-blue-500 dark:focus:border-blue-400;
 }
+
 .ag-input-field-input:focus {
   border: 1.5px solid var(--color-blue-300) !important;
   outline: none !important;

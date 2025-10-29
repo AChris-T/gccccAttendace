@@ -5,19 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 
-export const useAttendanceHistory = (options = {}) => {
-  return useQuery({
-    queryKey: QUERY_KEYS.ATTENDANCE.HISTORY,
-    queryFn: async () => {
-      const { data } = await AttendanceService.getAttendanceHistory();
-      return data || [];
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    cacheTime: 2 * 60 * 1000, // 2 minutes
-    ...options,
-  });
-};
-
 export const useAllAttendance = (params = {}, options = {}) => {
   return useQuery({
     queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
@@ -34,9 +21,10 @@ export const useAllAttendance = (params = {}, options = {}) => {
     ...options,
   });
 };
+
 export const useUserAttendance = (params = {}, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
+    queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS_USER(params),
     queryFn: async () => {
       const { data } = await AttendanceService.getAllUserAttendance(params);
       return data || [];
@@ -53,19 +41,11 @@ export const useUserAttendance = (params = {}, options = {}) => {
 
 // Mark attendance mutation
 export const useMarkAttendance = (options = {}) => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: AttendanceService.markAttendance,
     onSuccess: (data, variables) => {
-      //   // Invalidate attendance queries to refresh data
-      //   queryClient.invalidateQueries({
-      //     queryKey: QUERY_KEYS.ATTENDANCE.HISTORY,
-      //   });
-      //   queryClient.invalidateQueries({
-      //     queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS,
-      //   });
       Toast.success(data?.message || 'Attendance submitted successfully');
       navigate(`/dashboard`);
       options.onSuccess?.(data, variables);
@@ -79,14 +59,33 @@ export const useMarkAttendance = (options = {}) => {
 };
 
 // Mark absentees mutation
-export const useMarkAbsentees = (options = {}) => {
+export const useMarkAbsentees = (params = {}, options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: AttendanceService.markAbsentees,
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(),
+        queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
+      });
+      Toast.success(data?.message);
+      options.onSuccess?.(data, variables);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message);
+      options.onError?.(new Error(message));
+    },
+  });
+};
+
+export const useAdminMarkAttendance = (params = {}, options = {}) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: AttendanceService.adminMarkAttendance,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(params),
       });
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
@@ -100,14 +99,9 @@ export const useMarkAbsentees = (options = {}) => {
 };
 
 export const useAssignAbsenteesToLeaders = (options = {}) => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: AttendanceService.assignAbsenteesToLeaders,
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.ATTENDANCE.ALL_RECORDS(),
-      });
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
     },
@@ -133,7 +127,6 @@ export const useUsersMonthlyAttendanceStats = (year, month) => {
   });
 };
 
-//  usher attendance
 export const useMonthlyAttendanceStats = (year, mode) => {
   return useQuery({
     queryKey: QUERY_KEYS.ATTENDANCE.BY_MONTH_YEAR(year, mode),

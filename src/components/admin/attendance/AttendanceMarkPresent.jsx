@@ -5,11 +5,11 @@ import DatePicker from 'react-multi-date-picker';
 import Animated from '@/components/common/Animated';
 import Message from '@/components/common/Message';
 import Button from '@/components/ui/Button';
-import { useMarkAbsentees, useAdminMarkAttendance } from '@/queries/attendance.query';
+import { useAdminMarkAttendance } from '@/queries/attendance.query';
 import { useMembers } from '@/queries/member.query';
 import MultiSelectForm from '@/components/form/useForm/MultiSelectForm';
 import { getMatchingServiceId } from '@/utils/helper';
-import { markAbsentMemberSchema } from '@/schema';
+import { markPresentMemberSchema } from '@/schema';
 import { Toast } from '@/lib/toastify';
 
 const INITIAL_VALUES = {
@@ -17,66 +17,39 @@ const INITIAL_VALUES = {
     member_ids: []
 };
 
-const AttendanceMarkAbsent = ({ services = [], onClose, activeFilters }) => {
+const AttendanceMarkPresent = ({ services = [], onClose, activeFilters }) => {
     const { data: members, isLoading: isLoadingMembers } = useMembers();
+
+    const {
+        mutateAsync: markPresent,
+        isPending: isMarking,
+        isError: isMarkError,
+        error: markError,
+        isSuccess: isMarkSuccess
+    } = useAdminMarkAttendance(activeFilters);
 
     const {
         control,
         register,
         handleSubmit,
-        watch,
         setValue,
         reset,
         setError,
         clearErrors,
         formState: { errors, isSubmitting }
     } = useForm({
-        resolver: yupResolver(markAbsentMemberSchema),
+        resolver: yupResolver(markPresentMemberSchema),
         defaultValues: INITIAL_VALUES,
         mode: 'onChange'
     });
 
-    // Watch member_ids to determine which mutation to use
-    const memberIds = watch('member_ids');
-
-    // Conditionally use the appropriate mutation based on whether members are selected
-    const shouldUseAdminMark = useMemo(() =>
-        Array.isArray(memberIds) && memberIds.length > 0,
-        [memberIds]
-    );
-
-    const {
-        mutateAsync: markAbsentees,
-        isPending: isMarkingAbsentees,
-        isError: isMarkAbsenteesError,
-        error: markAbsenteesError,
-        isSuccess: isMarkAbsenteesSuccess,
-    } = useMarkAbsentees(activeFilters);
-
-    const {
-        mutateAsync: adminMarkAttendance,
-        isPending: isAdminMarking,
-        isError: isAdminMarkError,
-        error: adminMarkError,
-        isSuccess: isAdminMarkSuccess,
-    } = useAdminMarkAttendance(activeFilters);
-
-    // Aggregate mutation states
-    const isPending = shouldUseAdminMark ? isAdminMarking : isMarkingAbsentees;
-    const isError = shouldUseAdminMark ? isAdminMarkError : isMarkAbsenteesError;
-    const error = shouldUseAdminMark ? adminMarkError : markAbsenteesError;
-    const isSuccess = shouldUseAdminMark ? isAdminMarkSuccess : isMarkAbsenteesSuccess;
-
     // Handle success state with cleanup
     useEffect(() => {
-        if (isSuccess) {
+        if (isMarkSuccess) {
             reset(INITIAL_VALUES);
-            const successMessage = shouldUseAdminMark
-                ? 'Selected members have been marked absent successfully.'
-                : 'All members have been marked absent successfully.';
-            Toast.success(successMessage);
+            Toast.success('Selected members\' attendance have been recorded successfully.');
         }
-    }, [isSuccess, shouldUseAdminMark, reset]);
+    }, [isMarkSuccess, reset]);
 
     // Memoized member options for select dropdown
     const memberOptions = useMemo(() => {
@@ -117,65 +90,45 @@ const AttendanceMarkAbsent = ({ services = [], onClose, activeFilters }) => {
                 return;
             }
 
-            if (shouldUseAdminMark) {
-                // Use adminMarkAttendance when specific members are selected
-                const attendances = formData.member_ids.map(memberId => ({
-                    user_id: memberId,
-                    status: 'absent',
-                    mode: null
-                }));
+            // Transform member IDs into attendance records
+            const attendances = formData.member_ids.map(memberId => ({
+                user_id: memberId,
+                status: 'present',
+                mode: 'onsite'
+            }));
 
-                const payload = {
-                    service_id: serviceId,
-                    attendance_date: formData.attendance_date,
-                    attendances
-                };
+            // Prepare payload for API
+            const payload = {
+                service_id: serviceId,
+                attendance_date: formData.attendance_date,
+                attendances
+            };
 
-                await adminMarkAttendance(payload);
-            } else {
-                // Use markAbsentees when no members are selected (mark all absent)
-                const payload = {
-                    service_id: serviceId,
-                    attendance_date: formData.attendance_date
-                };
-
-                await markAbsentees(payload);
-            }
-
+            await markPresent(payload);
             onClose?.();
-        } catch (err) {
+        } catch (error) {
             // Graceful error handling with fallback messages
             const errorMessage =
-                err?.response?.data?.message ||
-                err?.message ||
+                error?.response?.data?.message ||
+                error?.message ||
                 'Failed to mark attendance. Please try again.';
             Toast.error(errorMessage);
         }
-    }, [services, shouldUseAdminMark, adminMarkAttendance, markAbsentees, setError, onClose]);
+    }, [services, markPresent, setError, onClose]);
 
     // Computed form state
-    const isFormDisabled = isPending || isSubmitting;
+    const isFormDisabled = isMarking || isSubmitting;
 
     return (
         <Animated
             animation="fade-up"
             className="space-y-5 w-full"
         >
-            {/* Info message about functionality */}
-            <Message
-                message={
-                    shouldUseAdminMark
-                        ? 'You are marking specific members as absent'
-                        : 'No members selected - all members will be marked absent'
-                }
-                variant="info"
-            />
-
             {/* Error message display */}
-            {isError && (
+            {isMarkError && (
                 <Message
-                    data={error?.data}
-                    message={error?.message}
+                    data={markError?.data}
+                    message={markError?.message}
                     variant="error"
                 />
             )}
@@ -217,10 +170,10 @@ const AttendanceMarkAbsent = ({ services = [], onClose, activeFilters }) => {
                     )}
                 </div>
 
-                {/* Members Multi-Select (Optional) */}
+                {/* Members Multi-Select */}
                 <div className="w-full">
                     <MultiSelectForm
-                        label="Select Members (Optional)"
+                        label="Select Members"
                         expandParent
                         name="member_ids"
                         options={memberOptions}
@@ -231,12 +184,10 @@ const AttendanceMarkAbsent = ({ services = [], onClose, activeFilters }) => {
                         placeholder={
                             isLoadingMembers
                                 ? 'Loading members...'
-                                : 'Select specific members or leave empty to mark all absent'
+                                : 'Select members to mark present...'
                         }
+                        required
                     />
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                        Leave empty to mark all members as absent
-                    </p>
                     {!isLoadingMembers && memberOptions.length === 0 && (
                         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                             No members available. Please add members first.
@@ -258,13 +209,13 @@ const AttendanceMarkAbsent = ({ services = [], onClose, activeFilters }) => {
                     </Button>
                     <Button
                         type="submit"
-                        variant="danger"
+                        variant="success"
                         loading={isFormDisabled}
                         disabled={isFormDisabled}
                         className="flex-1"
                         aria-label="Submit attendance"
                     >
-                        {isFormDisabled ? 'Marking...' : 'Mark Absent'}
+                        {isFormDisabled ? 'Marking...' : 'Mark Present'}
                     </Button>
                 </div>
             </form>
@@ -272,4 +223,4 @@ const AttendanceMarkAbsent = ({ services = [], onClose, activeFilters }) => {
     );
 };
 
-export default AttendanceMarkAbsent;
+export default AttendanceMarkPresent;

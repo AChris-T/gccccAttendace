@@ -266,3 +266,27 @@ export const filterAttendanceSchema = yup.object({
     .nullable()
     .transform((value) => value || null),
 });
+export const assignAbsentMemberSchema = yup.object().shape({
+  attendance_date: yup
+    .string()
+    .nullable()
+    .required('Attendance date is required'),
+  leader_ids: yup
+    .array()
+    .min(1, 'At least one leader must be selected')
+    .required('Leaders are required'),
+});
+export const markPresentMemberSchema = yup.object().shape({
+  attendance_date: yup
+    .string()
+    .nullable()
+    .required('Attendance date is required'),
+  member_ids: yup
+    .array()
+    .min(1, 'At least one member must be selected')
+    .required('Members are required'),
+});
+export const markAbsentMemberSchema = yup.object().shape({
+  attendance_date: yup.string().nullable().required('Service date is required'),
+  member_ids: yup.array().of(yup.number()).optional().default([]),
+});

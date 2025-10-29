@@ -22,7 +22,7 @@ const AssignedAbsentMembers = ({ assignedAbsentMembers }) => {
                 </div>
                 {assignedAbsentMembers?.length ?
                     <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-                        <div className="min-w-[800px]">
+                        <div className="min-w-[900px]">
                             <Table>
                                 <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
                                     <TableRow>

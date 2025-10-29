@@ -5,10 +5,6 @@ export const AttendanceService = {
     const { data } = await $api.post(`/attendance/mark`, payload);
     return data;
   },
-  async getAttendanceHistory() {
-    const { data } = await $api.get(`/attendance/history`);
-    return data;
-  },
   async getUserAttendanceMonthlyStats(year, month) {
     const { data } = await $api.get(
       `/attendance/monthly-stats?year=${year}&month=${month}`
@@ -21,6 +17,10 @@ export const AttendanceService = {
       `/admin/attendance/mark-absentees`,
       payload
     );
+    return data;
+  },
+  async adminMarkAttendance(payload) {
+    const { data } = await $api.post(`/admin/attendance/mark`, payload);
     return data;
   },
   async assignAbsenteesToLeaders(payload) {

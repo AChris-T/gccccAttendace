@@ -6,7 +6,7 @@ import { useFirstTimers } from '@/queries/firstTimer.query';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import Message from '@/components/common/Message';
-import { InlineLoader, TableLoadingSkeleton } from '@/components/skeleton';
+import { TableSkeletonLoader } from '@/components/skeleton';
 import { ExpandFullScreenIcon } from '@/icons';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -259,13 +259,12 @@ const AdminFirstTimersTable = () => {
         <div className="w-full space-y-3">
             {/* Header Section */}
             <div className="flex items-center gap-3">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold text-gray-900 dark:text-gray-100">
+                <p className="text-sm text-green-600 dark:text-green-400">
+                    <span className="font-semibold text-green-500 dark:text-green-500">
                         {firstTimersData.length}
                     </span>
                     {' '}record{firstTimersData.length !== 1 ? 's' : ''} found
                 </p>
-                {isFetching && <InlineLoader />}
             </div>
 
             {/* Action Buttons */}
@@ -299,7 +298,7 @@ const AdminFirstTimersTable = () => {
             </div>
 
             {isLoading && !firstTimersData.length ?
-                <TableLoadingSkeleton title={'first timers'} /> :
+                <TableSkeletonLoader /> :
                 <>
                     {/* AG Grid Table with Dark Mode Support */}
                     <div
@@ -319,23 +318,23 @@ const AdminFirstTimersTable = () => {
                         <div class="flex items-center justify-center h-full">
                             <div class="text-center">
                                 <div class="relative inline-block">
-                                    <div class="w-12 h-12 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
-                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 dark:border-t-blue-500 rounded-full animate-spin"></div>
+                                    <div class="w-12 h-12 border-4 border-gray-200 rounded-full"></div>
+                                    <div class="absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-blue-600 rounded-full animate-spin"></div>
                                 </div>
-                                <p class="text-gray-700 dark:text-gray-300 mt-4 font-medium">Loading first timers...</p>
+                                <p class="text-gray-700 mt-4 font-medium">Loading first timers...</p>
                             </div>
                         </div>
                     `}
                             overlayNoRowsTemplate={`
-                        <div class="flex items-center justify-center h-full bg-white dark:bg-gray-900">
+                        <div class="flex items-center justify-center h-full bg-white">
                             <div class="text-center py-8">
-                                <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">
+                                <p class="text-gray-500  text-lg font-medium mb-2">
                                     No first timers found
                                 </p>
-                                <p class="text-gray-400 dark:text-gray-500 text-sm">
+                                <p class="text-gray-400  text-sm">
                                     First timers will appear here once available
                                 </p>
                             </div>

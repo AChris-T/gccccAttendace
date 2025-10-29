@@ -71,7 +71,6 @@ const ProfileAvatar = ({ user, roleConfig, onUpload, isUploading }) => {
 
       Toast.success('Image downloaded successfully');
     } catch (error) {
-      console.error('Image download error:', error);
       Toast.error(`Failed to download image: ${error}`);
     }
   }, [getFileExtension, generateFileName, triggerBlobDownload]);

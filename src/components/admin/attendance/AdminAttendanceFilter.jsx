@@ -116,7 +116,7 @@ const AdminAttendanceFilter = ({
                 <div className="grid gap-x-3 gap-y-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                     {/* Date Picker */}
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Service Date
                         </label>
                         <Controller
@@ -124,6 +124,9 @@ const AdminAttendanceFilter = ({
                             control={control}
                             render={({ field: { onChange, value } }) => (
                                 <DatePicker
+                                    containerStyle={{
+                                        width: "100%"
+                                    }}
                                     format="YYYY-MM-DD"
                                     multiple
                                     value={value || []}
