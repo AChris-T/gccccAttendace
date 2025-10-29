@@ -68,8 +68,12 @@ export default function Event() {
           role="tabpanel"
           id={`panel-${validatedTab}`}
           aria-labelledby={`tab-${validatedTab}`}
+          className="mx-auto max-w-[1200px]"
         >
-          <ActiveTabComponent onSuccess={onEventSuccess} isPaying={isInitiating} />
+          <ActiveTabComponent
+            onSuccess={onEventSuccess}
+            isPaying={isInitiating}
+          />
         </div>
       </Animated>
     </div>

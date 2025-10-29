@@ -44,13 +44,13 @@ export default function OngoingEvents() {
   return (
     <>
       {events.length > 0 ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
             <>
               <img
                 src={event.imageUrl}
                 alt={event.title}
-                className="w-full h-full object-cover"
+                className="object-cover w-full h-full"
               />
             </>
           ))}
