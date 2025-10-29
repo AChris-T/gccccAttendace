@@ -6,13 +6,18 @@ const Switch = ({
   disabled = false,
   onChange,
   color = "blue",
+  checked,
 }) => {
-  const [isChecked, setIsChecked] = useState(defaultChecked);
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const isControlled = typeof checked === "boolean";
+  const isChecked = isControlled ? checked : internalChecked;
 
   const handleToggle = () => {
     if (disabled) return;
     const newCheckedState = !isChecked;
-    setIsChecked(newCheckedState);
+    if (!isControlled) {
+      setInternalChecked(newCheckedState);
+    }
     if (onChange) {
       onChange(newCheckedState);
     }

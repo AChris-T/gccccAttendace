@@ -159,8 +159,8 @@ export default function EventCalculator({
               </h2>{' '}
               <div className="flex flex-col justify-between gap-3 md:items-center md:flex-row">
                 <Switch
-                  label="Couples Accommodation"
-                  defaultChecked={couples}
+                  label="Couples Room"
+                  checked={couples}
                   onChange={(checked) => {
                     setSaved(false);
                     setRegistrationData(null);
@@ -169,7 +169,23 @@ export default function EventCalculator({
                 />
                 {couples && (
                   <div className="text-sm md:ml-4 text-slate-600 dark:text-slate-400">
-                    ₦10,000 per night (couples)
+                    ₦10,000 per night
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col justify-between gap-3 mt-3 md:items-center md:flex-row">
+                <Switch
+                  label="Shared Room"
+                  checked={!couples}
+                  onChange={(checked) => {
+                    setSaved(false);
+                    setRegistrationData(null);
+                    setCouples(!checked);
+                  }}
+                />
+                {!couples && (
+                  <div className="text-sm md:ml-4 text-slate-600 dark:text-slate-400">
+                    ₦7,000 per night
                   </div>
                 )}
               </div>
