@@ -11,6 +11,7 @@ import {
 } from '@/icons/EventsIcons';
 import usePayment from '@/hooks/usePayment';
 import { useAuthStore } from '@/store/auth.store';
+import Switch from '@/components/form/Switch';
 
 export default function EventCalculator({
   event,
@@ -71,7 +72,7 @@ export default function EventCalculator({
     const numDays = selectedDays.length;
     const nights = Math.max(0, numDays - 1);
     const isCouples = enableCouples && couples;
-    const accommodation = isCouples ? numDays * 10000 : nights * 7000;
+    const accommodation = isCouples ? nights * 10000 : nights * 7000;
     const feedingCost = feeding ? numDays * 1500 : 0;
     const transportCost =
       (transportation.to ? 5000 : 0) + (transportation.fro ? 5000 : 0);
@@ -146,6 +147,34 @@ export default function EventCalculator({
               </div>
             </div>
           </div>
+
+          {enableCouples && (
+            <div className="p-6 border-b sm:p-8 border-slate-200 dark:border-slate-700">
+              {' '}
+              <h2 className="flex items-center gap-2 mb-4 text-xl font-semibold text-slate-900 dark:text-white">
+                <span className="text-blue-600">
+                  <CoupleIcon />
+                </span>
+                Couples Room (Optional)
+              </h2>{' '}
+              <div className="flex flex-col justify-between gap-3 md:items-center md:flex-row">
+                <Switch
+                  label="Couples Accommodation"
+                  defaultChecked={couples}
+                  onChange={(checked) => {
+                    setSaved(false);
+                    setRegistrationData(null);
+                    setCouples(checked);
+                  }}
+                />
+                {couples && (
+                  <div className="text-sm md:ml-4 text-slate-600 dark:text-slate-400">
+                    ₦10,000 per night (couples)
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="p-6 border-b sm:p-8 border-slate-200 dark:border-slate-700">
             <h2 className="flex items-center gap-2 mb-4 text-xl font-semibold text-slate-900 dark:text-white">
@@ -287,36 +316,7 @@ export default function EventCalculator({
             </label>
           </div>
 
-          {enableCouples && (
-            <div className="p-6 border-b sm:p-8 border-slate-200 dark:border-slate-700">
-              <h2 className="flex items-center gap-2 mb-4 text-xl font-semibold text-slate-900 dark:text-white">
-                <span className="text-blue-600">
-                  <CoupleIcon />
-                </span>
-                Couples Selection (Optional)
-              </h2>
-              <label className="flex items-center p-4 transition-all border-2 cursor-pointer rounded-xl border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-700">
-                <input
-                  type="checkbox"
-                  checked={couples}
-                  onChange={(e) => {
-                    setSaved(false);
-                    setRegistrationData(null);
-                    setCouples(e.target.checked);
-                  }}
-                  className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="ml-3">
-                  <div className="font-medium text-slate-900 dark:text-white">
-                    Couples
-                  </div>
-                  <div className="text-sm text-slate-600 dark:text-slate-400">
-                    ₦10,000 per day
-                  </div>
-                </div>
-              </label>
-            </div>
-          )}
+          {/* Couples selection moved above using Switch */}
         </div>
 
         <div>
@@ -341,8 +341,8 @@ export default function EventCalculator({
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">
                         {calculations.couples
-                          ? `${calculations.numDays} day${
-                              calculations.numDays !== 1 ? 's' : ''
+                          ? `${calculations.nights} day${
+                              calculations.nights !== 1 ? 's' : ''
                             } × ₦10,000`
                           : `${calculations.nights} night${
                               calculations.nights !== 1 ? 's' : ''
