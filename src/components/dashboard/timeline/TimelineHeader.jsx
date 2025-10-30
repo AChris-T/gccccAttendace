@@ -9,7 +9,7 @@ const TimelineHeader = () => {
     return (
         <>
             <div className="mb-10">
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent mb-1">
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent mb-1">
                     Activity Timeline
                 </h1>
                 <p className="text-base text-gray-600 dark:text-gray-400">

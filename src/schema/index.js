@@ -297,3 +297,37 @@ export const assignUsersRoleSchema = yup.object().shape({
     .min(1, 'At least one member must be selected')
     .required('Members are required'),
 });
+export const assignMemberSchema = yup.object().shape({
+  followup_by_id: yup.string().required('Please select a member to assign'),
+});
+
+export const memberSchema = yup.object().shape({
+  first_name: yup
+    .string()
+    .required('First name is required')
+    .max(255, 'First name is too long'),
+  last_name: yup
+    .string()
+    .required('Last name is required')
+    .max(255, 'Last name is too long'),
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Please enter a valid email'),
+  gender: yup
+    .string()
+    .required('Gender is required')
+    .oneOf(['Male', 'Female'], 'Please select a valid gender'),
+  phone_number: yup
+    .string()
+    .required('Phone number is required')
+    .max(20, 'Phone number is too long'),
+});
+
+export const bulkMemberSchema = yup.object().shape({
+  members: yup
+    .array()
+    .of(memberSchema)
+    .min(1, 'At least one member is required')
+    .max(100, 'Maximum 100 members allowed'),
+});

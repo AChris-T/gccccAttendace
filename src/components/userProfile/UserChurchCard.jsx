@@ -18,7 +18,7 @@ const FIELD_CONFIG = [
 ];
 
 export default function UserChurchCard() {
-  const { user } = useAuthStore();
+  const { user, userUnitsDetails } = useAuthStore();
 
   const fields = FIELD_CONFIG.map((field) => ({
     ...field,
@@ -38,14 +38,13 @@ export default function UserChurchCard() {
         </p>
       </div>
 
-      {/* Community & Worker Section */}
       <div className="px-5 py-5 lg:px-6 lg:py-6 space-y-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5">
           {fields.map((field) => (
             <InfoField key={field.label} field={field} value={field.value} />
           ))}
         </div>
-        <UserUnitsDetails />
+        <UserUnitsDetails userUnits={userUnitsDetails} />
       </div>
     </div>
   );

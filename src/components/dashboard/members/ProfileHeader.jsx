@@ -4,6 +4,7 @@ import Badge from '@/components/ui/Badge';
 import { CheckIcon, DeleteIcon, DownloadIcon, UserIcon } from '@/icons';
 import { Toast } from '@/lib/toastify';
 import { useAuthStore } from '@/store/auth.store';
+import { getHighestRole } from '@/utils/auth.helpers';
 import {
   DEFAULT_EXTENSION,
   MIME_TYPE_EXTENSIONS,
@@ -19,7 +20,7 @@ const getRoleConfig = (role) => {
 };
 
 const UserInfo = ({ user }) => {
-  const primaryRole = user.roles?.[0];
+  const primaryRole = getHighestRole(user.roles);
   const roleConfig = getRoleConfig(primaryRole);
   const isActive = user.status === 'active';
 
@@ -35,7 +36,7 @@ const UserInfo = ({ user }) => {
         {user.email || 'No email provided'}
       </Link>
       <div className="flex flex-wrap items-center gap-3 mt-2">
-        <Badge size="sm" color={roleConfig.color}>
+        <Badge size="md" color={roleConfig.color}>
           {roleConfig.label}
         </Badge>
         {isActive ? (

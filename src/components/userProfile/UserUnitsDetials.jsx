@@ -1,5 +1,4 @@
 import { CrownIcon, StarIcon, UserIcon, UsersIcon } from "@/icons";
-import { useAuthStore } from "@/store/auth.store";
 
 const UnitBadge = ({ unit }) => {
     const getRoleBadge = () => {
@@ -68,15 +67,13 @@ const UnitBadge = ({ unit }) => {
     );
 };
 
-const UserUnitsDetails = () => {
-    const { user } = useAuthStore()
-
+const UserUnitsDetails = ({ userUnits }) => {
 
     return (
         <div className="mx-auto">
-            {user?.units?.length > 0 ? (
+            {userUnits?.length > 0 ? (
                 <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {user?.units.map((unit) => (
+                    {userUnits.map((unit) => (
                         <UnitBadge key={unit.id} unit={unit} />
                     ))}
                 </div>

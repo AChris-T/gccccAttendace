@@ -46,7 +46,7 @@ const MemberToolbox = ({ memberData }) => {
     }, []);
 
     return (
-        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-linear-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
             {/* Toolbox Header */}
             <button
                 onClick={toggleToolbox}

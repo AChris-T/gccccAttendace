@@ -24,8 +24,8 @@ export const MemberService = {
     return data;
   },
 
-  // async createMember(payload) {
-  //   const { data } = await $api.post(`/${MEMBERS}`, payload);
-  //   return data;
-  // },
+  async createMember(payload) {
+    const { data } = await $api.post(`/${MEMBERS}`, payload);
+    return data;
+  },
 };

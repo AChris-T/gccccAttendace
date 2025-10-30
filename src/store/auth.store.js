@@ -13,6 +13,7 @@ const initialState = {
   isFirstTimer: false,
   userRoles: [],
   userUnits: [],
+  userUnitsDetails: [],
 };
 export const useAuthStore = create()(
   persist(
@@ -31,6 +32,7 @@ export const useAuthStore = create()(
           isFirstTimer,
           userRoles: user?.roles || [],
           userUnits: user?.units?.map((role) => role?.name) || [],
+          userUnitsDetails: user?.units || [],
         });
       },
       setToken: ({ token }) => {
@@ -48,6 +50,7 @@ export const useAuthStore = create()(
           isMember: false,
           userRoles: [],
           userUnits: [],
+          userUnitsDetails: [],
         });
       },
     }),
@@ -63,6 +66,7 @@ export const useAuthStore = create()(
         isAuthenticated: state.isAuthenticated,
         userRoles: state.userRoles,
         userUnits: state.userUnits,
+        userUnitsDetails: state.userUnitsDetails,
       }),
     }
   )

@@ -67,28 +67,26 @@ export const useUpdateMember = (options = {}) => {
   });
 };
 
-// // Create member mutation
-// export const useCreateMember = (options = {}) => {
-//   const queryClient = useQueryClient();
+export const useCreateMember = (options = {}) => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: MemberService.createMember,
-//     onSuccess: (response, variables) => {
-//       // Optimistic update: Add new member to the cache
-//       queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, (oldData) => [
-//         response.data,
-//         ...(oldData || []),
-//       ]);
-
-//       options.onSuccess?.(response.data, variables);
-//     },
-//     onError: (error) => {
-//       const errorDetails = handleApiError(error);
-//       Toast.error(errorDetails.message);
-//       options.onError?.(new Error(errorDetails.message));
-//     },
-//   });
-// };
+  return useMutation({
+    mutationFn: MemberService.createMember,
+    onSuccess: (response, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.MEMBERS.ALL,
+      });
+      queryClient.invalidateQueries;
+      Toast.success(response.message);
+      options.onSuccess?.(response.data, variables);
+    },
+    onError: (error) => {
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message);
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};
 
 // // Update member mutation
 

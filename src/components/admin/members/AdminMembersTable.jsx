@@ -9,6 +9,7 @@ import Message from '@/components/common/Message';
 import { TableSkeletonLoader } from '@/components/skeleton';
 import { ExpandFullScreenIcon } from '@/icons';
 import CreateMembers from '@/components/admin/members/CreateMembers';
+import EditMembers from '@/components/admin/members/EditMembers';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -211,6 +212,7 @@ const AdminMembersTable = () => {
         <>
             <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <CreateMembers />
+                <EditMembers />
             </div>
             <div className="w-full space-y-3">
                 {/* Header Section */}

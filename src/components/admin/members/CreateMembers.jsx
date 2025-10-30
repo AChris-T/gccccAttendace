@@ -1,24 +1,26 @@
+import CreateMembersForm from '@/components/admin/members/CreateMembersForm';
 import ButtonCard from '@/components/ui/ButtonCard'
 import ModalForm from '@/components/ui/modal/ModalForm'
 import { useModal } from '@/hooks/useModal';
-import { UserIcon3 } from '@/icons'
+import { UsersIcon } from '@/icons/EventsIcons';
 
 const CreateMembers = () => {
     const { isOpen, openModal, closeModal } = useModal();
 
     return (
         <>
-            <ButtonCard onClick={openModal} description={'Assign admin, leader and member roles to users.'} icon={<UserIcon3 />}>
-                Assign Role
+            <ButtonCard onClick={openModal} description={'Create new members - name, email, gender, and phone number.'} icon={<UsersIcon />}>
+                New Members
             </ButtonCard>
 
             <ModalForm
-                title={`Assign Role to users.`}
+                maxWidth='max-w-2xl'
+                title={`Create Members`}
                 isOpen={isOpen}
-                description="Assign admin, leader and member roles to users."
+                description="Add one or multiple members at once. Phone number will be used as the default password."
                 onClose={closeModal}
             >
-                {/* <AssignRoleForm onClose={closeModal} /> */}
+                <CreateMembersForm onClose={closeModal} />
             </ModalForm>
         </>
     )
