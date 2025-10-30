@@ -1,7 +1,7 @@
 import EditPersonalInformation from '@/components/dashboard/firsttimer/edit/EditPersonalInformation'
 import { InfoField } from '@/components/dashboard/firsttimer/InfoField'
 import { SectionCard } from '@/components/dashboard/firsttimer/SectionCard'
-import Modal from '@/components/ui/Modal'
+import Modal from '@/components/ui/modal/Modal'
 import { useModal } from '@/hooks/useModal'
 import { BookOpenIcon, BriefcaseIcon, CalendarIcon, MailIcon, PhoneIcon, UserIcon } from '@/icons'
 import { formatDate } from '@/utils/helper'

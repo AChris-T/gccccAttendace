@@ -130,7 +130,7 @@ const VideoCarousel = () => {
                                 {/* Content */}
                                 <div className="p-4 sm:p-6">
                                     {/* Title */}
-                                    <h3 className="font-bold text-base sm:text-lg lg:text-xl text-slate-900 dark:text-slate-50 mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 leading-snug">
+                                    <h3 className="font-semibold text-base sm:text-lg text-slate-900 dark:text-slate-50 mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 leading-snug">
                                         {video.title}
                                     </h3>
 

@@ -54,11 +54,11 @@ const UnitBadge = ({ unit }) => {
                             </span>
                         </div>
                     </div>
-                    <div className={`flex flex-wrap sm:flex-nowrap items-center gap-2 px-3 py-2 rounded-lg border ${role.borderLight} ${role.bgLight} transition-all duration-200`}>
-                        <div className={`flex items-center justify-center w-7 h-7 rounded-full bg-linear-to-br ${role.gradient} text-white shadow-sm`}>
+                    <div className={`flex flex-wrap sm:flex-nowrap items-center gap-1 px-2.5 py-1.5 rounded-lg border ${role.borderLight} ${role.bgLight} transition-all duration-200`}>
+                        <div className={`flex items-center justify-center w-5 h-5 rounded-full bg-linear-to-br ${role.gradient} text-white shadow-sm`}>
                             {role.icon}
                         </div>
-                        <p className={`text-sm font-bold ${role.textLight}`}>
+                        <p className={`text-xs font-bold ${role.textLight}`}>
                             {role.text}
                         </p>
                     </div>

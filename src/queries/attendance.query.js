@@ -47,7 +47,9 @@ export const useMarkAttendance = (options = {}) => {
     mutationFn: AttendanceService.markAttendance,
     onSuccess: (data, variables) => {
       Toast.success(data?.message || 'Attendance submitted successfully');
-      navigate(`/dashboard`);
+      setTimeout(() => {
+        navigate(`/dashboard`);
+      }, 3000);
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {

@@ -3,86 +3,74 @@ import { useMonthlyAttendanceStats } from '../../../queries/attendance.query'
 import { AgCharts } from 'ag-charts-react'
 import { BarChartSkeleton } from '../../skeleton'
 import { years } from '../../../utils/constant'
-const VALUE = {
-    avg: 'Average',
-    total: 'Total'
-}
+import { CalendarIcon2, ChevronDownIcon } from '@/icons'
+import { Dropdown } from '@/components/ui/dropdown/Dropdown'
+import { generateChartSeries } from '@/utils/helper'
+
 const AdminAttendanceMonthlyStats = () => {
     const [year, setYear] = useState(2025)
-    const [mode, setMode] = useState('avg')
-    const { data, isLoading, isError, error } = useMonthlyAttendanceStats(year, mode)
-    const { dataset = [], series = [] } = data || {};
+    const { data = [], isLoading, isError, error } = useMonthlyAttendanceStats(year)
 
 
     const options = {
         title: {
-            text: `${VALUE[mode]} attendance per month`,
+            text: `Average attendance per month`,
         },
-        // subtitle: {
-        //     text: "In Billion U.S. Dollars",
-        // },
-        data: dataset,
-        series,
+        data: data,
+        series: generateChartSeries(data),
     };
+    const commonChartProps = {
+        enableCharts: true,
+        enableRangeSelection: true,
+        animateRows: true
+    };
+    const [isOpen, setIsOpen] = useState(false);
+    const closeDropdown = () => setIsOpen(false);
+    const openDropdown = () => setIsOpen(true);
 
-    const getButtonClass = (option) =>
-        mode === option
-            ? "shadow-theme-xs text-gray-900 dark:text-white bg-white dark:bg-gray-800"
-            : "text-gray-500 dark:text-gray-400";
 
     return (
         <>
-            <div className="mb-10 flex gap-x-3">
-                <div className="w-32">
-                    <label
-                        htmlFor="month-select"
-                        className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2"
-                    >
-                        Select Year:
-                    </label>
-                    <select
-                        id="month-year"
-                        value={year}
-                        onChange={(e) => setYear(e.target.value)}
-                        className="block w-full px-1 py-2 text-gray-700 dark:text-white/90 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
-                        aria-label="Select month for pie chart"
-                    >
-                        {years?.map((year) => (
-                            <option key={year} value={year}>
-                                {year}
-                            </option>
-                        )) || []}
-                    </select>
-                </div>
-                <div className='w-40 '>
-                    <label
-                        htmlFor="month-select"
-                        className="block text-sm font-medium text-gray-700 dark:text-white/90 mb-2"
-                    >
-                        Mode:
-                    </label>
-                    <div className="flex items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
-                        <button
-                            onClick={() => setMode("avg")}
-                            className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900   dark:hover:text-white ${getButtonClass(
-                                "avg"
-                            )}`}
-                        >
-                            Average
-                        </button>
-
-                        <button
-                            onClick={() => setMode("total")}
-                            className={`px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900   dark:hover:text-white ${getButtonClass(
-                                "total"
-                            )}`}
-                        >
-                            Total
-                        </button>
+            <div className="relative inline-block mb-4 max-w-xs">
+                <button
+                    role="button" onClick={openDropdown}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg  bg-white dark:bg-gray-800  text-gray-500 dark:text-gray-100 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 shadow-sm"
+                >
+                    <CalendarIcon2 />
+                    <span className="font-medium"><b>Year:</b> {year}</span>
+                    <ChevronDownIcon className={`w-5 h-5 transform transition-transform duration-300 text-gray-500 dark:text-gray-400 ${isOpen ? 'rotate-180' : 'rotate-0'} `} />
+                </button>
+                <Dropdown
+                    onClose={closeDropdown}
+                    isOpen={isOpen}
+                    className="p-2 w-[165px]"
+                >
+                    <div className="p-3 space-y-3">
+                        <div className="w-full">
+                            <label
+                                htmlFor="month-select"
+                                className="block text-xs sm:text-sm font-normal text-gray-700 dark:text-gray-400 mb-1"
+                            >
+                                Select Year:
+                            </label>
+                            <select
+                                id="month-year"
+                                value={year}
+                                onChange={(e) => setYear(e.target.value)}
+                                className="block w-full p-1.5 text-xs sm:text-sm text-gray-700 dark:text-gray-400 border dark:border-gray-400 border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+                                aria-label="Select month for pie chart"
+                            >
+                                {years?.map((year) => (
+                                    <option key={year} value={year}>
+                                        {year}
+                                    </option>
+                                )) || []}
+                            </select>
+                        </div>
                     </div>
-                </div>
+                </Dropdown>
             </div>
-            {isLoading ? <BarChartSkeleton /> : <AgCharts options={options} style={{ height: "500px" }} />}
+            {isLoading ? <BarChartSkeleton /> : <AgCharts  {...commonChartProps} options={options} style={{ height: "500px" }} />}
         </>
     )
 }

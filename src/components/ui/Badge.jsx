@@ -5,7 +5,6 @@ const Badge = ({
   startIcon,
   endIcon,
   children,
-  onClick,
 }) => {
   const baseStyles =
     "inline-flex items-center px-2.5 py-0.5 justify-center rounded-full font-medium";

@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 import { useModal } from "@/hooks/useModal";
 import CreateTimeline from "@/components/dashboard/timeline/CreateTimeline";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/ui/modal/Modal";
 
 const TimelineHeader = () => {
     const { isOpen, openModal, closeModal } = useModal();

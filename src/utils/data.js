@@ -43,6 +43,11 @@ export const adminNavItems = [
         path: '/dashboard/admin/followup-feedbacks',
         pro: true,
       },
+      {
+        name: 'Settings',
+        path: '/dashboard/admin/settings',
+        pro: true,
+      },
     ],
   },
 ];

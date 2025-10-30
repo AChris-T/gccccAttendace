@@ -3,7 +3,7 @@ export const DeleteConfirmation = ({ name, isSuccess }) => (
         {/* Warning Message */}
         <div className="mb-5 p-4 rounded-lg bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30">
             <div className="flex gap-3">
-                <div className="flex-shrink-0 mt-0.5">
+                <div className="shrink-0 mt-0.5">
                     <svg
                         className="w-5 h-5 text-red-600 dark:text-red-400"
                         fill="currentColor"

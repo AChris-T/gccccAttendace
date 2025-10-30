@@ -241,7 +241,7 @@ layer(base);
     cursor: pointer;
   }
   body {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
     @apply relative font-normal font-outfit z-1 bg-gray-50;
   }
 }

@@ -15,7 +15,7 @@ import Message from '@/components/common/Message';
 import { Link } from 'react-router-dom';
 import ButtonCard from '@/components/ui/ButtonCard';
 import { useModal } from '@/hooks/useModal';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/modal/Modal';
 import AttendanceMarkPresent from '@/components/admin/attendance/AttendanceMarkPresent';
 
 ModuleRegistry.registerModules([AllCommunityModule]);

@@ -42,7 +42,7 @@ const MonthlyTarget = ({ data, isError, isLoading, error, params, handleDateChan
 
     return (
         <>
-            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03] transition-all hover:shadow-md">
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/3 transition-all hover:shadow-md">
                 {showConfetti && <ConfettiShower />}
 
                 <Header monthAndYear={monthAndYear} isGoalMet={isGoalMet} handleDateChange={handleDateChange} />
@@ -61,7 +61,6 @@ const MonthlyTarget = ({ data, isError, isLoading, error, params, handleDateChan
 
 const Header = ({ monthAndYear, isGoalMet, handleDateChange }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const openDropdown = () => setIsOpen(true);
     const closeDropdown = () => setIsOpen(false);
     const toggleDropdown = () => setIsOpen((prev) => !prev);
 
@@ -79,7 +78,7 @@ const Header = ({ monthAndYear, isGoalMet, handleDateChange }) => {
                     <Dropdown
                         onClose={closeDropdown}
                         isOpen={isOpen}
-                        className="w-60 p-2 mt-2"
+                        className="w-60 p-2 mt-2 shadow-xl"
                     >
                         <MonthYearSelector
                             onChange={(value) => {

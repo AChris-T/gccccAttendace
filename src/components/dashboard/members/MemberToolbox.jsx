@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import ButtonCard from "@/components/ui/ButtonCard";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/ui/modal/Modal";
 import { useModal } from "@/hooks/useModal";
 import {
     CheckIcon,

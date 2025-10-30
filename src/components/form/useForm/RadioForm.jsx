@@ -24,7 +24,7 @@ const RadioForm = memo(({
     };
 
     return (
-        <fieldset disabled={disabled} className="mb-4">
+        <fieldset disabled={disabled}>
             {label && (
                 <legend className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
                     {label}

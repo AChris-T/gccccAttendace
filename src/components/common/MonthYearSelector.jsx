@@ -33,12 +33,12 @@ const MonthYearSelector = ({ onChange }) => {
         setSelectedMonth(Number(e.target.value) || "");
     }, []);
 
-    const selectClassName = "block w-full px-1 py-2 text-gray-700 dark:text-white/90 border border-gray-300 rounded-md shadow-sm text-sm font-normal focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
+    const selectClassName = "block w-full p-1.5 text-gray-700 dark:text-gray-400 border dark:border-gray-400 border-gray-300 rounded-md shadow text-xs sm:text-sm font-normal focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500";
 
-    const labelClassName = "block text-sm font-normal text-gray-700 dark:text-white/90 mb-2";
+    const labelClassName = "block text-xs sm:text-sm font-normal text-gray-700 dark:text-gray-400 mb-1";
 
     return (
-        <div className="mb-4 flex gap-x-3">
+        <div className="flex gap-x-3 p-2">
             <div className="w-32">
                 <label htmlFor="year-select" className={labelClassName}>
                     Select Year:

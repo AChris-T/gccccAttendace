@@ -9,4 +9,12 @@ export const AdminService = {
     );
     return data;
   },
+  async fetchFromYouTube() {
+    const { data } = await $api.post(`${ADMIN}/media/fetch`);
+    return data;
+  },
+  async assignRoleToUsers(payload) {
+    const { data } = await $api.post(`${ADMIN}/assign-role`, payload);
+    return data;
+  },
 };

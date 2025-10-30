@@ -34,6 +34,7 @@ const AdminFirstTimerPage = lazy(() => import('../pages/Admin/AdminFirstTimerPag
 const AdminMembersPage = lazy(() => import('../pages/Admin/AdminMembersPage'));
 const AdminFormsPage = lazy(() => import('../pages/Admin/AdminFormsPage'));
 const AdminFollowupFeedbacksPage = lazy(() => import('../pages/Admin/AdminFollowupFeedbacksPage'));
+const AdminSettingsPage = lazy(() => import('../pages/Admin/AdminSettingsPage'));
 
 const LeadersDashboardPage = lazy(() => import('../pages/Leaders/LeadersDashboardPage'));
 const LeadersUnitPage = lazy(() => import('../pages/Leaders/LeadersUnitPage'));
@@ -112,6 +113,10 @@ const AppRoutes = [
               {
                 path: 'followup-feedbacks',
                 element: withSuspense(AdminFollowupFeedbacksPage),
+              },
+              {
+                path: 'settings',
+                element: withSuspense(AdminSettingsPage),
               },
             ],
           },

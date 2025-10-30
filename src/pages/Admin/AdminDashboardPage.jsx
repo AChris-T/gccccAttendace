@@ -12,7 +12,7 @@ const AdminDashboardPage = () => {
             <PageMeta title="Admin: Dashboard | GCCC Ibadan" />
             <PageBreadcrumb icon={AdminIcon} pageTitle="Admin: Dashboard" description={'View real-time statistics on attendance, new members, follow-up progress, and recent system activity.'} />
 
-            <ComponentCard title="First Timers Analytics" >
+            <ComponentCard>
                 <AdminMetrics />
                 <FirstTimersCharts />
                 <AdminAttendanceMonthlyStats />

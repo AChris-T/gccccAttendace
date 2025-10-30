@@ -1,7 +1,7 @@
 import EditLocation from '@/components/dashboard/firsttimer/edit/EditLocation';
 import { InfoField } from '@/components/dashboard/firsttimer/InfoField'
 import { SectionCard } from '@/components/dashboard/firsttimer/SectionCard'
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
 import { MapPinIcon, MessageSquareIcon } from '@/icons'
 

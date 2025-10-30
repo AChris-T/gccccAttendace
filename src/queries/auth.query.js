@@ -1,11 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthService } from '../services/auth.service';
 import { QUERY_KEYS } from '../utils/queryKeys';
-import {
-  hasRole as checkRole,
-  hasUnit as checkUnit,
-  getUserRoles,
-} from '../utils/auth.helpers';
 import { Toast } from '../lib/toastify';
 import { useAuthStore } from '../store/auth.store';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -26,10 +21,6 @@ export const useMe = (options = {}) => {
     staleTime: 10 * 60 * 1000,
     cacheTime: 15 * 60 * 1000,
     refetchOnWindowFocus: true,
-    // retry: (failureCount, error) => {
-    //   if (error?.response?.status === 401) return false;
-    //   return failureCount < 2;
-    // },
     ...options,
   });
 };
@@ -63,12 +54,9 @@ export const useLogin = (options = {}) => {
 };
 
 export const useForgotPassword = (options = {}) => {
-  // const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: AuthService.sendResetLink,
     onSuccess: (data) => {
-      // queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
       Toast.success(data?.message);
       options.onSuccess?.(data, credentials);
     },
@@ -79,13 +67,11 @@ export const useForgotPassword = (options = {}) => {
   });
 };
 export const useResetPassword = (options = {}) => {
-  // const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: AuthService.resetPassword,
     onSuccess: (data) => {
-      // queryClient.setQueryData(QUERY_KEYS.AUTH.ME, user);
       Toast.success(data?.message);
       navigate('/login');
       options.onSuccess?.(data, credentials);
@@ -144,22 +130,4 @@ export const useLogout = (options = {}) => {
       options.onError?.(error);
     },
   });
-};
-
-export const useAuthHelpers = () => {
-  const { data: user } = useMe();
-
-  const hasRole = (role) => checkRole(user?.roles, role);
-  const hasUnit = (unit) => checkUnit(user?.units, unit);
-  const userRoles = getUserRoles(user?.roles || []);
-
-  return {
-    user,
-    hasRole,
-    hasUnit,
-    isAdmin: userRoles.isAdmin,
-    isLeader: userRoles.isLeader,
-    isMember: userRoles.isMember,
-    isAuthenticated: !!user,
-  };
 };

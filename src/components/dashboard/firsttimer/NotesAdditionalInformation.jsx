@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import EditNotesAdditionalInformation from "@/components/dashboard/firsttimer/edit/EditNotesAdditionalInformation";
 import { SectionCard } from "@/components/dashboard/firsttimer/SectionCard";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/ui/modal/Modal";
 import { useModal } from "@/hooks/useModal";
 import { ClipboardListIcon, MessageSquareIcon, PhoneIcon } from "@/icons";
 

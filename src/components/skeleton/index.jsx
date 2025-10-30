@@ -71,6 +71,7 @@ export const BarChartSkeleton = ({
     <div
       role="status"
       aria-label="Loading chart"
+      style={{ height: "500px" }}
       className={`w-full ${className}`}
     >
       <div className="flex items-end gap-4 px-2 py-3" style={{ minHeight: maxHeight }}>

@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import InputForm from '@/components/form/useForm/InputForm';
 import SingleSelect from '@/components/form/useForm/SingleSelectForm';
 import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
 import { PlusIcon } from '@/icons';
 import { useMembers } from '@/queries/member.query';

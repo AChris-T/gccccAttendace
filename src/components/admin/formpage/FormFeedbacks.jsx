@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import useFormMessagesSelection from '@/hooks/useFormMessagesSelection';
 import { EmptyState } from '@/components/common/EmptyState';
 import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
 
 const FormFeedbacks = () => {

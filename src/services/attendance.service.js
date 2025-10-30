@@ -64,7 +64,6 @@ export const AttendanceService = {
     const { data } = await $api.get(endpoint);
     return data;
   },
-  //  Get monthly attendance statistics (average or total). for usher attendance
   async getAdminAttendanceMonthlyStats(year, mode) {
     const { data } = await $api.get(
       `/admin/attendance/monthly-stats?year=${year}&mode=${mode}`

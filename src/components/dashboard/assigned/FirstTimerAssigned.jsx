@@ -1,15 +1,23 @@
 import { EmptyState } from '@/components/common/EmptyState'
+import { TableSkeletonLoader } from '@/components/skeleton'
 import Avatar from '@/components/ui/Avatar'
 import Badge from '@/components/ui/Badge'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table'
+import { useGetFirstTimersAssigned } from '@/queries/firstTimer.query'
 import { formatDate } from '@/utils/helper'
 import { Link } from 'react-router-dom'
 
 
-const FirstTimerAssigned = ({ firstTimers }) => {
+const FirstTimerAssigned = () => {
+
+    const { data: firstTimers = [], isLoading } = useGetFirstTimersAssigned();
+    if (isLoading) return (<section className="col-span-12 my-5">
+        <TableSkeletonLoader />
+    </section>)
+
     return (
         <>
-            <div className="col-span-12 my-5 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+            <div className="col-span-12 my-5 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/3 sm:px-6">
 
                 <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>

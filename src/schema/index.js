@@ -290,3 +290,10 @@ export const markAbsentMemberSchema = yup.object().shape({
   attendance_date: yup.string().nullable().required('Service date is required'),
   member_ids: yup.array().of(yup.number()).optional().default([]),
 });
+export const assignUsersRoleSchema = yup.object().shape({
+  role: yup.string().required('Role is required'),
+  user_ids: yup
+    .array()
+    .min(1, 'At least one member must be selected')
+    .required('Members are required'),
+});

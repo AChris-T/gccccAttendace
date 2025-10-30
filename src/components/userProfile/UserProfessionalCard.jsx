@@ -1,7 +1,7 @@
 import { useModal } from '../../hooks/useModal';
 import InputForm from '../form/useForm/InputForm';
 import Button from '../ui/Button';
-import Modal from '../ui/Modal';
+import Modal from '../ui/modal/Modal';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../../store/auth.store';
 import { useUpdateProfile } from '../../queries/user.query';

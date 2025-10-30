@@ -1,10 +1,6 @@
+import { getUserRoles } from '@/utils/auth.helpers';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import {
-  hasRole as checkRole,
-  hasUnit as checkUnit,
-  getUserRoles,
-} from '../utils/auth.helpers';
 
 const initialState = {
   user: null,
@@ -20,24 +16,22 @@ const initialState = {
 };
 export const useAuthStore = create()(
   persist(
-    (set, get) => ({
+    (set, _) => ({
       ...initialState,
-
-      hasRole: (role) => {
-        const { user } = get();
-        return checkRole(user?.roles, role);
-      },
-
-      hasUnit: (unit) => {
-        const { user } = get();
-        return checkUnit(user?.units, unit);
-      },
 
       setAuthenticatedUser: ({ user }) => {
         const { isAdmin, isLeader, isMember, isFirstTimer } = getUserRoles(
           user?.roles
         );
-        set({ user, isAdmin, isLeader, isMember, isFirstTimer });
+        set({
+          user,
+          isAdmin,
+          isLeader,
+          isMember,
+          isFirstTimer,
+          userRoles: user?.roles || [],
+          userUnits: user?.units?.map((role) => role?.name) || [],
+        });
       },
       setToken: ({ token }) => {
         set({ token, isAuthenticated: true });
@@ -67,8 +61,8 @@ export const useAuthStore = create()(
         isMember: state.isMember,
         isFirstTimer: state.isFirstTimer,
         isAuthenticated: state.isAuthenticated,
-        userRoles: [],
-        userUnits: [],
+        userRoles: state.userRoles,
+        userUnits: state.userUnits,
       }),
     }
   )

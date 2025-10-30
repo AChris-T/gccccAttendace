@@ -20,8 +20,11 @@ export function generateChartSeries(statusesPerMonth) {
     Contacted: '#0ba5ec',
     'Not Contacted': '#667085',
     Integrated: '#12b76a',
+    men: '#12b76a',
     Visiting: '#465fff',
+    children: '#465fff',
     'Opt-out': '#f04438',
+    women: '#f04438',
   };
 
   // Extract dynamic keys (all keys except 'month')

@@ -12,7 +12,6 @@ import {
 import { useCreateFirstTimer } from '../../queries/firstTimer.query';
 import Message from '../../components/common/Message';
 import Button from '../../components/ui/Button';
-import { CompletedIcon } from '../../icons';
 import { Toast } from '../../lib/toastify';
 import { formatBirthDate, handleApiError } from '../../utils/helper';
 import { ProgressIndicator } from '@/components/firstTimer/ProgressIndicator';

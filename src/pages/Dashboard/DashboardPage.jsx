@@ -12,8 +12,9 @@ import { DashboardIcon } from '@/icons';
 import { useGetAssignedMembers } from '@/queries/user.query';
 import { TableSkeletonLoader } from '@/components/skeleton';
 import FirstTimerAssigned from '@/components/dashboard/assigned/FirstTimerAssigned';
-import { useGetFirstTimersAssigned } from '@/queries/firstTimer.query';
 import AssignedMembers from '@/components/dashboard/assigned/AssignedMembers';
+import { Units } from '@/utils/constant';
+import { useHasUnit } from '@/hooks/useUnitPermission';
 
 // Constants
 const getCurrentDateParams = () => ({
@@ -35,12 +36,10 @@ const useDateFilter = () => {
 
 const useDashboardData = (year, month) => {
   const attendanceQuery = useUsersMonthlyAttendanceStats(year, month);
-  const firstTimersQuery = useGetFirstTimersAssigned();
   const assignednMembersQuery = useGetAssignedMembers();
 
   return {
     attendance: attendanceQuery,
-    firstTimers: firstTimersQuery,
     assignedMembers: assignednMembersQuery,
   };
 };
@@ -75,20 +74,11 @@ const AssignedMembersSection = ({ data, isLoading }) => {
   return <AssignedMembers assignedMembers={data} />;
 };
 
-const FirstTimersSection = ({ data, isLoading }) => {
-  if (isLoading) return <LoadingSection />;
-  return <FirstTimerAssigned firstTimers={data} />;
-};
-
-// Main Component
 const DashboardPage = () => {
   const { params, handleDateChange } = useDateFilter();
+  const hasFollowUp = useHasUnit(Units.FOLLOW_UP);
 
-  const {
-    attendance,
-    firstTimers,
-    assignedMembers
-  } = useDashboardData(params.year, params.month);
+  const { attendance, assignedMembers } = useDashboardData(params.year, params.month);
 
   const attendanceProps = useMemo(
     () => ({
@@ -120,10 +110,7 @@ const DashboardPage = () => {
           isLoading={assignedMembers.isLoading}
         />
 
-        <FirstTimersSection
-          data={firstTimers.data}
-          isLoading={firstTimers.isLoading}
-        />
+        {hasFollowUp && <FirstTimerAssigned />}
       </main>
     </>
   );

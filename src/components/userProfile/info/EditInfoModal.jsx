@@ -1,5 +1,5 @@
 import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/modal/Modal';
 import InputForm from '@/components/form/useForm/InputForm';
 import { useMemo } from 'react';
 import { Country, State } from 'country-state-city';

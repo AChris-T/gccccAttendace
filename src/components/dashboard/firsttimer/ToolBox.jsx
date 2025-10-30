@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import EditFirstTimer from "@/components/dashboard/firsttimer/edit/EditFirstTimer";
 import ButtonCard from "@/components/ui/ButtonCard";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/ui/modal/Modal";
 import { useModal } from "@/hooks/useModal";
 import {
     CheckIcon,

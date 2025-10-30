@@ -1,5 +1,5 @@
 import Button from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
+import Modal from '@/components/ui/modal/Modal';
 import SocialMediaForm from './SocialMediaForm';
 
 const EditSocialModal = ({

@@ -1,6 +1,6 @@
 const ComponentCard = ({ children }) => {
   return (
-    <div className="space-y-6">{children}</div>
+    <div className="space-y-8">{children}</div>
   );
 };
 

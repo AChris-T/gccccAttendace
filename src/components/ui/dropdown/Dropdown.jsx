@@ -35,7 +35,7 @@ export const Dropdown = ({
   return (
     <Animated duration={duration} animation={animation} easing={easing}
       ref={dropdownRef}
-      className={`absolute z-40 ${direction == 'right' ? 'left-0 top-7' : 'right-0'}  mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
+      className={`absolute z-10 ${direction == 'right' ? 'left-0 top-7' : 'right-0'}  mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
     >
       {children}
     </Animated>
