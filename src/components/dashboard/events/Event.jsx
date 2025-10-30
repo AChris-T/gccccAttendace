@@ -45,7 +45,6 @@ export default function Event() {
     try {
       await startPayment(paymentPayload);
     } catch (e) {
-      // handled in hook
     }
   };
 

@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import Message from '@/components/common/Message';
 import { TableSkeletonLoader } from '@/components/skeleton';
 import { ExpandFullScreenIcon } from '@/icons';
+import CreateMembers from '@/components/admin/members/CreateMembers';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -207,65 +208,69 @@ const AdminMembersTable = () => {
     }
 
     return (
-        <div className="w-full space-y-3">
-            {/* Header Section */}
-            <div className="flex items-center gap-3">
-                <p className="text-sm text-green-600 dark:text-green-400">
-                    <span className="font-semibold text-green-500 dark:text-green-500">
-                        {memberData.length}
-                    </span>
-                    {' '}record{memberData.length !== 1 ? 's' : ''} found
-                </p>
+        <>
+            <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                <CreateMembers />
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 justify-between w-full">
-                <div className='flex flex-wrap gap-3'>
-                    <Button
-                        variant='primary'
-                        onClick={handleExportCSV}
-                        disabled={!memberData.length || isLoading}
-                    >
-                        Export CSV
-                    </Button>
-                    <Button
-                        variant='ghost'
-                        onClick={handleRefresh}
-                        loading={isFetching}
-                        disabled={isLoading}
-                    >
-                        Refresh
-                    </Button>
+            <div className="w-full space-y-3">
+                {/* Header Section */}
+                <div className="flex items-center gap-3">
+                    <p className="text-sm text-green-600 dark:text-green-400">
+                        <span className="font-semibold text-green-500 dark:text-green-500">
+                            {memberData.length}
+                        </span>
+                        {' '}record{memberData.length !== 1 ? 's' : ''} found
+                    </p>
                 </div>
-                <div>
-                    <Button
-                        variant='light'
-                        onClick={autoSizeColumns}
-                        disabled={!memberData.length || isLoading}
-                    >
-                        <ExpandFullScreenIcon className='h-4 w-4 md:h-5 md:w-5' />
-                    </Button>
-                </div>
-            </div>
 
-            {isLoading && !memberData.length ?
-                <TableSkeletonLoader />
-                :
-                <>
-                    <div
-                        className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
-                        style={{ width: "100%", height: `${tableHeight}px` }}
-                    >
-                        <AgGridReact
-                            ref={gridRef}
-                            defaultColDef={defaultColDef}
-                            columnDefs={columnDefs}
-                            rowData={memberData}
-                            gridOptions={gridOptions}
-                            onGridReady={onGridReady}
-                            suppressLoadingOverlay={false}
-                            suppressNoRowsOverlay={false}
-                            overlayLoadingTemplate={`
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3 justify-between w-full">
+                    <div className='flex flex-wrap gap-3'>
+                        <Button
+                            variant='primary'
+                            onClick={handleExportCSV}
+                            disabled={!memberData.length || isLoading}
+                        >
+                            Export CSV
+                        </Button>
+                        <Button
+                            variant='ghost'
+                            onClick={handleRefresh}
+                            loading={isFetching}
+                            disabled={isLoading}
+                        >
+                            Refresh
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            variant='light'
+                            onClick={autoSizeColumns}
+                            disabled={!memberData.length || isLoading}
+                        >
+                            <ExpandFullScreenIcon className='h-4 w-4 md:h-5 md:w-5' />
+                        </Button>
+                    </div>
+                </div>
+
+                {isLoading && !memberData.length ?
+                    <TableSkeletonLoader />
+                    :
+                    <>
+                        <div
+                            className={`ag-theme-alpine border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors`}
+                            style={{ width: "100%", height: `${tableHeight}px` }}
+                        >
+                            <AgGridReact
+                                ref={gridRef}
+                                defaultColDef={defaultColDef}
+                                columnDefs={columnDefs}
+                                rowData={memberData}
+                                gridOptions={gridOptions}
+                                onGridReady={onGridReady}
+                                suppressLoadingOverlay={false}
+                                suppressNoRowsOverlay={false}
+                                overlayLoadingTemplate={`
                          <div class="flex items-center justify-center h-full">
                              <div class="text-center">
                                  <div class="relative inline-block">
@@ -276,7 +281,7 @@ const AdminMembersTable = () => {
                              </div>
                          </div>
                      `}
-                            overlayNoRowsTemplate={`
+                                overlayNoRowsTemplate={`
                          <div class="flex items-center justify-center h-full bg-white ">
                              <div class="text-center py-8">
                                  <svg class="w-16 h-16 mx-auto text-gray-400  mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -291,23 +296,24 @@ const AdminMembersTable = () => {
                              </div>
                          </div>
                      `}
-                        />
-                    </div>
-                    {/* Footer with Dark Mode Support */}
-                    {memberData.length > 0 && (
-                        <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
-                            <span>Last updated: {new Date().toLocaleString()}</span>
-                            <div className="flex items-center gap-2">
-                                <span className="flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
-                                    <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
-                                </span>
-                            </div>
+                            />
                         </div>
-                    )}
-                </>
-            }
-        </div>
+                        {/* Footer with Dark Mode Support */}
+                        {memberData.length > 0 && (
+                            <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
+                                <span>Last updated: {new Date().toLocaleString()}</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
+                                        <span className="text-green-600 dark:text-green-400 font-medium">Live data</span>
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                }
+            </div>
+        </>
     );
 };
 

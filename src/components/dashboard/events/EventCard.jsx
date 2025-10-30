@@ -53,12 +53,13 @@ export default function EventCard({ event, onRegister }) {
           {event.description}
         </p>
 
-        <button
+        {event.eventType !== 'past' && <button
           onClick={onRegister}
           className="w-full py-3 font-semibold text-white transition-colors duration-200 bg-blue-600 hover:bg-blue-700 rounded-xl"
         >
           Register Now
-        </button>
+        </button>}
+
       </div>
     </div>
   );

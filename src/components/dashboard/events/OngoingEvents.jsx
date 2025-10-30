@@ -16,7 +16,7 @@ export default function OngoingEvents() {
       ministers: ['Resident Pastors'],
     },
     {
-      id: 201,
+      id: 202,
       title: 'Divine Demand 2025',
       subtitle: 'Pressing In',
       date: 'Mon 1 Sept - Tues 9th Dec, 2025',
@@ -28,7 +28,7 @@ export default function OngoingEvents() {
       ministers: ['Resident Pastors'],
     },
     {
-      id: 201,
+      id: 203,
       title: 'Divine Demand 2025',
       subtitle: 'Pressing In',
       date: 'Mon 1 Sept - Tues 9th Dec, 2025',
@@ -46,13 +46,12 @@ export default function OngoingEvents() {
       {events.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
-            <>
-              <img
-                src={event.imageUrl}
-                alt={event.title}
-                className="object-cover w-full h-full"
-              />
-            </>
+            <img
+              key={event.id}
+              src={event.imageUrl}
+              alt={event.title}
+              className="object-cover w-full h-full"
+            />
           ))}
         </div>
       ) : (

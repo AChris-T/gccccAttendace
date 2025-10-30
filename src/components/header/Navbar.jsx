@@ -8,6 +8,7 @@ import {
   ChevronDownIcon,
   CloseIcon,
   DashboardIcon,
+  EventIcon,
   FormIcon,
   HomeIcon,
   LogoutIcon,
@@ -271,6 +272,14 @@ const Navbar = () => {
                         >
                           <UserIcon className="w-4 h-4" />
                           <span>Profile</span>
+                        </Link>
+                        <Link
+                          to='/dashboard/events'
+                          onClick={closeDropdown}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors duration-200"
+                        >
+                          <EventIcon className="w-4 h-4" />
+                          <span>Events</span>
                         </Link>
                       </div>
                       <div className="p-3 space-y-1 border-b border-white/10">

@@ -9,7 +9,6 @@ import PublicRoute from '../layout/route/PublicRoute';
 import PageLoader from '@/components/ui/PageLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 
-
 const LoginPage = lazy(() => import('../pages/Home/Auth/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/Home/Auth/RegisterPage'));
 const ResetPasswordPage = lazy(() => import('@/pages/Home/Auth/ResetPasswordPage'));
@@ -18,8 +17,6 @@ const ForgotPasswordPage = lazy(() => import('@/pages/Home/Auth/ForgotPasswordPa
 const HomePage = lazy(() => import('../pages/Home/HomePage'));
 const FormPage = lazy(() => import('../pages/Home/FormPage'));
 const FirstTimerPage = lazy(() => import('../pages/Home/FirstTimerPage'));
-
-
 
 const DashboardPage = lazy(() => import('../pages/Dashboard/DashboardPage'));
 const AttendancePage = lazy(() => import('../pages/Dashboard/AttendancePage'));
@@ -35,10 +32,11 @@ const AdminMembersPage = lazy(() => import('../pages/Admin/AdminMembersPage'));
 const AdminFormsPage = lazy(() => import('../pages/Admin/AdminFormsPage'));
 const AdminFollowupFeedbacksPage = lazy(() => import('../pages/Admin/AdminFollowupFeedbacksPage'));
 const AdminSettingsPage = lazy(() => import('../pages/Admin/AdminSettingsPage'));
+const AdminAttendanceRecordsPage = lazy(() => import('@/pages/Admin/AdminAttendanceRecordsPage'));
 
 const LeadersDashboardPage = lazy(() => import('../pages/Leaders/LeadersDashboardPage'));
+const LeadersAttendanceRecordsPage = lazy(() => import('../pages/Leaders/LeadersAttendanceRecordsPage'));
 const LeadersUnitPage = lazy(() => import('../pages/Leaders/LeadersUnitPage'));
-
 const NotFoundPage = lazy(() => import('../pages/Error/NotfoundPage'));
 
 const withSuspense = (Component) => (
@@ -105,6 +103,10 @@ const AppRoutes = [
                 element: withSuspense(AdminAttendancePage),
               },
               {
+                path: 'attendance-records',
+                element: withSuspense(AdminAttendanceRecordsPage),
+              },
+              {
                 path: 'first-timers',
                 element: withSuspense(AdminFirstTimerPage),
               },
@@ -127,6 +129,7 @@ const AppRoutes = [
             children: [
               { index: true, element: withSuspense(LeadersDashboardPage) },
               { path: 'units', element: withSuspense(LeadersUnitPage) },
+              { path: 'attendance-records', element: withSuspense(LeadersAttendanceRecordsPage) },
             ],
           },
         ],
