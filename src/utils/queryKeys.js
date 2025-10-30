@@ -60,6 +60,16 @@ export const QUERY_KEYS = {
     ANALYTICS: (params) => ['admin', 'analytics', params],
   },
 
+  EVENTS: {
+    ALL: ['events'],
+    DETAIL: (id) => ['events', 'detail', id],
+  },
+
+  PAYMENT: {
+    INITIATE: (payloadHash) => ['payment', 'initiate', payloadHash],
+    VERIFY: (reference) => ['payment', 'verify', reference],
+  },
+
   ATTENDANCE: {
     ALL: ['attendance'],
     HISTORY: ['attendance', 'history'],

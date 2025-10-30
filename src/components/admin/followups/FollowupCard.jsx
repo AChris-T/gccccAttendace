@@ -27,7 +27,7 @@ const FeedbackItem = ({ feedback }) => {
         `${feedback.created_by.first_name} ${feedback.created_by.last_name}`;
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 to-gray-50 dark:from-gray-700/50 dark:to-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow duration-200">
+        <div className="bg-linear-to-br from-gray-50 to-gray-50 dark:from-gray-700/50 dark:to-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow duration-200">
             <div className="flex flex-row sm:items-start justify-between gap-2 mb-3">
                 <div className="flex flex-wrap items-center gap-3">
                     <div className="flex items-center dark:text-gray-400 gap-1">
@@ -161,7 +161,7 @@ export const FollowupCard = ({ person, activeTab }) => {
             {/* Header */}
             <div className="relative z-10 w-full p-5 sm:p-6 flex items-start gap-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 rounded-xl">
                 {/* Avatar */}
-                <div className="relative flex-shrink-0">
+                <div className="relative shrink-0">
                     <Avatar
                         size="sm"
                         src={person.avatar}

@@ -1,3 +1,5 @@
+import { ShieldIcon, StarIcon, UsersIcon } from '@/icons';
+
 export const navItems = [
   {
     icon: 'DashboardIcon',
@@ -123,3 +125,40 @@ export const assistantGradients = [
   'from-fuchsia-500 to-purple-600',
   'from-indigo-500 to-sky-600',
 ];
+export const ROLE_CONFIGS = {
+  admin: {
+    label: 'Admin',
+    color: 'error',
+    icon: ShieldIcon,
+    bgClass:
+      'from-slate-700 to-slate-900 dark:from-slate-800 dark:to-slate-950',
+  },
+  leader: {
+    label: 'Leader',
+    color: 'warning',
+    icon: StarIcon,
+    bgClass:
+      'from-indigo-600 to-purple-700 dark:from-indigo-700 dark:to-purple-800',
+  },
+  member: {
+    label: 'Member',
+    color: 'primary',
+    icon: UsersIcon,
+    bgClass: 'from-blue-600 to-cyan-600 dark:from-blue-700 dark:to-cyan-700',
+  },
+};
+
+export const ROLE_CONFIG = {
+  admin: { label: 'Admin', color: 'error' },
+  leader: { label: 'Leader', color: 'warning' },
+  member: { label: 'Member', color: 'primary' },
+};
+export const MIME_TYPE_EXTENSIONS = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+  'image/svg+xml': 'svg',
+};
+
+export const DEFAULT_EXTENSION = 'jpg';
