@@ -25,7 +25,7 @@ const LayoutContent = () => {
             } ${isMobileOpen ? "ml-0" : ""}`}
         >
           <AppHeader />
-          <div className="p-4 md:p-6 mx-auto">
+          <div className="p-4 md:p-6 mx-auto overflow-x-hidden!">
             {!user?.profile_completed && <ProfileCompletionBanner completion_percent={user?.completion_percent} />}
             <Outlet />
           </div>

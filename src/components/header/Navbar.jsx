@@ -330,10 +330,10 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`md:hidden overflow-hidden transition-all duration-500 ease-out ${menuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+          className={`md:hidden overflow-hidden transition-all duration-500 ease-out ${menuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
             }`}
         >
-          <div className="px-4 pb-6 pt-4 space-y-2 bg-[#24244e] backdrop-blur-2xl border-t border-white/10">
+          <div className="px-4 pb-6 pt-4 space-y-1 bg-[#24244e] backdrop-blur-2xl border-t border-white/10">
             {navItems?.filter(item => item.show)?.map((item) => {
               const Icon = item.icon;
               return (
@@ -391,6 +391,14 @@ const Navbar = () => {
                 >
                   <UserIcon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
                   <span className="font-medium">Profile</span>
+                </Link>
+                <Link
+                  to='/dashboard/events'
+                  onClick={closeMenu}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-white/80 hover:text-white hover:bg-white/10 transition-colors duration-200"
+                >
+                  <EventIcon className="w-4 h-4" />
+                  <span>Events</span>
                 </Link>
                 <div className="my-2 pb-2 border-t border-white/10" />
                 <Button

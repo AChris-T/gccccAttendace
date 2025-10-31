@@ -88,44 +88,22 @@ export const useCreateMember = (options = {}) => {
   });
 };
 
-// // Update member mutation
+export const useDeleteMember = (options = {}) => {
+  const queryClient = useQueryClient();
 
-// // Delete member mutation with optimistic updates
-// export const useDeleteMember = (options = {}) => {
-//   const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: MemberService.deleteMember,
 
-//   return useMutation({
-//     mutationFn: MemberService.deleteMember,
-//     onMutate: async (memberId) => {
-//       // Cancel outgoing refetches
-//       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
-
-//       // Snapshot the previous value
-//       const previousMembers = queryClient.getQueryData(QUERY_KEYS.MEMBERS.ALL);
-
-//       // Optimistically update by removing the member
-//       queryClient.setQueryData(
-//         QUERY_KEYS.MEMBERS.ALL,
-//         (old) => old?.filter((member) => member.id !== memberId) || []
-//       );
-
-//       return { previousMembers };
-//     },
-//     onSuccess: (data, variables, context) => {
-//       // Remove member detail from cache
-//       queryClient.removeQueries({
-//         queryKey: QUERY_KEYS.MEMBERS.DETAIL(variables),
-//       });
-
-//       options.onSuccess?.(data, variables);
-//     },
-//     onError: (error, variables, context) => {
-//       // Rollback optimistic update
-//       queryClient.setQueryData(QUERY_KEYS.MEMBERS.ALL, context.previousMembers);
-
-//       const errorDetails = handleApiError(error);
-//       Toast.error(errorDetails.message);
-//       options.onError?.(new Error(errorDetails.message));
-//     },
-//   });
-// };
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.MEMBERS.ALL,
+      });
+      options.onSuccess?.(data, variables);
+    },
+    onError: (error) => {
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message);
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};

@@ -172,3 +172,18 @@ export const MIME_TYPE_EXTENSIONS = {
 };
 
 export const DEFAULT_EXTENSION = 'jpg';
+
+export const COMMUNITY = Object.freeze({
+  OLD_IFE_ROAD: 'Old-Ife Road/Alakia/Iwo Road',
+  IYANA_BODIJA: 'Iyana-Bodija/Express',
+  AKOBO: 'Akobo',
+  AGBOWO: 'Agbowo',
+  UI: 'UI',
+  OJOO_MONIYA: 'Ojoo/Moniya',
+  ASHI_BODIJA: 'Ashi Bodija',
+  GATE_IDI_APE: 'Bus-Stop Gate/Idi-Ape',
+  SANGO_POLY_APETE: 'Sango/Poly Ibadan/Apete',
+  RINGROAD_CHALLENGE: 'RingRoad/Challenge',
+});
+
+export const communityArray = Object.freeze(Object.values(COMMUNITY));

@@ -181,7 +181,7 @@ const Avatar = ({
 
       {name && (
         <div
-          className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg"
+          className="absolute -bottom-1 -right-1 w-5 h-5 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg"
           aria-label={`${name} badge`}
         >
           {name}

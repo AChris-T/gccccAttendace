@@ -36,8 +36,6 @@ const UnitBadge = ({ unit }) => {
 
     return (
         <div className="group relative bg-white dark:bg-gray-800 rounded shadow dark:shadow-gray-900/30 overflow-hidden transition-all duration-300 hover:shadow-lg border border-gray-100 dark:border-gray-700">
-            {/* Gradient Top Bar */}
-            <div className={`h-1.5 bg-linear-to-r ${role.gradient}`}></div>
 
             <div className="p-4">
                 {/* Unit Name & Member Count */}
@@ -78,9 +76,9 @@ const UserUnitsDetails = ({ userUnits }) => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-16">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                        <UsersIcon className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                <div className="text-center py-5">
+                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                        <UsersIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                         No Units Yet

@@ -76,7 +76,6 @@ const AdminAttendanceFilter = ({
     }, []);
 
     const handleApply = handleSubmit((data) => {
-        // Convert service_id to number if it exists
         const processedData = {
             ...data,
             service_id: data.service_id ? Number(data.service_id) : null
