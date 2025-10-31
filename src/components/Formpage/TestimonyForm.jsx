@@ -34,20 +34,20 @@ export default function TestimonyForm() {
   };
 
   return (
-    <div className="space-y-5 mt-5 text-gray-800 dark:text-gray-100">
+    <div className="mt-5 space-y-5 text-gray-800 dark:text-gray-100">
       <h3 className="text-[24px] font-bold text-[#24244e] dark:text-gray-100">
         Hi Friend
       </h3>
-      <h3 className="text-sm mt-2 text-gray-700 dark:text-gray-300">
+      <h3 className="mt-2 text-sm text-gray-700 dark:text-gray-300">
         At the GCCC Ibadan, we have a culture of sharing with the family of God
         what the Lord has done.
       </h3>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5 shadow-sm"
+        className="p-5 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
       >
-        <div className="mt-4 grid space-x-0 md:space-x-2 grid-cols-1 md:grid-cols-2 gap-y-4">
+        <div className="grid grid-cols-1 mt-4 space-x-0 md:space-x-2 md:grid-cols-2 gap-y-4">
           <div>
             <InputForm
               label="Name"
@@ -84,7 +84,7 @@ export default function TestimonyForm() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-medium mb-2 text-sm text-gray-800 dark:text-gray-200">
+            <label className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-200">
               Do you want to share your testimony physically?{' '}
               <span className="text-red-500">*</span>
             </label>
@@ -114,7 +114,7 @@ export default function TestimonyForm() {
               </label>
             </div>
             {errors.sharePhysically && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="mt-1 text-sm text-red-500">
                 {errors.sharePhysically.message}
               </p>
             )}
