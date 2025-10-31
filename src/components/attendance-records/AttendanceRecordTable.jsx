@@ -357,25 +357,9 @@ const AttendanceTable = () => {
         onConfirm={confirmDelete}
         onCancel={deleteConfirmation.close}
         isLoading={deleteRecords.isLoading}
-        title={
-          deleteConfirmation.itemToDelete?.length > 1
-            ? `Delete ${deleteConfirmation.itemToDelete?.length} Records?`
-            : 'Delete Record?'
-        }
-        message={
-          deleteConfirmation.itemToDelete?.length > 1
-            ? 'Are you sure you want to delete the selected records? This action cannot be undone.'
-            : 'Are you sure you want to delete this record? This action cannot be undone.'
-        }
-        confirmText={
-          deleteRecords.isLoading
-            ? 'Deleting...'
-            : `Delete ${
-                deleteConfirmation.itemToDelete?.length > 1
-                  ? 'Records'
-                  : 'Record'
-              }`
-        }
+        title="Delete Record?"
+        message="Are you sure you want to delete this record? This action cannot be undone."
+        confirmText={deleteRecords.isLoading ? 'Deleting...' : 'Delete Record'}
       />
 
       {/* Edit Record Modal */}
