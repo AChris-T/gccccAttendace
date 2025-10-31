@@ -10,8 +10,8 @@ export const UnitInformation = ({ user }) => {
             description="Your church roles and assignments"
         >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                <InfoField icon={UsersIcon} label="Community" value={user.community} color="blue" />
-                <InfoField icon={BriefcaseIcon} label="Worker" value={user.worker} color="blue" />
+                <InfoField icon={UsersIcon} label="Community" value={user.community} />
+                <InfoField icon={BriefcaseIcon} label="Worker" value={user.worker} />
             </div>
 
             <UserUnitsDetails userUnits={user?.units} />

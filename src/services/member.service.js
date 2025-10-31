@@ -4,8 +4,21 @@ const MEMBERS = 'members';
 const ADMIN_MEMBERS = `/admin/${MEMBERS}`;
 
 export const MemberService = {
-  async getAllMembers() {
-    const { data } = await $api.get(`${MEMBERS}`);
+  async getAllMembers(params = {}) {
+    const queryParams = new URLSearchParams();
+
+    params.date_of_birth?.forEach((date) =>
+      queryParams.append('date_of_birth[]', date)
+    );
+
+    ['birth_month', 'community'].forEach((key) => {
+      if (params[key]) queryParams.append(key, params[key]);
+    });
+
+    const query = queryParams.toString();
+    const endpoint = `${MEMBERS}${query ? `?${query}` : ''}`;
+
+    const { data } = await $api.get(endpoint);
     return data;
   },
 

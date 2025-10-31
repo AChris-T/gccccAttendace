@@ -18,9 +18,12 @@ export const useMe = (options = {}) => {
       setAuthenticatedUser({ user });
       return user;
     },
-    staleTime: 10 * 60 * 1000,
-    cacheTime: 15 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
+    cacheTime: 1 * 60 * 1000,
     refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    refetchInterval: false,
+    retry: 0,
     ...options,
   });
 };

@@ -119,6 +119,7 @@ export default function UserChurchCard() {
               expandParent
               options={communityOptions}
               register={register}
+              defaultValue={user.community}
               setValue={setValue}
               placeholder="Select a community..."
               searchable

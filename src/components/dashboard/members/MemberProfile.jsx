@@ -1,7 +1,6 @@
 import Animated from '@/components/common/Animated';
 import { EmptyState } from '@/components/common/EmptyState';
 import Message from '@/components/common/Message';
-import ToolBox from '@/components/dashboard/firsttimer/ToolBox';
 import MemberToolbox from '@/components/dashboard/members/MemberToolbox';
 import { PersonalInformation } from '@/components/dashboard/members/PersonalInformation';
 import { ProfessionalInformation } from '@/components/dashboard/members/ProfessionalInformation';
@@ -18,7 +17,7 @@ const MemberProfile = ({ memberId }) => {
     const [showToolbox, setShowToolbox] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
 
-    if (isError) return <Message data={error?.data} />
+    if (isError) return <Message variant='error' data={error?.data} />
     const isActive = memberData?.status !== 'deactivated';
 
     return (

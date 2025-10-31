@@ -23,11 +23,9 @@ export const useUpdateProfile = (options = {}) => {
     },
     onSuccess: ({ data }, variables, _) => {
       const { user } = data;
-      requestAnimationFrame(() => {
-        setAuthenticatedUser({ user });
-        Toast.success(data?.message || 'Profile updated successfully');
-        options.onSuccess?.(data, variables);
-      });
+      setAuthenticatedUser({ user });
+      Toast.success(data?.message || 'Profile updated successfully');
+      options.onSuccess?.(data, variables);
     },
 
     onError: (error, _, context) => {
@@ -40,29 +38,6 @@ export const useUpdateProfile = (options = {}) => {
     },
   });
 };
-
-// export const useUpdateProfile = (options = {}) => {
-//   const queryClient = useQueryClient();
-//   const { setAuthenticatedUser } = useAuthStore();
-
-//   return useMutation({
-//     mutationKey: QUERY_KEYS.AUTH.PROFILE,
-//     mutationFn: UserService.updateProfile,
-
-//     onSuccess: ({ data }, variables) => {
-//       const { user } = data;
-//       setAuthenticatedUser({ user });
-//       Toast.success(data?.message || 'Profile updated successfully');
-//       options.onSuccess?.(data, variables);
-//     },
-
-//     onError: (error) => {
-//       const message = handleApiError(error);
-//       Toast.error(message || 'Failed to update user record');
-//       options.onError?.(error);
-//     },
-//   });
-// };
 
 export const useGetAssignedAbsentees = (options = {}) => {
   const { isAdmin, isLeader } = useAuthStore();

@@ -4,13 +4,12 @@ import { QUERY_KEYS } from '../utils/queryKeys';
 import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 
-// Get all members
-export const useMembers = (options = {}) => {
+export const useMembers = (params = {}, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.MEMBERS.ALL,
+    queryKey: QUERY_KEYS.MEMBERS.ALL(params),
     queryFn: async () => {
-      const { data } = await MemberService.getAllMembers();
-      return data;
+      const { data } = await MemberService.getAllMembers(params);
+      return data || [];
     },
     staleTime: 2 * 60 * 1000,
     cacheTime: 5 * 60 * 1000,
@@ -41,6 +40,7 @@ export const useMember = (memberId, options = {}) => {
     enabled: !!memberId,
     staleTime: 5 * 60 * 1000,
     ...options,
+    retry: 0,
   });
 };
 

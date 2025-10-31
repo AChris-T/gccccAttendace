@@ -1,9 +1,9 @@
 import SocialLinkCard from './SocialLinkCard';
 import {
   FacebookIcon,
-  TwitterIcon,
   LinkedInIcon,
   InstagramIcon,
+  TwitterIcon2,
 } from '@/icons';
 
 const SOCIAL_PLATFORMS = [
@@ -16,7 +16,7 @@ const SOCIAL_PLATFORMS = [
   },
   {
     platform: 'twitter',
-    Icon: TwitterIcon,
+    Icon: TwitterIcon2,
     label: 'X (Twitter)',
     color:
       'hover:bg-gray-50 dark:hover:bg-gray-500/10 hover:border-gray-400 dark:hover:border-gray-600',

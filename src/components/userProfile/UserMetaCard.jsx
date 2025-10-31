@@ -1,11 +1,9 @@
 'use client';
 
-import { ShieldIcon, StarIcon, UsersIcon } from '@/icons';
 import { useAuthStore } from '@/store/auth.store';
 import { useUpdateProfile } from '@/queries/user.query';
 import { Toast } from '@/lib/toastify';
 import { useModal } from '@/hooks/useModal';
-import { useForm } from 'react-hook-form';
 import { useMemo } from 'react';
 import ProfileBanner from '@/components/userProfile/meta/ProfileBanner';
 import ProfileAvatar from '@/components/userProfile/meta/ProfileAvatar';
@@ -15,23 +13,9 @@ import EditSocialModal from '@/components/userProfile/meta/EditSocialModal';
 import { ROLE_CONFIGS } from '@/utils/data';
 
 export default function UserMetaCard() {
-  const { user, isAdmin, isLeader, setUser } = useAuthStore();
+  const { user, isAdmin, isLeader } = useAuthStore();
   const { isOpen, openModal, closeModal } = useModal();
   const { mutateAsync, isPending } = useUpdateProfile();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      facebook: user?.facebook || '',
-      twitter: user?.twitter || '',
-      linkedin: user?.linkedin || '',
-      instagram: user?.instagram || '',
-    },
-  });
 
   const roleConfig = useMemo(() => {
     if (isAdmin) return ROLE_CONFIGS.admin;
@@ -52,37 +36,11 @@ export default function UserMetaCard() {
     }
   };
 
-  const handleEdit = () => {
-    reset({
-      facebook: user?.facebook || '',
-      twitter: user?.twitter || '',
-      linkedin: user?.linkedin || '',
-      instagram: user?.instagram || '',
-    });
-    openModal();
-  };
-
-  const handleSave = async (data) => {
-    try {
-      const response = await mutateAsync(data);
-
-      if (response?.data?.user) {
-        setUser(response.data.user);
-      } else if (response?.data) {
-        setUser(response.data);
-      }
-
-      Toast.success('Social links updated successfully');
-      closeModal();
-    } catch (error) {
-      Toast.error('Failed to update social links');
-    }
-  };
 
   return (
     <>
       <div className="overflow-hidden border border-gray-200 rounded-2xl dark:border-gray-700/60 bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-colors mb-6">
-        <ProfileBanner roleConfig={roleConfig} onEdit={handleEdit} />
+        <ProfileBanner roleConfig={roleConfig} onEdit={openModal} />
 
         <div className="px-5 pb-5 lg:px-6 lg:pb-6 -mt-12">
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 mb-4">
@@ -102,10 +60,6 @@ export default function UserMetaCard() {
       <EditSocialModal
         isOpen={isOpen}
         onClose={closeModal}
-        onSubmit={handleSubmit(handleSave)}
-        isPending={isPending}
-        register={register}
-        errors={errors}
       />
     </>
   );

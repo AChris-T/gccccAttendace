@@ -266,6 +266,7 @@ export const filterAttendanceSchema = yup.object({
     .nullable()
     .transform((value) => value || null),
 });
+
 export const assignAbsentMemberSchema = yup.object().shape({
   attendance_date: yup
     .string()
@@ -330,4 +331,103 @@ export const bulkMemberSchema = yup.object().shape({
     .of(memberSchema)
     .min(1, 'At least one member is required')
     .max(100, 'Maximum 100 members allowed'),
+});
+
+export const filterMembersSchema = yup.object().shape({
+  date_of_birth: yup.array().of(yup.string()).nullable().default([]),
+  birth_month: yup
+    .string()
+    .nullable()
+    .oneOf(
+      [
+        '',
+        null,
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+      ],
+      'Invalid month selected'
+    ),
+  community: yup.string().nullable(),
+});
+
+export const profileSchema = yup.object().shape({
+  first_name: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value))
+    .min(2, 'First name must be at least 2 characters')
+    .max(50, 'First name must not exceed 50 characters')
+    .matches(
+      /^[a-zA-Z\s'-]+$/,
+      'First name can only contain letters, spaces, hyphens and apostrophes'
+    ),
+
+  last_name: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value))
+    .min(2, 'Last name must be at least 2 characters')
+    .max(50, 'Last name must not exceed 50 characters')
+    .matches(
+      /^[a-zA-Z\s'-]+$/,
+      'Last name can only contain letters, spaces, hyphens and apostrophes'
+    ),
+
+  phone_number: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value))
+    .matches(
+      /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/,
+      'Please enter a valid phone number'
+    ),
+
+  gender: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value))
+    .oneOf(['Male', 'Female', undefined], 'Please select a valid gender'),
+
+  date_of_birth: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value))
+    .matches(
+      /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])$/,
+      'Date must be in DD/MM format (e.g., 23/09)'
+    )
+    .test('valid-date', 'Please enter a valid date', (value) => {
+      if (!value) return true; // Allow empty
+      const [day, month] = value.split('/').map(Number);
+      if (month < 1 || month > 12) return false;
+      const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      return day >= 1 && day <= daysInMonth[month - 1];
+    }),
+
+  country: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value)),
+
+  city_or_state: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value)),
+
+  address: yup
+    .string()
+    .notRequired()
+    .transform((value) => (value === '' ? undefined : value))
+    .min(5, 'Address must be at least 5 characters')
+    .max(200, 'Address must not exceed 200 characters'),
 });

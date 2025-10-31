@@ -1,4 +1,4 @@
-import FieldItem from "./FieldItem";
+import FieldItem from "@/components/userProfile/info/FieldItem";
 
 const PersonalInfoGrid = ({ items }) => (
   <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3 lg:gap-5">
@@ -8,8 +8,6 @@ const PersonalInfoGrid = ({ items }) => (
         Icon={field.icon}
         label={field.label}
         value={field.value}
-        gradientClass={field.gradientClass}
-        size="md"
       />
     ))}
   </div>

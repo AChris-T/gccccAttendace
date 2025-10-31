@@ -9,9 +9,9 @@ export const ProfessionalInformation = ({ user }) => {
             description="Your educational and career details"
         >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <InfoField icon={GraduationCapIcon} label="Education" value={user.education} color="blue" />
-                <InfoField icon={BookIcon} label="Field of Study" value={user.field_of_study} color="purple" />
-                <InfoField icon={BriefcaseIcon} label="Occupation" value={user.occupation} color="blue" />
+                <InfoField icon={GraduationCapIcon} label="Education" value={user.education} />
+                <InfoField icon={BookIcon} label="Field of Study" value={user.field_of_study} />
+                <InfoField icon={BriefcaseIcon} label="Occupation" value={user.occupation} />
             </div>
         </SectionCard>
     );

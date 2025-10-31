@@ -23,16 +23,7 @@ const queryClient = new QueryClient({
       refetchOnReconnect: 'always',
     },
     mutations: {
-      // retry: (failureCount, error) => {
-      //   const status = error?.status;
-      //   if (status >= 400 && status < 500) {
-      //     if (status == 404 && status == 422) {
-      //       return false;
-      //     }
-      //     return false;
-      //   }
-      //   return failureCount < 2;
-      // },
+      retry: 0,
     },
   },
 });

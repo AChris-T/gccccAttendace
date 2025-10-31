@@ -11,7 +11,6 @@ export default function UserProfessionalCard() {
   const { user } = useAuthStore();
   const { isOpen, openModal, closeModal } = useModal();
 
-  // ✅ setup form with default values
   const {
     register,
     handleSubmit,
@@ -47,28 +46,16 @@ export default function UserProfessionalCard() {
       label: 'Education',
       value: user?.education,
       icon: EducationIcon,
-      colorClass: 'text-indigo-600 dark:text-indigo-400',
-      bgClass: 'bg-indigo-50 dark:bg-indigo-500/10',
-      gradientClass:
-        'from-indigo-500 to-indigo-600 dark:from-indigo-600 dark:to-indigo-700',
     },
     {
       label: 'Field of Study',
       value: user?.field_of_study,
       icon: StudyIcon,
-      colorClass: 'text-violet-600 dark:text-violet-400',
-      bgClass: 'bg-violet-50 dark:bg-violet-500/10',
-      gradientClass:
-        'from-violet-500 to-violet-600 dark:from-violet-600 dark:to-violet-700',
     },
     {
       label: 'Occupation',
       value: user?.occupation,
       icon: OccupationIcon,
-      colorClass: 'text-blue-600 dark:text-blue-400',
-      bgClass: 'bg-blue-50 dark:bg-blue-500/10',
-      gradientClass:
-        'from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700',
     },
   ];
 
@@ -105,17 +92,17 @@ export default function UserProfessionalCard() {
                 >
                   <div className="flex items-start gap-3">
                     <div
-                      className={`flex items-center justify-center w-10 h-10 rounded-lg bg-linear-to-br ${field.gradientClass} transition-transform group-hover:scale-110`}
+                      className={`bg-blue-100 dark:bg-gray-500 flex items-center justify-center w-9 h-9 rounded-lg bg-linear-to-br transition-transform group-hover:scale-110`}
                     >
                       <Icon
                         width={20}
                         height={20}
-                        className="text-white"
+                        className="text-blue-700 dark:text-gray-800"
                         fill="currentColor"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="mb-2 text-xs font-medium tracking-wide text-gray-500 uppercase dark:text-gray-400">
+                      <p className="text-xs font-medium tracking-wide text-gray-500 uppercase dark:text-gray-400">
                         {field.label}
                       </p>
                       <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 wrap-break-word">
@@ -127,13 +114,6 @@ export default function UserProfessionalCard() {
                       </p>
                     </div>
                   </div>
-
-                  {/* Decorative element */}
-                  {field.value && (
-                    <div
-                      className={`absolute bottom-0 left-0 right-0 h-1 ${field.bgClass} rounded-b-xl opacity-0 group-hover:opacity-100 transition-opacity`}
-                    ></div>
-                  )}
                 </div>
               );
             })}

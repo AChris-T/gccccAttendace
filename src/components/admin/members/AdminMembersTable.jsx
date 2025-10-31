@@ -6,7 +6,7 @@ import { useMembers } from '@/queries/member.query';
 import Button from '@/components/ui/Button';
 import Message from '@/components/common/Message';
 import { TableSkeletonLoader } from '@/components/skeleton';
-import { ExpandFullScreenIcon, FilterIcon, TrashIcon } from '@/icons';
+import { ExpandFullScreenIcon, FilterIcon } from '@/icons';
 import CreateMembers from '@/components/admin/members/CreateMembers';
 import EditMembersPanel from '@/components/admin/members/MembersFilterPanel';
 import DeleteMembers from '@/components/admin/members/DeleteMembers';
@@ -23,20 +23,18 @@ const HEADER_HEIGHT = 56;
 const PAGINATION_HEIGHT = 60;
 
 const DEFAULT_FILTERS = {
-    service_id: '',
-    attendance_date: [],
-    status: '',
-    mode: ''
+    date_of_birth: [],
+    birth_month: null,
+    community: null
 };
 
 const AdminMembersTable = () => {
-    const { data: members, isLoading, refetch, isError, error, isFetching } = useMembers();
     const gridRef = useRef(null);
     const [isGridReady, setIsGridReady] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [showFilter, setShowFilter] = useState(false);
     const [activeFilters, setActiveFilters] = useState(DEFAULT_FILTERS);
-
+    const { data: members, isLoading, refetch, isError, error, isFetching } = useMembers(activeFilters);
 
     const memberData = useMemo(() => {
         if (!members) return [];
@@ -81,7 +79,6 @@ const AdminMembersTable = () => {
         const date = new Date(params.value);
         if (isNaN(date.getTime())) return params.value;
         return date.toLocaleDateString('en-US', {
-            year: 'numeric',
             month: 'short',
             day: 'numeric'
         });
@@ -236,11 +233,11 @@ const AdminMembersTable = () => {
     }, [showFilter]);
 
     const hasActiveFilters = useMemo(() =>
-        activeFilters.service_id ||
-        activeFilters.attendance_date?.length > 0 ||
-        activeFilters.status ||
-        activeFilters.mode
+        activeFilters.birth_month ||
+        activeFilters.date_of_birth?.length > 0 ||
+        activeFilters.community
         , [activeFilters]);
+
 
     if (isError) {
         return (
@@ -265,7 +262,7 @@ const AdminMembersTable = () => {
     return (
         <>
             <div className="w-full space-y-10">
-                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
                     <ButtonSwitch
                         onChange={handleToggleFilter}
                         checked={showFilter}
@@ -280,7 +277,7 @@ const AdminMembersTable = () => {
                 </div>
 
                 {showFilter &&
-                    <div className='max-w-2xl p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
+                    <div className='max-w-xl p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
                         <EditMembersPanel
                             initialFilters={activeFilters}
                             onApply={handleApplyFilters}
@@ -290,7 +287,7 @@ const AdminMembersTable = () => {
                     </div>
                 }
 
-                <div className="w-full space-y-3">
+                <div className="space-y-3">
                     {/* Header Section */}
                     <div className="flex items-center gap-5 flex-wrap">
                         <p className="text-sm text-green-600 dark:text-green-400">
