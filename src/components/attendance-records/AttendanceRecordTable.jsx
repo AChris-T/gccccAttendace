@@ -296,17 +296,6 @@ const AttendanceTable = () => {
             >
               Refresh
             </Button>
-            {/*     {selectedRows.length > 0 && (
-              <Button
-                variant="outline-danger"
-                onClick={handleDeleteSelected}
-                loading={deleteRecords.isPending}
-                disabled={isLoading}
-              >
-                <TrashIcon className="w-4 h-4 md:h-5 md:w-5" />
-                Delete Selected ({selectedRows.length})
-              </Button>
-            )} */}
           </div>
           <Button
             variant="light"
@@ -365,12 +354,11 @@ const AttendanceTable = () => {
       {/* Edit Record Modal */}
       {editingRecord && (
         <EditAttendanceRecord
-          key={editingRecord?.id} // Force re-render when editing a different record
+          key={editingRecord?.id}
           isOpen={!!editingRecord}
           onClose={() => setEditingRecord(null)}
           record={editingRecord}
           onSuccess={(updatedRecord) => {
-            // Update the local state with the updated record
             if (updatedRecord) {
               setEditingRecord(updatedRecord);
             }
