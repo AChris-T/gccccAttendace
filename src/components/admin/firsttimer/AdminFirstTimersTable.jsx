@@ -161,6 +161,11 @@ const AdminFirstTimersTable = () => {
             editable: false,
         },
         {
+            field: "week_ending",
+            headerName: "Week Ending",
+            valueFormatter: dateValueFormatter,
+        },
+        {
             field: "gender",
             headerName: "Gender",
         },
@@ -170,11 +175,7 @@ const AdminFirstTimersTable = () => {
             cellClass: 'text-wrap',
             autoHeight: true,
         },
-        {
-            field: "week_ending",
-            headerName: "Week Ending",
-            valueFormatter: dateValueFormatter,
-        },
+
     ], [LinkRenderer, MemberNameRenderer, BadgeRenderer, dateValueFormatter]);
 
     // Grid options configuration
@@ -293,7 +294,7 @@ const AdminFirstTimersTable = () => {
 
     return (
         <div className="w-full space-y-10">
-            <div className="grid gap-3 max-w-3xl">
+            <div className="grid gap-3 grid-cols-1 md:grid-cols-4">
                 <ButtonSwitch
                     onChange={handleToggleFilter}
                     checked={showFilter}

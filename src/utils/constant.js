@@ -91,7 +91,7 @@ export const attendanceLevels = [
     toColor: '#f97066', // Lighter Red for gradient
     messages: [
       "Welcome back! Every journey starts with a single step. **Take it one service at a time**—we're excited to see you here!",
-      "Ready to start strong? Making it to that **first service is the biggest win**. We're looking forward to worshipping with you.",
+      "Ready to start strong? Making it to that **first service is the biggest win**. We're looking forward to fellowshipping with you.",
     ],
   },
   {

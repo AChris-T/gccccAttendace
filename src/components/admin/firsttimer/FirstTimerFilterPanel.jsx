@@ -28,7 +28,6 @@ const FirstTimerFilterPanel = ({
 }) => {
     const [filterByMonth, setFilterByMonth] = useState(false);
 
-    // Fetch follow-up statuses
     const { data: followUpStatuses = [], isLoading: isLoadingStatuses } = useFollowUpStatuses();
     const { data: members } = useMembers();
 

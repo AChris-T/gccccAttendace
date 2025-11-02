@@ -6,7 +6,6 @@ import { useModal } from "@/hooks/useModal";
 import {
     CheckIcon,
     ChevronDownIcon,
-    ChevronUpIcon,
     EditIcon2,
     MessageSquareIcon,
     SendIcon,
@@ -17,6 +16,7 @@ import { Toast } from "@/lib/toastify";
 import { getWelcomeMessage, normalizePhone } from "@/utils/helper";
 import { useFirstTimerWelcomeEmail } from "@/queries/firstTimer.query";
 import UpdateFirstTimer from "@/components/dashboard/firsttimer/edit/UpdateFirstTimer";
+import { useAuthStore } from "@/store/auth.store";
 
 const COPY_TIMEOUT_MS = 2000;
 const MESSAGE_TYPES = {
@@ -26,6 +26,7 @@ const MESSAGE_TYPES = {
 
 const ToolBox = ({ firstTimerData }) => {
     const { mutate: sendWelcomeEmailMutation, isPending: isSendingEmail } = useFirstTimerWelcomeEmail();
+    const { isAdmin } = useAuthStore()
 
     const {
         isOpen: isOpenUpdateStatusModal,
@@ -132,7 +133,7 @@ const ToolBox = ({ firstTimerData }) => {
     }, [copyToClipboard]);
 
     return (
-        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
+        <div className="bg-linear-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-sm border border-indigo-200 dark:border-gray-700 overflow-hidden">
             {/* Toolbox Header */}
             <button
                 onClick={toggleToolbox}
@@ -203,6 +204,7 @@ const ToolBox = ({ firstTimerData }) => {
                             icon={<CheckIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
                             description={statusButtonConfig.description}
                             onClick={openUpdateStatusModal}
+                            disabled={!isAdmin}
                         >
                             {statusButtonConfig.label} First Timer
                         </ButtonCard>

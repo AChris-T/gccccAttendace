@@ -80,22 +80,52 @@ const AdminAttendanceTable = () => {
 
     const StatusRenderer = useCallback(({ value }) => {
         if (!value) return <span className="text-gray-400 text-center">--</span>;
+        const statusLower = value.toLowerCase();
         const colorMap = { present: 'success', absent: 'error' };
-        const color = colorMap[value.toLowerCase()];
+        const color = colorMap[statusLower] || 'default';
         return <Badge color={color}>{value}</Badge>;
     }, []);
 
     const LinkRenderer = useCallback(({ data }) => {
-        if (!data) return <span className="text-gray-400 text-center">--</span>;
-        const value = data?.user;
-        return <Link target='_blank' className='text-blue-500 underline' to={`/dashboard/members/${value?.id}`}>{`${value?.first_name} ${value?.last_name}` || 'N/A'}</Link>;
+        if (!data?.user) return <span className="text-gray-400 text-center">--</span>;
+        const user = data.user;
+        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+        return (
+            <Link
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-blue-500 underline hover:text-blue-700 dark:hover:text-blue-300'
+                to={`/dashboard/members/${user.id}`}
+            >
+                {fullName || 'N/A'}
+            </Link>
+        );
+    }, []);
+
+    const nameValueGetter = useCallback((params) => {
+        const user = params.data?.user;
+        if (!user) return 'N/A';
+        return `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'N/A';
     }, []);
 
     const ModeRenderer = useCallback(({ value }) => {
         if (!value) return <span className="text-gray-400 text-center">--</span>;
+        const modeLower = value.toLowerCase();
         const colorMap = { onsite: 'primary', online: 'warning' };
-        const color = colorMap[value.toLowerCase()];
+        const color = colorMap[modeLower] || 'default';
         return <Badge color={color}>{value}</Badge>;
+    }, []);
+
+    const emailValueGetter = useCallback((params) => {
+        return params.data?.user?.email || 'N/A';
+    }, []);
+
+    const phoneValueGetter = useCallback((params) => {
+        return params.data?.user?.phone_number || 'N/A';
+    }, []);
+
+    const serviceValueGetter = useCallback((params) => {
+        return params.data?.service?.name || 'N/A';
     }, []);
 
     const dateFormatter = useCallback((params) => {
@@ -107,18 +137,6 @@ const AdminAttendanceTable = () => {
             month: 'short',
             day: 'numeric'
         });
-    }, []);
-
-    const emailFormatter = useCallback((params) => {
-        return params.data?.user?.email || 'N/A';
-    }, []);
-
-    const phoneFormatter = useCallback((params) => {
-        return params.data?.user?.phone_number || 'N/A';
-    }, []);
-
-    const serviceFormatter = useCallback((params) => {
-        return params.data?.service?.name || 'N/A';
     }, []);
 
     const columnDefs = useMemo(() => [
@@ -133,21 +151,22 @@ const AdminAttendanceTable = () => {
         {
             headerName: "Name",
             pinned: 'left',
+            valueGetter: nameValueGetter,
             cellRenderer: LinkRenderer,
             cellClass: 'font-medium',
         },
         {
             headerName: "Email",
-            valueFormatter: emailFormatter,
+            valueGetter: emailValueGetter,
             cellClass: 'text-blue-600 dark:text-blue-400',
         },
         {
             headerName: "Phone",
-            valueFormatter: phoneFormatter,
+            valueGetter: phoneValueGetter,
         },
         {
             headerName: "Service",
-            valueFormatter: serviceFormatter,
+            valueGetter: serviceValueGetter,
             cellClass: 'font-medium',
         },
         {
@@ -168,7 +187,7 @@ const AdminAttendanceTable = () => {
             cellRenderer: ModeRenderer,
             editable: false,
         },
-    ], [StatusRenderer, ModeRenderer, dateFormatter, LinkRenderer, emailFormatter, phoneFormatter, serviceFormatter]);
+    ], [StatusRenderer, ModeRenderer, dateFormatter, LinkRenderer, nameValueGetter, emailValueGetter, phoneValueGetter, serviceValueGetter]);
 
     const gridOptions = useMemo(() => ({
         pagination: true,
@@ -189,10 +208,13 @@ const AdminAttendanceTable = () => {
         ensureDomOrder: true,
     }), []);
 
+
     const autoSizeColumns = useCallback(() => {
         if (!gridRef.current) return;
+
         const allColumns = gridRef.current.getColumns?.() || gridRef.current.getAllDisplayedColumns?.();
         if (!allColumns || allColumns.length === 0) return;
+
         const allColumnIds = allColumns.map(col => col.getColId());
         gridRef.current.autoSizeColumns(allColumnIds, false);
     }, []);
@@ -231,7 +253,7 @@ const AdminAttendanceTable = () => {
     const handleExportCSV = useCallback(() => {
         if (!gridRef.current) return;
         const timestamp = new Date().toISOString().split('T')[0];
-        gridRef.current.exportDataAsCsv({
+        gridRef.current?.exportDataAsCsv({
             fileName: `attendance-report-${timestamp}.csv`,
         });
     }, []);

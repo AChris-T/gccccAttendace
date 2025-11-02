@@ -57,7 +57,7 @@ export const Step1PersonalInfo = ({ register, errors }) => (
       label="Email"
       name="email"
       type="email"
-      placeholder="Enter Email Address (Optional)"
+      placeholder="Enter Email Address"
       register={register}
       error={errors.email?.message}
     />

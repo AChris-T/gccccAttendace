@@ -253,7 +253,7 @@ const CountdownTimer = ({ secondsUntilStart, onRefresh }) => {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-400/30"
           >
-            <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-blue-400" />
             <span className="text-sm text-blue-300 font-medium">
               Checking service status...
             </span>
@@ -269,7 +269,7 @@ const ClockInButton = ({ onClockIn, isPending }) => (
   <div className="space-y-6 w-full">
     <div className="flex flex-col items-center space-y-5">
       {!isPending ? (
-        <div className="bg-[#3A4D70] rounded-full animate-pulse delay-150">
+        <div className="bg-[#3A4D70] rounded-full">
           <motion.button
             onClick={onClockIn}
             disabled={isPending}
@@ -284,8 +284,6 @@ const ClockInButton = ({ onClockIn, isPending }) => (
             }}
             aria-label="Clock in for attendance"
           >
-            <span className="absolute inset-1 rounded-full border-4 border-[#202a46] opacity-90 animate-ping delay-150" />
-            <span className="absolute inset-1 rounded-full border-4 border-[#172346] opacity-90 animate-ping delay-300" />
             <HandIcon height={150} width={150} />
           </motion.button>
         </div>
@@ -429,7 +427,7 @@ const NoServiceContent = () => (
         <div className="flex flex-col items-center space-y-6">
           <div className="relative">
             <div className="absolute inset-0 bg-gray-500/10 blur-xl rounded-full" />
-            <div className="relative z-10 bg-gradient-to-br from-gray-500/15 to-slate-500/15 backdrop-blur-sm rounded-full p-6 border-4 border-gray-400/25 mx-auto w-fit">
+            <div className="relative z-10 bg-linear-to-br from-gray-500/15 to-slate-500/15 backdrop-blur-sm rounded-full p-6 border-4 border-gray-400/25 mx-auto w-fit">
               <CalendarIcon className="w-16 h-16 sm:w-20 sm:h-20 text-gray-400" />
             </div>
           </div>
