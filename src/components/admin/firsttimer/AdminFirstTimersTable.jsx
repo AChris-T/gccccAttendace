@@ -23,10 +23,11 @@ const HEADER_HEIGHT = 56;
 const PAGINATION_HEIGHT = 60;
 
 const DEFAULT_FILTERS = {
-    week_ending: [],
-    date_of_visit: [],
+    week_ending: null,
+    date_of_visit: null,
+    date_month_of_visit: null,
     assigned_to_member: null,
-    follow_up_status: null,
+    follow_up_status: null
 };
 
 const AdminFirstTimersTable = () => {
@@ -262,10 +263,13 @@ const AdminFirstTimersTable = () => {
     }, [showFilter]);
 
     const hasActiveFilters = useMemo(() =>
-        activeFilters.birth_month ||
-        activeFilters.date_of_birth?.length > 0 ||
-        activeFilters.community
+        activeFilters.week_ending ||
+        activeFilters.date_of_visit ||
+        activeFilters.assigned_to_member ||
+        activeFilters.follow_up_status ||
+        activeFilters.date_month_of_visit
         , [activeFilters]);
+
 
     if (isError) {
         return (
@@ -289,7 +293,7 @@ const AdminFirstTimersTable = () => {
 
     return (
         <div className="w-full space-y-10">
-            <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-3 max-w-3xl">
                 <ButtonSwitch
                     onChange={handleToggleFilter}
                     checked={showFilter}
@@ -303,7 +307,7 @@ const AdminFirstTimersTable = () => {
             </div>
 
             {showFilter &&
-                <div className='max-w-xl p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
+                <div className='w-full max-w-3xl p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
                     <FirstTimerFilterPanel
                         initialFilters={activeFilters}
                         onApply={handleApplyFilters}

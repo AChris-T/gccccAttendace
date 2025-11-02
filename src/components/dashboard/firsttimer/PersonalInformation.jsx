@@ -5,6 +5,7 @@ import Modal from '@/components/ui/modal/Modal'
 import { useModal } from '@/hooks/useModal'
 import { BookOpenIcon, BriefcaseIcon, CalendarIcon, MailIcon, PhoneIcon, UserIcon } from '@/icons'
 import { formatDate } from '@/utils/helper'
+import dayjs from 'dayjs'
 
 const PersonalInformation = ({ firstTimerData }) => {
     const { isOpen, openModal, closeModal } = useModal();
@@ -16,7 +17,7 @@ const PersonalInformation = ({ firstTimerData }) => {
                 <InfoField icon={BookOpenIcon} label="Student" value={firstTimerData.is_student ? 'Yes' : 'No'} />
                 <InfoField icon={PhoneIcon} label="Phone Number" value={firstTimerData.phone_number} isPhone />
                 <InfoField icon={UserIcon} label="Gender" value={firstTimerData.gender} />
-                <InfoField icon={CalendarIcon} label="Date of Birth" value={formatDate(firstTimerData.date_of_birth)} />
+                <InfoField icon={CalendarIcon} label="Date of Birth" value={firstTimerData?.date_of_birth ? dayjs(firstTimerData?.date_of_birth).format("DD/MM") : null} />
                 <InfoField icon={BriefcaseIcon} label="Occupation" value={firstTimerData.occupation} fullWidth />
             </SectionCard>
             <Modal

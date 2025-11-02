@@ -431,3 +431,48 @@ export const profileSchema = yup.object().shape({
     .min(5, 'Address must be at least 5 characters')
     .max(200, 'Address must not exceed 200 characters'),
 });
+
+export const filterFirstTimersSchema = yup.object().shape(
+  {
+    week_ending: yup
+      .string()
+      .nullable()
+      .matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        'Week ending must be in YYYY-MM-DD format'
+      ),
+
+    date_of_visit: yup
+      .string()
+      .nullable()
+      .matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        'Date of visit must be in YYYY-MM-DD format'
+      )
+      .when('date_month_of_visit', {
+        is: (val) => val !== null && val !== '',
+        then: (schema) => schema.nullable().notRequired(),
+        otherwise: (schema) => schema.nullable(),
+      }),
+
+    date_month_of_visit: yup
+      .string()
+      .nullable()
+      .when('date_of_visit', {
+        is: (val) => val !== null && val !== '',
+        then: (schema) => schema.nullable().notRequired(),
+        otherwise: (schema) => schema.nullable(),
+      }),
+
+    assigned_to_member: yup
+      .string()
+      .nullable()
+      .transform((value) => (value === '' ? null : value)),
+
+    follow_up_status: yup
+      .string()
+      .nullable()
+      .transform((value) => (value === '' ? null : value)),
+  },
+  [['date_of_visit', 'date_month_of_visit']]
+);

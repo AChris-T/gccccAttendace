@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDownIcon, AttendanceIcon2, DashboardIcon, LogoutIcon, UserIcon2 } from "@/icons";
+import { ArrowDownIcon, AttendanceIcon2, CheckIcon, DashboardIcon, LogoutIcon, TrashIcon, UserIcon2 } from "@/icons";
 import { Dropdown } from '../../components/ui/dropdown/Dropdown'
 import { DropdownItem } from '../../components/ui/dropdown/DropdownItem'
 import { useLogout } from "@/queries/auth.query";
@@ -7,6 +7,7 @@ import { useAuthStore } from "@/store/auth.store";
 import Avatar from "@/components/ui/Avatar";
 import Button from "@/components/ui/Button";
 import RoleBadge from "@/components/userProfile/RoleBadge";
+import Badge from "@/components/ui/Badge";
 
 
 export default function UserDropdown() {
@@ -24,6 +25,8 @@ export default function UserDropdown() {
       >
         <Avatar
           size="sm" src={user?.avatar || ''} name={user?.initials || ''}
+          isProfileCompleted={user?.profile_completed}
+          showProfileStatus
         />
         <span className="block mr-1 font-medium text-theme-sm">
           {user?.first_name}
@@ -37,7 +40,7 @@ export default function UserDropdown() {
         className="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
       >
         <div>
-          <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+          <span className="flex items-start gap-2 font-medium text-gray-700 text-theme-sm dark:text-gray-400">
             {user?.first_name} {user?.last_name}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">

@@ -9,12 +9,12 @@ import VideoCarousel from '@/components/media/VideoCarousel';
 import QuickActionsSection from '@/components/dashboard/QuickActionsSection';
 import { useUsersMonthlyAttendanceStats } from '@/queries/attendance.query';
 import { DashboardIcon } from '@/icons';
-import { useGetAssignedMembers } from '@/queries/user.query';
 import { TableSkeletonLoader } from '@/components/skeleton';
 import FirstTimerAssigned from '@/components/dashboard/assigned/FirstTimerAssigned';
 import AssignedMembers from '@/components/dashboard/assigned/AssignedMembers';
 import { Units } from '@/utils/constant';
 import { useHasUnit } from '@/hooks/useUnitPermission';
+import { useAuthStore } from '@/store/auth.store';
 
 // Constants
 const getCurrentDateParams = () => ({
@@ -36,11 +36,9 @@ const useDateFilter = () => {
 
 const useDashboardData = (year, month) => {
   const attendanceQuery = useUsersMonthlyAttendanceStats(year, month);
-  const assignednMembersQuery = useGetAssignedMembers();
 
   return {
     attendance: attendanceQuery,
-    assignedMembers: assignednMembersQuery,
   };
 };
 
@@ -69,16 +67,12 @@ const LoadingSection = () => (
 );
 
 
-const AssignedMembersSection = ({ data, isLoading }) => {
-  if (isLoading) return <LoadingSection />;
-  return <AssignedMembers assignedMembers={data} />;
-};
-
 const DashboardPage = () => {
   const { params, handleDateChange } = useDateFilter();
   const hasFollowUp = useHasUnit(Units.FOLLOW_UP);
+  const { isFirstTimer } = useAuthStore()
 
-  const { attendance, assignedMembers } = useDashboardData(params.year, params.month);
+  const { attendance } = useDashboardData(params.year, params.month);
 
   const attendanceProps = useMemo(
     () => ({
@@ -105,10 +99,7 @@ const DashboardPage = () => {
           <VideoCarousel />
         </section>
 
-        <AssignedMembersSection
-          data={assignedMembers.data}
-          isLoading={assignedMembers.isLoading}
-        />
+        {!isFirstTimer && <AssignedMembers />}
 
         {hasFollowUp && <FirstTimerAssigned />}
       </main>

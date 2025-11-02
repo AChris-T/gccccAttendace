@@ -185,7 +185,7 @@ export const FollowupCard = ({ person, activeTab }) => {
                         </div>
 
                         <button
-                            className="bg-gray-100 px-1 rounded shadow-2xl flex-shrink-0"
+                            className="bg-gray-100 px-1 rounded shadow-2xl shrink-0"
                             aria-label={isOpen ? "Collapse details" : "Expand details"}
                             aria-expanded={isOpen}
                             onClick={toggleOpen}

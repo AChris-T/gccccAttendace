@@ -4,11 +4,11 @@ import { QUERY_KEYS } from '../utils/queryKeys';
 import { Toast } from '../lib/toastify';
 import { handleApiError } from '../utils/helper';
 
-export const useFirstTimers = (options = {}) => {
+export const useFirstTimers = (params = {}, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.FIRST_TIMERS.ALL,
+    queryKey: QUERY_KEYS.FIRST_TIMERS.ALL(params),
     queryFn: async () => {
-      const { data } = await FirstTimerService.getFirstTimers();
+      const { data } = await FirstTimerService.getFirstTimers(params);
       return data || [];
     },
     staleTime: 2 * 60 * 1000,

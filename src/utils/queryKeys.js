@@ -8,8 +8,7 @@ export const QUERY_KEYS = {
     FIRST_TIMERS: ['followup-feedbacks', 'first-timers'],
     ALL_MEMBERS: ['followup-feedbacks', 'all-members'],
     ABSENT_MEMBERS: ['followup-feedbacks', 'absent-members'],
-    MEMBER: (id) => ['followup-feedbacks', 'member', id],
-    FIRST_TIMER: (id) => ['followup-feedbacks', 'first-timer', id],
+    MEMBER_FIRST_TIMER: (id) => ['followup-feedbacks', id],
   },
 
   // refactored
@@ -34,7 +33,7 @@ export const QUERY_KEYS = {
     DETAIL: (id) => ['services', 'detail', id],
   },
   FIRST_TIMERS: {
-    ALL: ['first-timers'],
+    ALL: (params) => ['all-first-timers', params],
     FIRSTTIMER_FOLLOWUPS: ['first-timers', 'FIRSTTIMER_FOLLOWUPS'],
     DETAIL: (id) => ['first-timers', id],
     FOLLOWUPS: (id) => ['FOLLOWUPS', id],

@@ -1,14 +1,15 @@
-import { CameraIcon, LoadingIcon2, UserIcon } from '@/icons';
+import { AlertCircleIcon, CameraIcon, CheckCircleIcon, LoadingIcon2 } from '@/icons';
 import { useState, useRef, useCallback, useMemo } from 'react';
 
+
 const AVATAR_SIZES = {
-  xs: { container: 'w-8 h-8', text: 'text-xs', icon: 12 },
-  sm: { container: 'w-10 h-10', text: 'text-sm', icon: 14 },
-  md: { container: 'w-12 h-12', text: 'text-base', icon: 16 },
-  lg: { container: 'w-16 h-16', text: 'text-lg', icon: 20 },
-  xl: { container: 'w-20 h-20', text: 'text-xl', icon: 24 },
-  '2xl': { container: 'w-28 h-28', text: 'text-2xl', icon: 32 },
-  '3xl': { container: 'w-36 h-36', text: 'text-3xl', icon: 40 }
+  xs: { container: 'w-8 h-8', text: 'text-xs', icon: 12, badge: 'w-4 h-4', badgeIcon: 12 },
+  sm: { container: 'w-10 h-10', text: 'text-sm', icon: 14, badge: 'w-5 h-5', badgeIcon: 14 },
+  md: { container: 'w-12 h-12', text: 'text-base', icon: 16, badge: 'w-5 h-5', badgeIcon: 14 },
+  lg: { container: 'w-16 h-16', text: 'text-lg', icon: 20, badge: 'w-6 h-6', badgeIcon: 16 },
+  xl: { container: 'w-20 h-20', text: 'text-xl', icon: 24, badge: 'w-7 h-7', badgeIcon: 18 },
+  '2xl': { container: 'w-28 h-28', text: 'text-2xl', icon: 32, badge: 'w-8 h-8', badgeIcon: 20 },
+  '3xl': { container: 'w-36 h-36', text: 'text-3xl', icon: 40, badge: 'w-10 h-10', badgeIcon: 24 }
 };
 
 const SHAPE_CLASSES = {
@@ -16,7 +17,7 @@ const SHAPE_CLASSES = {
   square: 'rounded-xl'
 };
 
-const MAX_FILE_SIZE = 1.5 * 1024 * 1024; // 1.5MB
+const MAX_FILE_SIZE = 1.5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = 'image/*';
 
 const Avatar = ({
@@ -28,7 +29,9 @@ const Avatar = ({
   onUpload,
   className = '',
   loading = false,
-  onError
+  onError,
+  isProfileCompleted = false,
+  showProfileStatus = false
 }) => {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -38,7 +41,6 @@ const Avatar = ({
   const shapeClass = useMemo(() => SHAPE_CLASSES[shape], [shape]);
   const isUploadable = Boolean(onUpload);
   const showImage = src && !imageError;
-
 
   const handleImageError = useCallback(() => {
     setImageError(true);
@@ -157,7 +159,7 @@ const Avatar = ({
             >
               <CameraIcon
                 size={sizeConfig.icon * 0.8}
-                className="!text-white drop-shadow-lg"
+                className="text-white! drop-shadow-lg"
               />
             </div>
             <input
@@ -179,16 +181,39 @@ const Avatar = ({
         )}
       </div>
 
-      {name && (
+      {/* Profile Status Badge */}
+      {showProfileStatus && (
         <div
-          className="absolute -bottom-1 -right-1 w-5 h-5 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-lg"
-          aria-label={`${name} badge`}
+          className={`
+            absolute -bottom-1 -right-1 ${sizeConfig.badge}
+            flex items-center justify-center
+            shadow-lg ring-2 ring-white dark:ring-gray-900
+            transition-all duration-300 hover:scale-110
+            ${isProfileCompleted
+              ? 'bg-linear-to-br from-green-500 to-emerald-600'
+              : 'bg-linear-to-br from-red-500 to-rose-600'
+            }
+            ${shape === 'circle' ? 'rounded-full' : 'rounded-lg'}
+          `}
+          aria-label={isProfileCompleted ? 'Profile completed' : 'Profile incomplete'}
+          title={isProfileCompleted ? 'Profile completed' : 'Complete your profile'}
         >
-          {name}
+          {isProfileCompleted ? (
+            <CheckCircleIcon
+              size={sizeConfig.badgeIcon}
+              className="text-white drop-shadow-sm"
+            />
+          ) : (
+            <AlertCircleIcon
+              size={sizeConfig.badgeIcon}
+              className="text-white drop-shadow-sm animate-pulse"
+            />
+          )}
         </div>
       )}
     </div>
   );
 };
+
 
 export default Avatar;

@@ -13,7 +13,7 @@ const Header = ({ firstTimerData, showToolbox, setShowToolbox, showProfile, setS
         try {
             await mutateAsync({
                 id: firstTimerData.id,
-                avatar,
+                secondary_avatar: avatar,
                 folder: 'firsttimers'
             });
         } catch (error) { }
@@ -30,7 +30,7 @@ const Header = ({ firstTimerData, showToolbox, setShowToolbox, showProfile, setS
                         size='3xl'
                         loading={isUpdateFirstTimerPending}
                         shape='square'
-                        src={firstTimerData?.avatar || ''}
+                        src={firstTimerData?.secondary_avatar || ''}
                         onUpload={handleUpdateFirstTimer}
                         name={firstTimerData?.initials || ''}
                     />

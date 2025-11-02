@@ -10,13 +10,15 @@ import { useForm } from 'react-hook-form';
 import TextAreaForm from '@/components/form/TextAreaForm';
 import DateForm from '@/components/form/useForm/DateForm';
 import { useCreateFollowupsFeedbacks } from '@/queries/followupFeedback.query';
-import { useSubjectFromRoute } from '@/hooks/useSubjectFromRoute';
+import { useParams } from 'react-router-dom';
 
 const CreateTimeline = ({ onClose }) => {
+    const { memberId, firstTimerId } = useParams();
+    const user_id = memberId || firstTimerId;
+
     const { isAdmin, isLeader, isMember, user } = useAuthStore()
-    const { subject_type, subject_id } = useSubjectFromRoute();
     const followupCommentTypes = getFilteredCommentTypes({ isAdmin, isLeader, isMember });
-    const { mutateAsync, isPending, isError, error } = useCreateFollowupsFeedbacks(subject_id);
+    const { mutateAsync, isPending, isError, error } = useCreateFollowupsFeedbacks(user_id);
 
     const {
         register,
@@ -32,7 +34,7 @@ const CreateTimeline = ({ onClose }) => {
 
     const handleCreateTimeline = async (data) => {
         try {
-            const payload = { ...data, subject_id, subject_type, user_id: user.id }
+            const payload = { ...data, created_by: user.id, user_id }
             await mutateAsync(payload);
             onClose?.()
         } catch (error) { }

@@ -101,7 +101,6 @@ export default function EventCalculator({
       transportation,
       timestamp: new Date().toISOString(),
     };
-    console.log('Event Registration Saved:', savedData);
     setRegistrationData(savedData);
     setReadyToPay(true);
     onSuccess?.(savedData);
@@ -160,9 +159,8 @@ export default function EventCalculator({
               <div className="flex flex-col justify-between gap-3 md:items-center md:flex-row">
                 <div className="flex items-center gap-3">
                   <span
-                    className={`text-sm font-medium ${
-                      !couples ? 'text-blue-600' : 'text-slate-500'
-                    }`}
+                    className={`text-sm font-medium ${!couples ? 'text-blue-600' : 'text-slate-500'
+                      }`}
                   >
                     Single
                   </span>
@@ -177,9 +175,8 @@ export default function EventCalculator({
                   />
 
                   <span
-                    className={`text-sm font-medium ${
-                      couples ? 'text-blue-600' : 'text-slate-500'
-                    }`}
+                    className={`text-sm font-medium ${couples ? 'text-blue-600' : 'text-slate-500'
+                      }`}
                   >
                     Couple
                   </span>
@@ -208,27 +205,24 @@ export default function EventCalculator({
                 <button
                   key={i}
                   onClick={() => toggleDay(i)}
-                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                    selectedDays.includes(i)
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${selectedDays.includes(i)
                       ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 shadow-md'
                       : 'border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-700'
-                  }`}
+                    }`}
                 >
                   <div
-                    className={`text-xs font-medium mb-1 ${
-                      selectedDays.includes(i)
+                    className={`text-xs font-medium mb-1 ${selectedDays.includes(i)
                         ? 'text-blue-600 dark:text-blue-400'
                         : 'text-slate-500 dark:text-slate-400'
-                    }`}
+                      }`}
                   >
                     {d.day}
                   </div>
                   <div
-                    className={`text-lg font-bold ${
-                      selectedDays.includes(i)
+                    className={`text-lg font-bold ${selectedDays.includes(i)
                         ? 'text-blue-700 dark:text-blue-300'
                         : 'text-slate-900 dark:text-white'
-                    }`}
+                      }`}
                   >
                     {d.date}
                   </div>
@@ -357,12 +351,10 @@ export default function EventCalculator({
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-400">
                         {calculations.couples
-                          ? `${calculations.nights} day${
-                              calculations.nights !== 1 ? 's' : ''
-                            } × ₦10,000`
-                          : `${calculations.nights} night${
-                              calculations.nights !== 1 ? 's' : ''
-                            } × ₦7,000`}
+                          ? `${calculations.nights} day${calculations.nights !== 1 ? 's' : ''
+                          } × ₦10,000`
+                          : `${calculations.nights} night${calculations.nights !== 1 ? 's' : ''
+                          } × ₦7,000`}
                       </div>
                     </div>
                   </div>
@@ -404,8 +396,8 @@ export default function EventCalculator({
                           {transportation.to && transportation.fro
                             ? 'To & From'
                             : transportation.to
-                            ? 'To Lagos'
-                            : 'From Lagos'}
+                              ? 'To Lagos'
+                              : 'From Lagos'}
                         </div>
                       </div>
                     </div>
@@ -430,11 +422,10 @@ export default function EventCalculator({
               <button
                 onClick={handleSave}
                 disabled={saved}
-                className={`w-full mt-6 py-4 rounded-xl font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
-                  saved
+                className={`w-full mt-6 py-4 rounded-xl font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2 ${saved
                     ? 'bg-green-600 cursor-default'
                     : 'bg-blue-600 hover:bg-blue-700 active:scale-95'
-                }`}
+                  }`}
               >
                 {saved ? (
                   <>
@@ -516,12 +507,10 @@ export default function EventCalculator({
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">
                         {registrationData.couples
-                          ? `${registrationData.numDays} day${
-                              registrationData.numDays !== 1 ? 's' : ''
-                            } × ₦10,000`
-                          : `${registrationData.nights} night${
-                              registrationData.nights !== 1 ? 's' : ''
-                            } × ₦7,000`}
+                          ? `${registrationData.numDays} day${registrationData.numDays !== 1 ? 's' : ''
+                          } × ₦10,000`
+                          : `${registrationData.nights} night${registrationData.nights !== 1 ? 's' : ''
+                          } × ₦7,000`}
                       </td>
                       <td className="px-4 py-3 text-sm font-semibold text-right text-slate-900 dark:text-white">
                         ₦{registrationData.accommodation.toLocaleString()}
@@ -533,9 +522,8 @@ export default function EventCalculator({
                       </td>
                       <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">
                         {registrationData.feeding
-                          ? `${registrationData.numDays} day${
-                              registrationData.numDays !== 1 ? 's' : ''
-                            } × ₦1,500`
+                          ? `${registrationData.numDays} day${registrationData.numDays !== 1 ? 's' : ''
+                          } × ₦1,500`
                           : 'Not included'}
                       </td>
                       <td className="px-4 py-3 text-sm font-semibold text-right text-slate-900 dark:text-white">
@@ -549,11 +537,11 @@ export default function EventCalculator({
                         </td>
                         <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">
                           {registrationData.transportation.to &&
-                          registrationData.transportation.fro
+                            registrationData.transportation.fro
                             ? 'To & From Lagos'
                             : registrationData.transportation.to
-                            ? 'To Lagos'
-                            : 'From Lagos'}
+                              ? 'To Lagos'
+                              : 'From Lagos'}
                         </td>
                         <td className="px-4 py-3 text-sm font-semibold text-right text-slate-900 dark:text-white">
                           ₦{registrationData.transportCost.toLocaleString()}

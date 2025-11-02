@@ -12,14 +12,9 @@ export const useCreateFollowupsFeedbacks = (options = {}) => {
       return await FollowupFeedbacksService.createFollowupFeedbacks(payload);
     },
     onSuccess: (data, variables) => {
-      const queryKey =
-        variables?.subject_type == 'members'
-          ? QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER(
-              variables.subject_id?.toString()
-            )
-          : QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMER(
-              variables.subject_id?.toString()
-            );
+      const queryKey = QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER_FIRST_TIMER(
+        variables.user_id?.toString()
+      );
       queryClient.invalidateQueries({ queryKey: queryKey });
       Toast.success(data?.message);
       options.onSuccess?.(data, variables);
@@ -33,7 +28,7 @@ export const useCreateFollowupsFeedbacks = (options = {}) => {
 };
 export const useGetFollowUpsByMember = (id, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER(id),
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER_FIRST_TIMER(id),
     queryFn: async () => {
       const { data } = await FollowupFeedbacksService.getFollowUpsByMember(id);
       return data || [];
@@ -45,7 +40,7 @@ export const useGetFollowUpsByMember = (id, options = {}) => {
 };
 export const useGetFollowUpsByFirstTimer = (id, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.FIRST_TIMER(id),
+    queryKey: QUERY_KEYS.FOLLOWUP_FEEDBACKS.MEMBER_FIRST_TIMER(id),
     queryFn: async () => {
       const { data } = await FollowupFeedbacksService.getFollowUpsByFirstTimer(
         id

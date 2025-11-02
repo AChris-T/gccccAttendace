@@ -2,12 +2,12 @@ import { EmptyState } from "@/components/common/EmptyState";
 import TimelineContainer from "@/components/dashboard/timeline/TimelineContainer";
 import TimelineHeader from "@/components/dashboard/timeline/TimelineHeader";
 import { TimelineSkeletonLoader } from "@/components/skeleton";
-import { useSubjectFromRoute } from "@/hooks/useSubjectFromRoute";
 import { ClockIcon } from "@/icons";
 import {
     useGetFollowUpsByFirstTimer,
     useGetFollowUpsByMember,
 } from "@/queries/followupFeedback.query";
+import { useParams } from "react-router-dom";
 
 const SUBJECT_TYPES = {
     MEMBERS: "members",
@@ -22,14 +22,23 @@ const EMPTY_STATE_CONFIG = {
 };
 
 const FeedbackTimeline = () => {
-    const { subject_type, subject_id } = useSubjectFromRoute();
+    const { memberId, firstTimerId } = useParams();
 
+    const subject_type = memberId
+        ? SUBJECT_TYPES.MEMBERS
+        : SUBJECT_TYPES.FIRST_TIMER;
+
+    const subject_id = memberId ?? firstTimerId;
+
+    // Map subject type to the corresponding query hook
     const queryHooks = {
         [SUBJECT_TYPES.MEMBERS]: useGetFollowUpsByMember,
         [SUBJECT_TYPES.FIRST_TIMER]: useGetFollowUpsByFirstTimer,
     };
 
-    const useActiveQuery = queryHooks[subject_type] || useGetFollowUpsByFirstTimer;
+    const useActiveQuery =
+        queryHooks[subject_type] || useGetFollowUpsByFirstTimer;
+
     const { data: timelineData = [], isLoading } = useActiveQuery(subject_id);
 
     if (isLoading) {

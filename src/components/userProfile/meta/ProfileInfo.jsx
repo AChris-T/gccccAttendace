@@ -4,7 +4,7 @@ import RoleBadge from '@/components/userProfile/RoleBadge';
 const ProfileInfo = ({ user }) => (
   <div className="flex-1 min-w-0 text-center sm:text-left">
     <div className="mb-1">
-      <h4 className="text-2xl font-bold  text-gray-900 dark:text-white mb-1 tracking-tight wrap-break-words">
+      <h4 className="text-2xl flex items-center gap-2 font-bold  text-gray-900 dark:text-white mb-1 tracking-tight wrap-break-words">
         {user?.full_name}
       </h4>
     </div>

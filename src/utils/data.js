@@ -202,3 +202,38 @@ export const MONTH_OPTIONS = [
   { value: '11', text: 'November' },
   { value: '12', text: 'December' },
 ];
+
+export const bibleVerses = [
+  {
+    verse: 'Hebrews 10:25',
+    text: 'Not giving up meeting together, as some are in the habit of doing, but encouraging one another.',
+  },
+  {
+    verse: 'Psalm 122:1',
+    text: "I rejoiced with those who said to me, 'Let us go to the house of the Lord.'",
+  },
+  {
+    verse: 'Psalm 95:6',
+    text: 'Come, let us bow down in worship, let us kneel before the Lord our Maker.',
+  },
+  {
+    verse: '1 Corinthians 16:13',
+    text: 'Be on your guard; stand firm in the faith; be courageous; be strong.',
+  },
+  {
+    verse: 'Colossians 3:16',
+    text: 'Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom.',
+  },
+  {
+    verse: 'Matthew 18:20',
+    text: 'For where two or three gather in my name, there am I with them.',
+  },
+  {
+    verse: 'Psalm 100:4',
+    text: 'Enter his gates with thanksgiving and his courts with praise; give thanks to him and praise his name.',
+  },
+  {
+    verse: 'Acts 2:46',
+    text: 'Every day they continued to meet together in the temple courts. They broke bread in their homes and ate together with glad and sincere hearts.',
+  },
+];

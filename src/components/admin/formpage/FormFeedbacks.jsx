@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/common/EmptyState';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
+import { DeleteConfirmation } from '@/components/ui/DeleteConfirmation';
 
 const FormFeedbacks = () => {
   const [activeTab, setActiveTab] = useQueryParam('tab', 'prayer');
@@ -114,11 +115,19 @@ const FormFeedbacks = () => {
         isOpen={isOpenDeleteModal}
         onClose={closeDeleteModal}
       >
-        <h3 className="text-base">Are you sure you want to delete this item?</h3>
-        <p className="text-red-400 text-sm mt-2 mb-3">
-          <b>Warning: </b>This action is permanent and cannot be undone. All associated data will be lost.
-        </p>
-        <Button loading={isDeleting} size='sm' variant='danger' onClick={handleDelete}>Delete</Button>
+        <DeleteConfirmation />
+        <div className="flex gap-3 border-t pt-5 dark:border-gray-600">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={closeDeleteModal}
+            disabled={isDeleting}
+            className="flex-1"
+          >
+            Cancel
+          </Button>
+          <Button className="flex-1" loading={isDeleting} size='sm' variant='danger' onClick={handleDelete}>Delete</Button>
+        </div>
       </Modal>
     </>
   );

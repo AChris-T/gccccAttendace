@@ -21,12 +21,15 @@ export const useTodaysService = (options = {}) => {
     queryFn: async () => {
       const { data } = await ServiceService.getTodaysService();
       return {
-        service: data.service,
-        canMark: data.can_mark,
+        service: data?.service,
+        can_mark: data?.can_mark,
+        service_status: data?.service_status,
+        seconds_until_start: data?.seconds_until_start,
+        attendance: data?.attendance,
       };
     },
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    staleTime: 0 * 60 * 1000,
+    cacheTime: 0 * 60 * 1000,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchInterval: false,

@@ -5,9 +5,25 @@ const ADMIN = `/admin/${FIRST_TIMER}`;
 
 export const FirstTimerService = {
   async getFirstTimers(params = {}) {
-    const { data } = await $api.get(`/${FIRST_TIMER}`, { params });
+    const queryParams = new URLSearchParams();
+
+    [
+      'week_ending',
+      'date_of_visit',
+      'date_month_of_visit',
+      'assigned_to_member',
+      'follow_up_status',
+    ].forEach((key) => {
+      if (params[key]) queryParams.append(key, params[key]);
+    });
+
+    const query = queryParams.toString();
+    const endpoint = `/${FIRST_TIMER}${query ? `?${query}` : ''}`;
+
+    const { data } = await $api.get(endpoint);
     return data;
   },
+
   async fetchFirstTimer(id) {
     const { data } = await $api.get(`/${FIRST_TIMER}/${id}`);
     return data;
