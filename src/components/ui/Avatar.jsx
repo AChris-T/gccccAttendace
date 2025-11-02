@@ -1,4 +1,4 @@
-import { AlertCircleIcon, CameraIcon, CheckCircleIcon, LoadingIcon2 } from '@/icons';
+import { AlertCircleIcon, CameraIcon, CheckCircleIcon, LoadingIcon2, UserIcon } from '@/icons';
 import { useState, useRef, useCallback, useMemo } from 'react';
 
 
@@ -132,7 +132,7 @@ const Avatar = ({
             draggable={false}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600">
+          <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-blue-500 via-purple-500 to-pink-500 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600">
             {name ? (
               <span className={`font-semibold text-white select-none ${sizeConfig.text}`}>
                 {name}
