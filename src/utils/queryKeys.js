@@ -22,6 +22,11 @@ export const QUERY_KEYS = {
     DETAIL: (id) => ['members', 'detail', id],
     ROLE: (role) => [('members', role)],
   },
+  ATTENDANCE_RECORDS: {
+    ALL: ['attendance-records'],
+    DETAIL: (id) => ['attendance-records', id],
+    ROLE: (role) => [('attendance-records', role)],
+  },
   USER: {
     ABSENT: ['all_absent_members'],
     ASSIGNED_MEMBER: ['assigned_members'],

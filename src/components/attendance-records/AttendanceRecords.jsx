@@ -1,9 +1,9 @@
-import React from 'react'
+import AttendanceRecordTable from '@/components/attendance-records/AttendanceRecordTable';
 
 const AttendanceRecords = () => {
-    return (
-        <div>AttendanceRecords</div>
-    )
-}
+  return (
+    <AttendanceRecordTable />
+  );
+};
 
-export default AttendanceRecords
+export default AttendanceRecords;
