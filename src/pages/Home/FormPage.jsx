@@ -6,6 +6,7 @@ import Animated from '../../components/common/Animated';
 import { Tabs } from '@/components/ui/tab/Tabs';
 import useQueryParam from '@/hooks/useQueryParam';
 import { PrayerIcon, QuestionIcon, TestimonyIcon } from '@/icons';
+import HomepageComponentCard from '@/components/common/HomepageComponentCard';
 
 const TABS_CONFIG = [
   {
@@ -48,8 +49,8 @@ export default function FormPage() {
     : DEFAULT_TAB;
 
   return (
-    <div className="mt-28 mb-10 flex justify-center px-4">
-      <div className="w-full md:max-w-xl md:mx-auto  bg-white dark:bg-gray-900 shadow rounded-lg p-6 transition-colors">
+    <HomepageComponentCard>
+      <div className="w-full md:max-w-3xl mx-auto  bg-white dark:bg-gray-900 shadow rounded-lg p-6 transition-colors">
         <Tabs
           tabs={TABS_CONFIG}
           activeTab={validatedTab}
@@ -66,6 +67,6 @@ export default function FormPage() {
           </div>
         </Animated>
       </div>
-    </div>
+    </HomepageComponentCard>
   );
 }

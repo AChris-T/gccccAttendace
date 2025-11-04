@@ -16,6 +16,7 @@ import { Toast } from '../../lib/toastify';
 import { formatBirthDate, handleApiError } from '../../utils/helper';
 import { ProgressIndicator } from '@/components/firstTimer/ProgressIndicator';
 import SuccessCompletion from '@/components/firstTimer/SuccessCompletion';
+import HomepageComponentCard from '@/components/common/HomepageComponentCard';
 
 // Constants
 const TOTAL_STEPS = 5;
@@ -266,13 +267,13 @@ const FirstTimerPage = () => {
   );
 
   return (
-    <div className="mt-28 mb-10 flex justify-center px-3">
-      <div className="w-full md:max-w-xl">
+    <HomepageComponentCard>
+      <div className="w-full md:max-w-3xl  mx-auto">
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 md:p-7">
           {isCompleteStep ? renderCompletionMessage() : renderForm()}
         </div>
       </div>
-    </div>
+    </HomepageComponentCard>
   );
 };
 

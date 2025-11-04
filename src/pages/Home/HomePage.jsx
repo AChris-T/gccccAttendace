@@ -10,6 +10,7 @@ import Lottie from "lottie-react";
 import { BookIcon, CalendarIcon, CheckIcon, ClockIcon, HandIcon, SparklesIcon, TelegramIcon, YoutubeIcon } from "@/icons";
 import animationData from '../../utils/animation.json';
 import { bibleVerses } from "@/utils/data";
+import HomepageComponentCard from "@/components/common/HomepageComponentCard";
 
 // ============= CONSTANTS =============
 const ATTENDANCE_SOURCES = {
@@ -617,11 +618,11 @@ const HomePage = () => {
   };
 
   return (
-    <div className="mt-28 mb-10 flex flex-col justify-center gap-6 px-4 py-8">
+    <HomepageComponentCard>
       <GreetingContainer userName={user?.first_name} />
       {renderContent()}
       <BibleVerseCard />
-    </div>
+    </HomepageComponentCard>
   );
 };
 

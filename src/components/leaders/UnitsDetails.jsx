@@ -43,7 +43,7 @@ const UnitsDetails = ({ unit }) => {
     };
 
     return (
-        <>
+        <div className='grid grid-cols-1 sm:grid-cols-2'>
             {user?.units?.map((unit) =>
                 <div className="group bg-white dark:bg-gray-800 rounded-2xl shadow dark:shadow-gray-900/30 overflow-hidden transition-all duration-300 hover:shadow-lg border border-gray-100 dark:border-gray-700">
                     {/* Header */}
@@ -189,7 +189,7 @@ const UnitsDetails = ({ unit }) => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 
