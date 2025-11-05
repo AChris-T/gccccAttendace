@@ -33,6 +33,8 @@ export const adminNavItems = [
         pro: true,
       },
       { name: 'Attendance', path: '/dashboard/admin/attendance', pro: true },
+      { name: 'Events', path: '/dashboard/admin/events', pro: true },
+
       {
         name: 'Attendance Records',
         path: '/dashboard/admin/attendance-records',

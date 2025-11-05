@@ -11,10 +11,9 @@ import {
 } from '@/queries/attendancerecord.query';
 import CreateAttendanceRecord from './CreateAttendanceRecord';
 import EditAttendanceRecord from './EditAttendanceRecord';
-import {
-  useDeleteConfirmation,
-  DeleteConfirmation,
-} from '@/components/ui/DeleteConfirmation';
+import Modal from '@/components/ui/modal/Modal';
+import { useModal } from '@/hooks/useModal';
+import { DeleteConfirmation } from '@/components/ui/DeleteConfirmation';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -29,25 +28,37 @@ const PAGINATION_HEIGHT = 60;
 const AttendanceTable = () => {
   const { data, isLoading, refetch, isError, error, isFetching } =
     useAttendanceRecords();
-  const deleteRecords = useDeleteAttendanceRecords({
-    onSuccess: () => {
-      deleteConfirmation.close();
-      refetch();
-    },
-  });
+
+  const {
+    isOpen: isOpenDeleteModal,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal();
+
+  const [recordToDelete, setRecordToDelete] = useState(null);
+  const [isSuccessDelete, setIsSuccessDelete] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
+
   const gridRef = useRef(null);
   const [isGridReady, setIsGridReady] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [editingRecord, setEditingRecord] = useState(null);
-  const deleteConfirmation = useDeleteConfirmation();
 
-  // Extract the data safely
+  const deleteRecords = useDeleteAttendanceRecords({
+    onSuccess: () => {
+      setIsSuccessDelete(true);
+      setTimeout(() => {
+        setIsSuccessDelete(false);
+        closeDeleteModal();
+        refetch();
+      }, 2000);
+    },
+  });
+
   const attendanceData = useMemo(() => {
     if (!data) return [];
     return Array.isArray(data) ? data : [];
   }, [data]);
 
-  // Dynamic table height
   const tableHeight = useMemo(() => {
     if (attendanceData.length === 0) return MIN_TABLE_HEIGHT;
     const contentHeight =
@@ -58,7 +69,6 @@ const AttendanceTable = () => {
     );
   }, [attendanceData.length]);
 
-  // Default column definition
   const defaultColDef = useMemo(
     () => ({
       filter: true,
@@ -71,7 +81,6 @@ const AttendanceTable = () => {
     []
   );
 
-  // Date formatter
   const dateFormatter = useCallback((params) => {
     if (!params.value) return '';
     const date = new Date(params.value);
@@ -83,7 +92,20 @@ const AttendanceTable = () => {
     });
   }, []);
 
-  // Column definitions
+  const handleOpenDelete = useCallback(
+    (id) => {
+      setRecordToDelete(id);
+      openDeleteModal();
+    },
+    [openDeleteModal]
+  );
+
+  const handleDelete = async () => {
+    if (recordToDelete) {
+      await deleteRecords.mutate(recordToDelete);
+    }
+  };
+
   const columnDefs = useMemo(
     () => [
       {
@@ -118,7 +140,6 @@ const AttendanceTable = () => {
         width: 150,
         cellRenderer: (params) => {
           const rowData = params.data;
-
           return (
             <div className="flex items-center justify-center w-full h-full gap-3 py-2">
               <button
@@ -134,7 +155,7 @@ const AttendanceTable = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleDelete(rowData.id);
+                  handleOpenDelete(rowData.id);
                 }}
                 className="p-1 text-red-500 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30"
                 title="Delete record"
@@ -146,10 +167,9 @@ const AttendanceTable = () => {
         },
       },
     ],
-    [dateFormatter, deleteRecords, refetch]
+    [dateFormatter, handleOpenDelete]
   );
 
-  // Grid options
   const gridOptions = useMemo(
     () => ({
       pagination: true,
@@ -165,7 +185,6 @@ const AttendanceTable = () => {
     []
   );
 
-  // Auto-size columns
   const autoSizeColumns = useCallback(() => {
     if (!gridRef.current) return;
     const allColumns =
@@ -197,7 +216,6 @@ const AttendanceTable = () => {
     }
   }, [attendanceData, isGridReady, autoSizeColumns]);
 
-  // Export CSV
   const handleExportCSV = useCallback(() => {
     if (!gridRef.current) return;
     const timestamp = new Date().toISOString().split('T')[0];
@@ -206,34 +224,10 @@ const AttendanceTable = () => {
     });
   }, []);
 
-  // Refresh
   const handleRefresh = useCallback(() => {
     refetch();
   }, [refetch]);
 
-  // Delete multiple records
-  const handleDeleteSelected = useCallback(() => {
-    if (selectedRows.length === 0) return;
-    const ids = selectedRows.map((row) => row.id);
-    deleteConfirmation.open(ids);
-  }, [selectedRows, deleteConfirmation]);
-
-  // Handle single record delete
-  const handleDelete = useCallback(
-    (id) => {
-      deleteConfirmation.open([id]);
-    },
-    [deleteConfirmation]
-  );
-
-  // Confirm delete
-  const confirmDelete = useCallback(() => {
-    if (deleteConfirmation.itemToDelete) {
-      deleteRecords.mutate(deleteConfirmation.itemToDelete);
-    }
-  }, [deleteConfirmation.itemToDelete, deleteRecords]);
-
-  // Error handling
   if (isError) {
     return (
       <Message
@@ -261,7 +255,6 @@ const AttendanceTable = () => {
       </div>
 
       <div className="w-full mt-4 space-y-3">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <p className="text-sm text-green-600 dark:text-green-400">
             <span className="font-semibold text-green-500 dark:text-green-500">
@@ -272,8 +265,7 @@ const AttendanceTable = () => {
           {selectedRows.length > 0 && (
             <p className="text-sm text-blue-600 dark:text-blue-400">
               <span className="font-semibold">{selectedRows.length}</span>{' '}
-              record
-              {selectedRows.length !== 1 ? 's' : ''} selected
+              record{selectedRows.length !== 1 ? 's' : ''} selected
             </p>
           )}
         </div>
@@ -325,31 +317,37 @@ const AttendanceTable = () => {
             />
           </div>
         )}
-
-        {/* Footer */}
-        {attendanceData.length > 0 && (
-          <div className="flex items-center justify-between mt-4 text-sm text-gray-500 dark:text-gray-400">
-            <span>Last updated: {new Date().toLocaleString()}</span>
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              <span className="font-medium text-green-600 dark:text-green-400">
-                Live data
-              </span>
-            </span>
-          </div>
-        )}
       </div>
 
-      {/* Delete Confirmation Modal */}
-      <DeleteConfirmation
-        isOpen={deleteConfirmation.isOpen}
-        onConfirm={confirmDelete}
-        onCancel={deleteConfirmation.close}
-        isLoading={deleteRecords.isLoading}
-        title="Delete Record?"
-        message="Are you sure you want to delete this record? This action cannot be undone."
-        confirmText={deleteRecords.isLoading ? 'Deleting...' : 'Delete Record'}
-      />
+      <Modal
+        title="Delete Record"
+        isOpen={isOpenDeleteModal}
+        onClose={closeDeleteModal}
+      >
+        <div className="space-y-4">
+          <DeleteConfirmation isSuccess={isSuccessDelete} />
+          {!isSuccessDelete && (
+            <div className="flex justify-end gap-3 mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={closeDeleteModal}
+                disabled={deleteRecords.isLoading}
+              >
+                Cancel
+              </Button>
+              <Button
+                loading={deleteRecords.isLoading}
+                size="sm"
+                variant="danger"
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            </div>
+          )}
+        </div>
+      </Modal>
 
       {/* Edit Record Modal */}
       {editingRecord && (
@@ -359,9 +357,7 @@ const AttendanceTable = () => {
           onClose={() => setEditingRecord(null)}
           record={editingRecord}
           onSuccess={(updatedRecord) => {
-            if (updatedRecord) {
-              setEditingRecord(updatedRecord);
-            }
+            if (updatedRecord) setEditingRecord(updatedRecord);
             refetch();
           }}
         />
