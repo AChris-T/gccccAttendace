@@ -255,7 +255,7 @@ const AdminEventsTable = () => {
   return (
     <div className="w-full space-y-4">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-3 ">
         <p className="text-sm text-green-600 dark:text-green-400">
           {paymentData.length} payment{paymentData.length !== 1 ? 's' : ''}{' '}
           found
@@ -271,9 +271,6 @@ const AdminEventsTable = () => {
             loading={isRefreshing}
           >
             Refresh
-          </Button>
-          <Button variant="light" onClick={autoSizeColumns}>
-            <ExpandFullScreenIcon className="w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -300,9 +297,9 @@ const AdminEventsTable = () => {
           onClose={() => setIsModalOpen(false)}
           title="Payment Details"
         >
-          <div className="space-y-6 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
+          <div className="space-y-6 rounded-lg bg-gray-50 dark:bg-gray-900/20">
             {/* Reference */}
-            <div className="flex items-center justify-between border-b pb-3">
+            <div className="flex items-center justify-between pb-3 border-b">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Reference:{' '}
                 <span className="text-blue-600">
@@ -324,10 +321,10 @@ const AdminEventsTable = () => {
 
             {/* User Section */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+              <h4 className="mb-2 text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
                 User Information
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <UserCheckIcon className="w-4 h-4 text-blue-500" />
                   <span>{selectedRecord.user.name}</span>
@@ -341,10 +338,10 @@ const AdminEventsTable = () => {
 
             {/* Payment Info */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+              <h4 className="mb-2 text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
                 Payment Information
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <CalendarIcon2 className="w-4 h-4 text-purple-500" />
                   <span>₦{selectedRecord.amount.toLocaleString()}</span>
@@ -364,7 +361,7 @@ const AdminEventsTable = () => {
 
             {/* Event Info */}
             <div>
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
+              <h4 className="mb-2 text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-gray-300">
                 Event Details
               </h4>
               <div className="flex items-center gap-2 text-sm">
