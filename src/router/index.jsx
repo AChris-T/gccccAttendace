@@ -11,8 +11,12 @@ import ErrorBoundary from '@/components/error/ErrorBoundary';
 
 const LoginPage = lazy(() => import('../pages/Home/Auth/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/Home/Auth/RegisterPage'));
-const ResetPasswordPage = lazy(() => import('@/pages/Home/Auth/ResetPasswordPage'));
-const ForgotPasswordPage = lazy(() => import('@/pages/Home/Auth/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() =>
+  import('@/pages/Home/Auth/ResetPasswordPage')
+);
+const ForgotPasswordPage = lazy(() =>
+  import('@/pages/Home/Auth/ForgotPasswordPage')
+);
 
 const HomePage = lazy(() => import('../pages/Home/HomePage'));
 const FormPage = lazy(() => import('../pages/Home/FormPage'));
@@ -20,22 +24,45 @@ const FirstTimerPage = lazy(() => import('../pages/Home/FirstTimerPage'));
 
 const DashboardPage = lazy(() => import('../pages/Dashboard/DashboardPage'));
 const AttendancePage = lazy(() => import('../pages/Dashboard/AttendancePage'));
-const UserProfilePage = lazy(() => import('../pages/Dashboard/UserProfilePage'));
+const UserProfilePage = lazy(() =>
+  import('../pages/Dashboard/UserProfilePage')
+);
 const EventsPage = lazy(() => import('../pages/Dashboard/EventsPage'));
-const FirstTimerDetailsPage = lazy(() => import('../pages/Dashboard/FirstTimerDetailsPage'));
-const MemberDetailsPage = lazy(() => import('../pages/Dashboard/MemberDetailsPage'));
+const FirstTimerDetailsPage = lazy(() =>
+  import('../pages/Dashboard/FirstTimerDetailsPage')
+);
+const MemberDetailsPage = lazy(() =>
+  import('../pages/Dashboard/MemberDetailsPage')
+);
 
-const AdminDashboardPage = lazy(() => import('../pages/Admin/AdminDashboardPage'));
-const AdminAttendancePage = lazy(() => import('../pages/Admin/AdminAttendancePage'));
-const AdminFirstTimerPage = lazy(() => import('../pages/Admin/AdminFirstTimerPage'));
+const AdminDashboardPage = lazy(() =>
+  import('../pages/Admin/AdminDashboardPage')
+);
+const AdminAttendancePage = lazy(() =>
+  import('../pages/Admin/AdminAttendancePage')
+);
+const AdminFirstTimerPage = lazy(() =>
+  import('../pages/Admin/AdminFirstTimerPage')
+);
 const AdminMembersPage = lazy(() => import('../pages/Admin/AdminMembersPage'));
 const AdminFormsPage = lazy(() => import('../pages/Admin/AdminFormsPage'));
-const AdminFollowupFeedbacksPage = lazy(() => import('../pages/Admin/AdminFollowupFeedbacksPage'));
-const AdminSettingsPage = lazy(() => import('../pages/Admin/AdminSettingsPage'));
-const AdminAttendanceRecordsPage = lazy(() => import('@/pages/Admin/AdminAttendanceRecordsPage'));
+const AdminFollowupFeedbacksPage = lazy(() =>
+  import('../pages/Admin/AdminFollowupFeedbacksPage')
+);
+const AdminSettingsPage = lazy(() =>
+  import('../pages/Admin/AdminSettingsPage')
+);
+const AdminAttendanceRecordsPage = lazy(() =>
+  import('@/pages/Admin/AdminAttendanceRecordsPage')
+);
+const AdminEventsPage = lazy(() => import('@/pages/Admin/AdminEventsPage'));
 
-const LeadersDashboardPage = lazy(() => import('../pages/Leaders/LeadersDashboardPage'));
-const LeadersAttendanceRecordsPage = lazy(() => import('../pages/Leaders/LeadersAttendanceRecordsPage'));
+const LeadersDashboardPage = lazy(() =>
+  import('../pages/Leaders/LeadersDashboardPage')
+);
+const LeadersAttendanceRecordsPage = lazy(() =>
+  import('../pages/Leaders/LeadersAttendanceRecordsPage')
+);
 const LeadersUnitPage = lazy(() => import('../pages/Leaders/LeadersUnitPage'));
 const NotFoundPage = lazy(() => import('../pages/Error/NotfoundPage'));
 
@@ -62,7 +89,10 @@ const AppRoutes = [
           { path: 'login', element: withSuspense(LoginPage) },
           { path: 'register', element: withSuspense(RegisterPage) },
           { path: 'reset-password', element: withSuspense(ResetPasswordPage) },
-          { path: 'forgot-password', element: withSuspense(ForgotPasswordPage) },
+          {
+            path: 'forgot-password',
+            element: withSuspense(ForgotPasswordPage),
+          },
         ],
       },
       { path: 'forms', element: withSuspense(FormPage) },
@@ -103,6 +133,10 @@ const AppRoutes = [
                 element: withSuspense(AdminAttendancePage),
               },
               {
+                path: 'events',
+                element: withSuspense(AdminEventsPage),
+              },
+              {
                 path: 'attendance-records',
                 element: withSuspense(AdminAttendanceRecordsPage),
               },
@@ -129,7 +163,10 @@ const AppRoutes = [
             children: [
               { index: true, element: withSuspense(LeadersDashboardPage) },
               { path: 'units', element: withSuspense(LeadersUnitPage) },
-              { path: 'attendance-records', element: withSuspense(LeadersAttendanceRecordsPage) },
+              {
+                path: 'attendance-records',
+                element: withSuspense(LeadersAttendanceRecordsPage),
+              },
             ],
           },
         ],

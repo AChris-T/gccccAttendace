@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { PaymentService } from '@/services/payment.service';
 import { QUERY_KEYS } from '@/utils/queryKeys';
 import { Toast } from '@/lib/toastify';
 import { handleApiError } from '@/utils/helper';
+import { paymentService } from '@/services/payment.service';
 
 export const useInitiatePayment = (options = {}) => {
   return useMutation({
-    mutationFn: PaymentService.initiatePayment,
+    mutationFn: paymentService.initiatePayment,
     onSuccess: (data, variables) => {
       if (data?.message) Toast.success(data.message);
       options.onSuccess?.(data, variables);
@@ -31,5 +31,3 @@ export const useVerifyPayment = (reference, options = {}) => {
     ...options,
   });
 };
-
-

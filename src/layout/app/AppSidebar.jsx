@@ -8,12 +8,22 @@ import {
   EventIcon,
   HorizontaLDotsIcon,
   UserIcon,
-  LeaderIcon
+  LeaderIcon,
 } from '@/icons';
 import { adminNavItems, leaderNavItems, navItems } from '@/utils/data';
 import { useAuthStore } from '@/store/auth.store';
 import { useSidebar } from '@/context/SidebarContext';
-import { AdminAttendanceBadge, AdminDashboardBadge, AdminFirstTimersBadge, AdminFollowUpBadge, AdminFormsBadge, AdminMembersBadge, AdminSettingsBadge, LeaderDashboardBadge, LeaderUnitsBadge } from '@/icons/sidebarIcons';
+import {
+  AdminAttendanceBadge,
+  AdminDashboardBadge,
+  AdminFirstTimersBadge,
+  AdminFollowUpBadge,
+  AdminFormsBadge,
+  AdminMembersBadge,
+  AdminSettingsBadge,
+  LeaderDashboardBadge,
+  LeaderUnitsBadge,
+} from '@/icons/sidebarIcons';
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen } = useSidebar();
@@ -29,20 +39,26 @@ const AppSidebar = () => {
     [location.pathname]
   );
 
-  const hasActiveSubmenuItem = useCallback((menuItem) => {
-    if (!menuItem.subItems) return false;
-    return menuItem.subItems.some(subItem => isActive(subItem.path));
-  }, [isActive]);
+  const hasActiveSubmenuItem = useCallback(
+    (menuItem) => {
+      if (!menuItem.subItems) return false;
+      return menuItem.subItems.some((subItem) => isActive(subItem.path));
+    },
+    [isActive]
+  );
 
-  const findActiveSubmenu = useCallback((items, menuType) => {
-    for (let index = 0; index < items.length; index++) {
-      const nav = items[index];
-      if (hasActiveSubmenuItem(nav)) {
-        return { type: menuType, index };
+  const findActiveSubmenu = useCallback(
+    (items, menuType) => {
+      for (let index = 0; index < items.length; index++) {
+        const nav = items[index];
+        if (hasActiveSubmenuItem(nav)) {
+          return { type: menuType, index };
+        }
       }
-    }
-    return null;
-  }, [hasActiveSubmenuItem]);
+      return null;
+    },
+    [hasActiveSubmenuItem]
+  );
 
   const iconMap = {
     AdminIcon,
@@ -50,23 +66,24 @@ const AppSidebar = () => {
     DashboardIcon,
     EventIcon,
     UserIcon,
-    LeaderIcon
+    LeaderIcon,
   };
 
   const adminBadgeMap = {
-    'Dashboard': AdminDashboardBadge,
-    'Attendance': AdminAttendanceBadge,
+    Dashboard: AdminDashboardBadge,
+    Attendance: AdminAttendanceBadge,
     'Attendance Records': AdminAttendanceBadge,
     'First Timers': AdminFirstTimersBadge,
-    'Members': AdminMembersBadge,
-    'Forms': AdminFormsBadge,
+    Members: AdminMembersBadge,
+    Events: AdminMembersBadge,
+    Forms: AdminFormsBadge,
     'Follow-Up Feedbacks': AdminFollowUpBadge,
-    'Settings': AdminSettingsBadge,
+    Settings: AdminSettingsBadge,
   };
 
   const leaderBadgeMap = {
-    'Dashboard': LeaderDashboardBadge,
-    'Units': LeaderUnitsBadge,
+    Dashboard: LeaderDashboardBadge,
+    Units: LeaderUnitsBadge,
     'Attendance Records': AdminAttendanceBadge,
   };
 
@@ -86,15 +103,25 @@ const AppSidebar = () => {
     }
 
     const allItems = isAdmin ? [...adminNavItems, ...navItems] : navItems;
-    const isOnSubmenuRoute = allItems.some(item => hasActiveSubmenuItem(item));
+    const isOnSubmenuRoute = allItems.some((item) =>
+      hasActiveSubmenuItem(item)
+    );
 
     if (!isOnSubmenuRoute) {
-      const isTopLevelRoute = allItems.some(item => !item.subItems && isActive(item.path));
+      const isTopLevelRoute = allItems.some(
+        (item) => !item.subItems && isActive(item.path)
+      );
       if (isTopLevelRoute) {
         setOpenSubmenu(null);
       }
     }
-  }, [location.pathname, isActive, findActiveSubmenu, hasActiveSubmenuItem, isAdmin]);
+  }, [
+    location.pathname,
+    isActive,
+    findActiveSubmenu,
+    hasActiveSubmenuItem,
+    isAdmin,
+  ]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -138,7 +165,8 @@ const AppSidebar = () => {
       <ul className="flex flex-col gap-4">
         {items?.map((nav, index) => {
           const Icon = iconMap[nav.icon];
-          const isSubmenuOpen = openSubmenu?.type === menuType && openSubmenu?.index === index;
+          const isSubmenuOpen =
+            openSubmenu?.type === menuType && openSubmenu?.index === index;
           const hasActiveSubItem = hasActiveSubmenuItem(nav);
 
           return (
@@ -146,17 +174,20 @@ const AppSidebar = () => {
               {nav.subItems ? (
                 <button
                   onClick={() => handleSubmenuToggle(index, menuType)}
-                  className={`menu-item group ${isSubmenuOpen || hasActiveSubItem
-                    ? "menu-item-active"
-                    : "menu-item-inactive"
-                    } cursor-pointer ${!isExpanded ? "lg:justify-center" : "lg:justify-start"
-                    }`}
+                  className={`menu-item group ${
+                    isSubmenuOpen || hasActiveSubItem
+                      ? 'menu-item-active'
+                      : 'menu-item-inactive'
+                  } cursor-pointer ${
+                    !isExpanded ? 'lg:justify-center' : 'lg:justify-start'
+                  }`}
                 >
                   <span
-                    className={`menu-item-icon-size ${isSubmenuOpen || hasActiveSubItem
-                      ? "menu-item-icon-active"
-                      : "menu-item-icon-inactive"
-                      }`}
+                    className={`menu-item-icon-size ${
+                      isSubmenuOpen || hasActiveSubItem
+                        ? 'menu-item-icon-active'
+                        : 'menu-item-icon-inactive'
+                    }`}
                   >
                     <Icon width={30} height={30} />
                   </span>
@@ -165,10 +196,9 @@ const AppSidebar = () => {
                   )}
                   {(isExpanded || isMobileOpen) && (
                     <ChevronDownIcon
-                      className={`ml-auto w-5 h-5 transition-transform duration-200 ${isSubmenuOpen
-                        ? "rotate-180 text-brand-500"
-                        : ""
-                        }`}
+                      className={`ml-auto w-5 h-5 transition-transform duration-200 ${
+                        isSubmenuOpen ? 'rotate-180 text-brand-500' : ''
+                      }`}
                     />
                   )}
                 </button>
@@ -176,16 +206,18 @@ const AppSidebar = () => {
                 nav.path && (
                   <Link
                     to={nav.path}
-                    className={`menu-item group ${isActive(nav.path)
-                      ? 'menu-item-active'
-                      : 'menu-item-inactive'
-                      }`}
+                    className={`menu-item group ${
+                      isActive(nav.path)
+                        ? 'menu-item-active'
+                        : 'menu-item-inactive'
+                    }`}
                   >
                     <span
-                      className={`menu-item-icon-size ${isActive(nav.path)
-                        ? 'menu-item-icon-active'
-                        : 'menu-item-icon-inactive'
-                        }`}
+                      className={`menu-item-icon-size ${
+                        isActive(nav.path)
+                          ? 'menu-item-icon-active'
+                          : 'menu-item-icon-inactive'
+                      }`}
                     >
                       <Icon width={30} height={30} />
                     </span>
@@ -204,7 +236,7 @@ const AppSidebar = () => {
                   style={{
                     height: isSubmenuOpen
                       ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                      : "0px",
+                      : '0px',
                   }}
                 >
                   <ul className="mt-2 space-y-1 ml-9">
@@ -215,12 +247,15 @@ const AppSidebar = () => {
                         <li key={subItem.name}>
                           <Link
                             to={subItem.path}
-                            className={`menu-dropdown-item ${isActive(subItem.path)
-                              ? 'menu-dropdown-item-active'
-                              : 'menu-dropdown-item-inactive'
-                              }`}
+                            className={`menu-dropdown-item ${
+                              isActive(subItem.path)
+                                ? 'menu-dropdown-item-active'
+                                : 'menu-dropdown-item-inactive'
+                            }`}
                           >
-                            <span className="flex-1 truncate">{subItem.name}</span>
+                            <span className="flex-1 truncate">
+                              {subItem.name}
+                            </span>
                             {badge && (
                               <span className="flex items-center ml-2">
                                 {badge}
@@ -243,13 +278,14 @@ const AppSidebar = () => {
   return (
     <aside
       className={`fixed flex flex-col mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 dark:text-gray-100 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
-        ${isExpanded || isMobileOpen ? "w-[290px]" : "w-[90px]"}
-        ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+        ${isExpanded || isMobileOpen ? 'w-[290px]' : 'w-[90px]'}
+        ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0`}
     >
       <div
-        className={`pt-5 flex ${!isExpanded ? 'lg:justify-center' : 'justify-start'
-          }`}
+        className={`pt-5 flex ${
+          !isExpanded ? 'lg:justify-center' : 'justify-start'
+        }`}
       >
         <Link to="/">
           {isExpanded || isMobileOpen ? (
@@ -285,11 +321,12 @@ const AppSidebar = () => {
             {isAdmin && (
               <div>
                 <h2
-                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 dark:text-gray-500 ${!isExpanded ? "lg:justify-center" : "justify-start"
-                    }`}
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 dark:text-gray-500 ${
+                    !isExpanded ? 'lg:justify-center' : 'justify-start'
+                  }`}
                 >
                   {isExpanded || isMobileOpen ? (
-                    "Admin"
+                    'Admin'
                   ) : (
                     <HorizontaLDotsIcon className="size-6" />
                   )}
@@ -300,11 +337,12 @@ const AppSidebar = () => {
             {isAdmin || isLeader ? (
               <div>
                 <h2
-                  className={`mb-4 text-xs uppercase flex  leading-5 text-gray-400 dark:text-gray-500 ${!isExpanded ? "lg:justify-center" : "justify-start"
-                    }`}
+                  className={`mb-4 text-xs uppercase flex  leading-5 text-gray-400 dark:text-gray-500 ${
+                    !isExpanded ? 'lg:justify-center' : 'justify-start'
+                  }`}
                 >
                   {isExpanded || isMobileOpen ? (
-                    "Leaders"
+                    'Leaders'
                   ) : (
                     <HorizontaLDotsIcon className="size-6" />
                   )}
@@ -314,8 +352,9 @@ const AppSidebar = () => {
             ) : null}
             <div>
               <h2
-                className={`mb-4 text-xs uppercase flex leading-5 text-gray-400 dark:text-gray-500 ${!isExpanded ? "lg:justify-center" : "justify-start"
-                  }`}
+                className={`mb-4 text-xs uppercase flex leading-5 text-gray-400 dark:text-gray-500 ${
+                  !isExpanded ? 'lg:justify-center' : 'justify-start'
+                }`}
               >
                 {isExpanded || isMobileOpen ? (
                   'Members'
