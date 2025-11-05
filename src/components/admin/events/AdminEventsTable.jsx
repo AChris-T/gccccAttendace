@@ -6,7 +6,6 @@ import {
   AlertTriangleIcon,
   CalendarIcon,
   CalendarIcon2,
-  ExpandFullScreenIcon,
   MailIcon,
   UserCheckIcon,
 } from '@/icons';
