@@ -34,21 +34,24 @@ const VideoCarousel = () => {
         <>
             <div className="relative">
                 {/* Custom Navigation Buttons */}
-                <button
-                    onClick={() => swiperRef?.slidePrev()}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
-                    aria-label="Previous slide"
-                >
-                    <LeftIcon className="w-6 h-6 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                </button>
+                {videos?.length > 0 && <>
+                    <button
+                        onClick={() => swiperRef?.slidePrev()}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
+                        aria-label="Previous slide"
+                    >
+                        <LeftIcon className="w-6 h-6 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    </button>
 
-                <button
-                    onClick={() => swiperRef?.slideNext()}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
-                    aria-label="Next slide"
-                >
-                    <RightIcon className="w-6 h-6 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-                </button>
+                    <button
+                        onClick={() => swiperRef?.slideNext()}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-10 bg-white dark:bg-slate-800 p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/30 transition-all duration-300 hover:scale-110 border-2 border-slate-200 dark:border-slate-700 group"
+                        aria-label="Next slide"
+                    >
+                        <RightIcon className="w-6 h-6 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    </button>
+                </>}
+
 
                 {/* Swiper Carousel */}
                 <Swiper
@@ -85,7 +88,7 @@ const VideoCarousel = () => {
                             spaceBetween: 30
                         }
                     }}
-                    className="!pb-16"
+                    className="pb-16!"
                 >
                     {isLoading ? <> {[...Array(4)].map((_, i) => (
                         <SwiperSlide key={i}>
@@ -98,7 +101,7 @@ const VideoCarousel = () => {
                                 onClick={() => openVideo(video)}
                             >
                                 {/* Thumbnail Container */}
-                                <div className="relative overflow-hidden aspect-video bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
+                                <div className="relative overflow-hidden aspect-video bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
                                     <img
                                         src={video.thumbnail_high}
                                         alt={video.title}
@@ -107,16 +110,16 @@ const VideoCarousel = () => {
                                     />
 
                                     {/* Gradient Overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
                                     {/* Play Button */}
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="relative">
                                             {/* Glow Effect */}
-                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-violet-500 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 scale-150" />
+                                            <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-violet-500 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 scale-150" />
 
                                             {/* Main Play Button */}
-                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-violet-500 transition-all duration-300 shadow-2xl">
+                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-linear-to-br group-hover:from-blue-500 group-hover:to-violet-500 transition-all duration-300 shadow-2xl">
                                                 <PlayIcon
                                                     className="w-7 h-7 sm:w-9 sm:h-9 text-slate-800 dark:text-slate-100 group-hover:text-white transition-colors duration-300 ml-1"
                                                     fill="currentColor"
@@ -190,7 +193,7 @@ const VideoCarousel = () => {
                             </div>
                         </div>
 
-                        <div className="p-5 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
+                        <div className="p-5 bg-linear-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
                             <h2 className="text-lg ms:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-4">
                                 {selectedVideo.title}
                             </h2>

@@ -34,7 +34,7 @@ const UserAchievement = () => {
     <div className="overflow-hidden border border-gray-200 rounded-2xl bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-all hover:shadow-lg">
       <div className="flex items-start justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700/60">
         <div className="flex items-start gap-4 flex-1">
-          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shrink-0">
+          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 shrink-0">
             <AwardIcon className="text-white" />
           </div>
           <div className="flex-1 min-w-0">
@@ -50,7 +50,7 @@ const UserAchievement = () => {
 
       <div className="px-5 py-5 mt-6">
         <div className="flex flex-col items-center text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 mb-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-linear-to-br from-emerald-500 to-teal-600 mb-4">
             <span className="text-3xl font-bold text-white">{userData.attendance_badge || 0}</span>
           </div>
 
@@ -65,13 +65,13 @@ const UserAchievement = () => {
             {badges.slice(0, 3).map((badge) => (
               <div
                 key={badge.id}
-                className="bg-gradient-to-b from-[#111827] to-[#0b1220] text-white rounded-2xl p-8 text-center shadow-2xl w-[320px]"
+                className="bg-linear-to-b from-[#111827] to-[#0b1220] text-white rounded-2xl p-8 text-center shadow-2xl w-[320px]"
               >
                 <p className="text-xs tracking-wide font-semibold opacity-80 mb-3">
                   {badge.month.toUpperCase()}
                 </p>
                 <div
-                  className={`mx-auto w-28 h-28 rounded-full bg-gradient-to-b ${badge.color} flex items-center justify-center shadow-[0_20px_30px_rgba(0,0,0,0.6)]`}
+                  className={`mx-auto w-28 h-28 rounded-full bg-linear-to-b ${badge.color} flex items-center justify-center shadow-[0_20px_30px_rgba(0,0,0,0.6)]`}
                 >
                   <BadgeIcon />
                 </div>
@@ -118,7 +118,7 @@ const UserAchievement = () => {
                 {badge.month.toUpperCase()}
               </p>
               <div
-                className={`mx-auto w-24 h-24 rounded-full bg-gradient-to-b ${badge.color} flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.4)]`}
+                className={`mx-auto w-24 h-24 rounded-full bg-linear-to-b ${badge.color} flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.4)]`}
               >
                 <BadgeIcon />
               </div>

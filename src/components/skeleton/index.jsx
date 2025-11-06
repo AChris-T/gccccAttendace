@@ -328,7 +328,7 @@ export const AttendanceStatsSkeleton = () => {
 
 export const MonthlyTargetSkeleton = () => {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03] animate-pulse">
+    <div className="w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/[0.03] animate-pulse">
       {/* Header Skeleton */}
       <div className="px-4 pt-4 sm:px-6 sm:pt-6">
         <div className="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded sm:h-6 sm:w-40" />

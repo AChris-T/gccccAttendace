@@ -29,7 +29,7 @@ export default function BibleVerseDisplay() {
     }, []);
 
     return (
-        <div className="w-full h-56 bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 flex items-center justify-center relative overflow-hidden rounded-2xl">
+        <div className="w-full h-56 bg-white dark:bg-linear-to-br dark:from-slate-900 dark:via-purple-900 dark:to-slate-900 flex items-center justify-center relative overflow-hidden rounded-2xl">
             {/* Animated background elements - dark mode only */}
             <div className="absolute inset-0 overflow-hidden hidden dark:block">
                 <div className="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl -top-48 -left-48 animate-pulse"></div>
@@ -39,17 +39,17 @@ export default function BibleVerseDisplay() {
             {/* Main card with glassmorphism */}
             <div className="relative w-full h-56 backdrop-blur-xl bg-slate-100/80 dark:bg-white/10 rounded-2xl shadow border border-purple-200 dark:border-white/20 p-4 md:p-5 overflow-hidden">
                 {/* Shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 dark:from-white/5 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-white/40 dark:from-white/5 to-transparent pointer-events-none"></div>
 
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6 relative z-10">
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-500/20 dark:to-blue-500/20 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-white/10">
+                        <div className="p-2.5 bg-linear-to-br from-purple-100 to-blue-100 dark:from-purple-500/20 dark:to-blue-500/20 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-white/10">
                             <svg className="w-5 h-5 text-purple-600 dark:text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                         </div>
-                        <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-slate-700 via-purple-700 to-slate-700 dark:from-purple-200 dark:to-blue-200 bg-clip-text text-transparent">
+                        <h1 className="text-xl md:text-2xl font-bold bg-linear-to-r from-slate-700 via-purple-700 to-slate-700 dark:from-purple-200 dark:to-blue-200 bg-clip-text text-transparent">
                             Daily Verse
                         </h1>
                     </div>
@@ -57,7 +57,7 @@ export default function BibleVerseDisplay() {
                     <button
                         onClick={fetchVerse}
                         disabled={loading}
-                        className="p-2.5 bg-gradient-to-br from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 dark:from-purple-500/30 dark:to-blue-500/30 dark:hover:from-purple-500/40 dark:hover:to-blue-500/40 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-white/10 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
+                        className="p-2.5 bg-linear-to-br from-purple-100 to-blue-100 hover:from-purple-200 hover:to-blue-200 dark:from-purple-500/30 dark:to-blue-500/30 dark:hover:from-purple-500/40 dark:hover:to-blue-500/40 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-white/10 transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
                         aria-label="Refresh verse"
                     >
                         <svg className={`w-5 h-5 text-purple-600 dark:text-purple-200 ${loading ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ export default function BibleVerseDisplay() {
                             {/* Verse text with line clamp */}
                             <div className="relative">
                                 <div className="absolute -left-3 top-0 text-4xl text-purple-300/40 dark:text-purple-300/20 font-serif">"</div>
-                                <p className="text-base md:text-lg leading-relaxed bg-gradient-to-r from-slate-800 via-purple-900 to-slate-800 dark:from-white dark:via-white dark:to-white/90 bg-clip-text text-transparent font-light italic pl-5 line-clamp-2">
+                                <p className="text-base md:text-lg leading-relaxed bg-linear-to-r from-slate-800 via-purple-900 to-slate-800 dark:from-white dark:via-white dark:to-white/90 bg-clip-text text-transparent font-light italic pl-5 line-clamp-2">
                                     {verse.text}
                                 </p>
                                 <div className="absolute -right-1 bottom-0 text-4xl text-purple-300/40 dark:text-purple-300/20 font-serif">"</div>
@@ -91,8 +91,8 @@ export default function BibleVerseDisplay() {
 
                             {/* Reference */}
                             <div className="flex items-center justify-end gap-2 pt-2">
-                                <div className="h-px flex-grow bg-gradient-to-r from-transparent to-purple-300/50 dark:to-purple-300/30"></div>
-                                <p className="text-sm md:text-base font-semibold bg-gradient-to-r from-slate-700 via-purple-700 to-blue-700 dark:from-purple-300 dark:to-blue-300 bg-clip-text text-transparent">
+                                <div className="h-px grow bg-linear-to-r from-transparent to-purple-300/50 dark:to-purple-300/30"></div>
+                                <p className="text-sm md:text-base font-semibold bg-linear-to-r from-slate-700 via-purple-700 to-blue-700 dark:from-purple-300 dark:to-blue-300 bg-clip-text text-transparent">
                                     {verse.bookname} {verse.chapter}:{verse.verse}
                                 </p>
                             </div>
@@ -101,7 +101,7 @@ export default function BibleVerseDisplay() {
                 </div>
 
                 {/* Decorative bottom shine */}
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-400/50 dark:via-purple-300/50 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-purple-400/50 dark:via-purple-300/50 to-transparent"></div>
             </div>
         </div>
     );
