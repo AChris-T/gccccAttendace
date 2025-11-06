@@ -11,9 +11,8 @@ import {
 } from '@/queries/attendancerecord.query';
 import CreateAttendanceRecord from './CreateAttendanceRecord';
 import EditAttendanceRecord from './EditAttendanceRecord';
-import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
-import { DeleteConfirmation } from '@/components/ui/DeleteConfirmation';
+import DeleteConfirmationModal from '@/components/ui/modal/DeleteConfirmationModal';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -102,7 +101,7 @@ const AttendanceTable = () => {
 
   const handleDelete = async () => {
     if (recordToDelete) {
-      await deleteRecords.mutate(recordToDelete);
+       deleteRecords.mutate(recordToDelete);
     }
   };
 
@@ -318,36 +317,15 @@ const AttendanceTable = () => {
           </div>
         )}
       </div>
-
-      <Modal
-        title="Delete Record"
+      <DeleteConfirmationModal
+        title="Delete Attendance Record"
+        description="Are you sure you want to delete this attendance record? This action cannot be undone."
         isOpen={isOpenDeleteModal}
+        isLoading={deleteRecords.isLoading}
+        isSuccess={isSuccessDelete}
         onClose={closeDeleteModal}
-      >
-        <div className="space-y-4">
-          <DeleteConfirmation isSuccess={isSuccessDelete} />
-          {!isSuccessDelete && (
-            <div className="flex justify-end gap-3 mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={closeDeleteModal}
-                disabled={deleteRecords.isLoading}
-              >
-                Cancel
-              </Button>
-              <Button
-                loading={deleteRecords.isLoading}
-                size="sm"
-                variant="danger"
-                onClick={handleDelete}
-              >
-                Delete
-              </Button>
-            </div>
-          )}
-        </div>
-      </Modal>
+        onConfirm={handleDelete}
+      />
 
       {/* Edit Record Modal */}
       {editingRecord && (

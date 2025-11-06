@@ -6,7 +6,6 @@ import {
   AlertTriangleIcon,
   CalendarIcon,
   CalendarIcon2,
-  ExpandFullScreenIcon,
   MailIcon,
   UserCheckIcon,
 } from '@/icons';
@@ -149,7 +148,7 @@ const AdminEventsTable = () => {
     return (
       <div className="flex items-center justify-center">
         <span
-          className={`inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+          className={`inline-flex items-center mt-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
         >
           <span className={`w-2 h-2 mr-1.5 rounded-full ${config.dot}`}></span>
           {params.value}
