@@ -94,19 +94,9 @@ const getPositionStyling = (position) => {
             textColor: 'text-gray-800 dark:text-gray-100',
             percentColor: 'text-[#119bd6] dark:text-[#4ab8e8]'
         },
-        4: {
-            ...baseStyles,
-            avatarRing: 'ring-4 ring-gray-300 dark:ring-gray-600',
-            badgeBg: 'bg-gradient-to-br from-gray-400 to-gray-500 dark:from-gray-500 dark:to-gray-600 text-white',
-            podiumBg: 'bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800',
-            podiumBorder: 'border-2 border-gray-300 dark:border-gray-600',
-            podiumShadow: 'shadow-md shadow-gray-200 dark:shadow-gray-900/50',
-            textColor: 'text-gray-800 dark:text-gray-100',
-            percentColor: 'text-gray-600 dark:text-gray-300'
-        }
     };
 
-    return positionStyles[position] || positionStyles[4];
+    return positionStyles[position] || positionStyles[3];
 };
 
 /**
