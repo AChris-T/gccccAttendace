@@ -19,7 +19,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-fade';
 import AttendanceLeaderboard from "@/components/dashboard/attendance/AttendanceLeaderboard";
 
-const CONFETTI_DURATION = 9000;
+const CONFETTI_DURATION = 10000;
 const GOAL_PERCENTAGE = 100;
 
 const MonthlyTarget = ({ data, isError, isLoading, error, params, handleDateChange }) => {
@@ -123,7 +123,7 @@ const Header = ({ monthAndYear, isGoalMet, handleDateChange }) => {
                 </div>
             </div>
 
-            {isGoalMet || user?.attendance_badges ? (
+            {isGoalMet || user?.attendance_badges?.length ? (
                 <div className="flex gap-0.5">
                     <BagdeIcon
                         width={24}

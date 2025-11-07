@@ -4,7 +4,7 @@ import { monthNames, years } from "@/utils/constant";
 
 const MonthYearSelector = ({ onChange }) => {
 
-    const [selectedYear, setSelectedYear] = useState(2025);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState('');
 
     const months = useMemo(
