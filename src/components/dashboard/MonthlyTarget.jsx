@@ -26,9 +26,8 @@ const MonthlyTarget = ({ data, isError, isLoading, error, params, handleDateChan
     const [showConfetti, setShowConfetti] = useState(false);
     const [hasShownToast, setHasShownToast] = useState(false);
 
-
     const monthAndYear = `${getMonthName(params?.month)}, ${params.year}`;
-    const percentage = Number(data?.present_percentage) ?? 0;
+    const percentage = Number(data?.metrics?.present_percentage) ?? 0;
     const { level, message, fromColor, toColor } = getAttendanceMessage(percentage);
     const isGoalMet = percentage === GOAL_PERCENTAGE;
 
@@ -51,7 +50,7 @@ const MonthlyTarget = ({ data, isError, isLoading, error, params, handleDateChan
     return (
         <>
             {showConfetti && <ConfettiShower />}
-            <aside className="col-span-12 xl:col-span-5 relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-white/3 transition-all hover:shadow-md">
+            <aside className="col-span-12 xl:col-span-5 relative overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3 transition-all">
                 <Swiper
                     modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
                     spaceBetween={0}
@@ -84,9 +83,7 @@ const MonthlyTarget = ({ data, isError, isLoading, error, params, handleDateChan
                             </div>
                         </SwiperSlide>
                         <SwiperSlide key={'2'}>
-                            <div className="w-full space-y-5 pt-5 pb-10">
-                                <AttendanceLeaderboard />
-                            </div>
+                            <AttendanceLeaderboard handleDateChange={handleDateChange} topAttendees={data?.topAttendees} monthAndYear={monthAndYear} />
                         </SwiperSlide>
                     </>}
                 </Swiper>
@@ -126,15 +123,15 @@ const Header = ({ monthAndYear, isGoalMet, handleDateChange }) => {
                 </div>
             </div>
 
-            {isGoalMet || user?.attendance_badge ? (
-                <div className="animate-bounce flex gap-0.5">
+            {isGoalMet || user?.attendance_badges ? (
+                <div className="flex gap-0.5">
                     <BagdeIcon
                         width={24}
                         height={24}
                         fill="#32d583"
                     />
                     <Badge color="success">
-                        <span className="text-xs font-bold">{user?.attendance_badge}</span>
+                        <span className="text-xs font-bold">{user?.total_badges}</span>
                     </Badge>
                 </div>
             ) : null}

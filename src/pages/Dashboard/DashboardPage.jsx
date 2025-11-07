@@ -33,14 +33,6 @@ const useDateFilter = () => {
   };
 };
 
-const useDashboardData = (year, month) => {
-  const attendanceQuery = useUsersMonthlyAttendanceStats(year, month);
-
-  return {
-    attendance: attendanceQuery,
-  };
-};
-
 
 const MainContentSection = ({ attendanceProps, handleDateChange }) => {
   return (
@@ -53,21 +45,10 @@ const MainContentSection = ({ attendanceProps, handleDateChange }) => {
 
 const DashboardPage = () => {
   const { params, handleDateChange } = useDateFilter();
+  const { data, isLoading, isError, error } = useUsersMonthlyAttendanceStats(params?.year, params?.month);
   const hasFollowUp = useHasUnit(Units.FOLLOW_UP);
   const { isFirstTimer } = useAuthStore()
-
-  const { attendance } = useDashboardData(params.year, params.month);
-
-  const attendanceProps = useMemo(
-    () => ({
-      data: attendance.data,
-      isLoading: attendance.isLoading,
-      isError: attendance.isError,
-      error: attendance.error,
-      params,
-    }),
-    [attendance.data, attendance.isLoading, attendance.isError, attendance.error, params]
-  );
+  const attendanceProps = { data, isLoading, isError, error, params }
 
   return (
     <>
@@ -75,7 +56,7 @@ const DashboardPage = () => {
       <PageBreadcrumb icon={DashboardIcon} pageTitle="Dashboard" description={'See your latest attendance summary, current giving status, and important community updates at a glance.'} />
 
       <main className="grid grid-cols-12 gap-4 md:gap-6">
-        <MainContentSection attendanceProps={attendanceProps} />
+        <MainContentSection {...attendanceProps} />
         <MonthlyTarget {...attendanceProps} handleDateChange={handleDateChange} />
         <QuickActionsSection />
 

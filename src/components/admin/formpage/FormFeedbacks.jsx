@@ -44,9 +44,7 @@ const FormFeedbacks = () => {
         setIsSuccessDelete(false);
         closeDeleteModal();
       }, 2000);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) { }
   };
 
   const tabs = useMemo(

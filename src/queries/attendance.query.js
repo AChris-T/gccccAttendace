@@ -125,7 +125,7 @@ export const useUsersMonthlyAttendanceStats = (year, month) => {
       );
       return data;
     },
-    staleTime: 0,
+    staleTime: 10 * 60 * 1000,
   });
 };
 

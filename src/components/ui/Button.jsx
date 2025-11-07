@@ -1,4 +1,3 @@
-
 import { LoadingIcon2 } from '@/icons';
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -53,76 +52,72 @@ const Button = ({
   const variantClasses = {
     primary:
       "bg-gradient-to-r from-[#119bd6] via-[#0d8ac0] to-[#0a7eb3] " +
-      "text-white rounded-lg shadow-md shadow-[#119bd6]/20 font-semibold " +
-      "hover:shadow-xl hover:shadow-[#119bd6]/40 hover:brightness-110 hover:-translate-y-0.5 " +
-      "active:brightness-95 active:scale-[0.97] active:translate-y-0 " +
-      "transition-all duration-200 ease-out " +
-      "dark:shadow-[#119bd6]/25 dark:hover:shadow-[#119bd6]/50",
+      "text-white rounded-lg shadow-md font-semibold " +
+      "hover:shadow-xl hover:brightness-110 " +
+      "active:brightness-95 active:scale-[0.97] " +
+      "transition-all duration-200 ease-out",
 
     "outline-primary":
       "bg-transparent border-2 border-[#119bd6] text-[#119bd6] rounded-lg font-semibold " +
-      "hover:bg-[#119bd6]/10 hover:border-[#0d8ac0] hover:shadow-md hover:shadow-[#119bd6]/20 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-[#119bd6]/20 active:translate-y-0 " +
-      "transition-all duration-200 ease-out " +
-      "dark:border-[#119bd6] dark:text-[#119bd6] dark:hover:bg-[#119bd6]/15",
+      "hover:bg-[#119bd6]/10 hover:border-[#0d8ac0] hover:shadow-md " +
+      "active:scale-[0.97] active:bg-[#119bd6]/20 " +
+      "transition-all duration-200 ease-out",
 
     danger:
       "bg-gradient-to-r from-[#eb2225] via-[#d41e21] to-[#c11a1d] " +
-      "text-white rounded-lg shadow-md shadow-[#eb2225]/20 font-semibold " +
-      "hover:shadow-xl hover:shadow-[#eb2225]/40 hover:brightness-110 hover:-translate-y-0.5 " +
-      "active:brightness-95 active:scale-[0.97] active:translate-y-0 " +
-      "transition-all duration-200 ease-out " +
-      "dark:shadow-[#eb2225]/25 dark:hover:shadow-[#eb2225]/50",
+      "text-white rounded-lg shadow-md font-semibold " +
+      "hover:shadow-xl hover:brightness-110 " +
+      "active:brightness-95 active:scale-[0.97] " +
+      "transition-all duration-200 ease-out",
 
     "outline-danger":
       "bg-transparent border-2 border-[#eb2225] text-[#eb2225] rounded-lg font-semibold " +
-      "hover:bg-[#eb2225]/10 hover:border-[#d41e21] hover:shadow-md hover:shadow-[#eb2225]/20 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-[#eb2225]/20 active:translate-y-0 " +
-      "transition-all duration-200 ease-out " +
-      "dark:border-[#eb2225] dark:text-[#eb2225] dark:hover:bg-[#eb2225]/15",
+      "hover:bg-[#eb2225]/10 hover:border-[#d41e21] hover:shadow-md " +
+      "active:scale-[0.97] active:bg-[#eb2225]/20 " +
+      "transition-all duration-200 ease-out",
 
     light:
-      "bg-white text-gray-700 rounded-lg shadow-md shadow-gray-200/80 border border-gray-200 font-semibold " +
-      "hover:shadow-lg hover:shadow-gray-300/60 hover:bg-gray-50 hover:border-gray-300 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-gray-100 active:translate-y-0 " +
+      "bg-white text-gray-700 rounded-lg shadow-md border border-gray-200 font-semibold " +
+      "hover:shadow-lg hover:bg-gray-50 hover:border-gray-300 " +
+      "active:scale-[0.97] active:bg-gray-100 " +
       "transition-all duration-200 ease-out " +
-      "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 " +
-      "dark:shadow-gray-900/40 dark:hover:shadow-gray-900/60 dark:hover:bg-gray-750 dark:hover:border-gray-600",
+      "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-750 dark:hover:border-gray-600",
 
     "outline-light":
       "bg-transparent border-2 border-gray-300 text-gray-600 rounded-lg font-semibold " +
-      "hover:bg-gray-100 hover:border-gray-400 hover:shadow-md hover:shadow-gray-200/50 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-gray-200 active:translate-y-0 " +
+      "hover:bg-gray-100 hover:border-gray-400 hover:shadow-md " +
+      "active:scale-[0.97] active:bg-gray-200 " +
       "transition-all duration-200 ease-out " +
       "dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800/80 dark:hover:border-gray-500",
 
     dark:
       "bg-gradient-to-r from-[#101828] via-[#1a2235] to-[#0f1624] " +
-      "text-white rounded-lg shadow-md shadow-gray-900/40 font-semibold " +
-      "hover:shadow-xl hover:shadow-gray-900/60 hover:brightness-125 hover:-translate-y-0.5 " +
-      "active:brightness-100 active:scale-[0.97] active:translate-y-0 " +
+      "text-white rounded-lg shadow-md font-semibold " +
+      "hover:shadow-xl hover:brightness-125 " +
+      "active:brightness-100 active:scale-[0.97] " +
       "transition-all duration-200 ease-out " +
-      "dark:from-gray-700 dark:via-gray-650 dark:to-gray-700 dark:shadow-gray-950/50",
+      "dark:from-gray-700 dark:via-gray-650 dark:to-gray-700",
 
     "outline-dark":
       "bg-transparent border-2 border-gray-600 text-gray-700 rounded-lg font-semibold " +
-      "hover:bg-gray-100 hover:border-gray-700 hover:shadow-md hover:shadow-gray-400/30 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-gray-200 active:translate-y-0 " +
+      "hover:bg-gray-100 hover:border-gray-700 hover:shadow-md " +
+      "active:scale-[0.97] active:bg-gray-200 " +
       "transition-all duration-200 ease-out " +
       "dark:border-gray-500 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:border-gray-400",
 
     ghost:
       "bg-gray-200/90 text-gray-700 rounded-lg font-semibold " +
-      "hover:bg-gray-300 hover:shadow-md hover:shadow-gray-300/50 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-gray-400/80 active:translate-y-0 " +
+      "hover:bg-gray-300 hover:shadow-md " +
+      "active:scale-[0.97] active:bg-gray-400/80 " +
       "transition-all duration-200 ease-out " +
-      "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:shadow-gray-900/40",
+      "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600",
+
     neutral:
       "bg-gray-200/90 text-gray-700 rounded-lg font-semibold " +
-      "hover:bg-gray-300 hover:shadow-md hover:shadow-gray-300/50 hover:-translate-y-0.5 " +
-      "active:scale-[0.97] active:bg-gray-400/80 active:translate-y-0 " +
+      "hover:bg-gray-300 hover:shadow-md " +
+      "active:scale-[0.97] active:bg-gray-400/80 " +
       "transition-all duration-200 ease-out " +
-      "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:shadow-gray-900/40",
+      "dark:bg-gray-700/90 dark:text-gray-200 dark:hover:bg-gray-600",
   };
 
   const disabledClasses =
@@ -162,13 +157,14 @@ const Button = ({
     <>
       {ripples.map((ripple) => (
         <span
+          data-testid="ripple"
           key={ripple.id}
           className="absolute rounded-full bg-white/30 pointer-events-none"
           style={{
-            left: ripple.x,
-            top: ripple.y,
-            width: ripple.size,
-            height: ripple.size,
+            left: `${ripple.x}px`,
+            top: `${ripple.y}px`,
+            width: `${ripple.size}px`,
+            height: `${ripple.size}px`,
             transform: 'scale(0)',
             animation: 'ripple 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           }}

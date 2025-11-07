@@ -9,8 +9,8 @@ const AttendanceMetrics = ({ data, isError, isLoading, error }) => {
 
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
-            <AttendanceMetric data={data} type='Present' />
-            <AttendanceMetric data={data} type='Absent' />
+            <AttendanceMetric data={data?.metrics} type='Present' />
+            <AttendanceMetric data={data?.metrics} type='Absent' />
         </div>
     )
 }
