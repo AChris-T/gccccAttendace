@@ -5,27 +5,15 @@ import { useAuthStore } from "@/store/auth.store";
 import { useMemo, useState } from "react";
 import Modal from "../ui/modal/Modal";
 import Button from "@/components/ui/Button";
+import { EmptyState } from "@/components/common/EmptyState";
 
 const UserAchievement = () => {
   const { user: userData } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const badges = [
-    { id: 1, month: "December 2025", title: "Faithfulness", color: "from-yellow-400 to-yellow-500" },
-    { id: 2, month: "November 2025", title: "Faithfulness", color: "from-yellow-400 to-yellow-500" },
-    { id: 3, month: "October 2025", title: "Faithfulness", color: "from-yellow-400 to-yellow-500" },
-    { id: 4, month: "September 2025", title: "Faithfulness", color: "from-yellow-400 to-yellow-500" },
-    { id: 5, month: "August 2025", title: "Faithfulness", color: "from-yellow-400 to-yellow-500" },
-    { id: 6, month: "August 2025", title: "Faithfulness", color: "from-yellow-400 to-yellow-500" },
-  ];
 
-  const lastBadgeDate = useMemo(() => {
-    if (!userData.last_badge_month || !userData.last_badge_year) return null;
-    const date = new Date(userData.last_badge_year, userData.last_badge_month - 1);
-    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-  }, [userData.last_badge_month, userData.last_badge_year]);
-
-  const hasBadges = userData.attendance_badge > 0;
+  const hasBadges = userData?.total_badges > 0;
+  const badges = userData?.attendance_badges;
 
   const handleViewAll = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
@@ -47,19 +35,8 @@ const UserAchievement = () => {
           </div>
         </div>
       </div>
-
-      <div className="px-5 py-5 mt-6">
+      {hasBadges ? <div className="px-5 py-5 mt-6">
         <div className="flex flex-col items-center text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-linear-to-br from-emerald-500 to-teal-600 mb-4">
-            <span className="text-3xl font-bold text-white">{userData.attendance_badge || 0}</span>
-          </div>
-
-          <h4 className="text-lg font-semibold text-gray-900 mb-1">
-            {hasBadges ? "Attendance Badges" : "Start Your Journey"}
-          </h4>
-          <p className="text-sm text-gray-500 mb-6">
-            {lastBadgeDate ? `Last earned: ${lastBadgeDate}` : "No badges earned yet"}
-          </p>
 
           <div className="flex flex-wrap justify-center gap-6 mb-4">
             {badges.slice(0, 3).map((badge) => (
@@ -100,7 +77,7 @@ const UserAchievement = () => {
             View all badges
           </button>
         </div>
-      </div>
+      </div> : <EmptyState variant='minimal' title="No attendance badge earned" description="Commitment takes effort. You have not yet met the 100% attendance requirement to earn this badge for flawless devotion" />}
 
       <Modal
         isOpen={isModalOpen}

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 
 import PageMeta from '@/components/common/PageMeta';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
@@ -34,14 +34,6 @@ const useDateFilter = () => {
 };
 
 
-const MainContentSection = ({ attendanceProps, handleDateChange }) => {
-  return (
-    <section className="relative col-span-12 space-y-5 xl:col-span-7">
-      <AttendanceMetrics {...attendanceProps} handleDateChange={handleDateChange} />
-      <BibleVerseDisplay />
-    </section>
-  );
-}
 
 const DashboardPage = () => {
   const { params, handleDateChange } = useDateFilter();
@@ -56,7 +48,11 @@ const DashboardPage = () => {
       <PageBreadcrumb icon={DashboardIcon} pageTitle="Dashboard" description={'See your latest attendance summary, current giving status, and important community updates at a glance.'} />
 
       <main className="grid grid-cols-12 gap-4 md:gap-6">
-        <MainContentSection {...attendanceProps} />
+        <section className="relative col-span-12 space-y-5 xl:col-span-7">
+          <AttendanceMetrics {...attendanceProps} handleDateChange={handleDateChange} />
+          <BibleVerseDisplay />
+        </section>
+
         <MonthlyTarget {...attendanceProps} handleDateChange={handleDateChange} />
         <QuickActionsSection />
 
