@@ -99,14 +99,14 @@ const Header = ({ monthAndYear, isGoalMet, handleDateChange }) => {
 
     const { user } = useAuthStore()
     return (
-        <div className="flex items-start justify-between">
-            <div>
+        <div>
+            <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                     Monthly Target
                 </h3>
-                <div className="relative mt-1">
+                <div className="relative">
                     <button role="button" onClick={toggleDropdown} className="cursor-pointer flex items-center text-gray-500 gap-1 dark:text-gray-400 text-sm">
-                        Attendance Report for:  <Badge endIcon={<ChevronDownIcon2 className={`transform transition-transform duration-300 h-5 w-4 ${isOpen ? 'rotate-180' : 'rotate-0'}`} />} color="primary">{monthAndYear}</Badge>
+                        <Badge size="md" endIcon={<ChevronDownIcon2 className={`transform transition-transform duration-300 h-5 w-4 ${isOpen ? 'rotate-180' : 'rotate-0'}`} />} color="primary">{monthAndYear}</Badge>
                     </button>
                     <Dropdown
                         onClose={closeDropdown}
@@ -121,6 +121,9 @@ const Header = ({ monthAndYear, isGoalMet, handleDateChange }) => {
                         />
                     </Dropdown>
                 </div>
+            </div>
+            <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400"> Attendance Report</p>
             </div>
 
             {isGoalMet || user?.attendance_badges?.length ? (

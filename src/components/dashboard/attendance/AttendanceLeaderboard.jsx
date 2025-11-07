@@ -164,44 +164,46 @@ const LeaderboardHeader = ({ monthAndYear, handleDateChange }) => {
     }, [handleDateChange, closeDropdown]);
 
     return (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-            <div className="flex-1">
+        <div>
+            <div className="flex items-start justify-between">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2 mb-2">
                     <TrophyIcon size={24} className="text-[#119bd6] shrink-0" />
                     <span>Top Attendees</span>
                 </h3>
+                <div className="relative">
+                    <button
+                        type="button"
+                        onClick={toggleDropdown}
+                        className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                        aria-label="Select month and year"
+                        aria-expanded={isOpen}
+                    >
+                        <Badge
+                            size="md"
+                            endIcon={
+                                <ChevronDownIcon2
+                                    className={`h-5 w-4 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+                                />
+                            }
+                            color="primary"
+                        >
+                            {monthAndYear}
+                        </Badge>
+                    </button>
+
+                    <Dropdown
+                        onClose={closeDropdown}
+                        isOpen={isOpen}
+                        className="w-60 p-2 mt-2 shadow-xl"
+                    >
+                        <MonthYearSelector onChange={handleDateChangeWrapper} />
+                    </Dropdown>
+                </div>
+            </div>
+            <div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
                     {SCRIPTURE.text} - <span className="text-[#119bd6] dark:text-[#4ab8e8] font-semibold">{SCRIPTURE.reference}</span>
                 </p>
-            </div>
-
-            <div className="relative">
-                <button
-                    type="button"
-                    onClick={toggleDropdown}
-                    className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-                    aria-label="Select month and year"
-                    aria-expanded={isOpen}
-                >
-                    <Badge
-                        endIcon={
-                            <ChevronDownIcon2
-                                className={`h-5 w-4 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
-                            />
-                        }
-                        color="primary"
-                    >
-                        {monthAndYear}
-                    </Badge>
-                </button>
-
-                <Dropdown
-                    onClose={closeDropdown}
-                    isOpen={isOpen}
-                    className="w-60 p-2 mt-2 shadow-xl"
-                >
-                    <MonthYearSelector onChange={handleDateChangeWrapper} />
-                </Dropdown>
             </div>
         </div>
     );
