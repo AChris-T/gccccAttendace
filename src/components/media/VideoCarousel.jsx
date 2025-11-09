@@ -29,6 +29,7 @@ const VideoCarousel = () => {
     };
 
     if (isError) return <Message variant="error" data={error?.data} />
+    if (videos?.length <= 0) return null;
 
     return (
         <>

@@ -60,9 +60,9 @@ const DashboardPage = () => {
           <VideoCarousel />
         </section>
 
-        {!isFirstTimer && <AssignedMembers />}
-
         {hasFollowUp && <FirstTimerAssigned />}
+
+        {!isFirstTimer && <AssignedMembers />}
       </main>
     </>
   );
