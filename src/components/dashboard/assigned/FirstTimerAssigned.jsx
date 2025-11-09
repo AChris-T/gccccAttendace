@@ -13,7 +13,6 @@ const FirstTimerAssigned = () => {
 
     const { data: firstTimers = [], isLoading } = useGetFirstTimersAssigned();
 
-    console.log(firstTimers)
     if (isLoading) return (<section className="col-span-12 my-5">
         <TableSkeletonLoader />
     </section>)
@@ -63,12 +62,23 @@ const FirstTimerAssigned = () => {
                             <TableBody className="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-gray-900">
                                 {firstTimers?.map((firstTimer, index) => {
                                     const isDeactivated = firstTimer?.status === 'deactivated';
+                                    const isOptOut = firstTimer?.follow_up_status?.title === 'Opt-out';
+                                    const isDisabled = isDeactivated || isOptOut;
+
+                                    // Determine the label text
+                                    let disabledLabel = '';
+                                    if (isDeactivated) {
+                                        disabledLabel = 'Deactivated';
+                                    } else if (isOptOut) {
+                                        disabledLabel = 'Opt-out';
+                                    }
+
                                     return (
                                         <TableRow
                                             key={firstTimer.id}
-                                            className={`${isDeactivated
-                                                    ? 'grayscale opacity-60 cursor-help pointer-events-none bg-gray-50/50 dark:bg-gray-800/20'
-                                                    : 'hover:bg-gray-50 dark:hover:bg-gray-800/40'
+                                            className={`${isDisabled
+                                                ? 'grayscale opacity-60 cursor-help pointer-events-none bg-gray-50/50 dark:bg-gray-800/20'
+                                                : 'hover:bg-gray-50 dark:hover:bg-gray-800/40'
                                                 } transition-colors relative`}
                                         >
                                             <TableCell className="py-3 whitespace-nowrap text-gray-500 text-sm dark:text-gray-400">
@@ -82,21 +92,21 @@ const FirstTimerAssigned = () => {
                                                     <div className="flex items-center gap-3">
                                                         <div className="relative">
                                                             <Avatar src={firstTimer.avatar} name={firstTimer.initials} />
-                                                            {isDeactivated && (
+                                                            {isDisabled && (
                                                                 <div className="absolute -top-1 -right-1 bg-gray-700 dark:bg-gray-600 rounded-full p-1 shadow-md">
                                                                     <LockIcon className="w-3 h-3 text-white" />
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className="flex items-center gap-2">
+                                                        <div className="flex flex-col items-center gap-2">
                                                             <p className="font-medium hover:text-blue-500 text-gray-800 text-sm dark:text-white/90">
                                                                 {firstTimer.full_name}
                                                             </p>
-                                                            {isDeactivated && (
-                                                                <span className="inline-flex items-center gap-1 text-xs text-red-600 dark:text-red-400">
+                                                            {isDisabled && (
+                                                                <p className="inline-flex items-center gap-1 text-xs text-red-600 dark:text-red-400">
                                                                     <LockIcon className="w-3.5 h-3.5" />
-                                                                    <span className="font-semibold">Deactivated</span>
-                                                                </span>
+                                                                    <span className="font-semibold">{disabledLabel}</span>
+                                                                </p>
                                                             )}
                                                         </div>
                                                     </div>
