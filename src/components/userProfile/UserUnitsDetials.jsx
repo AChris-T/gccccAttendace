@@ -1,90 +1,90 @@
 import { CrownIcon, StarIcon, UsersIcon } from '@/icons';
 
 const UnitBadge = ({ unit }) => {
-  const getRoleBadge = () => {
-    if (unit.isLeader) {
-      return {
-        icon: <CrownIcon className="w-4 h-4" />,
-        text: 'Leader',
-        gradient: 'from-amber-500 to-orange-500',
-        bgLight: 'bg-amber-50 dark:bg-amber-900/20',
-        borderLight: 'border-amber-200 dark:border-amber-800',
-        textLight: 'text-amber-700 dark:text-amber-400',
-      };
-    }
-    if (unit.isAssistantLeader) {
-      return {
-        icon: <StarIcon className="w-4 h-4" />,
-        text: 'Ass. Leader',
-        gradient: 'from-blue-500 to-indigo-500',
-        bgLight: 'bg-blue-50 dark:bg-blue-900/20',
-        borderLight: 'border-blue-200 dark:border-blue-800',
-        textLight: 'text-blue-700 dark:text-blue-400',
-      };
-    }
-  };
+    const getRoleBadge = () => {
+        if (unit.isLeader) {
+            return {
+                icon: <CrownIcon className="w-4 h-4" />,
+                text: 'Leader',
+                gradient: 'from-amber-500 to-orange-500',
+                bgLight: 'bg-amber-50 dark:bg-amber-900/20',
+                borderLight: 'border-amber-200 dark:border-amber-800',
+                textLight: 'text-amber-700 dark:text-amber-400',
+            };
+        }
+        if (unit.isAssistantLeader) {
+            return {
+                icon: <StarIcon className="w-4 h-4" />,
+                text: 'Ass. Leader',
+                gradient: 'from-blue-500 to-indigo-500',
+                bgLight: 'bg-blue-50 dark:bg-blue-900/20',
+                borderLight: 'border-blue-200 dark:border-blue-800',
+                textLight: 'text-blue-700 dark:text-blue-400',
+            };
+        }
+    };
 
-  const role = getRoleBadge();
+    const role = getRoleBadge();
 
-  return (
-    <div className="relative overflow-hidden transition-all duration-300 bg-white border border-gray-100 rounded shadow group dark:bg-gray-800 dark:shadow-gray-900/30 hover:shadow-lg dark:border-gray-700">
-      <div className="p-4">
-        {/* Unit Name & Member Count */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <h3 className="mb-1 text-base font-bold text-gray-600 truncate dark:text-gray-300">
-              {unit?.name}
-            </h3>
-            <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
-              <UsersIcon className="w-3 h-3 shrink-0" />
-              <span className="text-xs font-medium">
-                {unit?.members_count}{' '}
-                {unit?.members_count === 1 ? 'member' : 'members'}
-              </span>
+    return (
+        <div className="relative overflow-hidden transition-all duration-300 bg-white border border-gray-100 rounded shadow group dark:bg-gray-800 dark:shadow-gray-900/30 hover:shadow-lg dark:border-gray-700">
+            <div className="p-4">
+                {/* Unit Name & Member Count */}
+                <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                        <h3 className="mb-1 text-base font-bold text-gray-600 truncate dark:text-gray-300">
+                            {unit?.name}
+                        </h3>
+                        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                            <UsersIcon className="w-3 h-3 shrink-0" />
+                            <span className="text-xs font-medium">
+                                {unit?.members_count}{' '}
+                                {unit?.members_count === 1 ? 'member' : 'members'}
+                            </span>
+                        </div>
+                    </div>
+                    <div
+                        className={`flex flex-wrap sm:flex-nowrap items-center gap-1 px-2.5 py-1.5 rounded-lg border ${role.borderLight} ${role?.bgLight} transition-all duration-200`}
+                    >
+                        <div
+                            className={`flex items-center justify-center w-5 h-5 rounded-full bg-linear-to-br ${role?.gradient} text-white shadow-sm`}
+                        >
+                            {role?.icon}
+                        </div>
+                        <p className={`text-xs font-bold ${role?.textLight}`}>
+                            {role?.text}
+                        </p>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div
-            className={`flex flex-wrap sm:flex-nowrap items-center gap-1 px-2.5 py-1.5 rounded-lg border ${role?.borderLight} ${role?.bgLight} transition-all duration-200`}
-          >
-            <div
-              className={`flex items-center justify-center w-5 h-5 rounded-full bg-linear-to-br ${role?.gradient} text-white shadow-sm`}
-            >
-              {role?.icon}
-            </div>
-            <p className={`text-xs font-bold ${role?.textLight}`}>
-              {role?.text}
-            </p>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 const UserUnitsDetails = ({ userUnits }) => {
-  return (
-    <div className="mx-auto">
-      {userUnits?.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {userUnits?.map((unit) => (
-            <UnitBadge key={unit?.id} unit={unit} />
-          ))}
+    return (
+        <div className="mx-auto">
+            {userUnits?.length > 0 ? (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {userUnits?.map((unit) => (
+                        <UnitBadge key={unit?.id} unit={unit} />
+                    ))}
+                </div>
+            ) : (
+                <div className="py-5 text-center">
+                    <div className="inline-flex items-center justify-center w-10 h-10 mb-4 bg-gray-100 rounded-full dark:bg-gray-800">
+                        <UsersIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                    </div>
+                    <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                        No Units Yet
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                        You don't belong to any units.
+                    </p>
+                </div>
+            )}
         </div>
-      ) : (
-        <div className="py-5 text-center">
-          <div className="inline-flex items-center justify-center w-10 h-10 mb-4 bg-gray-100 rounded-full dark:bg-gray-800">
-            <UsersIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-          </div>
-          <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-            No Units Yet
-          </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            You don't belong to any units.
-          </p>
-        </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default UserUnitsDetails;
