@@ -1,6 +1,7 @@
 import $api from '../lib/axios';
 
-const SOD_EVENT = 'sod-events';
+const SOD_EVENT = 'event-registrations';
+const SOD_ADMIN_EVENT = 'admin/event-registrations';
 
 export const EventService = {
   async createEvent(payload) {
@@ -8,11 +9,14 @@ export const EventService = {
     return data;
   },
 
-  async getEventById(eventId) {
-    const { data } = await $api.get(`/${SOD_EVENT}/${eventId}`);
+  async getEvent(params) {
+    const { data } = await $api.get(`/${SOD_EVENT}?event=${params?.event}`);
     return data;
   },
-
+  async getAllEvents() {
+    const { data } = await $api.get(`/${SOD_ADMIN_EVENT}`);
+    return data;
+  },
   async updateEvent(payload) {
     const { data } = await $api.put(`/${SOD_EVENT}/${payload.id}`, payload);
     return data;

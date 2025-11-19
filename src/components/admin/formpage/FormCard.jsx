@@ -138,10 +138,10 @@ export default function FormCard({ person, selected = false, onToggleSelect }) {
 
         {isOpen && (
           <div
-            className={`absolute left-0 right-0 top-full z-[10] animate-in fade-in slide-in-from-top-2 duration-200`}
+            className={`absolute left-0 right-0 top-full z-10 animate-in fade-in slide-in-from-top-2 duration-200`}
           >
             <div className="overflow-hidden bg-white border border-gray-200 shadow-lg dark:bg-gray-800 rounded-xl dark:border-gray-700">
-              <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-900 dark:border-gray-700">
+              <div className="px-4 py-3 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-900 dark:border-gray-700">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <DocumentIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />

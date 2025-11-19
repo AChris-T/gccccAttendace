@@ -22,15 +22,27 @@ export const useCreateEvent = (options = {}) => {
   });
 };
 
-export const useGetEventById = (id, options = {}) => {
+export const useGetEvent = (params = {}, options = {}) => {
   return useQuery({
-    queryKey: QUERY_KEYS.EVENTS.DETAIL(id),
+    queryKey: QUERY_KEYS.EVENTS.DETAIL(params?.event),
     queryFn: async () => {
-      const data = await EventService.getEventById(id);
+      const data = await EventService.getEvent(params);
       return data;
     },
-    enabled: !!id,
-    staleTime: 60 * 1000,
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
+export const useGetAllEvent = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.EVENTS.DETAIL(),
+    queryFn: async () => {
+      const data = await EventService.getAllEvents();
+      return data;
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
     ...options,
   });
 };
@@ -57,5 +69,3 @@ export const useUpdateEvent = (options = {}) => {
     },
   });
 };
-
-
