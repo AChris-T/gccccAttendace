@@ -1,39 +1,43 @@
 import toast from 'react-hot-toast';
 
 class ToastService {
-  constructor() {
-    this.activeToastId = null;
-  }
+  activeToastId = null;
 
+  // ---- Helpers ----
   dismissActiveToast() {
-    if (this.activeToastId !== null) {
+    if (this.activeToastId) {
       toast.dismiss(this.activeToastId);
       this.activeToastId = null;
     }
   }
 
-  showToast(message, type = 'default', options = {}) {
-    const toastOptions = {
-      position: 'top-center',
-      duration: 5000,
-      ...options,
-    };
-
-    this.dismissActiveToast();
-
-    const toastHandlers = {
+  getHandler(type) {
+    const map = {
       success: toast.success,
       error: toast.error,
       loading: toast.loading,
       default: toast,
     };
+    return map[type] || map.default;
+  }
 
-    const toastHandler = toastHandlers[type] || toast;
-    const toastId = toastHandler(message, toastOptions);
+  // ---- Core Toast ----
+  showToast(message, type = 'default', options = {}) {
+    this.dismissActiveToast();
+
+    const handler = this.getHandler(type);
+
+    const toastId = handler(message, {
+      position: 'top-center',
+      duration: 5000,
+      ...options,
+    });
+
     this.activeToastId = toastId;
     return toastId;
   }
 
+  // ---- Convenience methods ----
   success(message, options) {
     return this.showToast(message, 'success', options);
   }
@@ -52,21 +56,6 @@ class ToastService {
 
   dismiss() {
     this.dismissActiveToast();
-  }
-
-  promise(promise, messages, options = {}) {
-    this.dismissActiveToast();
-    const toastId = toast.promise(
-      promise,
-      {
-        loading: messages.loading || 'Loading...',
-        success: messages.success || 'Success!',
-        error: messages.error || 'Error occurred',
-      },
-      { position: 'top-right', ...options }
-    );
-    this.activeToastId = toastId;
-    return toastId;
   }
 }
 
