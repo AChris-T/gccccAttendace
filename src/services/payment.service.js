@@ -1,13 +1,15 @@
 import $api from '../lib/axios';
 
-const PAYMENT = 'payment';
+const PAYMENT = 'registrations';
 
 export const paymentService = {
-  async initiatePayment(payload) {
-    const { data } = await $api.post(`/${PAYMENT}/initiate`, payload);
+  async initiatePayment({ registration, payload }) {
+    const { data } = await $api.post(
+      `/${PAYMENT}/${registration}/transactions`,
+      payload
+    );
     return data;
   },
-
   async verifyPayment(reference) {
     const { data } = await $api.get(`/${PAYMENT}/verify/${reference}`);
     return data;
