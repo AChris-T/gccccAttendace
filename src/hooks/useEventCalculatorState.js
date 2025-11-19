@@ -23,8 +23,8 @@ export default function useEventCalculatorState({
   const [saved, setSaved] = useState(false);
   const [registrationData, setRegistrationData] = useState(null);
   const [formData, setFormData] = useState({
-    interested_in_serving: true,
-    integrated_into_a_unit: true,
+    interested_in_serving: false,
+    integrated_into_a_unit: false,
     specify_unit: '',
     is_student: false,
     institution: '',
@@ -320,7 +320,7 @@ export default function useEventCalculatorState({
           onSuccess?.(updatedSavedData);
         },
       });
-    } catch (error) {}
+    } catch (error) { }
   }, [
     calculations,
     eventKey,

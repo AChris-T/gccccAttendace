@@ -23,27 +23,24 @@ export default function DaySelector({
           <button
             key={i}
             onClick={() => onToggleDay(i)}
-            className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-              selectedDays.includes(i)
-                ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 shadow-md'
-                : 'border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-700'
-            }`}
+            className={`py-1 rounded-xl border-2 transition-all duration-200 ${selectedDays.includes(i)
+              ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30 shadow-md'
+              : 'border-slate-200 dark:border-slate-600 hover:border-blue-300 dark:hover:border-blue-700'
+              }`}
           >
             <div
-              className={`text-xs font-medium mb-1 ${
-                selectedDays.includes(i)
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-slate-500 dark:text-slate-400'
-              }`}
+              className={`text-xs font-medium mb-1 ${selectedDays.includes(i)
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-slate-500 dark:text-slate-400'
+                }`}
             >
               {d.day}
             </div>
             <div
-              className={`text-lg font-bold ${
-                selectedDays.includes(i)
-                  ? 'text-blue-700 dark:text-blue-300'
-                  : 'text-slate-900 dark:text-white'
-              }`}
+              className={`text-lg font-bold ${selectedDays.includes(i)
+                ? 'text-blue-700 dark:text-blue-300'
+                : 'text-slate-900 dark:text-white'
+                }`}
             >
               {d.date}
             </div>
