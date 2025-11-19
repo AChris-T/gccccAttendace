@@ -122,6 +122,7 @@ export default function useEventCalculatorState({
           fro: false,
         },
         timestamp: existingRegistration.created_at,
+        transactions: existingRegistration.transactions ?? [],
       };
 
       setRegistrationData(mappedData);
