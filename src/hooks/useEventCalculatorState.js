@@ -395,7 +395,6 @@ export default function useEventCalculatorState({
 
       setReadyToPay(false);
     } catch (error) {
-      // Toast handled by hooks
     } finally {
       setIsProcessingPayment(false);
     }

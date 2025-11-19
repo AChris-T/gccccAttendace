@@ -34,6 +34,18 @@ export const useGetEvent = (params = {}, options = {}) => {
     ...options,
   });
 };
+export const useGetAllEvent = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.EVENTS.DETAIL(),
+    queryFn: async () => {
+      const data = await EventService.getAllEvents();
+      return data;
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
 
 export const useUpdateEvent = (options = {}) => {
   const queryClient = useQueryClient();
