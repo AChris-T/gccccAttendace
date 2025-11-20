@@ -147,7 +147,10 @@ export default function RegistrationSummary({
         </table>
       </div>
 
-      <img src="/images/contribution.jpg" className="rounded shadow mt-5" alt="contribution" />
+      <div className='my-5'>
+        <p className='text-sm italic text-red-500'>Please make your payment to the account details below, using <strong>SOD 25</strong> as the payment description.</p>
+        <img src="/images/contribution.jpg" className="rounded shadow" alt="contribution" />
+      </div>
 
       {/* <>
         {transaction ? (
