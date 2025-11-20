@@ -3,6 +3,9 @@ import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import Button from '@/components/ui/Button';
 import { useGetAllEvent } from '@/queries/events.query';
+import Modal from '@/components/ui/modal/Modal';
+import { useUpdateTransactionStatus } from '@/queries/payment.query';
+import { Toast } from '@/lib/toastify';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -18,8 +21,23 @@ const AdminEventsTable = () => {
   const gridRef = useRef(null);
   const [isGridReady, setIsGridReady] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [statusForm, setStatusForm] = useState('');
   const { data: apiRegistrations, refetch } = useGetAllEvent();
+  
+  const {
+    mutate: updateTransactionStatus,
+    isPending: isUpdatingStatus,
+  } = useUpdateTransactionStatus({
+    onSuccess: () => {
+      refetch();
+      setIsModalOpen(false);
+      setSelectedRegistration(null);
+      setSelectedTransaction(null);
+    },
+  });
 
   const registrationData = useMemo(() => {
     if (!apiRegistrations?.data) return [];
@@ -52,6 +70,8 @@ const AdminEventsTable = () => {
       specifyUnit: p.specify_unit || '-',
       isStudent: p.is_student ? 'Yes' : 'No',
       institution: p.institution || '-',
+      transactions: p.transactions || [],
+      raw: p,
     }));
   }, [apiRegistrations]);
 
@@ -99,7 +119,7 @@ const AdminEventsTable = () => {
   const StatusRenderer = useCallback((params) => {
     const value = params.value?.toLowerCase();
     const config = {
-      success: {
+      completed: {
         bg: 'bg-green-100 dark:bg-green-900/30',
         text: 'text-green-800 dark:text-green-400',
         dot: 'bg-green-500',
@@ -139,7 +159,8 @@ const AdminEventsTable = () => {
         headerName: 'Reference',
         maxWidth: 150,
         pinned: 'left',
-        cellClass: 'text-blue-600 dark:text-blue-400 underline',
+        cellClass:
+          'text-blue-600 dark:text-blue-400 underline cursor-pointer font-semibold',
       },
       {
         field: 'userName',
@@ -237,6 +258,56 @@ const AdminEventsTable = () => {
     if (isGridReady) setTimeout(() => autoSizeColumns(), 200);
   }, [isGridReady, registrationData, autoSizeColumns]);
 
+  const handleReferenceClick = useCallback(
+    (registrationData) => {
+      const transactions = registrationData?.raw?.transactions || [];
+      const primaryTransaction = transactions[0] || null;
+
+      if (!primaryTransaction) {
+        Toast.error('No payment transaction found for this registration.');
+        return;
+      }
+
+      setSelectedRegistration(registrationData.raw);
+      setSelectedTransaction(primaryTransaction);
+      setStatusForm(primaryTransaction.status || '');
+      setIsModalOpen(true);
+    },
+    []
+  );
+
+  const handleCellClicked = useCallback(
+    (params) => {
+      if (params.colDef.field === 'reference') {
+        handleReferenceClick(params.data);
+      }
+    },
+    [handleReferenceClick]
+  );
+
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+    setSelectedRegistration(null);
+    setSelectedTransaction(null);
+  }, []);
+
+  const handleStatusUpdate = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (!selectedTransaction?.id) return;
+      if (!statusForm) {
+        Toast.error('Please select a status');
+        return;
+      }
+
+      updateTransactionStatus({
+        transaction: selectedTransaction.id,
+        payload: { status: statusForm },
+      });
+    },
+    [selectedTransaction, statusForm, updateTransactionStatus]
+  );
+
   const handleExportCSV = useCallback(() => {
     if (!gridRef.current) return;
     const timestamp = new Date().toISOString().split('T')[0];
@@ -284,11 +355,132 @@ const AdminEventsTable = () => {
           rowData={registrationData}
           gridOptions={gridOptions}
           onGridReady={onGridReady}
+          onCellClicked={handleCellClicked}
           getRowClass={getRowClass}
         />
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        maxWidth="max-w-3xl"
+        title="Payment Details"
+      >
+        {selectedRegistration && selectedTransaction ? (
+          <div className="space-y-6">
+            <section>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                Registration Details
+              </h3>
+              <div className="grid grid-cols-1 gap-3 mt-3 sm:grid-cols-2">
+                <DetailItem
+                  label="User"
+                  value={`${selectedRegistration.user?.first_name || ''} ${
+                    selectedRegistration.user?.last_name || ''
+                  }`}
+                />
+                <DetailItem
+                  label="Email"
+                  value={selectedRegistration.user?.email || 'N/A'}
+                />
+                <DetailItem label="Event" value={selectedRegistration.event} />
+                <DetailItem
+                  label="Dates"
+                  value={selectedRegistration.selected_dates?.join(', ') || 'N/A'}
+                />
+                <DetailItem
+                  label="Amount Due"
+                  value={`₦${Number(selectedRegistration.total || 0).toLocaleString()}`}
+                />
+                <DetailItem
+                  label="Interested in Serving"
+                  value={selectedRegistration.interested_in_serving ? 'Yes' : 'No'}
+                />
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                Transaction
+              </h3>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <DetailItem
+                  label="Reference"
+                  value={selectedTransaction.transaction_reference}
+                />
+                <DetailItem
+                  label="Status"
+                  value={selectedTransaction.status?.toUpperCase()}
+                />
+                <DetailItem
+                  label="Method"
+                  value={selectedTransaction.payment_method}
+                />
+                <DetailItem
+                  label="Amount Paid"
+                  value={`₦${Number(selectedTransaction.amount || 0).toLocaleString()}`}
+                />
+                <DetailItem
+                  label="Created At"
+                  value={
+                    selectedTransaction.created_at
+                      ? new Date(selectedTransaction.created_at).toLocaleString()
+                      : 'N/A'
+                  }
+                />
+                <DetailItem
+                  label="Note"
+                  value={selectedTransaction.note || 'N/A'}
+                />
+              </div>
+
+              <form onSubmit={handleStatusUpdate} className="space-y-3">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Update Status
+                </label>
+                <select
+                  value={statusForm}
+                  onChange={(e) => setStatusForm(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                >
+                  <option value="">Select status</option>
+                  <option value="pending">Pending</option>
+                  <option value="completed">Completed</option>
+                  <option value="failed">Failed</option>
+                </select>
+                <div className="flex justify-end gap-3 pt-2">
+                  <Button variant="ghost" type="button" onClick={closeModal}>
+                    Close
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    loading={isUpdatingStatus}
+                    disabled={!statusForm}
+                  >
+                    Update Status
+                  </Button>
+                </div>
+              </form>
+            </section>
+          </div>
+        ) : (
+          <p>No transaction data available.</p>
+        )}
+      </Modal>
     </div>
   );
 };
 
 export default AdminEventsTable;
+
+const DetailItem = ({ label, value }) => (
+  <div>
+    <p className="text-xs uppercase text-slate-500 dark:text-slate-400">
+      {label}
+    </p>
+    <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
+      {value || 'N/A'}
+    </p>
+  </div>
+);

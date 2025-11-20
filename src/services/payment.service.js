@@ -10,26 +10,9 @@ export const paymentService = {
     );
     return data;
   },
-  async verifyPayment(reference) {
-    const { data } = await $api.get(`/${PAYMENT}/verify/${reference}`);
-    return data;
-  },
 
-  async getEventPayments() {
-    const { data } = await $api.get(`/${PAYMENT}/events`);
-    return data;
-  },
-
-  async getPaymentDetails(paymentId) {
-    const { data } = await $api.get(`/${PAYMENT}/${paymentId}`);
-    return data;
-  },
-
-  async exportPayments(format = 'excel') {
-    const { data } = await $api.get(`/${PAYMENT}/export`, {
-      params: { format },
-      responseType: 'blob',
-    });
+  async updateTransactionStatus({ transaction, payload }) {
+    const { data } = await $api.patch(`/transactions/${transaction}`, payload);
     return data;
   },
 };
