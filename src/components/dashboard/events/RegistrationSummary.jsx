@@ -2,12 +2,35 @@ import { CheckIcon } from '@/icons/EventsIcons';
 
 export default function RegistrationSummary({
   registrationData,
-  readyToPay,
+  //readyToPay,
   onNewRegistration,
-  onProceedToPay,
-  isProcessingPayment = false,
+  // onProceedToPay,
+  //isProcessingPayment = false,
 }) {
-  console.log('registrationData transactions:', registrationData);
+  const transaction = registrationData.transactions?.[0];
+
+  const getTransactionClasses = (status) => {
+    if (!status)
+      return { bg: 'bg-gray-100 border-gray-300', text: 'text-gray-700' };
+
+    const lowerStatus = status.toLowerCase();
+    switch (lowerStatus) {
+      case 'pending':
+        return {
+          bg: 'bg-yellow-100 border-yellow-300',
+          text: 'text-yellow-700',
+        };
+      case 'successful':
+        return { bg: 'bg-green-100 border-green-300', text: 'text-green-700' };
+      default:
+        return { bg: 'bg-gray-100 border-gray-300', text: 'text-gray-700' };
+    }
+  };
+
+  const transactionClasses = transaction
+    ? getTransactionClasses(transaction.status)
+    : null;
+
   return (
     <div className="p-6 bg-white sm:p-8 dark:bg-slate-800">
       <div className="flex items-center justify-between mb-6">
@@ -126,9 +149,31 @@ export default function RegistrationSummary({
           </tbody>
         </table>
       </div>
-      <>
-        {registrationData.transactions?.length > 0 ? (
-          <>hell0</> // whatever you want to display when transaction exists
+
+      <div className="my-5">
+        <p className="text-sm italic text-red-500">
+          Please make your payment to the account details below, using{' '}
+          <strong>SOD 25</strong> as the payment description.
+        </p>
+        <img
+          src="/images/contribution.jpg"
+          className="rounded shadow"
+          alt="contribution"
+        />
+      </div>
+
+      {/* <>
+        {transaction ? (
+          <div
+            className={`p-4 mt-6 rounded-xl border ${transactionClasses.bg}`}
+          >
+            <p className={`font-semibold ${transactionClasses.text}`}>
+              Payment Status: {transaction.status}
+            </p>
+            <p className={`mt-1 text-sm ${transactionClasses.text}`}>
+              Reference: {transaction.transaction_reference}
+            </p>
+          </div>
         ) : (
           readyToPay && (
             <div className="mt-6">
@@ -148,7 +193,7 @@ export default function RegistrationSummary({
             </div>
           )
         )}
-      </>
+      </> */}
     </div>
   );
 }
