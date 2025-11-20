@@ -2,7 +2,6 @@ import { useModal } from "@/hooks/useModal";
 import { QUICK_ACTION_LINKS } from "@/utils/constant";
 import { Link } from "react-router-dom";
 import Modal from "@/components/ui/modal/Modal";
-import Button from "@/components/ui/Button";
 
 
 const QuickActionLink = ({ to, src, alt, external }) => {

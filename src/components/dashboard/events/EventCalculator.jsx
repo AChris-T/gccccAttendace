@@ -92,23 +92,27 @@ export default function EventCalculator({
 
           <div>
             {selectedDays.length > 0 && isConsecutive && !saved && (
-              <CostBreakdown
-                calculations={calculations}
-                transportation={transportation}
-                saved={saved}
-                isPending={isSaving}
-                onSave={handleSave}
-              />
+              <>
+                <CostBreakdown
+                  calculations={calculations}
+                  transportation={transportation}
+                  saved={saved}
+                  isPending={isSaving}
+                  onSave={handleSave}
+                />
+              </>
             )}
 
             {saved && registrationData && (
-              <RegistrationSummary
-                registrationData={registrationData}
-                readyToPay={readyToPay}
-                onNewRegistration={handleNewRegistration}
-                onProceedToPay={handleProceedToPay}
-                isProcessingPayment={isProcessingPayment || isInitiating}
-              />
+              <>
+                <RegistrationSummary
+                  registrationData={registrationData}
+                  readyToPay={readyToPay}
+                  onNewRegistration={handleNewRegistration}
+                  onProceedToPay={handleProceedToPay}
+                  isProcessingPayment={isProcessingPayment || isInitiating}
+                />
+              </>
             )}
           </div>
         </div>

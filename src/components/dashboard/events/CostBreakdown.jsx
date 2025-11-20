@@ -35,12 +35,10 @@ export default function CostBreakdown({
               </div>
               <div className="text-sm text-slate-600 dark:text-slate-400">
                 {calculations.couples
-                  ? `${calculations.nights} day${
-                      calculations.nights !== 1 ? 's' : ''
-                    } × ₦10,000`
-                  : `${calculations.nights} night${
-                      calculations.nights !== 1 ? 's' : ''
-                    } × ₦7,000`}
+                  ? `${calculations.nights} day${calculations.nights !== 1 ? 's' : ''
+                  } × ₦10,000`
+                  : `${calculations.nights} night${calculations.nights !== 1 ? 's' : ''
+                  } × ₦7,000`}
               </div>
             </div>
           </div>
@@ -82,8 +80,8 @@ export default function CostBreakdown({
                   {transportation.to && transportation.fro
                     ? 'To & From'
                     : transportation.to
-                    ? 'To Lagos'
-                    : 'From Lagos'}
+                      ? 'To Lagos'
+                      : 'From Lagos'}
                 </div>
               </div>
             </div>
@@ -105,6 +103,9 @@ export default function CostBreakdown({
         </div>
       </div>
 
+      <img src="/images/contribution.jpg" className="rounded shadow mt-5" alt="contribution" />
+
+
       <Button
         className="w-full mt-5 "
         onClick={onSave}
@@ -116,8 +117,8 @@ export default function CostBreakdown({
         {saved
           ? 'Registration Saved'
           : isPending
-          ? 'Saving...'
-          : 'Save Registration'}
+            ? 'Saving...'
+            : 'Save Registration'}
       </Button>
     </div>
   );

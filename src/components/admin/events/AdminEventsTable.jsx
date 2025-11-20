@@ -34,8 +34,9 @@ const AdminEventsTable = () => {
       couples: p.couples ? 'Yes' : 'No',
       accommodationCost: p.couples_cost || '0.00',
       transportCost: p.transport_cost,
-      transportation: `${p.transportation?.fro ? 'Fro' : ''} ${p.transportation?.to ? 'To' : ''
-        }`.trim(),
+      transportation: `${p.transportation?.fro ? 'Fro' : ''} ${
+        p.transportation?.to ? 'To' : ''
+      }`.trim(),
       numDays: p.num_days,
       nights: p.nights,
       selectedDates: p.selected_dates?.join(', ') || '',
