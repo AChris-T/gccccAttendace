@@ -2,10 +2,10 @@ import { CheckIcon } from '@/icons/EventsIcons';
 
 export default function RegistrationSummary({
   registrationData,
-  readyToPay,
+  //readyToPay,
   onNewRegistration,
-  onProceedToPay,
-  isProcessingPayment = false,
+ // onProceedToPay,
+  //isProcessingPayment = false,
 }) {
   const transaction = registrationData.transactions?.[0];
 
