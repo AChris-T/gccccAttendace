@@ -52,71 +52,68 @@ export default function EventCalculator({
         <ArrowLeftIcon />
         Back to Events
       </button>
-      {isLoading ? (
-        <div className="flex items-center justify-center w-full p-6 text-center text-slate-600 dark:text-slate-400">
-          <LoadingIcon2 />
-        </div>
-      ) : (
-        <div className="grid w-full grid-cols-1 gap-10 overflow-hidden bg-white rounded shadow md:grid-cols-2 dark:bg-slate-800">
-          <div>
-            <EventHeader event={event} />
-            {enableCouples && (
-              <AccommodationType
-                couples={couples}
-                onCouplesChange={handleCouplesChange}
-              />
-            )}
 
-            <DaySelector
-              dates={dates}
-              selectedDays={selectedDays}
-              isConsecutive={isConsecutive}
-              onToggleDay={toggleDay}
+      <div className="grid w-full grid-cols-1 gap-10 overflow-hidden bg-white rounded shadow md:grid-cols-2 dark:bg-slate-800">
+        <div>
+          <EventHeader event={event} />
+          {enableCouples && (
+            <AccommodationType
+              couples={couples}
+              onCouplesChange={handleCouplesChange}
             />
+          )}
 
-            <TransportationSection
+          <DaySelector
+            dates={dates}
+            selectedDays={selectedDays}
+            isConsecutive={isConsecutive}
+            onToggleDay={toggleDay}
+          />
+
+          <TransportationSection
+            transportation={transportation}
+            onTransportationChange={handleTransportationChange}
+          />
+
+          <FeedingSection
+            feeding={feeding}
+            onFeedingChange={handleFeedingChange}
+          />
+
+          <AdditionalInformation
+            formData={formData}
+            onFormDataChange={handleFormDataChange}
+          />
+        </div>
+
+        <div>
+          {selectedDays.length > 0 && isConsecutive && !saved && (
+            <CostBreakdown
+              calculations={calculations}
               transportation={transportation}
-              onTransportationChange={handleTransportationChange}
+              saved={saved}
+              isPending={isSaving}
+              onSave={handleSave}
             />
+          )}
 
-            <FeedingSection
-              feeding={feeding}
-              onFeedingChange={handleFeedingChange}
+          {saved && registrationData && (
+            <RegistrationSummary
+              registrationData={registrationData}
+              readyToPay={readyToPay}
+              onNewRegistration={handleNewRegistration}
+              onProceedToPay={handleProceedToPay}
+              isProcessingPayment={isProcessingPayment || isInitiating}
             />
+          )}
 
-            <AdditionalInformation
-              formData={formData}
-              onFormDataChange={handleFormDataChange}
-            />
-          </div>
-
-          <div>
-            {selectedDays.length > 0 && isConsecutive && !saved && (
-              <>
-                <CostBreakdown
-                  calculations={calculations}
-                  transportation={transportation}
-                  saved={saved}
-                  isPending={isSaving}
-                  onSave={handleSave}
-                />
-              </>
-            )}
-
-            {saved && registrationData && (
-              <>
-                <RegistrationSummary
-                  registrationData={registrationData}
-                  readyToPay={readyToPay}
-                  onNewRegistration={handleNewRegistration}
-                  onProceedToPay={handleProceedToPay}
-                  isProcessingPayment={isProcessingPayment || isInitiating}
-                />
-              </>
-            )}
-          </div>
+          {isLoading && (
+            <div className="flex items-center justify-center w-full p-6 text-center text-slate-600 dark:text-slate-400">
+              <LoadingIcon2 />
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 }

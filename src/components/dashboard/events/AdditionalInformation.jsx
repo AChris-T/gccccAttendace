@@ -11,8 +11,8 @@ export default function AdditionalInformation({ formData, onFormDataChange }) {
           [fieldName]: e.target.value,
         });
       },
-      onBlur: () => { },
-      ref: () => { },
+      onBlur: () => {},
+      ref: () => {},
       value: formData[fieldName] || '',
     });
   };
@@ -61,7 +61,7 @@ export default function AdditionalInformation({ formData, onFormDataChange }) {
               className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
             />
             <span className="font-medium text-slate-900 dark:text-white">
-              Integrated into the Global workforce
+              Integrated into a Unit
             </span>
           </label>
         </div>
@@ -69,7 +69,7 @@ export default function AdditionalInformation({ formData, onFormDataChange }) {
         {formData.integrated_into_a_unit && (
           <div className="bg-white dark:bg-slate-800 rounded-xl">
             <InputForm
-              label="The Unit"
+              label="Specify Unit"
               name="specify_unit"
               type="text"
               register={createRegister('specify_unit')}

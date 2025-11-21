@@ -2,10 +2,10 @@ import { CheckIcon } from '@/icons/EventsIcons';
 
 export default function RegistrationSummary({
   registrationData,
-  readyToPay,
+  //readyToPay,
   onNewRegistration,
-  onProceedToPay,
-  isProcessingPayment = false,
+  // onProceedToPay,
+  //isProcessingPayment = false,
 }) {
   const transaction = registrationData.transactions?.[0];
 
@@ -93,10 +93,12 @@ export default function RegistrationSummary({
               </td>
               <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">
                 {registrationData.couples
-                  ? `${registrationData.numDays} day${registrationData.numDays !== 1 ? 's' : ''
-                  } × ₦10,000`
-                  : `${registrationData.nights} night${registrationData.nights !== 1 ? 's' : ''
-                  } × ₦7,000`}
+                  ? `${registrationData.numDays} day${
+                      registrationData.numDays !== 1 ? 's' : ''
+                    } × ₦10,000`
+                  : `${registrationData.nights} night${
+                      registrationData.nights !== 1 ? 's' : ''
+                    } × ₦7,000`}
               </td>
               <td className="px-4 py-3 text-sm font-semibold text-right text-slate-900 dark:text-white">
                 ₦{registrationData.accommodation.toLocaleString()}
@@ -108,8 +110,9 @@ export default function RegistrationSummary({
               </td>
               <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">
                 {registrationData.feeding
-                  ? `${registrationData.numDays} day${registrationData.numDays !== 1 ? 's' : ''
-                  } × ₦1,500`
+                  ? `${registrationData.numDays} day${
+                      registrationData.numDays !== 1 ? 's' : ''
+                    } × ₦1,500`
                   : 'Not included'}
               </td>
               <td className="px-4 py-3 text-sm font-semibold text-right text-slate-900 dark:text-white">
@@ -123,11 +126,11 @@ export default function RegistrationSummary({
                 </td>
                 <td className="px-4 py-3 text-sm text-slate-600 dark:text-slate-400">
                   {registrationData.transportation.to &&
-                    registrationData.transportation.fro
+                  registrationData.transportation.fro
                     ? 'To & From Lagos'
                     : registrationData.transportation.to
-                      ? 'To Lagos'
-                      : 'From Lagos'}
+                    ? 'To Lagos'
+                    : 'From Lagos'}
                 </td>
                 <td className="px-4 py-3 text-sm font-semibold text-right text-slate-900 dark:text-white">
                   ₦{registrationData.transportCost.toLocaleString()}
@@ -147,9 +150,16 @@ export default function RegistrationSummary({
         </table>
       </div>
 
-      <div className='my-5'>
-        <p className='text-sm italic text-red-500'>Please make your payment to the account details below, using <strong>SOD 25</strong> as the payment description.</p>
-        <img src="/images/contribution.jpg" className="rounded shadow" alt="contribution" />
+      <div className="my-5">
+        <p className="text-sm italic text-red-500">
+          Please make your payment to the account details below, using{' '}
+          <strong>SOD 25</strong> as the payment description.
+        </p>
+        <img
+          src="/images/contribution.jpg"
+          className="rounded shadow"
+          alt="contribution"
+        />
       </div>
 
       {/* <>
