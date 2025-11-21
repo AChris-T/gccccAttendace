@@ -7,6 +7,7 @@ import Modal from '@/components/ui/modal/Modal';
 import { useUpdateTransactionStatus } from '@/queries/payment.query';
 import { Toast } from '@/lib/toastify';
 import { generateTransRef } from '@/utils/helper';
+import Badge from '@/components/ui/Badge';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -60,7 +61,7 @@ const AdminEventsTable = () => {
       numDays: p.num_days,
       nights: p.nights,
       selectedDates: p.selected_dates?.join(', ') || '',
-      status: p.transactions?.status || 'N/A',
+      status: p.transactions?.status == 'completed' ? 'Paid' : 'N/A',
       paymentMethod: p.transactions?.payment_method || 'N/A',
       reference: p.transactions?.transaction_reference || '+ Payment',
       total: Number(p.total),
@@ -121,7 +122,7 @@ const AdminEventsTable = () => {
   const StatusRenderer = useCallback((params) => {
     const value = params.value?.toLowerCase();
     const config = {
-      completed: {
+      paid: {
         bg: 'bg-green-100 dark:bg-green-900/30',
         text: 'text-green-800 dark:text-green-400',
         dot: 'bg-green-500',
@@ -426,7 +427,7 @@ const AdminEventsTable = () => {
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <DetailItem
                   label="Status"
-                  value={selectedTransaction?.status?.toUpperCase() || 'N/A'}
+                  value={selectedTransaction?.status == 'completed' ? 'Paid' : 'N/A'}
                 />
                 <DetailItem
                   label="Created At"
