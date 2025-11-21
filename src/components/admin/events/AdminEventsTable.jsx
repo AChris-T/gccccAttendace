@@ -6,6 +6,7 @@ import { useGetAllEvent } from '@/queries/events.query';
 import Modal from '@/components/ui/modal/Modal';
 import { useUpdateTransactionStatus } from '@/queries/payment.query';
 import { Toast } from '@/lib/toastify';
+import { generateTransRef } from '@/utils/helper';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -47,24 +48,23 @@ const AdminEventsTable = () => {
     return apiRegistrations.data.map((p) => ({
       id: p.id,
       event: p.event,
-      paidAmount: Number(p.transactions?.[0]?.amount || 0),
+      paidAmount: Number(p.transactions?.amount || 0),
       feeding: p.feeding ? 'Yes' : 'No',
       feedingCost: p.feeding_cost,
       accommodation: p.accommodation ? 'Yes' : 'No',
       couples: p.couples ? 'Yes' : 'No',
       accommodationCost: p.couples_cost || '0.00',
       transportCost: p.transport_cost,
-      transportation: `${p.transportation?.fro ? 'Fro' : ''} ${
-        p.transportation?.to ? 'To' : ''
-      }`.trim(),
+      transportation: `${p.transportation?.fro ? 'Fro' : ''} ${p.transportation?.to ? 'To' : ''
+        }`.trim(),
       numDays: p.num_days,
       nights: p.nights,
       selectedDates: p.selected_dates?.join(', ') || '',
-      status: p.transactions?.[0]?.status || 'N/A',
-      paymentMethod: p.transactions?.[0]?.payment_method || 'N/A',
-      reference: p.transactions?.[0]?.transaction_reference || 'N/A',
+      status: p.transactions?.status || 'N/A',
+      paymentMethod: p.transactions?.payment_method || 'N/A',
+      reference: p.transactions?.transaction_reference || '+ Payment',
       total: Number(p.total),
-      paymentDate: p.transactions?.[0]?.created_at,
+      paymentDate: p.transactions?.created_at,
       userName: `${p.user?.first_name || ''} ${p.user?.last_name || ''}`,
       userEmail: p.user?.email || 'No email',
       interestedInServing: p.interested_in_serving ? 'Yes' : 'No',
@@ -72,7 +72,7 @@ const AdminEventsTable = () => {
       specifyUnit: p.specify_unit || '-',
       isStudent: p.is_student ? 'Yes' : 'No',
       institution: p.institution || '-',
-      transactions: p.transactions || [],
+      transactions: p.transactions || {},
       raw: p,
     }));
   }, [apiRegistrations]);
@@ -261,8 +261,8 @@ const AdminEventsTable = () => {
   }, [isGridReady, registrationData, autoSizeColumns]);
 
   const handleReferenceClick = useCallback((registrationData) => {
-    const transactions = registrationData?.raw?.transactions || [];
-    const primaryTransaction = transactions[0] || null;
+    const transactions = registrationData?.raw?.transactions || {};
+    const primaryTransaction = transactions || null;
 
     setSelectedRegistration(registrationData.raw);
     setSelectedTransaction(primaryTransaction);
@@ -270,7 +270,7 @@ const AdminEventsTable = () => {
       amount: primaryTransaction?.amount || '',
       payment_method: primaryTransaction?.payment_method || '',
       note: primaryTransaction?.note || '',
-      transaction_reference: primaryTransaction?.transaction_reference || '',
+      transaction_reference: primaryTransaction?.transaction_reference || generateTransRef(),
     });
     setIsModalOpen(true);
   }, []);
@@ -390,9 +390,8 @@ const AdminEventsTable = () => {
               <div className="grid grid-cols-1 gap-3 mt-3 sm:grid-cols-2">
                 <DetailItem
                   label="User"
-                  value={`${selectedRegistration.user?.first_name || ''} ${
-                    selectedRegistration.user?.last_name || ''
-                  }`}
+                  value={`${selectedRegistration.user?.first_name || ''} ${selectedRegistration.user?.last_name || ''
+                    }`}
                 />
                 <DetailItem
                   label="Email"
@@ -434,8 +433,8 @@ const AdminEventsTable = () => {
                   value={
                     selectedTransaction?.created_at
                       ? new Date(
-                          selectedTransaction.created_at
-                        ).toLocaleString()
+                        selectedTransaction.created_at
+                      ).toLocaleString()
                       : 'N/A'
                   }
                 />
@@ -446,7 +445,7 @@ const AdminEventsTable = () => {
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                       Amount Paid *
-                    </label> 
+                    </label>
                     <input
                       type="number"
                       step="0.01"
@@ -480,23 +479,18 @@ const AdminEventsTable = () => {
                       required
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                       Transaction Reference
                     </label>
                     <input
+                      disabled
                       type="text"
-                      value={transactionForm.transaction_reference}
-                      onChange={(e) =>
-                        setTransactionForm({
-                          ...transactionForm,
-                          transaction_reference: e.target.value,
-                        })
-                      }
+                      value={transactionForm.transaction_reference || generateTransRef()}
                       className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                       placeholder="Transaction reference"
                     />
-                  </div>
+                  </div> */}
                   <div className="sm:col-span-2">
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                       Note

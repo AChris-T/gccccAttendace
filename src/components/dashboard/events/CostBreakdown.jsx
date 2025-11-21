@@ -1,3 +1,4 @@
+import PaymentInfoCard from '@/components/common/PaymentInfoCard';
 import Button from '@/components/ui/Button';
 import {
   CheckIcon,
@@ -103,11 +104,9 @@ export default function CostBreakdown({
         </div>
       </div>
 
-      <div className='my-5'>
-        <p className='text-sm italic text-red-500'>Please make your payment to the account details below, using <strong>SOD 25</strong> as the payment description.</p>
-        <img src="/images/contribution.jpg" className="rounded shadow" alt="contribution" />
+      <div className="my-5">
+        <PaymentInfoCard />
       </div>
-      <img src="/images/contribution.jpg" className="rounded shadow mt-5" alt="contribution" />
 
       <Button
         className="w-full mt-5 "

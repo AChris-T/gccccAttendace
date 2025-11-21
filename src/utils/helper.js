@@ -312,3 +312,8 @@ export const formatBirthDate = (dateStr) => {
     return null;
   }
 };
+export function generateTransRef(prefix = "TRX") {
+  const time = Date.now().toString(36).toUpperCase();
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `${prefix}-${time}-${random}`;
+}
