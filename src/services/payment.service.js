@@ -11,8 +11,11 @@ export const paymentService = {
     return data;
   },
 
-  async updateTransactionStatus({ transaction, payload }) {
-    const { data } = await $api.patch(`/transactions/${transaction}`, payload);
+  async updateTransactionStatus({ registration, payload }) {
+    const { data } = await $api.post(
+      `registrations/${registration}/transactions`,
+      payload
+    );
     return data;
   },
 };

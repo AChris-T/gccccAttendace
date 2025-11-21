@@ -24,28 +24,30 @@ const AdminEventsTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRegistration, setSelectedRegistration] = useState(null);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [statusForm, setStatusForm] = useState('');
-  const { data: apiRegistrations, refetch } = useGetAllEvent();
-  
-  const {
-    mutate: updateTransactionStatus,
-    isPending: isUpdatingStatus,
-  } = useUpdateTransactionStatus({
-    onSuccess: () => {
-      refetch();
-      setIsModalOpen(false);
-      setSelectedRegistration(null);
-      setSelectedTransaction(null);
-    },
+  const [transactionForm, setTransactionForm] = useState({
+    amount: '',
+    payment_method: '',
+    note: '',
+    transaction_reference: '',
   });
+  const { data: apiRegistrations, refetch } = useGetAllEvent();
 
+  const { mutate: updateTransactionStatus, isPending: isUpdatingStatus } =
+    useUpdateTransactionStatus({
+      onSuccess: () => {
+        refetch();
+        setIsModalOpen(false);
+        setSelectedRegistration(null);
+        setSelectedTransaction(null);
+      },
+    });
   const registrationData = useMemo(() => {
     if (!apiRegistrations?.data) return [];
 
     return apiRegistrations.data.map((p) => ({
       id: p.id,
       event: p.event,
-      total: Number(p.total),
+      paidAmount: Number(p.transactions?.[0]?.amount || 0),
       feeding: p.feeding ? 'Yes' : 'No',
       feedingCost: p.feeding_cost,
       accommodation: p.accommodation ? 'Yes' : 'No',
@@ -61,7 +63,7 @@ const AdminEventsTable = () => {
       status: p.transactions?.[0]?.status || 'N/A',
       paymentMethod: p.transactions?.[0]?.payment_method || 'N/A',
       reference: p.transactions?.[0]?.transaction_reference || 'N/A',
-      paidAmount: Number(p.transactions?.[0]?.amount || 0),
+      total: Number(p.total),
       paymentDate: p.transactions?.[0]?.created_at,
       userName: `${p.user?.first_name || ''} ${p.user?.last_name || ''}`,
       userEmail: p.user?.email || 'No email',
@@ -189,11 +191,7 @@ const AdminEventsTable = () => {
         wrapText: true,
         autoHeight: true,
       },
-      {
-        field: 'paidAmount',
-        headerName: 'Paid Amount',
-        valueFormatter: amountValueFormatter,
-      },
+
       { field: 'paymentMethod', headerName: 'Payment Method', minWidth: 120 },
       {
         field: 'paymentDate',
@@ -214,10 +212,14 @@ const AdminEventsTable = () => {
       { field: 'isStudent', headerName: 'Student', minWidth: 100 },
       { field: 'institution', headerName: 'Institution', minWidth: 150 },
       { field: 'status', headerName: 'Status', cellRenderer: StatusRenderer },
-
       {
         field: 'total',
         headerName: 'Total',
+        valueFormatter: amountValueFormatter,
+      },
+      {
+        field: 'paidAmount',
+        headerName: 'Paid Amount',
         valueFormatter: amountValueFormatter,
         cellClass: 'text-blue-600 dark:text-blue-400 font-medium ',
       },
@@ -258,23 +260,20 @@ const AdminEventsTable = () => {
     if (isGridReady) setTimeout(() => autoSizeColumns(), 200);
   }, [isGridReady, registrationData, autoSizeColumns]);
 
-  const handleReferenceClick = useCallback(
-    (registrationData) => {
-      const transactions = registrationData?.raw?.transactions || [];
-      const primaryTransaction = transactions[0] || null;
+  const handleReferenceClick = useCallback((registrationData) => {
+    const transactions = registrationData?.raw?.transactions || [];
+    const primaryTransaction = transactions[0] || null;
 
-      if (!primaryTransaction) {
-        Toast.error('No payment transaction found for this registration.');
-        return;
-      }
-
-      setSelectedRegistration(registrationData.raw);
-      setSelectedTransaction(primaryTransaction);
-      setStatusForm(primaryTransaction.status || '');
-      setIsModalOpen(true);
-    },
-    []
-  );
+    setSelectedRegistration(registrationData.raw);
+    setSelectedTransaction(primaryTransaction);
+    setTransactionForm({
+      amount: primaryTransaction?.amount || '',
+      payment_method: primaryTransaction?.payment_method || '',
+      note: primaryTransaction?.note || '',
+      transaction_reference: primaryTransaction?.transaction_reference || '',
+    });
+    setIsModalOpen(true);
+  }, []);
 
   const handleCellClicked = useCallback(
     (params) => {
@@ -289,23 +288,39 @@ const AdminEventsTable = () => {
     setIsModalOpen(false);
     setSelectedRegistration(null);
     setSelectedTransaction(null);
+    setTransactionForm({
+      amount: '',
+      payment_method: '',
+      note: '',
+      transaction_reference: '',
+    });
   }, []);
 
-  const handleStatusUpdate = useCallback(
+  const handleTransactionUpdate = useCallback(
     (event) => {
       event.preventDefault();
-      if (!selectedTransaction?.id) return;
-      if (!statusForm) {
-        Toast.error('Please select a status');
+      if (!selectedRegistration?.id) {
+        Toast.error('Registration ID is missing');
+        return;
+      }
+      if (!transactionForm.amount || !transactionForm.payment_method) {
+        Toast.error(
+          'Please fill in required fields (amount and payment method)'
+        );
         return;
       }
 
       updateTransactionStatus({
-        transaction: selectedTransaction.id,
-        payload: { status: statusForm },
+        registration: selectedRegistration.id,
+        payload: {
+          amount: Number(transactionForm.amount),
+          payment_method: transactionForm.payment_method,
+          note: transactionForm.note || '',
+          transaction_reference: transactionForm.transaction_reference || '',
+        },
       });
     },
-    [selectedTransaction, statusForm, updateTransactionStatus]
+    [selectedRegistration, transactionForm, updateTransactionStatus]
   );
 
   const handleExportCSV = useCallback(() => {
@@ -366,7 +381,7 @@ const AdminEventsTable = () => {
         maxWidth="max-w-3xl"
         title="Payment Details"
       >
-        {selectedRegistration && selectedTransaction ? (
+        {selectedRegistration ? (
           <div className="space-y-6">
             <section>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -386,68 +401,120 @@ const AdminEventsTable = () => {
                 <DetailItem label="Event" value={selectedRegistration.event} />
                 <DetailItem
                   label="Dates"
-                  value={selectedRegistration.selected_dates?.join(', ') || 'N/A'}
+                  value={
+                    selectedRegistration.selected_dates?.join(', ') || 'N/A'
+                  }
                 />
                 <DetailItem
-                  label="Amount Due"
-                  value={`₦${Number(selectedRegistration.total || 0).toLocaleString()}`}
+                  label="Amount"
+                  value={`₦${Number(
+                    selectedRegistration.total || 0
+                  ).toLocaleString()}`}
                 />
                 <DetailItem
                   label="Interested in Serving"
-                  value={selectedRegistration.interested_in_serving ? 'Yes' : 'No'}
+                  value={
+                    selectedRegistration.interested_in_serving ? 'Yes' : 'No'
+                  }
                 />
               </div>
             </section>
 
             <section className="space-y-4">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                Transaction
+                Transaction Details
               </h3>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <DetailItem
-                  label="Reference"
-                  value={selectedTransaction.transaction_reference}
-                />
-                <DetailItem
                   label="Status"
-                  value={selectedTransaction.status?.toUpperCase()}
-                />
-                <DetailItem
-                  label="Method"
-                  value={selectedTransaction.payment_method}
-                />
-                <DetailItem
-                  label="Amount Paid"
-                  value={`₦${Number(selectedTransaction.amount || 0).toLocaleString()}`}
+                  value={selectedTransaction?.status?.toUpperCase() || 'N/A'}
                 />
                 <DetailItem
                   label="Created At"
                   value={
-                    selectedTransaction.created_at
-                      ? new Date(selectedTransaction.created_at).toLocaleString()
+                    selectedTransaction?.created_at
+                      ? new Date(
+                          selectedTransaction.created_at
+                        ).toLocaleString()
                       : 'N/A'
                   }
                 />
-                <DetailItem
-                  label="Note"
-                  value={selectedTransaction.note || 'N/A'}
-                />
               </div>
 
-              <form onSubmit={handleStatusUpdate} className="space-y-3">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Update Status
-                </label>
-                <select
-                  value={statusForm}
-                  onChange={(e) => setStatusForm(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
-                >
-                  <option value="">Select status</option>
-                  <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                  <option value="failed">Failed</option>
-                </select>
+              <form onSubmit={handleTransactionUpdate} className="space-y-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Amount Paid *
+                    </label> 
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={transactionForm.amount}
+                      onChange={(e) =>
+                        setTransactionForm({
+                          ...transactionForm,
+                          amount: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                      placeholder="0.00"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Payment Method *
+                    </label>
+                    <input
+                      type="text"
+                      value={transactionForm.payment_method}
+                      onChange={(e) =>
+                        setTransactionForm({
+                          ...transactionForm,
+                          payment_method: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                      placeholder="e.g., paystack, bank transfer"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Transaction Reference
+                    </label>
+                    <input
+                      type="text"
+                      value={transactionForm.transaction_reference}
+                      onChange={(e) =>
+                        setTransactionForm({
+                          ...transactionForm,
+                          transaction_reference: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                      placeholder="Transaction reference"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Note
+                    </label>
+                    <textarea
+                      value={transactionForm.note}
+                      onChange={(e) =>
+                        setTransactionForm({
+                          ...transactionForm,
+                          note: e.target.value,
+                        })
+                      }
+                      rows={3}
+                      className="w-full px-3 py-2 border rounded-lg border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+                      placeholder="Payment note"
+                    />
+                  </div>
+                </div>
                 <div className="flex justify-end gap-3 pt-2">
                   <Button variant="ghost" type="button" onClick={closeModal}>
                     Close
@@ -456,9 +523,8 @@ const AdminEventsTable = () => {
                     type="submit"
                     variant="primary"
                     loading={isUpdatingStatus}
-                    disabled={!statusForm}
                   >
-                    Update Status
+                    Update Transaction
                   </Button>
                 </div>
               </form>
