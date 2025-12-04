@@ -4,7 +4,7 @@ export default function PageLoader({
 }) {
     return (
         <div
-            className="fixed top-0 right-0 left-0 backdrop-blur-sm min-h-screen dark:bg-gray-900 transition-colors duration-300 inset-0 z-[1000000] flex items-center justify-center bg-gray-900/40"
+            className="fixed top-0 right-0 left-0 backdrop-blur-sm min-h-screen dark:bg-gray-900 transition-colors duration-300 inset-0 z-1000000 flex items-center justify-center bg-gray-900/40"
             aria-live="polite"
             role="status"
         >

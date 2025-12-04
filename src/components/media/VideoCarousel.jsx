@@ -216,7 +216,8 @@ const VideoCarousel = () => {
                 </div>
             )}
 
-            <style>{`
+            <style>
+                {`
                 .swiper-pagination-bullet {
                 width: 12px;
                 height: 12px;
