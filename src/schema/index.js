@@ -9,17 +9,33 @@ export const unitSchema = yup.object({
     .nullable()
     .notRequired(),
 
-  assistant_id: yup
+  assistant_leader_id: yup
     .number()
     .positive('Invalid assistant ID')
     .integer('Invalid assistant ID')
+    .transform((value, originalValue) =>
+      !originalValue ? null : Number(originalValue)
+    )
     .nullable()
+    .notRequired(),
+
+  assistant_leader_id_2: yup
+    .number()
+    .positive('Invalid second assistant ID')
+    .integer('Invalid second assistant ID')
+    .nullable()
+    .transform((value, originalValue) =>
+      !originalValue ? null : Number(originalValue)
+    )
     .notRequired(),
 
   leader_id: yup
     .number()
     .positive('Invalid leader ID')
     .integer('Invalid leader ID')
+    .transform((value, originalValue) => {
+      return originalValue === '' ? null : value;
+    })
     .nullable()
     .notRequired(),
 });
@@ -234,6 +250,12 @@ export const updateUnitSchema = yup.object({
   name: yup.string().nullable(),
   member_ids: yup.array().of(yup.string()).nullable().default([]),
   assistant_leader_id: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) =>
+      !originalValue ? null : Number(originalValue)
+    ),
+  assistant_leader_id_2: yup
     .number()
     .nullable()
     .transform((value, originalValue) =>

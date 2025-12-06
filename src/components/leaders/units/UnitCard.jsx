@@ -263,6 +263,13 @@ const UnitCard = ({ unit, index }) => {
                         gradientSet={assistantGradients}
                     />
 
+                    <LeaderInfo
+                        leader={unit?.assistantLeader2}
+                        index={index}
+                        title="Assistant Leader (2)"
+                        gradientSet={assistantGradients}
+                    />
+
                     <MembersCount
                         hasPermission={hasPermission}
                         count={unit.members_count}

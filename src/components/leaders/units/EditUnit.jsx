@@ -42,6 +42,7 @@ const EditUnit = ({ unit, onClose }) => {
             member_ids: initialMemberIds,
             leader_id: unit?.leader_id || '',
             assistant_leader_id: unit?.assistant_leader_id || '',
+            assistant_leader_id_2: unit?.assistant_leader_id_2 || '',
         }
     });
 
@@ -107,6 +108,18 @@ const EditUnit = ({ unit, onClose }) => {
                         disabled={isLoadingMembers}
                         error={errors.assistant_leader_id?.message}
                         placeholder="Select an assistant leader..."
+                    />
+                    <SingleSelectForm
+                        expandParent
+                        register={register}
+                        setValue={setValue}
+                        label="Assistant Leader (2)"
+                        name="assistant_leader_id_2"
+                        options={filteredMembers}
+                        defaultValue={unit?.assistant_leader_id_2}
+                        disabled={isLoadingMembers}
+                        error={errors.assistant_leader_id_2?.message}
+                        placeholder="Select a second assistant leader..."
                     />
                 </>
             )}

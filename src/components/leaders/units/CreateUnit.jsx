@@ -35,6 +35,7 @@ const CreateUnit = () => {
             member_ids: [],
             leader_id: null,
             assistant_leader_id: null,
+            assistant_leader_id_2: null,
         },
     });
 
@@ -100,6 +101,7 @@ const CreateUnit = () => {
                                 expandParent
                                 register={register}
                                 setValue={setValue}
+                                error={errors.member_ids?.message}
                                 options={memberOptions}
                                 disabled={isLoadingMembers}
                                 placeholder="Select leader..."
@@ -112,8 +114,21 @@ const CreateUnit = () => {
                                 label="Unit Assistant Leader"
                                 name="assistant_leader_id"
                                 options={memberOptions}
+                                error={errors.assistant_leader_id?.message}
                                 disabled={isLoadingMembers}
                                 placeholder="Select assistant leader..."
+                            />
+
+                            <SingleSelect
+                                expandParent
+                                register={register}
+                                setValue={setValue}
+                                error={errors.assistant_leader_id_2?.message}
+                                label="Unit Assistant Leader (2)"
+                                name="assistant_leader_id_2"
+                                options={memberOptions}
+                                disabled={isLoadingMembers}
+                                placeholder="Select assistant leader (2)..."
                             />
                         </>
                     )}
