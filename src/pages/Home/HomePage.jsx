@@ -11,6 +11,8 @@ import { BookIcon, CalendarIcon, CheckIcon, ClockIcon, HandIcon, SparklesIcon, T
 import animationData from '../../utils/animation.json';
 import { bibleVerses } from "@/utils/data";
 import HomepageComponentCard from "@/components/common/HomepageComponentCard";
+import Avatar from "@/components/ui/Avatar";
+import ConfettiShower from "@/components/dashboard/ConfettiShower";
 
 // ============= CONSTANTS =============
 const ATTENDANCE_SOURCES = {
@@ -359,6 +361,110 @@ const AttendanceRecordedState = ({ attendance }) => (
   </div>
 );
 
+const CakeIcon = ({ className }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+  </svg>
+);
+// ============= BIRTHDAY CARD COMPONENT =============
+const BirthdayCard = ({ birthdayList }) => {
+  if (!birthdayList || birthdayList.length === 0) return null;
+
+  return (
+    <Animated
+      animation="fade-up"
+      duration={0.6}
+      delay={0.6}
+      className="w-full max-w-3xl mx-auto px-4"
+    >
+      <div className="relative group">
+        {/* Animated background glow */}
+        <motion.div
+          className="absolute -inset-1 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-blue-500/20 rounded-2xl blur-xl"
+          animate={{
+            opacity: [0.5, 0.8, 0.5],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        {/* Main card */}
+        <div className="relative px-6 py-5 rounded-2xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 backdrop-blur-sm border border-pink-400/20 shadow-lg">
+          <div className="flex items-start gap-4 mb-4">
+            <div className="shrink-0">
+              <motion.div
+                animate={{
+                  rotate: [0, 10, -10, 0],
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="p-2 rounded-lg bg-pink-400/20"
+              >
+                <CakeIcon className="w-5 h-5 text-pink-300" />
+              </motion.div>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-pink-300 uppercase tracking-wider mb-1">
+                🎉 Birthday Celebrations
+              </h3>
+              <p className="text-xs text-white/70">
+                Let's celebrate our beloved members born today!
+              </p>
+            </div>
+          </div>
+
+          {/* Birthday list */}
+          <div className="space-y-3">
+            {birthdayList.map((person, index) => (
+              <motion.div
+                key={person.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * index, duration: 0.4 }}
+                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+              >
+                <Avatar
+                  src={person.avatar}
+                  name={`${person.first_name} ${person.last_name}`}
+                  size="md"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-white truncate">
+                    {person.first_name} {person.last_name}
+                  </p>
+                  <p className="text-xs text-white/50">
+                    Wishing you a blessed day! 🎂
+                  </p>
+                </div>
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="shrink-0"
+                >
+                  <span className="text-2xl">🎈</span>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Animated>
+  );
+};
+
 // ============= SERVICE ENDED STATE =============
 const ServiceEndedState = ({ serviceName, attendance }) => (
   <div className="space-y-6 w-full">
@@ -545,8 +651,10 @@ const OngoingServiceContent = ({ service, showMarkedAttendance, attendance, onCl
 
 // ============= MAIN PAGE COMPONENT =============
 const HomePage = () => {
+  const [showConfetti, setShowConfetti] = useState(false);
   const { data, isLoading, isError, isFetching, refetch } = useTodaysService();
-  const { service, service_status, seconds_until_start, can_mark, attendance } = data || {};
+  const { service, service_status, seconds_until_start, can_mark, attendance, birthday_list } = data || {};
+
   const { mutate, isPending, isSuccess } = useMarkAttendance();
   const { user } = useAuthStore();
   const [searchParams] = useSearchParams();
@@ -617,10 +725,15 @@ const HomePage = () => {
     }
   };
 
+
   return (
     <HomepageComponentCard>
+      {birthday_list && birthday_list.length > 0 && <ConfettiShower duration={10} />}
       <GreetingContainer userName={user?.first_name} />
       {renderContent()}
+
+      <BirthdayCard birthdayList={birthday_list} />
+
       <BibleVerseCard />
     </HomepageComponentCard>
   );

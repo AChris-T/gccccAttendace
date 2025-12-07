@@ -22,6 +22,7 @@ export const useTodaysService = (options = {}) => {
       const { data } = await ServiceService.getTodaysService();
       return {
         service: data?.service,
+        birthday_list: data?.birthday_list,
         can_mark: data?.can_mark,
         service_status: data?.service_status,
         seconds_until_start: data?.seconds_until_start,
