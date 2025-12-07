@@ -13,6 +13,8 @@ import { bibleVerses } from "@/utils/data";
 import HomepageComponentCard from "@/components/common/HomepageComponentCard";
 import Avatar from "@/components/ui/Avatar";
 import ConfettiShower from "@/components/dashboard/ConfettiShower";
+import { formatBirthDate, formatDisplayDate, generateInitials } from "@/utils/helper";
+import dayjs from "dayjs";
 
 // ============= CONSTANTS =============
 const ATTENDANCE_SOURCES = {
@@ -415,7 +417,7 @@ const BirthdayCard = ({ birthdayList }) => {
                 🎉 Birthday Celebrations
               </h3>
               <p className="text-xs text-white/70">
-                Let's celebrate our beloved members born today!
+                Let's celebrate our beloved brothers and sisters on their special day!
               </p>
             </div>
           </div>
@@ -432,7 +434,7 @@ const BirthdayCard = ({ birthdayList }) => {
               >
                 <Avatar
                   src={person.avatar}
-                  name={`${person.first_name} ${person.last_name}`}
+                  name={generateInitials(`${person.first_name} ${person.last_name}`)}
                   size="md"
                 />
                 <div className="flex-1 min-w-0">
@@ -441,6 +443,9 @@ const BirthdayCard = ({ birthdayList }) => {
                   </p>
                   <p className="text-xs text-white/50">
                     Wishing you a blessed day! 🎂
+                  </p>
+                  <p className="text-xs text-white/50">
+                    <b>Date: </b> {dayjs(person?.date_of_birth).format('DD MMM')}
                   </p>
                 </div>
                 <motion.div
@@ -731,9 +736,7 @@ const HomePage = () => {
       {birthday_list && birthday_list.length > 0 && <ConfettiShower duration={10} />}
       <GreetingContainer userName={user?.first_name} />
       {renderContent()}
-
       <BirthdayCard birthdayList={birthday_list} />
-
       <BibleVerseCard />
     </HomepageComponentCard>
   );

@@ -119,7 +119,7 @@ export function getMatchingServiceId(services, selectedDate) {
 export const formatDate = (dateString) => {
   if (!dateString) return null;
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('en-NG', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -237,7 +237,7 @@ export function getFilteredCommentTypes({ isAdmin, isLeader, isMember }) {
 export const formatDateFull = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('en-NG', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -248,7 +248,7 @@ export const formatDateFull = (dateString) => {
 export const formatFullDateTime = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('en-NG', {
     weekday: 'long',
     month: 'short',
     day: 'numeric',
@@ -317,3 +317,17 @@ export function generateTransRef(prefix = "TRX") {
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `${prefix}-${time}-${random}`;
 }
+
+
+export const generateInitials = (name, maxInitials = 2) => {
+  if (!name || typeof name !== 'string') return '';
+
+  return name
+    .trim()
+    .split(/\s+/) // Split by whitespace
+    .filter(Boolean) // Remove empty strings
+    .map(word => word[0]?.toUpperCase()) // Get first letter of each word
+    .filter(Boolean) // Remove undefined values
+    .slice(0, maxInitials) // Limit to maxInitials
+    .join('');
+};
