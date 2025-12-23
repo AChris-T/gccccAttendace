@@ -8,6 +8,8 @@ import LeadersProtectedRoute from '../layout/route/LeadersProtectedRoute';
 import PublicRoute from '../layout/route/PublicRoute';
 import PageLoader from '@/components/ui/PageLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
+import EventCard from '@/components/dashboard/events/EventCard';
+import EventDetailsPage from '@/pages/Home/EventsPage';
 
 const LoginPage = lazy(() => import('../pages/Home/Auth/LoginPage'));
 const RegisterPage = lazy(() => import('../pages/Home/Auth/RegisterPage'));
@@ -81,7 +83,9 @@ const AppRoutes = [
     children: [
       {
         element: <ProtectedRoute />,
-        children: [{ index: true, element: withSuspense(HomePage) }],
+        children: [{ index: true, element: withSuspense(HomePage) },
+        { path: 'events/picnic-2025', element: withSuspense(EventDetailsPage) },
+        ],
       },
       {
         element: <PublicRoute />,

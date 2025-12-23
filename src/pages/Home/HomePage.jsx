@@ -1,20 +1,35 @@
-import Animated from "@/components/common/Animated";
-import Button from "@/components/ui/Button";
-import { useMarkAttendance } from "@/queries/attendance.query";
-import { useTodaysService } from "@/queries/service.query";
-import { useAuthStore } from "@/store/auth.store";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef, memo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 import Lottie from "lottie-react";
-import { BookIcon, CalendarIcon, CheckIcon, ClockIcon, HandIcon, SparklesIcon, TelegramIcon, YoutubeIcon } from "@/icons";
-import animationData from '../../utils/animation.json';
-import { bibleVerses } from "@/utils/data";
+import dayjs from "dayjs";
+
+// Components
+import Animated from "@/components/common/Animated";
+import Button from "@/components/ui/Button";
 import HomepageComponentCard from "@/components/common/HomepageComponentCard";
 import Avatar from "@/components/ui/Avatar";
 import ConfettiShower from "@/components/dashboard/ConfettiShower";
-import { formatBirthDate, formatDisplayDate, generateInitials } from "@/utils/helper";
-import dayjs from "dayjs";
+
+// Icons
+import {
+  BookIcon,
+  CalendarIcon,
+  CheckIcon,
+  ClockIcon,
+  HandIcon,
+  SparklesIcon,
+  TelegramIcon,
+  YoutubeIcon
+} from "@/icons";
+
+// Hooks & Utils
+import { useMarkAttendance } from "@/queries/attendance.query";
+import { useCoreAppData, useTodaysService } from "@/queries/service.query";
+import { useAuthStore } from "@/store/auth.store";
+import { generateInitials } from "@/utils/helper";
+import { bibleVerses } from "@/utils/data";
+import animationData from '../../utils/animation.json';
 
 // ============= CONSTANTS =============
 const ATTENDANCE_SOURCES = {
@@ -22,95 +37,134 @@ const ATTENDANCE_SOURCES = {
   ONSITE: 'onsite',
 };
 
-// ============= GREETING CONTAINER =============
-const GreetingContainer = ({ userName }) => {
+const SERVICE_STATUS = {
+  UPCOMING: 'upcoming',
+  ONGOING: 'ongoing',
+  ENDED: 'ended',
+};
+
+// Consistent color scheme from birthday card
+const THEME = {
+  gradient: {
+    background: 'from-pink-500/10 to-purple-500/10',
+    glow: 'from-pink-500/20 via-purple-500/20 to-blue-500/20',
+    border: 'border-pink-400/20',
+  },
+  colors: {
+    primary: 'pink-300',
+    secondary: 'purple-400',
+    accent: 'blue-400',
+  }
+};
+
+// ============= SHARED COMPONENTS =============
+const AnimatedGlow = memo(() => (
+  <motion.div
+    className={`absolute -inset-1 bg-gradient-to-r ${THEME.gradient.glow} rounded-2xl blur-xl`}
+    animate={{ opacity: [0.5, 0.8, 0.5] }}
+    transition={{
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }}
+  />
+));
+AnimatedGlow.displayName = 'AnimatedGlow';
+
+const Card = memo(({ children, className = "" }) => (
+  <div className="relative group">
+    <AnimatedGlow />
+    <div className={`relative px-6 py-5 rounded-2xl bg-gradient-to-br ${THEME.gradient.background} backdrop-blur-sm border ${THEME.gradient.border} shadow-lg ${className}`}>
+      {children}
+    </div>
+  </div>
+));
+Card.displayName = 'Card';
+
+const IconWrapper = memo(({ icon: Icon, animated = false, bgColor = "pink-400/20", iconColor = "pink-300" }) => {
+  const content = (
+    <div className={`p-2 rounded-lg bg-${bgColor}`}>
+      <Icon className={`w-5 h-5 text-${iconColor}`} />
+    </div>
+  );
+
+  if (!animated) return <div className="shrink-0">{content}</div>;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full max-w-3xl mx-auto px-4"
-    >
-      <div className="relative group">
-        {/* Animated background glow */}
+    <div className="shrink-0">
+      <motion.div
+        animate={{
+          rotate: [0, 10, -10, 0],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        {content}
+      </motion.div>
+    </div>
+  );
+});
+IconWrapper.displayName = 'IconWrapper';
+
+// ============= GREETING CONTAINER =============
+const GreetingContainer = memo(({ userName }) => (
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+  >
+    <Card>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4 flex-1">
+          <IconWrapper icon={SparklesIcon} animated bgColor="purple-400/20" iconColor="purple-300" />
+
+          <div className="flex-1 min-w-0">
+            <motion.h1
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-lg sm:text-xl font-bold text-white tracking-tight truncate"
+            >
+              Hello 👋, {userName ?? 'Friend'}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="text-sm text-white/60 mt-0.5"
+            >
+              Welcome to GCCC Ibadan.
+            </motion.p>
+          </div>
+        </div>
+
         <motion.div
-          className="absolute -inset-1 bg-linear-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl"
           animate={{
-            opacity: [0.5, 0.8, 0.5],
+            scale: [1, 1.2, 1],
+            opacity: [0.5, 1, 0.5],
           }}
           transition={{
-            duration: 3,
+            duration: 2,
             repeat: Infinity,
             ease: "easeInOut"
           }}
-        />
-
-        {/* Main greeting card */}
-        <div className="relative px-6 py-4 rounded-2xl bg-linear-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/20 shadow-2xl">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4 flex-1">
-              {/* Animated sparkle icon */}
-              <motion.div
-                animate={{
-                  rotate: [0, 10, -10, 0],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="shrink-0"
-              >
-                <div className="p-2.5 rounded-xl bg-linear-to-br from-yellow-400/20 to-amber-400/20 border border-yellow-400/30">
-                  <SparklesIcon className="w-5 h-5 text-yellow-300" />
-                </div>
-              </motion.div>
-
-              <div className="flex-1 min-w-0">
-                <motion.h1
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                  className="text-lg sm:text-xl font-bold text-white tracking-tight truncate"
-                >
-                  Hello 👋, {userName ?? 'Friend'}
-                </motion.h1>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                  className="text-sm text-white/60 mt-0.5"
-                >
-                  Welcome to GCCC Ibadan.
-                </motion.p>
-              </div>
-            </div>
-
-            {/* Pulsing indicator */}
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="shrink-0"
-            >
-              <div className="w-3 h-3 rounded-full bg-linear-to-br from-green-400 to-emerald-400 shadow-lg shadow-green-400/50" />
-            </motion.div>
-          </div>
-        </div>
+          className="shrink-0"
+        >
+          <div className="w-3 h-3 rounded-full bg-gradient-to-br from-pink-400 to-purple-400 shadow-lg shadow-pink-400/50" />
+        </motion.div>
       </div>
-    </motion.div>
-  );
-};
+    </Card>
+  </motion.div>
+));
+GreetingContainer.displayName = 'GreetingContainer';
 
 // ============= BIBLE VERSE CARD =============
-const BibleVerseCard = () => {
+const BibleVerseCard = memo(() => {
   const [currentVerse] = useState(() =>
     bibleVerses[Math.floor(Math.random() * bibleVerses.length)]
   );
@@ -120,17 +174,13 @@ const BibleVerseCard = () => {
       animation="fade-up"
       duration={0.6}
       delay={0.5}
-      className="w-full max-w-3xl mx-auto px-4"
+      className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
     >
-      <div className="px-6 py-5 rounded-2xl bg-linear-to-br from-amber-500/10 to-yellow-500/10 backdrop-blur-sm border border-amber-400/20 shadow-lg">
+      <Card>
         <div className="flex items-start gap-4">
-          <div className="shrink-0">
-            <div className="p-2 rounded-lg bg-amber-400/20">
-              <BookIcon className="w-5 h-5 text-amber-300" />
-            </div>
-          </div>
+          <IconWrapper icon={BookIcon} />
           <div className="flex-1 space-y-2">
-            <p className="text-xs font-semibold text-amber-300 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-pink-300 uppercase tracking-wider">
               {currentVerse.verse}
             </p>
             <p className="text-sm text-white/80 leading-relaxed italic">
@@ -138,61 +188,69 @@ const BibleVerseCard = () => {
             </p>
           </div>
         </div>
-      </div>
+      </Card>
     </Animated>
   );
-};
+});
+BibleVerseCard.displayName = 'BibleVerseCard';
 
 // ============= MAIN CONTAINER WRAPPER =============
-const MainContainer = ({ children }) => {
-  return (
-    <Animated
-      animation="fade-up"
-      duration={0.6}
-      delay={0.2}
-      className="w-full max-w-3xl mx-auto px-4"
-    >
-      <div className="px-4 relative sm:px-6 py-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 shadow-2xl shadow-black/20">
-        <div className="flex justify-center">
-          <img className="h-10" src='/images/logo/gccc.png' alt="logo" />
-        </div>
-        {children}
+const MainContainer = memo(({ children }) => (
+  <Animated
+    animation="fade-up"
+    duration={0.6}
+    delay={0.2}
+    className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+  >
+    <div className="px-4 relative sm:px-6 py-8 rounded-3xl bg-gradient-to-br from-pink-500/5 to-purple-500/5 backdrop-blur-sm border border-pink-400/10 shadow-2xl shadow-black/20">
+      <div className="flex justify-center mb-8">
+        <img className="h-10" src='/images/logo/gccc.png' alt="GCCC Logo" />
       </div>
-    </Animated>
-  );
-};
+      {children}
+    </div>
+  </Animated>
+));
+MainContainer.displayName = 'MainContainer';
 
 // ============= SEO TEXT =============
-const SEOText = ({ scenario, serviceName }) => {
+const SEOText = memo(({ scenario, serviceName }) => {
   const seoContent = {
-    none: {
-      description: "There is no church service scheduled today, but the Lord is always near. Stay connected with us through our online platforms."
-    },
-    upcoming: {
-      description: `Get ready! ${serviceName} begins very soon. Prepare your heart for worship and fellowship.`
-    },
-    ongoing: {
-      description: `${serviceName} is currently in progress. Join us in worship and receive the Word of God.`
-    },
-    marked: {
-      description: "Thank you for marking your presence! Your faithfulness in fellowshipping with fellow believers honors God."
-    },
-    ended: {
-      description: `${serviceName} has ended. We hope you were blessed by today's service. Stay connected for upcoming services.`
-    }
+    none: "There is no church service scheduled today, but the Lord is always near. Stay connected with us through our online platforms.",
+    upcoming: `Get ready! ${serviceName} begins very soon. Prepare your heart for worship and fellowship.`,
+    ongoing: `${serviceName} is currently in progress. Join us in worship and receive the Word of God.`,
+    marked: "Thank you for marking your presence! Your faithfulness in fellowshipping with fellow believers honors God.",
+    ended: `${serviceName} has ended. We hope you were blessed by today's service. Stay connected for upcoming services.`
   };
 
   const content = seoContent[scenario] || seoContent.none;
 
   return (
     <p className="text-sm sm:text-base text-white/70 leading-relaxed text-center px-4 max-w-xl mx-auto">
-      {content.description}
+      {content}
     </p>
   );
-};
+});
+SEOText.displayName = 'SEOText';
 
 // ============= COUNTDOWN TIMER =============
-const CountdownTimer = ({ secondsUntilStart, onRefresh }) => {
+const TimeUnit = memo(({ value, label }) => (
+  <div className="flex flex-col items-center">
+    <div className="relative">
+      <div className="absolute inset-0 bg-pink-500/10 blur-lg rounded-2xl" />
+      <div className={`relative bg-gradient-to-br ${THEME.gradient.background} backdrop-blur-md rounded-xl px-4 py-3 sm:px-6 sm:py-4 border border-white/10 shadow-lg`}>
+        <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tabular-nums">
+          {String(value).padStart(2, '0')}
+        </span>
+      </div>
+    </div>
+    <span className="text-xs text-white/50 mt-1.5 font-medium uppercase tracking-wide">
+      {label}
+    </span>
+  </div>
+));
+TimeUnit.displayName = 'TimeUnit';
+
+const CountdownTimer = memo(({ secondsUntilStart, onRefresh }) => {
   const [timeLeft, setTimeLeft] = useState(secondsUntilStart || 0);
   const hasRefetchedRef = useRef(false);
 
@@ -216,27 +274,11 @@ const CountdownTimer = ({ secondsUntilStart, onRefresh }) => {
   const minutes = Math.floor((timeLeft % 3600) / 60);
   const seconds = timeLeft % 60;
 
-  const TimeUnit = ({ value, label }) => (
-    <div className="flex flex-col items-center">
-      <div className="relative">
-        <div className="absolute inset-0 bg-blue-500/10 blur-lg rounded-2xl" />
-        <div className="relative bg-linear-to-br from-blue-600/30 to-purple-600/30 backdrop-blur-md rounded-xl px-4 py-3 sm:px-6 sm:py-4 border border-white/10 shadow-lg">
-          <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tabular-nums">
-            {String(value).padStart(2, '0')}
-          </span>
-        </div>
-      </div>
-      <span className="text-xs text-white/50 mt-1.5 font-medium uppercase tracking-wide">
-        {label}
-      </span>
-    </div>
-  );
-
   return (
     <div className="w-full space-y-4">
       <div className="text-center">
         <div className="inline-flex items-center gap-2 mb-3">
-          <ClockIcon className="w-5 h-5 text-blue-400" />
+          <ClockIcon className={`w-5 h-5 text-${THEME.colors.primary}`} />
           <h3 className="text-lg sm:text-xl font-bold text-white">
             Service Starts In
           </h3>
@@ -256,10 +298,10 @@ const CountdownTimer = ({ secondsUntilStart, onRefresh }) => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-400/30"
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-500/20 border border-pink-400/30`}
           >
-            <div className="w-2 h-2 rounded-full bg-blue-400" />
-            <span className="text-sm text-blue-300 font-medium">
+            <div className="w-2 h-2 rounded-full bg-pink-400" />
+            <span className="text-sm text-pink-300 font-medium">
               Checking service status...
             </span>
           </motion.div>
@@ -267,18 +309,19 @@ const CountdownTimer = ({ secondsUntilStart, onRefresh }) => {
       )}
     </div>
   );
-};
+});
+CountdownTimer.displayName = 'CountdownTimer';
 
 // ============= CLOCK IN BUTTON =============
-const ClockInButton = ({ onClockIn, isPending }) => (
+const ClockInButton = memo(({ onClockIn, isPending }) => (
   <div className="space-y-6 w-full">
     <div className="flex flex-col items-center space-y-5">
       {!isPending ? (
-        <div className="bg-[#3A4D70] rounded-full">
+        <div className="bg-purple-600/30 rounded-full">
           <motion.button
             onClick={onClockIn}
             disabled={isPending}
-            className="rounded-full bg-[#4C8EFF] p-9 cursor-pointer relative disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-full bg-gradient-to-br from-pink-500 to-purple-500 p-9 cursor-pointer relative disabled:opacity-50 disabled:cursor-not-allowed"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1.1 }}
             transition={{
@@ -294,7 +337,7 @@ const ClockInButton = ({ onClockIn, isPending }) => (
         </div>
       ) : (
         <div className="relative">
-          <div className="absolute inset-0 bg-blue-500/20 dark:bg-blue-400/20 blur-3xl rounded-full"></div>
+          <div className="absolute inset-0 bg-pink-500/20 blur-3xl rounded-full" />
           <Lottie
             animationData={animationData}
             loop
@@ -306,7 +349,7 @@ const ClockInButton = ({ onClockIn, isPending }) => (
 
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center gap-2">
-          <ClockIcon className="w-5 h-5 text-blue-400" />
+          <ClockIcon className={`w-5 h-5 text-${THEME.colors.primary}`} />
           <p className="text-lg font-bold text-white">
             {isPending ? 'Submitting...' : 'Tap to Clock In'}
           </p>
@@ -317,27 +360,28 @@ const ClockInButton = ({ onClockIn, isPending }) => (
       </div>
     </div>
   </div>
-);
+));
+ClockInButton.displayName = 'ClockInButton';
 
 // ============= ATTENDANCE RECORDED STATE =============
-const AttendanceRecordedState = ({ attendance }) => (
+const AttendanceRecordedState = memo(({ attendance }) => (
   <div className="space-y-6 w-full">
     <div className="flex flex-col items-center space-y-5">
       <div className="relative">
-        <div className="absolute inset-0 bg-green-500/10 blur-xl rounded-full" />
+        <div className="absolute inset-0 bg-pink-500/10 blur-xl rounded-full" />
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-          className="relative z-10 bg-linear-to-br from-green-500/15 to-emerald-500/15 backdrop-blur-sm rounded-full p-6 border-4 border-green-400/25"
+          className={`relative z-10 bg-gradient-to-br ${THEME.gradient.background} backdrop-blur-sm rounded-full p-6 border-4 ${THEME.gradient.border}`}
         >
-          <CheckIcon className="w-16 h-16 sm:w-20 sm:h-20 text-green-400" />
+          <CheckIcon className={`w-16 h-16 sm:w-20 sm:h-20 text-${THEME.colors.primary}`} />
         </motion.div>
       </div>
 
       <div className="text-center space-y-3">
         <div className="flex items-center justify-center gap-2">
-          <CalendarIcon className="w-5 h-5 text-green-400" />
+          <CalendarIcon className={`w-5 h-5 text-${THEME.colors.primary}`} />
           <h3 className="text-lg sm:text-xl font-bold text-white">
             Attendance Recorded!
           </h3>
@@ -347,13 +391,13 @@ const AttendanceRecordedState = ({ attendance }) => (
         </p>
 
         {attendance && (
-          <div className="inline-flex flex-col gap-1.5 px-5 py-2.5 rounded-lg bg-white/5 border border-white/10">
+          <div className={`inline-flex flex-col gap-1.5 px-5 py-2.5 rounded-lg bg-white/5 border ${THEME.gradient.border}`}>
             <div className="flex items-center gap-2 text-xs text-white/60">
-              <span className="font-semibold text-green-400">Mode:</span>
+              <span className={`font-semibold text-${THEME.colors.primary}`}>Mode:</span>
               <span className="capitalize">{attendance.mode}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-white/60">
-              <span className="font-semibold text-green-400">Time:</span>
+              <span className={`font-semibold text-${THEME.colors.primary}`}>Time:</span>
               <span>{attendance.marked_at}</span>
             </div>
           </div>
@@ -361,15 +405,57 @@ const AttendanceRecordedState = ({ attendance }) => (
       </div>
     </div>
   </div>
-);
+));
+AttendanceRecordedState.displayName = 'AttendanceRecordedState';
 
-const CakeIcon = ({ className }) => (
+// ============= CAKE ICON =============
+const CakeIcon = memo(({ className }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
   </svg>
-);
+));
+CakeIcon.displayName = 'CakeIcon';
+
 // ============= BIRTHDAY CARD COMPONENT =============
-const BirthdayCard = ({ birthdayList }) => {
+const BirthdayPersonCard = memo(({ person, index }) => (
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: 0.1 * index, duration: 0.4 }}
+    className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+  >
+    <Avatar
+      src={person.avatar}
+      name={generateInitials(`${person.first_name} ${person.last_name}`)}
+      size="md"
+    />
+    <div className="flex-1 min-w-0">
+      <p className="text-sm font-semibold text-white truncate">
+        {person.first_name} {person.last_name}
+      </p>
+      <p className="text-xs text-white/50">
+        Wishing you a blessed day! 🎂
+      </p>
+      <p className="text-xs text-white/50">
+        <b>Date: </b> {dayjs(person?.date_of_birth).format('DD MMM')}
+      </p>
+    </div>
+    <motion.div
+      animate={{ scale: [1, 1.2, 1] }}
+      transition={{
+        duration: 1.5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+      className="shrink-0"
+    >
+      <span className="text-2xl">🎈</span>
+    </motion.div>
+  </motion.div>
+));
+BirthdayPersonCard.displayName = 'BirthdayPersonCard';
+
+const BirthdayCard = memo(({ birthdayList }) => {
   if (!birthdayList || birthdayList.length === 0) return null;
 
   return (
@@ -377,107 +463,40 @@ const BirthdayCard = ({ birthdayList }) => {
       animation="fade-up"
       duration={0.6}
       delay={0.6}
-      className="w-full max-w-3xl mx-auto px-4"
+      className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
     >
-      <div className="relative group">
-        {/* Animated background glow */}
-        <motion.div
-          className="absolute -inset-1 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-blue-500/20 rounded-2xl blur-xl"
-          animate={{
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-
-        {/* Main card */}
-        <div className="relative px-6 py-5 rounded-2xl bg-gradient-to-br from-pink-500/10 to-purple-500/10 backdrop-blur-sm border border-pink-400/20 shadow-lg">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="shrink-0">
-              <motion.div
-                animate={{
-                  rotate: [0, 10, -10, 0],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="p-2 rounded-lg bg-pink-400/20"
-              >
-                <CakeIcon className="w-5 h-5 text-pink-300" />
-              </motion.div>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-sm font-semibold text-pink-300 uppercase tracking-wider mb-1">
-                🎉 Birthday Celebrations
-              </h3>
-              <p className="text-xs text-white/70">
-                Let's celebrate our beloved brothers and sisters on their special day!
-              </p>
-            </div>
-          </div>
-
-          {/* Birthday list */}
-          <div className="space-y-3">
-            {birthdayList.map((person, index) => (
-              <motion.div
-                key={person.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * index, duration: 0.4 }}
-                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
-              >
-                <Avatar
-                  src={person.avatar}
-                  name={generateInitials(`${person.first_name} ${person.last_name}`)}
-                  size="md"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">
-                    {person.first_name} {person.last_name}
-                  </p>
-                  <p className="text-xs text-white/50">
-                    Wishing you a blessed day! 🎂
-                  </p>
-                  <p className="text-xs text-white/50">
-                    <b>Date: </b> {dayjs(person?.date_of_birth).format('DD MMM')}
-                  </p>
-                </div>
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="shrink-0"
-                >
-                  <span className="text-2xl">🎈</span>
-                </motion.div>
-              </motion.div>
-            ))}
+      <Card>
+        <div className="flex items-start gap-4 mb-4">
+          <IconWrapper icon={CakeIcon} animated />
+          <div className="flex-1">
+            <h3 className={`text-sm font-semibold text-${THEME.colors.primary} uppercase tracking-wider mb-1`}>
+              🎉 Birthday Celebrations
+            </h3>
+            <p className="text-xs text-white/70">
+              Let's celebrate our beloved brothers and sisters on their special day!
+            </p>
           </div>
         </div>
-      </div>
+
+        <div className="space-y-3">
+          {birthdayList.map((person, index) => (
+            <BirthdayPersonCard key={person.id} person={person} index={index} />
+          ))}
+        </div>
+      </Card>
     </Animated>
   );
-};
+});
+BirthdayCard.displayName = 'BirthdayCard';
 
 // ============= SERVICE ENDED STATE =============
-const ServiceEndedState = ({ serviceName, attendance }) => (
+const ServiceEndedState = memo(({ serviceName, attendance }) => (
   <div className="space-y-6 w-full">
     <div className="flex flex-col items-center space-y-5">
       <div className="relative">
-        <div className="absolute inset-0 bg-orange-500/10 blur-xl rounded-full" />
-        <div className="relative z-10 bg-gradient-to-br from-orange-500/15 to-amber-500/15 backdrop-blur-sm rounded-full p-6 border-4 border-orange-400/25">
-          <ClockIcon className="w-16 h-16 sm:w-20 sm:h-20 text-orange-400" />
+        <div className="absolute inset-0 bg-pink-500/10 blur-xl rounded-full" />
+        <div className={`relative z-10 bg-gradient-to-br ${THEME.gradient.background} backdrop-blur-sm rounded-full p-6 border-4 ${THEME.gradient.border}`}>
+          <ClockIcon className={`w-16 h-16 sm:w-20 sm:h-20 text-${THEME.colors.primary}`} />
         </div>
       </div>
 
@@ -490,24 +509,87 @@ const ServiceEndedState = ({ serviceName, attendance }) => (
         </p>
 
         {attendance ? (
-          <div className="inline-flex flex-col gap-1.5 px-5 py-2.5 rounded-lg bg-white/5 border border-green-400/25">
-            <p className="text-sm text-green-400 font-semibold">✓ You marked your attendance</p>
+          <div className={`inline-flex flex-col gap-1.5 px-5 py-2.5 rounded-lg bg-white/5 border ${THEME.gradient.border}`}>
+            <p className={`text-sm text-${THEME.colors.primary} font-semibold`}>✓ You marked your attendance</p>
             <div className="text-xs text-white/50">
               {attendance.marked_at}
             </div>
           </div>
         ) : (
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border border-orange-400/25">
-            <span className="text-sm text-orange-300">Attendance was not recorded</span>
+          <div className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/5 border ${THEME.gradient.border}`}>
+            <span className={`text-sm text-${THEME.colors.primary}`}>Attendance was not recorded</span>
           </div>
         )}
       </div>
     </div>
   </div>
-);
+));
+ServiceEndedState.displayName = 'ServiceEndedState';
+
+// ============= ACTION BUTTONS =============
+const ActionButtons = memo(() => (
+  <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+    <Button
+      variant="danger"
+      href="https://youtube.com/@gccc_ibadan"
+      target="_blank"
+      rel="noopener noreferrer"
+      startIcon={<YoutubeIcon className="w-4 h-4" />}
+    >
+      Watch on YouTube
+    </Button>
+    <Button
+      variant="primary"
+      href="https://t.me/Pastoropeyemipeter"
+      target="_blank"
+      startIcon={<TelegramIcon className="w-4 h-4" />}
+      rel="noopener noreferrer"
+    >
+      Download on Telegram
+    </Button>
+  </div>
+));
+ActionButtons.displayName = 'ActionButtons';
+
+const RecapButtons = memo(() => (
+  <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+    <Button
+      variant="danger"
+      href="https://youtube.com/@gccc_ibadan"
+      target="_blank"
+      rel="noopener noreferrer"
+      startIcon={<YoutubeIcon className="w-4 h-4" />}
+    >
+      Watch Recap
+    </Button>
+    <Button
+      variant="primary"
+      href="https://t.me/Pastoropeyemipeter"
+      target="_blank"
+      startIcon={<TelegramIcon className="w-4 h-4" />}
+      rel="noopener noreferrer"
+    >
+      Get Audio Message
+    </Button>
+  </div>
+));
+RecapButtons.displayName = 'RecapButtons';
+
+// ============= SERVICE HEADER =============
+const ServiceHeader = memo(({ service, isLive = false }) => (
+  <div className="text-center space-y-1">
+    <h2 className="text-xl sm:text-2xl font-semibold text-white">
+      {service?.name || 'Service'}{isLive && ' is Live'}
+    </h2>
+    {service?.description && (
+      <p className="text-sm text-white/60">{service.description}</p>
+    )}
+  </div>
+));
+ServiceHeader.displayName = 'ServiceHeader';
 
 // ============= CONTENT COMPONENTS =============
-const LoadingContent = () => (
+const LoadingContent = memo(() => (
   <MainContainer>
     <div className="flex flex-col items-center space-y-6">
       <Animated
@@ -516,7 +598,7 @@ const LoadingContent = () => (
         delay={0.2}
         className="relative"
       >
-        <div className="absolute inset-0 bg-blue-500/20 dark:bg-blue-400/20 blur-3xl rounded-full"></div>
+        <div className="absolute inset-0 bg-pink-500/20 blur-3xl rounded-full" />
         <Lottie
           animationData={animationData}
           loop
@@ -530,17 +612,18 @@ const LoadingContent = () => (
       </div>
     </div>
   </MainContainer>
-);
+));
+LoadingContent.displayName = 'LoadingContent';
 
-const NoServiceContent = () => (
+const NoServiceContent = memo(() => (
   <MainContainer>
     <div className="flex flex-col space-y-8">
       <Animated animation="fade-up" duration={0.6} delay={0.2} className="space-y-6 w-full">
         <div className="flex flex-col items-center space-y-6">
           <div className="relative">
-            <div className="absolute inset-0 bg-gray-500/10 blur-xl rounded-full" />
-            <div className="relative z-10 bg-linear-to-br from-gray-500/15 to-slate-500/15 backdrop-blur-sm rounded-full p-6 border-4 border-gray-400/25 mx-auto w-fit">
-              <CalendarIcon className="w-16 h-16 sm:w-20 sm:h-20 text-gray-400" />
+            <div className="absolute inset-0 bg-pink-500/10 blur-xl rounded-full" />
+            <div className={`relative z-10 bg-gradient-to-br ${THEME.gradient.background} backdrop-blur-sm rounded-full p-6 border-4 ${THEME.gradient.border} mx-auto w-fit`}>
+              <CalendarIcon className={`w-16 h-16 sm:w-20 sm:h-20 text-${THEME.colors.primary}`} />
             </div>
           </div>
 
@@ -553,95 +636,41 @@ const NoServiceContent = () => (
         </div>
       </Animated>
 
-      <Animated animation="fade-up" duration={0.6} delay={0.3} className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
-        <Button
-          variant="danger"
-          href="https://youtube.com/@gccc_ibadan"
-          target="_blank"
-          rel="noopener noreferrer"
-          startIcon={<YoutubeIcon className="w-4 h-4" />}
-        >
-          Watch on YouTube
-        </Button>
-        <Button
-          variant="primary"
-          href="https://t.me/Pastoropeyemipeter"
-          target="_blank"
-          startIcon={<TelegramIcon className="w-4 h-4" />}
-          rel="noopener noreferrer"
-        >
-          Download on Telegram
-        </Button>
+      <Animated animation="fade-up" duration={0.6} delay={0.3}>
+        <ActionButtons />
       </Animated>
     </div>
   </MainContainer>
-);
+));
+NoServiceContent.displayName = 'NoServiceContent';
 
-const UpcomingServiceContent = ({ service, secondsUntilStart, onRefresh }) => (
+const UpcomingServiceContent = memo(({ service, secondsUntilStart, onRefresh }) => (
   <MainContainer>
     <div className="flex flex-col space-y-8">
-      <div className="text-center space-y-1">
-        <h2 className="text-xl sm:text-2xl font-semibold text-white">
-          {service?.name || 'Service'}
-        </h2>
-        {service?.description && (
-          <p className="text-sm text-white/60">{service.description}</p>
-        )}
-      </div>
+      <ServiceHeader service={service} />
       <CountdownTimer secondsUntilStart={secondsUntilStart || 0} onRefresh={onRefresh} />
       <SEOText scenario="upcoming" serviceName={service?.name} />
     </div>
   </MainContainer>
-);
+));
+UpcomingServiceContent.displayName = 'UpcomingServiceContent';
 
-const EndedServiceContent = ({ service, attendance }) => (
+const EndedServiceContent = memo(({ service, attendance }) => (
   <MainContainer>
     <div className="flex flex-col space-y-8">
-      <div className="text-center space-y-1">
-        <h2 className="text-xl sm:text-2xl font-semibold text-white">
-          {service?.name || 'Service'}
-        </h2>
-        {service?.description && (
-          <p className="text-sm text-white/60">{service.description}</p>
-        )}
-      </div>
+      <ServiceHeader service={service} />
       <ServiceEndedState serviceName={service?.name} attendance={attendance} />
       <SEOText scenario="ended" serviceName={service?.name} />
-      <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
-        <Button
-          variant="danger"
-          href="https://youtube.com/@gccc_ibadan"
-          target="_blank"
-          rel="noopener noreferrer"
-          startIcon={<YoutubeIcon className="w-4 h-4" />}
-        >
-          Watch Recap
-        </Button>
-        <Button
-          variant="primary"
-          href="https://t.me/Pastoropeyemipeter"
-          target="_blank"
-          startIcon={<TelegramIcon className="w-4 h-4" />}
-          rel="noopener noreferrer"
-        >
-          Get Audio Message
-        </Button>
-      </div>
+      <RecapButtons />
     </div>
   </MainContainer>
-);
+));
+EndedServiceContent.displayName = 'EndedServiceContent';
 
-const OngoingServiceContent = ({ service, showMarkedAttendance, attendance, onClockIn, isPending }) => (
+const OngoingServiceContent = memo(({ service, showMarkedAttendance, attendance, onClockIn, isPending }) => (
   <MainContainer>
     <div className="flex flex-col space-y-8">
-      <div className="text-center space-y-1">
-        <h2 className="text-xl sm:text-2xl font-semibold text-white">
-          {service?.name || 'Service'} is Live
-        </h2>
-        {service?.description && (
-          <p className="text-sm text-white/60">{service.description}</p>
-        )}
-      </div>
+      <ServiceHeader service={service} isLive />
       <AnimatePresence mode="wait">
         {showMarkedAttendance ? (
           <AttendanceRecordedState key="recorded" attendance={attendance} />
@@ -652,23 +681,29 @@ const OngoingServiceContent = ({ service, showMarkedAttendance, attendance, onCl
       <SEOText scenario={showMarkedAttendance ? 'marked' : 'ongoing'} serviceName={service?.name} />
     </div>
   </MainContainer>
-);
+));
+OngoingServiceContent.displayName = 'OngoingServiceContent';
 
 // ============= MAIN PAGE COMPONENT =============
 const HomePage = () => {
-  const [showConfetti, setShowConfetti] = useState(false);
-  const { data, isLoading, isError, isFetching, refetch } = useTodaysService();
-  const { service, service_status, seconds_until_start, can_mark, attendance, birthday_list } = data || {};
+  const { data: serviceData, isLoading: isServiceLoading, isError, isFetching: isServiceFetching, refetch } = useTodaysService();
+  const { data: coreData, isLoading: isCoreLoading, isFetching: isCoreFetching } = useCoreAppData();
+
+  const { service, service_status, seconds_until_start, can_mark, attendance } = serviceData || {};
+  const { birthday_list } = coreData || {};
+
 
   const { mutate, isPending, isSuccess } = useMarkAttendance();
   const { user } = useAuthStore();
   const [searchParams] = useSearchParams();
 
   const sourceParam = searchParams.get('source');
-  const source = sourceParam === ATTENDANCE_SOURCES.ONLINE ? ATTENDANCE_SOURCES.ONLINE : ATTENDANCE_SOURCES.ONSITE;
+  const source = sourceParam === ATTENDANCE_SOURCES.ONLINE
+    ? ATTENDANCE_SOURCES.ONLINE
+    : ATTENDANCE_SOURCES.ONSITE;
 
-  const showMarkedAttendance = isSuccess || (data && !can_mark && attendance);
-  const isLoadingState = isLoading || isPending || isFetching;
+  const showMarkedAttendance = isSuccess || (serviceData && !can_mark && attendance);
+  const isLoadingState = isServiceLoading || isCoreLoading || isPending || isServiceFetching || isCoreFetching;
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -678,16 +713,14 @@ const HomePage = () => {
     e.preventDefault();
     if (!service?.id) return;
 
-    const payload = {
+    mutate({
       service_id: service.id,
       mode: source,
       status: 'present',
-    };
-
-    mutate(payload);
+    });
   }, [service?.id, source, mutate]);
 
-  const renderContent = () => {
+  const renderContent = useCallback(() => {
     if (isLoadingState) {
       return <LoadingContent />;
     }
@@ -697,7 +730,7 @@ const HomePage = () => {
     }
 
     switch (service_status) {
-      case 'upcoming':
+      case SERVICE_STATUS.UPCOMING:
         return (
           <UpcomingServiceContent
             service={service}
@@ -706,7 +739,7 @@ const HomePage = () => {
           />
         );
 
-      case 'ended':
+      case SERVICE_STATUS.ENDED:
         return (
           <EndedServiceContent
             service={service}
@@ -714,7 +747,7 @@ const HomePage = () => {
           />
         );
 
-      case 'ongoing':
+      case SERVICE_STATUS.ONGOING:
         return (
           <OngoingServiceContent
             service={service}
@@ -728,8 +761,18 @@ const HomePage = () => {
       default:
         return <NoServiceContent />;
     }
-  };
-
+  }, [
+    isLoadingState,
+    isError,
+    service_status,
+    service,
+    seconds_until_start,
+    handleRefresh,
+    attendance,
+    showMarkedAttendance,
+    handleClockIn,
+    isPending
+  ]);
 
   return (
     <HomepageComponentCard>

@@ -1,0 +1,842 @@
+{
+  "starters": [
+    {
+      "category": "Classic Pepper Soup",
+      "items": [
+        {
+          "name": "Cat Fish Pepper Soup",
+          "price": 16500
+        },
+        {
+          "name": "Croaker Fish Pepper Soup",
+          "price": 18000
+        },
+        {
+          "name": "Goat Meat Pepper Soup",
+          "price": 11000
+        },
+        {
+          "name": "Chicken Pepper Soup",
+          "price": 10000
+        },
+        {
+          "name": "Turkey Pepper Soup",
+          "price": 14000
+        },
+        {
+          "name": "Seafood Pepper Soup",
+          "price": 23000
+        }
+      ]
+    },
+    {
+      "category": "Nigerian Appetizers",
+      "items": [
+        {
+          "name": "Isi Ewu",
+          "price": 17000
+        },
+        {
+          "name": "Nkwobi (Ponmo)",
+          "price": 16000
+        },
+        {
+          "name": "Asun",
+          "price": 10000
+        },
+        {
+          "name": "Peppered Gizzard",
+          "price": 10000
+        },
+        {
+          "name": "Peppered Beef",
+          "price": 10000
+        },
+        {
+          "name": "Peppered Chicken",
+          "price": 9000
+        },
+        {
+          "name": "Peppered Prawns",
+          "price": 19000
+        },
+        {
+          "name": "Peppered Goat Meat",
+          "price": 10000
+        },
+        {
+          "name": "Peppered Wings",
+          "price": 11000
+        },
+        {
+          "name": "Peppered Turkey Wings",
+          "price": 13000
+        },
+        {
+          "name": "Peppered Snail",
+          "price": 15000
+        }
+      ]
+    },
+    {
+      "category": "Chinese Starters",
+      "items": [
+        {
+          "name": "Spring Roll - Veg (Per Pcs)",
+          "price": 1200
+        },
+        {
+          "name": "Spring Roll - Chicken (Per Pcs)",
+          "price": 1400
+        },
+        {
+          "name": "Samosa - Chicken/Beef (Per Pcs)",
+          "price": 1400
+        },
+        {
+          "name": "Spring Roll - Mayo & Shrimps",
+          "price": 2800
+        },
+        {
+          "name": "Steamed Dumplings - Chicken (4 Pcs)",
+          "price": 6600
+        },
+        {
+          "name": "Steamed Dumplings - Prawns",
+          "price": 8000
+        },
+        {
+          "name": "Pan Fried Dumplings - Chicken",
+          "price": 6000
+        },
+        {
+          "name": "Pan Fried Dumplings - Prawns",
+          "price": 8000
+        },
+        {
+          "name": "Butterfly Prawns - Medium",
+          "price": 10000
+        }
+      ]
+    },
+    {
+      "category": "Grill House",
+      "items": [
+        {
+          "name": "Beef Suya",
+          "price": 6000
+        },
+        {
+          "name": "Chicken Suya",
+          "price": 9000
+        },
+        {
+          "name": "Fish Tikka",
+          "price": 17500
+        },
+        {
+          "name": "Fish Reshmi Kebab",
+          "price": 17500
+        },
+        {
+          "name": "Sarson Fish Tikka",
+          "price": 17500
+        },
+        {
+          "name": "Achari Fish Tikka",
+          "price": 17500
+        },
+        {
+          "name": "Tandoori Prawns",
+          "price": 23000
+        },
+        {
+          "name": "Tandoori Butter Garlic Prawns",
+          "price": 23000
+        },
+        {
+          "name": "Achari Prawns",
+          "price": 23000
+        },
+        {
+          "name": "Kandhari Prawns",
+          "price": 23000
+        },
+        {
+          "name": "BBQ Chicken - Half",
+          "price": 14500
+        },
+        {
+          "name": "BBQ Chicken - Full",
+          "price": 19500
+        },
+        {
+          "name": "Nigerian Grilled Fish - Cat Fish",
+          "price": 18000
+        },
+        {
+          "name": "Nigerian Grilled Fish - Croacker",
+          "price": 19500
+        },
+        {
+          "name": "Chicken Wings",
+          "price": 13000
+        }
+      ]
+    },
+    {
+      "category": "Continental Starters",
+      "items": [
+        {
+          "name": "Chicken Tenders",
+          "price": 12000
+        },
+        {
+          "name": "Crispy Calamari Rings",
+          "price": 16000
+        },
+        {
+          "name": "Fish Fingers",
+          "price": 16000
+        },
+        {
+          "name": "Prawn Tempura",
+          "price": 23000
+        },
+        {
+          "name": "Butter Garlic Prawns",
+          "price": 23000
+        }
+      ]
+    },
+    {
+      "category": "Pizza",
+      "items": [
+        {
+          "name": "Margarrita - Medium",
+          "price": 11500
+        },
+        {
+          "name": "Margarrita - Large",
+          "price": 13500
+        },
+        {
+          "name": "Vegetarian - Medium",
+          "price": 12500
+        },
+        {
+          "name": "Vegetarian - Large",
+          "price": 15000
+        },
+        {
+          "name": "Hawaiian - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Hawaiian - Large",
+          "price": 16500
+        },
+        {
+          "name": "Chicken & Mushroom - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Chicken & Mushroom - Large",
+          "price": 16500
+        },
+        {
+          "name": "Sweet Chilli Chicken - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Sweet Chilli Chicken - Large",
+          "price": 16500
+        },
+        {
+          "name": "Shrimp Suya Pizza - Medium",
+          "price": 16000
+        },
+        {
+          "name": "Shrimp Suya Pizza - Large",
+          "price": 20000
+        },
+        {
+          "name": "BBQ - Medium",
+          "price": 14000
+        },
+        {
+          "name": "BBQ - Large",
+          "price": 16500
+        },
+        {
+          "name": "Chicken Suya - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Chicken Suya - Large",
+          "price": 16500
+        },
+        {
+          "name": "Pepperoni - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Pepperoni - Large",
+          "price": 16500
+        },
+        {
+          "name": "Beef Suya - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Beef Suya - Large",
+          "price": 16500
+        },
+        {
+          "name": "Something Meaty - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Something Meaty - Large",
+          "price": 16500
+        },
+        {
+          "name": "Chicken Crammed-Crust",
+          "price": 20000
+        },
+        {
+          "name": "Meaty Crammed-Crust",
+          "price": 20000
+        },
+        {
+          "name": "Chicken Tikka",
+          "price": 17000
+        },
+        {
+          "name": "Butter Chicken",
+          "price": 17000
+        }
+      ]
+    }
+  ],
+  "main_dishes": [
+    {
+      "category": "Chinese Main Course",
+      "items": [
+        {
+          "name": "Chicken in Black Bean Sauce - Medium",
+          "price": 17000
+        },
+        {
+          "name": "Diced Chicken in Chilli Sauce - Medium",
+          "price": 17000
+        },
+        {
+          "name": "Diced Chicken in Curry Sauce - Medium",
+          "price": 17000
+        },
+        {
+          "name": "Chicken in Hot Plate - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Chicken in Hot Plate - Large",
+          "price": 17000
+        },
+        {
+          "name": "Mongolian Chicken - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Mongolian Chicken - Large",
+          "price": 17000
+        },
+        {
+          "name": "Sweet & Sour Chicken - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Sweet & Sour Chicken - Large",
+          "price": 17000
+        },
+        {
+          "name": "Chicken & Broccoli - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Chicken & Broccoli - Large",
+          "price": 17000
+        },
+        {
+          "name": "Shredded Beef with Green Pepper - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Shredded Beef with Green Pepper - Large",
+          "price": 17000
+        },
+        {
+          "name": "Beef in Black Bean Sauce (HP) - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Beef in Black Bean Sauce (HP) - Large",
+          "price": 17000
+        },
+        {
+          "name": "Beef in Black Pepper (HP) - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Beef in Black Pepper (HP) - Large",
+          "price": 17000
+        },
+        {
+          "name": "Beef in Oyster Sauce (HP) - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Beef in Oyster Sauce (HP) - Large",
+          "price": 17000
+        },
+        {
+          "name": "Mongolian Beef - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Mongolian Beef - Large",
+          "price": 17000
+        },
+        {
+          "name": "Stir Fried Beef & Broccoli - Medium",
+          "price": 14000
+        },
+        {
+          "name": "Stir Fried Beef & Broccoli - Large",
+          "price": 17000
+        },
+        {
+          "name": "Sliced Lamb with Spring Onion & Ginger - Medium",
+          "price": 16000
+        },
+        {
+          "name": "Sliced Lamb with Spring Onion & Ginger - Large",
+          "price": 19000
+        },
+        {
+          "name": "Diced Lamb with Spicy Sauce - Medium",
+          "price": 16000
+        },
+        {
+          "name": "Diced Lamb with Spicy Sauce - Large",
+          "price": 19000
+        },
+        {
+          "name": "Lamb in Hot Plate - Medium",
+          "price": 16000
+        },
+        {
+          "name": "Lamb in Hot Plate - Large",
+          "price": 19000
+        },
+        {
+          "name": "Steamed Whole Fish",
+          "price": 21000
+        },
+        {
+          "name": "Whole Fish in Sweet & Sour Sauce",
+          "price": 21000
+        },
+        {
+          "name": "Sliced Fish in Chilli Sauce - Medium",
+          "price": 18000
+        },
+        {
+          "name": "Sliced Fish in Chilli Sauce - Large",
+          "price": 21000
+        },
+        {
+          "name": "Fish in Hot Plate - Medium",
+          "price": 18000
+        },
+        {
+          "name": "Fish in Hot Plate - Large",
+          "price": 21000
+        },
+        {
+          "name": "Sliced Fish in Sweet & Sour Sauce - Medium",
+          "price": 18000
+        },
+        {
+          "name": "Sliced Fish in Sweet & Sour Sauce - Large",
+          "price": 21000
+        },
+        {
+          "name": "Prawns in Chilli Sauce - Medium",
+          "price": 22000
+        },
+        {
+          "name": "Prawn in Black Bean Sauce (HP) - Medium",
+          "price": 22000
+        },
+        {
+          "name": "Prawns in Oyster Sauce (HP) - Medium",
+          "price": 22000
+        },
+        {
+          "name": "Prawns in Hot Plate - Medium",
+          "price": 22000
+        }
+      ]
+    },
+    {
+      "category": "Chinese Noodles",
+      "items": [
+        {
+          "name": "Stir Fried Singapore Noodles - Vegetarian Medium",
+          "price": 12000
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Vegetarian Large",
+          "price": 14000
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Chicken Medium",
+          "price": 12500
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Chicken Large",
+          "price": 14500
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Beef Medium",
+          "price": 12500
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Beef Large",
+          "price": 14500
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Shrimps Medium",
+          "price": 14000
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Shrimps Large",
+          "price": 16500
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Seafood Medium",
+          "price": 16000
+        },
+        {
+          "name": "Stir Fried Singapore Noodles - Seafood Large",
+          "price": 19000
+        }
+      ]
+    },
+    {
+      "category": "Chinese Rice",
+      "items": [
+        {
+          "name": "Steamed Rice - Medium",
+          "price": 7500
+        },
+        {
+          "name": "Steamed Rice - Large",
+          "price": 9000
+        },
+        {
+          "name": "Veg Fried Rice - Medium",
+          "price": 10000
+        },
+        {
+          "name": "Veg Fried Rice - Large",
+          "price": 12500
+        },
+        {
+          "name": "Egg Fried Rice - Medium",
+          "price": 10000
+        },
+        {
+          "name": "Egg Fried Rice - Large",
+          "price": 12500
+        },
+        {
+          "name": "Beef Fried Rice - Medium",
+          "price": 11000
+        },
+        {
+          "name": "Beef Fried Rice - Large",
+          "price": 13500
+        },
+        {
+          "name": "Chicken Fried Rice - Medium",
+          "price": 11000
+        },
+        {
+          "name": "Chicken Fried Rice - Large",
+          "price": 13500
+        },
+        {
+          "name": "Shrimps Fried Rice - Medium",
+          "price": 12000
+        },
+        {
+          "name": "Shrimps Fried Rice - Large",
+          "price": 15000
+        },
+        {
+          "name": "Special Fried Rice - Medium",
+          "price": 13500
+        },
+        {
+          "name": "Special Fried Rice - Large",
+          "price": 17500
+        }
+      ]
+    },
+    {
+      "category": "Chinese Soups",
+      "items": [
+        {
+          "name": "Sweet Corn Soup - Veg",
+          "price": 9000
+        },
+        {
+          "name": "Sweet Corn Soup - Chicken",
+          "price": 9000
+        },
+        {
+          "name": "Peking Soup - Veg",
+          "price": 9000
+        },
+        {
+          "name": "Peking Soup - Chicken",
+          "price": 9000
+        },
+        {
+          "name": "Seafood Creamy Soup",
+          "price": 15000
+        }
+      ]
+    },
+    {
+      "category": "Nigerian Rice",
+      "items": [
+        {
+          "name": "Seafood Fried Rice",
+          "price": 14000
+        },
+        {
+          "name": "Jollof Rice",
+          "price": 11000
+        },
+        {
+          "name": "Fried Rice",
+          "price": 11000
+        },
+        {
+          "name": "Chicken & Chips",
+          "price": 14000
+        }
+      ]
+    },
+    {
+      "category": "Nigerian Soups",
+      "items": [
+        {
+          "name": "Ogbono",
+          "price": 15000
+        },
+        {
+          "name": "Afang Soup",
+          "price": 10000
+        },
+        {
+          "name": "Okro Soup",
+          "price": 10000
+        },
+        {
+          "name": "Edikaikong Soup",
+          "price": 8000
+        },
+        {
+          "name": "Eforiro Soup",
+          "price": 9000
+        },
+        {
+          "name": "Egusi Soup",
+          "price": 9000
+        },
+        {
+          "name": "Bitter Leaf Soup",
+          "price": 9000
+        },
+        {
+          "name": "Banga (Delta Style)",
+          "price": 10000
+        }
+      ]
+    },
+    {
+      "category": "Continental Soups",
+      "items": [
+        {
+          "name": "Spicy Coconut Shrimp Soup",
+          "price": 13000
+        },
+        {
+          "name": "Tomato Basil Soup",
+          "price": 9000
+        }
+      ]
+    },
+    {
+      "category": "Continental Salads",
+      "items": [
+        {
+          "name": "Caesar Salad - Chicken",
+          "price": 14000
+        }
+      ]
+    },
+    {
+      "category": "Continental Pasta",
+      "items": [
+        {
+          "name": "Alfredo Pasta - Chicken",
+          "price": 16000
+        },
+        {
+          "name": "Alfredo Pasta - Seafood",
+          "price": 18000
+        },
+        {
+          "name": "Arrabbiata Pasta with Chicken",
+          "price": 16000
+        },
+        {
+          "name": "Arrabbiata Pasta with Prawns",
+          "price": 16000
+        },
+        {
+          "name": "Spaghetti with Meat Balls",
+          "price": 16000
+        },
+        {
+          "name": "Spaghetti Bolognesse",
+          "price": 16000
+        },
+        {
+          "name": "Mac & Cheese - Chicken",
+          "price": 16000
+        },
+        {
+          "name": "Mac & Cheese - Prawns",
+          "price": 20000
+        }
+      ]
+    },
+    {
+      "category": "Continental Chicken",
+      "items": [
+        {
+          "name": "Chicken Escalope",
+          "price": 18500
+        },
+        {
+          "name": "Chicken Red Curry with Rice",
+          "price": 18500
+        },
+        {
+          "name": "Grilled Chicken & Chips with Salad",
+          "price": 18500
+        }
+      ]
+    },
+    {
+      "category": "Continental Beef",
+      "items": [
+        {
+          "name": "Beef Stroganoff with Mashed Potatoes",
+          "price": 24000
+        },
+        {
+          "name": "Jack Daniels Steak with Roasted Potatoes & Stir Fried Vegetables",
+          "price": 24000
+        },
+        {
+          "name": "Beef Steak with Creamy Mushroom Sauce Served with Fries",
+          "price": 24000
+        }
+      ]
+    },
+    {
+      "category": "Continental Seafood",
+      "items": [
+        {
+          "name": "Pan Fried Sole Filet in Lemon Butter Garlic Sauce with Stir Fried Vegetables",
+          "price": 23000
+        },
+        {
+          "name": "Beer Battered Fish with Potato Wedges",
+          "price": 22000
+        },
+        {
+          "name": "Pineapple Rice - Prawns",
+          "price": 22000
+        }
+      ]
+    },
+    {
+      "category": "Continental Subs & Wraps",
+      "items": [
+        {
+          "name": "Philly Cheese Steak Sandwich",
+          "price": 12000
+        },
+        {
+          "name": "Club Sandwich",
+          "price": 12000
+        },
+        {
+          "name": "Assorted Shawarma",
+          "price": 8000
+        },
+        {
+          "name": "Chicken Shawarma",
+          "price": 8000
+        },
+        {
+          "name": "Beef Shawarma",
+          "price": 8000
+        },
+        {
+          "name": "Grilled Chicken",
+          "price": 16000
+        },
+        {
+          "name": "Beef Lasagna",
+          "price": 16000
+        }
+      ]
+    },
+    {
+      "category": "Desserts",
+      "items": [
+        {
+          "name": "Brownie with Ice Cream",
+          "price": 12000
+        },
+        {
+          "name": "Blueberry Cheesecake",
+          "price": 12000
+        },
+        {
+          "name": "Tiramisu",
+          "price": 12000
+        }
+      ]
+    }
+  ]
+}

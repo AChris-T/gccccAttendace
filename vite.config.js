@@ -4,6 +4,12 @@ import svgr from 'vite-plugin-svgr';
 import path from 'path';
 
 export default defineConfig({
+  base: '/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+  },
   plugins: [
     react(),
     svgr({

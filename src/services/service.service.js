@@ -10,4 +10,8 @@ export const ServiceService = {
     const { data } = await $api.get(`${SERVICES}/today-service`);
     return data;
   },
+  async fetchCoreAppData() {
+    const { data } = await $api.get(`${SERVICES}/core-app-data`);
+    return data;
+  },
 };

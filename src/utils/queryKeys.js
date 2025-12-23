@@ -35,6 +35,7 @@ export const QUERY_KEYS = {
   SERVICES: {
     ALL: ['services'],
     TODAY: ['services', 'today'],
+    CORE_DATA: ['core data'],
     DETAIL: (id) => ['services', 'detail', id],
   },
   FIRST_TIMERS: {

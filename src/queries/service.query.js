@@ -14,6 +14,20 @@ export const useServices = (options = {}) => {
     ...options,
   });
 };
+export const useCoreAppData = (options = {}) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.SERVICES.CORE_DATA,
+    queryFn: async () => {
+      const { data } = await ServiceService.fetchCoreAppData();
+      return {
+        birthday_list: data?.birthday_list,
+      }
+    },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
+  });
+};
 
 export const useTodaysService = (options = {}) => {
   return useQuery({
@@ -22,7 +36,6 @@ export const useTodaysService = (options = {}) => {
       const { data } = await ServiceService.getTodaysService();
       return {
         service: data?.service,
-        birthday_list: data?.birthday_list,
         can_mark: data?.can_mark,
         service_status: data?.service_status,
         seconds_until_start: data?.seconds_until_start,
