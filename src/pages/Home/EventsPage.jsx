@@ -506,12 +506,6 @@ export default function PicnicRegistration() {
                     <div className="max-w-2xl mx-auto space-y-3 mb-6">
                         <div>
                             <p className="text-lg text-gray-700 italic">
-                                Taste and see that the Lord is good; blessed is the one who takes refuge in him.
-                            </p>
-                            <p className="text-sm text-gray-500">- Psalm 34:8</p>
-                        </div>
-                        <div>
-                            <p className="text-lg text-gray-700 italic">
                                 This is the day the Lord has made; let us rejoice and be glad in it.
                             </p>
                             <p className="text-sm text-gray-500">- Psalm 118:24</p>
