@@ -706,6 +706,7 @@ import { Calendar, Clock, Users, Gift, CheckCircle, Trophy, Mail, Sparkles, Game
 import { useCreatePicnicRegistration, useGetMyRegistration } from '@/queries/picnic.query';
 import { handleApiError } from '@/utils/helper';
 import Message from '@/components/common/Message';
+import PaymentInfoCard from '@/components/common/PaymentInfoCard';
 
 const GAMES_CONFIG = [
     { name: 'Checkers', image: '/images/games/checkers.png', emoji: '🔴' },
@@ -962,30 +963,6 @@ export default function PicnicRegistration() {
                             </div>
                         </div>
 
-                        {/* Coordinator Special Message */}
-                        {gamesDetails.some(d => d.is_coordinator) && (
-                            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-400 rounded-2xl p-5 mb-6">
-                                <div className="flex items-start gap-3">
-                                    <div className="text-3xl">👑</div>
-                                    <div>
-                                        <h3 className="text-lg font-bold text-amber-900 mb-2">
-                                            You're a Game Coordinator! 🎮
-                                        </h3>
-                                        <p className="text-sm text-amber-800 leading-relaxed mb-2">
-                                            As one of the first to register for{' '}
-                                            <span className="font-bold">
-                                                {gamesDetails.filter(d => d.is_coordinator).map(d => d.game).join(', ')}
-                                            </span>
-                                            , you've been chosen as the game coordinator! Don't worry - we'll send you all the details and support you need.
-                                        </p>
-                                        <p className="text-xs text-amber-700 italic">
-                                            "For to everyone who has, more will be given" - Your early commitment is rewarded with leadership! 💪✨
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
                         {/* Email Notification */}
                         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-2xl p-5 mb-6">
                             <div className="flex items-start gap-3">
@@ -1023,6 +1000,30 @@ export default function PicnicRegistration() {
                                 <p className="text-base font-bold text-green-900">{EVENT_INFO.fellowship}</p>
                             </div>
                         </div>
+
+                        {/* Coordinator Special Message */}
+                        {gamesDetails.some(d => d.is_coordinator) && (
+                            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-400 rounded-2xl p-5 mb-6">
+                                <div className="flex items-start gap-3">
+                                    <div className="text-3xl">👑</div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-amber-900 mb-2">
+                                            You're a Game Coordinator! 🎮
+                                        </h3>
+                                        <p className="text-sm text-amber-800 leading-relaxed mb-2">
+                                            As one of the first to register for{' '}
+                                            <span className="font-bold">
+                                                {gamesDetails.filter(d => d.is_coordinator).map(d => d.game).join(', ')}
+                                            </span>
+                                            , you've been chosen as the game coordinator! Don't worry - we'll send you all the details and support you need.
+                                        </p>
+                                        <p className="text-xs text-amber-700 italic">
+                                            "For to everyone who has, more will be given" - Your early commitment is rewarded with leadership! 💪✨
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Games Section - Always show selected games */}
                         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 mb-6 border-2 border-green-200">
@@ -1116,6 +1117,7 @@ export default function PicnicRegistration() {
                                         </p>
                                     </div>
                                 </div>
+                                <PaymentInfoCard payment_description={'PICNIC 25'} />
                             </div>
                         )}
 
@@ -1330,10 +1332,17 @@ export default function PicnicRegistration() {
 
                         {/* Support Section */}
                         <div className="mb-8 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-5 border-2 border-yellow-200">
-                            <label className="block text-base font-bold text-gray-800 mb-3 flex items-center">
-                                <Gift className="w-5 h-5 mr-2 text-orange-600" />
-                                Would you like to support this event?
-                            </label>
+                            <div className='mb-3'>
+                                <label className="block text-base font-bold text-gray-800 flex items-center">
+                                    <Gift className="w-5 h-5 mr-2 text-orange-600" />
+                                    Would you like to support this event?
+                                </label>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                    Your generous contribution helps make this event a blessing for everyone.
+                                    Every seed sown in love multiplies in joy! 🌱✨
+                                </p>
+                            </div>
+
 
                             <div className="flex gap-4 mb-4">
                                 <button
@@ -1369,12 +1378,7 @@ export default function PicnicRegistration() {
                                         placeholder="₦ Enter amount"
                                         min="0"
                                     />
-                                    <div className="mt-3 bg-white rounded-lg p-3 border border-orange-200">
-                                        <p className="text-xs text-gray-700 leading-relaxed">
-                                            Your generous contribution helps make this event a blessing for everyone.
-                                            Every seed sown in love multiplies in joy! 🌱✨
-                                        </p>
-                                    </div>
+                                    <PaymentInfoCard payment_description={'PICNIC 25'} />
                                 </div>
                             )}
 
