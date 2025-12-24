@@ -34,6 +34,7 @@ export const useGetEvent = (params = {}, options = {}) => {
     ...options,
   });
 };
+
 export const useGetAllEvent = (options = {}) => {
   return useQuery({
     queryKey: QUERY_KEYS.EVENTS.DETAIL(),
