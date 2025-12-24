@@ -10,6 +10,10 @@ export const PicnicService = {
         const { data } = await $api.get(`${PICNIC}/my-registration`);
         return data;
     },
+    async getRegistrations() {
+        const { data } = await $api.get(`/admin${PICNIC}/registrations`);
+        return data;
+    },
     async fetchRegistrations() {
         const { data } = await $api.get(`${PICNIC}/registrations/admin`);
         return data;

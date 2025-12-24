@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Calendar, Clock, Users, Gift, CheckCircle, Trophy, Mail, Sparkles, Gamepad2, PartyPopper } from 'lucide-react';
 import { useCreatePicnicRegistration, useGetMyRegistration } from '@/queries/picnic.query';

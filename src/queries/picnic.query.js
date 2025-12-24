@@ -34,3 +34,15 @@ export const useGetMyRegistration = (options = {}) => {
         ...options,
     });
 };
+export const useGetRegistrations = (options = {}) => {
+    return useQuery({
+        queryKey: ['picnic-registrations'],
+        queryFn: async () => {
+            const data = await PicnicService.getRegistrations();
+            return data;
+        },
+        staleTime: 2 * 60 * 1000,
+        cacheTime: 5 * 60 * 1000,
+        ...options,
+    });
+};
