@@ -1,5 +1,6 @@
 import React from 'react';
 import { CalendarIcon, MapPinIcon, UsersIcon } from '@/icons/EventsIcons';
+import Button from '@/components/ui/Button';
 
 export default function EventCard({ event, onRegister }) {
   return (
@@ -34,31 +35,36 @@ export default function EventCard({ event, onRegister }) {
       </div>
 
       <div className="p-6">
-        <div className="mb-4 space-y-1 font-medium">
-          <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
+        <div className="space-y-1 font-medium">
+          {event.date && <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
             <CalendarIcon />
             <span className="text-base">{event.date}</span>
-          </div>
-          <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
+          </div>}
+
+          {event.location && <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
             <MapPinIcon />
             <span className="text-base">{event.location}</span>
-          </div>
-          <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
+          </div>}
+
+          {event.ministers && <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
             <UsersIcon />
             <span className="text-base">{event.ministers.join(', ')}</span>
-          </div>
+          </div>}
+
         </div>
 
-        <p className="mb-4 text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
+        {event.description && <p className="mb-4 text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
           {event.description}
-        </p>
+        </p>}
 
-        {event.eventType !== 'past' && <button
-          onClick={onRegister}
+
+
+        {event.eventType !== 'past' && <Button
+          href={'/events/picnic-2025'}
           className="w-full py-3 font-semibold text-white transition-colors duration-200 bg-blue-600 hover:bg-blue-700 rounded-xl"
         >
           Register Now
-        </button>}
+        </Button>}
 
       </div>
     </div>

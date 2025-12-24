@@ -3,18 +3,19 @@ import { Calendar, Clock, Users, Gift, CheckCircle, Trophy, Mail, Sparkles, Game
 import { useCreatePicnicRegistration, useGetMyRegistration } from '@/queries/picnic.query';
 import { handleApiError } from '@/utils/helper';
 import Message from '@/components/common/Message';
+import PaymentInfoCard from '@/components/common/PaymentInfoCard';
 
 // Constants
 const GAMES_CONFIG = [
-    { name: 'Checkers', image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=400&h=300&fit=crop', emoji: '🔴' },
-    { name: 'Card games', image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300&fit=crop', emoji: '🃏' },
-    { name: 'Ludo', image: 'https://images.unsplash.com/photo-1611371805429-8b5c1b2c34ba?w=400&h=300&fit=crop', emoji: '🎲' },
-    { name: 'Monopoly', image: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop', emoji: '🏠' },
-    { name: 'Scrabble', image: 'https://images.unsplash.com/photo-1632501641765-e568d28b0015?w=400&h=300&fit=crop', emoji: '🔤' },
-    { name: 'Chess', image: 'https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=400&h=300&fit=crop', emoji: '♟️' },
-    { name: 'Jenga', image: 'https://images.unsplash.com/photo-1632501641679-f9dba8a8e3f5?w=400&h=300&fit=crop', emoji: '🧱' },
-    { name: 'Snake and ladder', image: 'https://images.unsplash.com/photo-1611891487232-fb7709e79d9e?w=400&h=300&fit=crop', emoji: '🐍' },
-    { name: 'Ayo', image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=300&fit=crop', emoji: '🪵' }
+    { name: 'Checkers', image: '/images/games/checkers.png', emoji: '🔴' },
+    { name: 'Card games', image: '/images/games/cardgames.png', emoji: '🃏' },
+    { name: 'Ludo', image: '/images/games/ludo.png', emoji: '🎲' },
+    { name: 'Monopoly', image: '/images/games/monopoly.png', emoji: '🏠' },
+    { name: 'Scrabble', image: '/images/games/scrabble.png', emoji: '🔤' },
+    { name: 'Chess', image: '/images/games/chess.png', emoji: '♟️' },
+    { name: 'Jenga', image: '/images/games/jenga.png', emoji: '🧱' },
+    { name: 'Snake and ladder', image: '/images/games/snakeandladder.png', emoji: '🐍' },
+    { name: 'Ayo', image: '/images/games/ayo.png', emoji: '🪵' }
 ];
 
 const EVENT_INFO = {
@@ -60,7 +61,7 @@ export default function PicnicRegistration() {
             { min: 0, max: 0, text: "Jesus said 'Come and play... I mean pray!' 😅 Select at least one game to continue!", emoji: "🎮", color: "red" },
             { min: 1, max: 1, text: "One game? That's like bringing one fish to feed the 5,000. Bold choice! 🐟", emoji: "🎯", color: "blue" },
             { min: 2, max: 2, text: "Two games! Like Noah's Ark - you're keeping it balanced! ⚖️😄", emoji: "🎲", color: "green" },
-            { min: 3, max: 3, text: "Three games! The Trinity of fun 🙏✨", emoji: "⭐", color: "purple" },
+            { min: 3, max: 3, text: "Three games! The Holy Trinity of fun! 🙏✨", emoji: "⭐", color: "purple" },
             { min: 4, max: 4, text: "Four games! Like the four gospels, you're covering all the bases! 📖🎮", emoji: "🎪", color: "yellow" },
             { min: 5, max: 5, text: "Five games! More choices than loaves and fishes! Someone's ready to multiply the fun! 🍞🐟", emoji: "🎊", color: "orange" },
             { min: 6, max: 7, text: "6-7 games! God rested on the 7th day... but you're not planning to! 😂🎮", emoji: "🌟", color: "pink" },
@@ -118,26 +119,88 @@ export default function PicnicRegistration() {
         }
     };
 
-    // Get players by game from API response
-    const playersByGame = useMemo(() => {
-        if (!existingRegistration?.players_by_game) return {};
+    // Get games details with players and coordinator status
+    const gamesDetails = useMemo(() => {
+        if (!existingRegistration?.games_details) return [];
 
-        const filtered = {};
-        formData.games.forEach(gameName => {
-            if (existingRegistration.players_by_game[gameName]) {
-                filtered[gameName] = existingRegistration.players_by_game[gameName];
-            }
-        });
-        return filtered;
+        // Filter to only show games user has selected
+        return existingRegistration.games_details.filter(detail =>
+            formData.games.includes(detail.game)
+        );
     }, [existingRegistration, formData.games]);
 
-    // Loading state
+    // Loading state with proper skeleton
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-medium">Loading registration...</p>
+            <div className="min-h-screen py-12 px-4">
+                <div className="max-w-4xl my-24 space-y-5 mx-auto">
+                    {/* Hero Skeleton */}
+                    <div className="relative overflow-hidden">
+                        <div className="relative bg-gradient-to-br from-gray-200 via-gray-300 to-gray-200 rounded-3xl p-8 md:p-12 shadow-2xl animate-pulse">
+                            <div className="space-y-4">
+                                <div className="h-6 w-48 bg-white/30 rounded-full"></div>
+                                <div className="h-12 w-3/4 bg-white/40 rounded-lg"></div>
+                                <div className="bg-white/20 rounded-2xl p-4 space-y-3">
+                                    <div className="h-4 bg-white/30 rounded w-full"></div>
+                                    <div className="h-4 bg-white/30 rounded w-2/3"></div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-4 mt-4">
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className="bg-white/20 rounded-xl p-3 h-20"></div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Form Skeleton */}
+                    <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-10 border-4 border-gray-100 animate-pulse">
+                        {/* Event Details Skeleton */}
+                        <div className="grid md:grid-cols-3 gap-6 mb-8">
+                            {[1, 2, 3].map(i => (
+                                <div key={i} className="bg-gray-100 rounded-2xl p-4 h-24"></div>
+                            ))}
+                        </div>
+
+                        {/* Welcome Message Skeleton */}
+                        <div className="bg-gray-50 rounded-2xl p-5 mb-8 space-y-3">
+                            <div className="h-4 bg-gray-200 rounded w-full"></div>
+                            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                            <div className="bg-gray-100 rounded-xl p-4 mt-3">
+                                <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                                <div className="h-3 bg-gray-200 rounded w-full mt-2"></div>
+                            </div>
+                        </div>
+
+                        {/* Title Skeleton */}
+                        <div className="h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-64 mb-6"></div>
+
+                        {/* Games Grid Skeleton */}
+                        <div className="mb-8">
+                            <div className="h-6 bg-gray-200 rounded w-48 mb-3"></div>
+                            <div className="h-3 bg-gray-100 rounded w-64 mb-4"></div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
+                                    <div key={i} className="bg-gray-100 rounded-2xl h-32 overflow-hidden">
+                                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Support Section Skeleton */}
+                        <div className="bg-gray-50 rounded-2xl p-5 mb-8 space-y-4">
+                            <div className="h-6 bg-gray-200 rounded w-56"></div>
+                            <div className="h-3 bg-gray-100 rounded w-full"></div>
+                            <div className="flex gap-4">
+                                <div className="flex-1 h-11 bg-gray-200 rounded-xl"></div>
+                                <div className="flex-1 h-11 bg-gray-200 rounded-xl"></div>
+                            </div>
+                        </div>
+
+                        {/* Submit Button Skeleton */}
+                        <div className="h-14 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-2xl"></div>
+                    </div>
                 </div>
             </div>
         );
@@ -198,6 +261,7 @@ export default function PicnicRegistration() {
                             </div>
                         </div>
 
+
                         {/* Email Notification */}
                         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-2xl p-5 mb-6">
                             <div className="flex items-start gap-3">
@@ -237,39 +301,67 @@ export default function PicnicRegistration() {
                         </div>
 
                         {/* Games Section - Always show selected games */}
+
+                        {/* Coordinator Special Message */}
+                        {gamesDetails.some(d => d.is_coordinator) && (
+                            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-400 rounded-2xl p-5 mb-6">
+                                <div className="flex items-start gap-3">
+                                    <div className="text-3xl">👑</div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-amber-900 mb-2">
+                                            You're a Game Coordinator! 🎮
+                                        </h3>
+                                        <p className="text-sm text-amber-800 leading-relaxed mb-2">
+                                            As one of the first to register for{' '}
+                                            <span className="font-bold">
+                                                {gamesDetails.filter(d => d.is_coordinator).map(d => d.game).join(', ')}
+                                            </span>
+                                            , you've been chosen as the game coordinator! Don't worry - we'll send you all the details and support you need.
+                                        </p>
+                                        <p className="text-xs text-amber-700 italic">
+                                            "For to everyone who has, more will be given" - Your early commitment is rewarded with leadership! 💪✨
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+
                         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 mb-6 border-2 border-green-200">
                             <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center">
                                 <Trophy className="w-6 h-6 mr-2 text-green-600" />
                                 Your Game Line-Up 🎮
                             </h3>
                             <p className="text-xs text-gray-600 mb-4">
-                                {Object.keys(playersByGame).length > 0
+                                {gamesDetails.length > 0 && gamesDetails.some(d => d.players.length > 0)
                                     ? "Connect with these fellow believers who'll be playing the same games! Iron sharpens iron... and apparently so does friendly competition! ⚔️"
                                     : "These are the games you've selected. Player lists will be available soon!"}
                             </p>
 
                             <div className="space-y-4">
-                                {formData.games.map((gameName) => {
-                                    const game = GAMES_CONFIG.find(g => g.name === gameName);
-                                    const players = playersByGame[gameName] || [];
+                                {gamesDetails.map((gameDetail) => {
+                                    const game = GAMES_CONFIG.find(g => g.name === gameDetail.game);
 
                                     return (
-                                        <div key={gameName} className="bg-white rounded-xl p-4 shadow-md border-2 border-green-100">
+                                        <div key={gameDetail.game} className="bg-white rounded-xl p-4 shadow-md border-2 border-green-100">
                                             <div className="flex items-center mb-3 pb-3 border-b-2 border-gray-100">
                                                 <span className="text-3xl mr-2">{game?.emoji}</span>
                                                 <div className="flex-1">
-                                                    <h4 className="text-base font-bold text-gray-800">{gameName}</h4>
+                                                    <h4 className="text-base font-bold text-gray-800">{gameDetail.game}</h4>
+                                                    {gameDetail.is_coordinator && (
+                                                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-yellow-700 mt-0">
+                                                            👑 Game Coordinator
+                                                        </span>
+                                                    )}
                                                 </div>
-                                                {players.length > 0 && (
-                                                    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
-                                                        {players.length} {players.length === 1 ? 'Player' : 'Players'}
-                                                    </span>
-                                                )}
+                                                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                                                    {gameDetail.total_players} {gameDetail.total_players === 1 ? 'Player' : 'Players'}
+                                                </span>
                                             </div>
 
-                                            {players.length > 0 ? (
+                                            {gameDetail.players.length > 0 ? (
                                                 <div className="flex flex-wrap gap-2">
-                                                    {players.map((player, idx) => (
+                                                    {gameDetail.players.map((player, idx) => (
                                                         <span key={idx} className="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-800 px-3 py-1.5 rounded-full text-xs font-medium border-2 border-gray-200 shadow-sm">
                                                             {player.name}
                                                         </span>
@@ -277,7 +369,9 @@ export default function PicnicRegistration() {
                                                 </div>
                                             ) : (
                                                 <p className="text-xs text-gray-500 italic">
-                                                    Player list will be updated as more people register
+                                                    {gameDetail.is_coordinator
+                                                        ? "You're the first to register for this game! Others will join soon. 🎉"
+                                                        : "Player list will be updated as more people register"}
                                                 </p>
                                             )}
                                         </div>
@@ -305,6 +399,7 @@ export default function PicnicRegistration() {
                                         </p>
                                     </div>
                                 </div>
+                                <PaymentInfoCard payment_description={'PICNIC 25'} />
                             </div>
                         )}
 
@@ -339,6 +434,7 @@ export default function PicnicRegistration() {
                 {fetchError && (
                     <Message
                         variant="error"
+                        data={fetchErrorData?.data}
                         message={handleApiError(fetchErrorData)}
                     />
                 )}
@@ -509,8 +605,8 @@ export default function PicnicRegistration() {
                                                 gameJoke.color === 'pink' ? 'from-pink-50 to-rose-50 border-pink-300' :
                                                     'from-red-50 to-rose-50 border-red-300'
                                 } border-2 rounded-2xl p-4`}>
-                                <p className="text-sm font-semibold text-gray-800 flex items-center">
-                                    <span className="mr-2 flex-shrink-0">{gameJoke.emoji}</span>
+                                <p className="text-sm font-semibold text-gray-800 flex items-start">
+                                    <span className="text-2xl mr-2 flex-shrink-0">{gameJoke.emoji}</span>
                                     <span className="flex-1">{gameJoke.text}</span>
                                 </p>
                             </div>
@@ -519,14 +615,13 @@ export default function PicnicRegistration() {
                         {/* Support Section */}
                         <div className="mb-8 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-5 border-2 border-yellow-200">
                             <div className='mb-3'>
-                                <label className="text-base font-bold text-gray-800  flex items-center">
+                                <label className="block text-base font-bold text-gray-800  flex items-center">
                                     <Gift className="w-5 h-5 mr-2 text-orange-600" />
                                     Would you like to support this event?
                                 </label>
-
                                 <p className="text-xs text-gray-700 leading-relaxed">
                                     Your generous contribution helps make this event a blessing for everyone.
-                                    Every seed sown in love multiplies in joy.
+                                    Every seed sown in love multiplies in joy! 🌱✨
                                 </p>
                             </div>
 
@@ -534,9 +629,9 @@ export default function PicnicRegistration() {
                                 <button
                                     type="button"
                                     onClick={() => handleSupportChoice(true)}
-                                    className={`flex-1 py-2.5 border-1 px-5 rounded-xl font-semibold text-sm transition-all duration-300 ${formData.wantsToSupport === true
+                                    className={`flex-1 py-2.5 px-5 rounded-xl font-semibold text-sm transition-all duration-300 border-1 ${formData.wantsToSupport === true
                                         ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg'
-                                        : 'bg-white border-gray-300 text-gray-700 hover:border-green-400'
+                                        : 'bg-white  border-gray-300 text-gray-700 hover:border-green-400'
                                         }`}
                                 >
                                     Yes, I'd love to! 💚
@@ -544,7 +639,7 @@ export default function PicnicRegistration() {
                                 <button
                                     type="button"
                                     onClick={() => handleSupportChoice(false)}
-                                    className={`flex-1 border-1 py-2.5 px-5 rounded-xl font-semibold text-sm transition-all duration-300 ${formData.wantsToSupport === false
+                                    className={`flex-1 py-2.5 px-5 rounded-xl font-semibold text-sm transition-all duration-300 border-1 ${formData.wantsToSupport === false
                                         ? 'bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-lg'
                                         : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
                                         }`}
@@ -564,6 +659,7 @@ export default function PicnicRegistration() {
                                         placeholder="₦ Enter amount"
                                         min="0"
                                     />
+                                    <PaymentInfoCard payment_description={'PICNIC 25'} />
                                 </div>
                             )}
 
