@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Calendar, Clock, Users, Gift, CheckCircle, Trophy, Mail, Sparkles, Gamepad2, PartyPopper } from 'lucide-react';
 import { useCreatePicnicRegistration, useGetMyRegistration } from '@/queries/picnic.query';
@@ -234,8 +233,9 @@ export default function PicnicRegistration() {
                             </div>
 
                             <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-                                {isUpdate ? 'Registration Updated! 🎉' : 'Hallelujah! Registration Successful! 🎉'}
+                                {isUpdate ? 'Registration! 🎉' : 'Hallelujah! Registration Successful! 🎉'}
                             </h2>
+
                             <p className="text-gray-600 mb-2">
                                 Your spot is secured in the kingdom of fun!
                             </p>

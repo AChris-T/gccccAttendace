@@ -2,9 +2,11 @@ import { EmptyState } from '@/components/common/EmptyState';
 import React, { useState } from 'react';
 import EventCard from './EventCard';
 import EventCalculator from './EventCalculator';
+import { useGetMyRegistration } from '@/queries/picnic.query';
 
 export default function UpcomingEvents() {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const { isError, isLoading } = useGetMyRegistration()
   const events = [
     {
       id: 1,
@@ -31,6 +33,8 @@ export default function UpcomingEvents() {
             <EventCard
               key={event.id}
               event={event}
+              isLoading={isLoading}
+              isError={isError}
               onRegister={() => setSelectedEvent(event)}
             />
           ))}

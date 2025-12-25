@@ -2,7 +2,7 @@ import React from 'react';
 import { CalendarIcon, MapPinIcon, UsersIcon } from '@/icons/EventsIcons';
 import Button from '@/components/ui/Button';
 
-export default function EventCard({ event, onRegister }) {
+export default function EventCard({ event, isLoading, isError }) {
   return (
     <div className="overflow-hidden transition-all duration-300 bg-white rounded shadow dark:bg-slate-800 hover:shadow-lg hover:-translate-y-1">
       <div className="relative h-48 overflow-hidden bg-slate-200 dark:bg-slate-700">
@@ -34,7 +34,7 @@ export default function EventCard({ event, onRegister }) {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-4">
         <div className="space-y-1 font-medium">
           {event.date && <div className="flex items-start gap-3 text-slate-600 dark:text-slate-300">
             <CalendarIcon />
@@ -57,15 +57,14 @@ export default function EventCard({ event, onRegister }) {
           {event.description}
         </p>}
 
-
-
-        {event.eventType !== 'past' && <Button
+        {event.eventType !== 'past' && <Button loading={isLoading}
           href={'/events/picnic-2025'}
-          className="w-full py-3 font-semibold text-white transition-colors duration-200 bg-blue-600 hover:bg-blue-700 rounded-xl"
+          className='w-full'
         >
-          Register Now
+          {isError ? 'Register Now' : 'Update Registration'}
         </Button>}
 
+        {!isError && !isLoading && event.eventType !== 'past' && <p className='text-xs text-red-500 mt-2'>You have registered for this event, you can update your registration.</p>}
       </div>
     </div>
   );
