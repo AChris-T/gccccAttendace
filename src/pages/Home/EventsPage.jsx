@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Calendar, Clock, Users, Gift, CheckCircle, Trophy, Mail, Sparkles, Gamepad2, PartyPopper } from 'lucide-react';
+import { Calendar, Clock, Users, Gift, CheckCircle, Trophy, Mail, Sparkles, Gamepad2, PartyPopper, MapPin, Info } from 'lucide-react';
 import { useCreatePicnicRegistration, useGetMyRegistration } from '@/queries/picnic.query';
 import { handleApiError } from '@/utils/helper';
 import Message from '@/components/common/Message';
@@ -205,7 +205,7 @@ export default function PicnicRegistration() {
         );
     }
 
-    // Success/Registration Complete View
+    // Success/Registration Complete View - UPDATED with Venue Details
     if (existingRegistration && !showEditForm) {
         return (
             <div className="min-h-screen my-24 py-12 px-4">
@@ -233,7 +233,7 @@ export default function PicnicRegistration() {
                             </div>
 
                             <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-                                {isUpdate ? 'Registration! 🎉' : 'Hallelujah! Registration Successful! 🎉'}
+                                {isUpdate ? 'Registration Updated! 🎉' : 'Hallelujah! Registration Successful! 🎉'}
                             </h2>
 
                             <p className="text-gray-600 mb-2">
@@ -244,58 +244,149 @@ export default function PicnicRegistration() {
                             </p>
                         </div>
 
-                        {/* Congratulatory Message */}
-                        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl p-5 mb-6">
-                            <div className="flex items-start gap-3">
-                                <PartyPopper className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />
-                                <div>
-                                    <h3 className="text-lg font-bold text-gray-800 mb-2">
-                                        Congratulations! 🎊
-                                    </h3>
-                                    <p className="text-sm text-gray-700 leading-relaxed">
-                                        You're all set for an amazing day of fellowship, fun, and unforgettable memories!
-                                        Get ready to connect with your church family in a whole new way. The joy of the Lord is truly our strength -
-                                        and we're about to have a joyful time!
+                        {/* Venue Details - NEW SECTION */}
+                        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-3 border-blue-300 rounded-2xl p-6 mb-6 shadow-lg">
+                            <div className="text-center mb-4">
+                                <h3 className="text-2xl font-bold text-blue-900 mb-2 flex items-center justify-center gap-2">
+                                    <MapPin className="w-6 h-6" />
+                                    Your Picnic Destination
+                                </h3>
+                            </div>
+
+                            <div className="bg-white rounded-xl p-5 mb-4 shadow-md border-2 border-blue-100">
+                                <div className="text-center mb-4">
+                                    <h4 className="text-2xl font-bold text-gray-900 mb-2">The Jagz</h4>
+                                    <p className="text-gray-700 text-sm leading-relaxed">
+                                        4 Simeon Adebo Street, Iyaganku GRA<br />
+                                        Ibadan 200273, Oyo, Nigeria
                                     </p>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3 mb-4">
+                                    <div className="bg-blue-50 rounded-lg p-3 text-center border-2 border-blue-200">
+                                        <Calendar className="w-5 h-5 mx-auto mb-1 text-blue-700" />
+                                        <p className="text-xs text-blue-800 font-medium mb-0.5">Date</p>
+                                        <p className="text-sm font-bold text-blue-900">Dec 28, 2025</p>
+                                    </div>
+
+                                    <div className="bg-purple-50 rounded-lg p-3 text-center border-2 border-purple-200">
+                                        <Clock className="w-5 h-5 mx-auto mb-1 text-purple-700" />
+                                        <p className="text-xs text-purple-800 font-medium mb-0.5">Time</p>
+                                        <p className="text-sm font-bold text-purple-900">4:00 PM Sharp</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <a
+                                        href="https://maps.google.com/?q=4+Simeon+Adebo+Street+Iyaganku+GRA+Ibadan+Nigeria"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                                    >
+                                        <MapPin className="w-5 h-5" />
+                                        Open in Google Maps
+                                    </a>
+
+                                    <a
+                                        href="https://www.instagram.com/thejagzibadan"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-center text-blue-700 text-sm font-semibold hover:text-blue-900 transition-colors underline"
+                                    >
+                                        Explore Venue on Instagram →
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-300 rounded-lg p-4">
+                                <p className="text-sm text-gray-700 text-center">
+                                    <span className="font-bold text-amber-900">📍 Pro Tip:</span> Save the addres and make sure you arrive on time - the games and food wait for no one!
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Important Reminders */}
+                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-300 rounded-2xl p-5 mb-6">
+                            <h3 className="text-lg font-bold text-purple-900 mb-4 flex items-center gap-2">
+                                <Info className="w-5 h-5" />
+                                Important Reminders
+                            </h3>
+
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-purple-700 font-bold text-sm">1</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-gray-800 text-sm mb-1">Dress Code: Corporate Casual</p>
+                                        <p className="text-xs text-gray-600">Remember: You're a king's kid! Dress like you're going to the palace... which you are!</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-purple-700 font-bold text-sm">2</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-gray-800 text-sm mb-1">Arrive on Time</p>
+                                        <p className="text-xs text-gray-600">The party starts at 4:00 PM sharp. Don't be fashionably late — the games and food wait for no one!</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-purple-700 font-bold text-sm">3</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-gray-800 text-sm mb-1">Get Your Game Face On</p>
+                                        <p className="text-xs text-gray-600">Your selected games are waiting! May the odds be ever in your favor (and may you remember we're all family afterward!)</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-purple-700 font-bold text-sm">4</span>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-gray-800 text-sm mb-1">Bring Your Appetite</p>
+                                        <p className="text-xs text-gray-600">It's a buffet! Come hungry, leave blessed (and maybe needing a nap).</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Email Notification */}
+                        {/* Email Notification - Updated Text */}
                         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-2xl p-5 mb-6">
                             <div className="flex items-start gap-3">
                                 <Mail className="w-7 h-7 text-blue-600 flex-shrink-0 mt-1" />
                                 <div>
                                     <h3 className="text-base font-bold text-gray-800 mb-2">
-                                        Check Your Inbox! 📧
+                                        Event Details Sent! 📧
                                     </h3>
                                     <p className="text-sm text-gray-700 leading-relaxed">
-                                        Your official event ticket with the complete venue address and additional details will be sent to your email
-                                        <span className="font-semibold"> 48 hours before the event</span>. Please keep an eye on your inbox
-                                        (and spam folder, just in case the devil tries to hide it! 😉).
+                                        A confirmation email with complete venue details has been sent to your inbox.
+                                        Please check your email (and spam folder, just in case!) for the full event information.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Event Quick Info */}
-                        <div className="grid md:grid-cols-3 gap-4 mb-6">
-                            <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl p-4 text-center">
-                                <Calendar className="w-6 h-6 mx-auto mb-2 text-blue-700" />
-                                <p className="text-xs text-blue-800 font-medium mb-1">Date</p>
-                                <p className="text-base font-bold text-blue-900">{EVENT_INFO.date}</p>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl p-4 text-center">
-                                <Clock className="w-6 h-6 mx-auto mb-2 text-purple-700" />
-                                <p className="text-xs text-purple-800 font-medium mb-1">Time</p>
-                                <p className="text-base font-bold text-purple-900">{EVENT_INFO.timeDetail}</p>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-xl p-4 text-center">
-                                <Users className="w-6 h-6 mx-auto mb-2 text-green-700" />
-                                <p className="text-xs text-green-800 font-medium mb-1">Fellowship</p>
-                                <p className="text-base font-bold text-green-900">{EVENT_INFO.fellowship}</p>
+                        {/* Congratulatory Message */}
+                        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-2xl p-5 mb-6">
+                            <div className="flex items-start gap-3">
+                                <PartyPopper className="w-7 h-7 text-green-600 flex-shrink-0 mt-1" />
+                                <div>
+                                    <h3 className="text-lg font-bold text-gray-800 mb-2">
+                                        We Can't Wait to See You! 🎊
+                                    </h3>
+                                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                                        Get ready for a day filled with laughter, games, amazing food, and unforgettable fellowship.
+                                        It's going to be <span className="font-bold text-green-700">LEGENDARY!</span>
+                                    </p>
+                                    <p className="text-sm text-gray-700 leading-relaxed">
+                                        See you at the picnic! Don't forget to bring your A-game and your beautiful smile!
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
