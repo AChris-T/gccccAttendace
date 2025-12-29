@@ -8,7 +8,6 @@ export default function UpcomingEvents() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { isError, isLoading } = useGetMyRegistration()
   const events = [
-
   ];
 
   if (selectedEvent) {
@@ -37,8 +36,8 @@ export default function UpcomingEvents() {
         </div>
       ) : (
         <EmptyState
-          title={`No ${activeTab} events`}
-          description={`Check back later for ${activeTab} events`}
+          title={`No upcoming events`}
+          description={`Check back later for upcoming events`}
         />
       )}
     </>

@@ -8,6 +8,7 @@ export default function PastEvents() {
       id: 10,
       title: 'Picnic 2025',
       imageUrl: '/images/picnic/picnic.jpeg',
+      eventType: 'past',
     },
     {
       id: 1,
