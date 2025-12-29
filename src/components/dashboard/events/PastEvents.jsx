@@ -5,6 +5,11 @@ import EventCard from './EventCard';
 export default function PastEvents() {
   const events = [
     {
+      id: 10,
+      title: 'Picnic 2025',
+      imageUrl: '/images/picnic/picnic.jpeg',
+    },
+    {
       id: 1,
       title: 'School of Destiny 2025',
       // subtitle: 'The Call',

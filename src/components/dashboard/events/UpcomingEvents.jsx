@@ -8,11 +8,7 @@ export default function UpcomingEvents() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { isError, isLoading } = useGetMyRegistration()
   const events = [
-    {
-      id: 1,
-      title: 'Picnic 2025',
-      imageUrl: '/images/picnic/picnic.jpeg',
-    },
+
   ];
 
   if (selectedEvent) {
