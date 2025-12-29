@@ -17,6 +17,7 @@ export const QUERY_KEYS = {
     DETAIL: (statusId) => ['followup-status', statusId],
   },
   MEMBERS: {
+    ALL_USERS: ['all_users'],
     ALL: (params) => ['allmembers', params],
     LIST: (params) => ['members', 'list', params],
     DETAIL: (id) => ['members', 'detail', id],

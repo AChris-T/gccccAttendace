@@ -17,4 +17,8 @@ export const AdminService = {
     const { data } = await $api.post(`${ADMIN}/assign-role`, payload);
     return data;
   },
+  async syncUsersPermissions(payload) {
+    const { data } = await $api.post(`${ADMIN}/sync-permissions`, payload);
+    return data;
+  },
 };

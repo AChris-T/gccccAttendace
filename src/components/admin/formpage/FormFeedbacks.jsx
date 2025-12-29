@@ -10,8 +10,11 @@ import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
 import { DeleteConfirmation } from '@/components/ui/DeleteConfirmation';
+import { usePermission } from '@/hooks/usePermission';
+import { PERMISSIONS } from '@/utils/data';
 
 const FormFeedbacks = () => {
+  const { can } = usePermission();
   const [activeTab, setActiveTab] = useQueryParam('tab', 'prayer');
   const {
     isOpen: isOpenDeleteModal,
@@ -56,6 +59,66 @@ const FormFeedbacks = () => {
     []
   );
 
+  // Check permission based on active tab
+  const hasViewPermission = useMemo(() => {
+    switch (activeTab) {
+      case 'prayer':
+        return can(PERMISSIONS.PRAYER_REQUEST_VIEW);
+      case 'question':
+        return true;
+      case 'testimony':
+        return true;
+      default:
+        return false;
+    }
+  }, [activeTab, can]);
+
+  const hasEditPermission = useMemo(() => {
+    switch (activeTab) {
+      case 'prayer':
+        return true;
+      case 'question':
+        return true;
+      case 'testimony':
+        return true;
+      default:
+        return false;
+    }
+  }, [activeTab, can]);
+
+  const hasDeletePermission = useMemo(() => {
+    switch (activeTab) {
+      case 'prayer':
+        return true;
+      case 'question':
+        return true;
+      case 'testimony':
+        return true;
+      default:
+        return false;
+    }
+  }, [activeTab, can]);
+
+  // Show access denied if no view permission
+  if (!hasViewPermission) {
+    return (
+      <div className="max-w-5xl p-2 mx-auto bg-white shadow dark:bg-gray-800 sm:p-5 rounded-xl">
+        <Tabs
+          tabs={tabs}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          className="justify-center mb-5"
+        />
+        <div className="flex items-center justify-center py-12">
+          <EmptyState
+            title="Access Denied"
+            description={`You don't have permission to view ${activeTab.toLowerCase()}s`}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="max-w-5xl p-2 mx-auto bg-white shadow dark:bg-gray-800 sm:p-5 rounded-xl">
@@ -70,7 +133,8 @@ const FormFeedbacks = () => {
           <FormsSkeleton />
         ) : (
           <div className="space-y-5">
-            {data.length > 0 && (
+            {/* Only show action bar if user has edit or delete permissions */}
+            {data.length > 0 && (hasEditPermission || hasDeletePermission) && (
               <div className="flex flex-col justify-between gap-3 p-3 border border-gray-200 rounded-lg sm:flex-row sm:items-center bg-gray-50 dark:bg-gray-700/40 dark:border-gray-700">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-200 rounded cursor-pointer dark:bg-gray-700">
                   <input
@@ -92,24 +156,31 @@ const FormFeedbacks = () => {
                   </label>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="success"
-                    size="sm"
-                    loading={isUpdating}
-                    disabled={selectedIds.length === 0 || isUpdating}
-                    onClick={() => updateSelected(true)}
-                  >
-                    Mark completed
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    disabled={selectedIds.length === 0}
-                    loading={isDeleting}
-                    onClick={openDeleteModal}
-                  >
-                    Delete
-                  </Button>
+                  {/* Only show Mark completed button if user has edit permission */}
+                  {hasEditPermission && (
+                    <Button
+                      variant="success"
+                      size="sm"
+                      loading={isUpdating}
+                      disabled={selectedIds.length === 0 || isUpdating}
+                      onClick={() => updateSelected(true)}
+                    >
+                      Mark completed
+                    </Button>
+                  )}
+
+                  {/* Only show Delete button if user has delete permission */}
+                  {hasDeletePermission && (
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      disabled={selectedIds.length === 0}
+                      loading={isDeleting}
+                      onClick={openDeleteModal}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
@@ -121,6 +192,8 @@ const FormFeedbacks = () => {
                   person={person}
                   selected={selectedIds.includes(person.id)}
                   onToggleSelect={(checked) => toggleSelect(person.id, checked)}
+                  canEdit={hasEditPermission}
+                  canDelete={hasDeletePermission}
                 />
               ))
             ) : (
@@ -130,35 +203,38 @@ const FormFeedbacks = () => {
         )}
       </div>
 
-      <Modal
-        title="Delete"
-        isOpen={isOpenDeleteModal}
-        onClose={closeDeleteModal}
-      >
-        <div className="space-y-4">
-          <DeleteConfirmation isSuccess={isSuccessDelete} />
-          {!isSuccessDelete && (
-            <div className="flex justify-end gap-3 mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={closeDeleteModal}
-                disabled={isDeleting}
-              >
-                Cancel
-              </Button>
-              <Button
-                loading={isDeleting}
-                size="sm"
-                variant="danger"
-                onClick={handleDelete}
-              >
-                Delete
-              </Button>
-            </div>
-          )}
-        </div>
-      </Modal>
+      {/* Only show delete modal if user has delete permission */}
+      {hasDeletePermission && (
+        <Modal
+          title="Delete"
+          isOpen={isOpenDeleteModal}
+          onClose={closeDeleteModal}
+        >
+          <div className="space-y-4">
+            <DeleteConfirmation isSuccess={isSuccessDelete} />
+            {!isSuccessDelete && (
+              <div className="flex justify-end gap-3 mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={closeDeleteModal}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  loading={isDeleting}
+                  size="sm"
+                  variant="danger"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

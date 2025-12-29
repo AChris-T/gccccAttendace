@@ -22,6 +22,10 @@ export const MemberService = {
     return data;
   },
 
+  async getAllUsers() {
+    const { data } = await $api.get(`${MEMBERS}/users/all`);
+    return data;
+  },
   async fetchMembersByRole(role) {
     const { data } = await $api.get(`${ADMIN_MEMBERS}/role/${role}`);
     return data;

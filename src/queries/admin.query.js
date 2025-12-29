@@ -42,3 +42,17 @@ export const useAssignRoleToUsers = (options = {}) => {
     },
   });
 };
+
+export const useSyncUsersPermissions = (options = {}) => {
+  return useMutation({
+    mutationFn: AdminService.syncUsersPermissions,
+    onSuccess: (data) => {
+      Toast.success(data?.message);
+      options.onSuccess?.(data, credentials);
+    },
+    onError: (error) => {
+      const message = handleApiError(error);
+      Toast.error(message);
+    },
+  });
+};

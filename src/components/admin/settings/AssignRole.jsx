@@ -4,7 +4,6 @@ import { useModal } from "@/hooks/useModal";
 import ModalForm from "@/components/ui/modal/ModalForm";
 import AssignRoleForm from "@/components/admin/settings/AssignRoleForm";
 
-
 const AssignRole = () => {
     const { isOpen, openModal, closeModal } = useModal();
 

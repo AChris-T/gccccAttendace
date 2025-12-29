@@ -320,6 +320,16 @@ export const assignUsersRoleSchema = yup.object().shape({
     .min(1, 'At least one member must be selected')
     .required('Members are required'),
 });
+export const syncPermissionsSchema = yup.object().shape({
+  user_ids: yup
+    .array()
+    .min(1, 'At least one member must be selected')
+    .required('Members are required'),
+  permissions: yup
+    .array()
+    .min(1, 'At least one permission must be selected')
+    .required('Permissions are are required'),
+});
 export const assignMemberSchema = yup.object().shape({
   followup_by_id: yup.string().required('Please select a member to assign'),
 });

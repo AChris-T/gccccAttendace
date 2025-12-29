@@ -12,6 +12,7 @@ const initialState = {
   isMember: false,
   isFirstTimer: false,
   userRoles: [],
+  userPermissions: [],
   userUnits: [],
   userUnitsDetails: [],
 };
@@ -31,6 +32,7 @@ export const useAuthStore = create()(
           isMember,
           isFirstTimer,
           userRoles: user?.roles || [],
+          userPermissions: user?.permissions || [],
           userUnits: user?.units?.map((role) => role?.name) || [],
           userUnitsDetails: user?.units || [],
         });
@@ -49,6 +51,7 @@ export const useAuthStore = create()(
           isLeader: false,
           isMember: false,
           userRoles: [],
+          userPermissions: [],
           userUnits: [],
           userUnitsDetails: [],
         });
@@ -64,6 +67,7 @@ export const useAuthStore = create()(
         isMember: state.isMember,
         isFirstTimer: state.isFirstTimer,
         isAuthenticated: state.isAuthenticated,
+        userPermissions: state.userPermissions,
         userRoles: state.userRoles,
         userUnits: state.userUnits,
         userUnitsDetails: state.userUnitsDetails,

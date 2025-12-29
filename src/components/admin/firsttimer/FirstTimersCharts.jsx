@@ -6,6 +6,8 @@ import { years } from "../../../utils/constant";
 import { useFirstTimersAnalytics } from "../../../queries/firstTimer.query";
 import { CalendarIcon, ChevronDownIcon } from "@/icons";
 import { Dropdown } from "@/components/ui/dropdown/Dropdown";
+import AnnualFirstTimersOverview from "@/components/admin/firsttimer/AnnualFirstTimersOverview";
+import { IdCardIcon } from "lucide-react";
 
 const FirstTimersCharts = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));
@@ -129,12 +131,13 @@ const FirstTimersCharts = () => {
 
     const StatusReportSection = () => {
         const [isOpen, setIsOpen] = useState(false);
+        const [isVisible, setIsvisible] = useState(false);
         const closeDropdown = () => setIsOpen(false);
         const openDropdown = () => setIsOpen(true);
 
         return (
             <>
-                <div className="relative inline-block mb-4">
+                <div className="relative inline-block mb-4 mr-4">
                     <button
                         role="button" onClick={openDropdown}
                         className="
@@ -162,6 +165,27 @@ const FirstTimersCharts = () => {
                     </Dropdown>
 
                 </div>
+                <div className="relative inline-block mb-4">
+                    <button
+                        role="button" onClick={() => setIsvisible(!isVisible)}
+                        className="
+                                flex items-center gap-2 
+                                px-4 py-2 rounded-lg 
+                                bg-white dark:bg-gray-800 
+                                text-gray-900 dark:text-gray-100 
+                                border border-gray-200 dark:border-gray-700
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                transition-colors duration-200
+                                shadow-sm
+                            "
+                    >
+                        <CalendarIcon />
+                        {isVisible ? 'Hide' : 'Show'}  FirstTimers' Annual Report
+                    </button>
+                </div>
+
+                <AnnualFirstTimersOverview isVisible={isVisible} selectedYear={selectedYear} statusesPerMonth={statusesPerMonth} />
+
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                     <ChartContainer>
                         <AgCharts
