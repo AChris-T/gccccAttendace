@@ -7,7 +7,6 @@ import { useFirstTimersAnalytics } from "../../../queries/firstTimer.query";
 import { CalendarIcon, ChevronDownIcon } from "@/icons";
 import { Dropdown } from "@/components/ui/dropdown/Dropdown";
 import AnnualFirstTimersOverview from "@/components/admin/firsttimer/AnnualFirstTimersOverview";
-import { IdCardIcon } from "lucide-react";
 
 const FirstTimersCharts = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));
