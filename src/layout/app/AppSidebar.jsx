@@ -26,7 +26,7 @@ import {
 } from '@/icons/sidebarIcons';
 
 const AppSidebar = () => {
-  const { isExpanded, isMobileOpen } = useSidebar();
+  const { isExpanded, isMobileOpen, toggleMobileSidebar } = useSidebar();
   const location = useLocation();
   const { isAdmin, isLeader } = useAuthStore();
 
@@ -59,6 +59,13 @@ const AppSidebar = () => {
     },
     [hasActiveSubmenuItem]
   );
+
+  const handleLinkClick = useCallback(() => {
+    if (isMobileOpen && toggleMobileSidebar) {
+      toggleMobileSidebar();
+    }
+  }, [isMobileOpen, toggleMobileSidebar]);
+
 
   const iconMap = {
     AdminIcon,
@@ -136,6 +143,7 @@ const AppSidebar = () => {
   }, [openSubmenu]);
 
   const handleSubmenuToggle = (index, menuType) => {
+    // Don't close mobile sidebar when toggling dropdown
     setOpenSubmenu((prevOpenSubmenu) => {
       if (
         prevOpenSubmenu &&
@@ -174,20 +182,17 @@ const AppSidebar = () => {
               {nav.subItems ? (
                 <button
                   onClick={() => handleSubmenuToggle(index, menuType)}
-                  className={`menu-item group ${
-                    isSubmenuOpen || hasActiveSubItem
-                      ? 'menu-item-active'
-                      : 'menu-item-inactive'
-                  } cursor-pointer ${
-                    !isExpanded ? 'lg:justify-center' : 'lg:justify-start'
-                  }`}
+                  className={`menu-item group ${isSubmenuOpen || hasActiveSubItem
+                    ? 'menu-item-active'
+                    : 'menu-item-inactive'
+                    } cursor-pointer ${!isExpanded ? 'lg:justify-center' : 'lg:justify-start'
+                    }`}
                 >
                   <span
-                    className={`menu-item-icon-size ${
-                      isSubmenuOpen || hasActiveSubItem
-                        ? 'menu-item-icon-active'
-                        : 'menu-item-icon-inactive'
-                    }`}
+                    className={`menu-item-icon-size ${isSubmenuOpen || hasActiveSubItem
+                      ? 'menu-item-icon-active'
+                      : 'menu-item-icon-inactive'
+                      }`}
                   >
                     <Icon width={30} height={30} />
                   </span>
@@ -196,9 +201,8 @@ const AppSidebar = () => {
                   )}
                   {(isExpanded || isMobileOpen) && (
                     <ChevronDownIcon
-                      className={`ml-auto w-5 h-5 transition-transform duration-200 ${
-                        isSubmenuOpen ? 'rotate-180 text-brand-500' : ''
-                      }`}
+                      className={`ml-auto w-5 h-5 transition-transform duration-200 ${isSubmenuOpen ? 'rotate-180 text-brand-500' : ''
+                        }`}
                     />
                   )}
                 </button>
@@ -206,18 +210,17 @@ const AppSidebar = () => {
                 nav.path && (
                   <Link
                     to={nav.path}
-                    className={`menu-item group ${
-                      isActive(nav.path)
-                        ? 'menu-item-active'
-                        : 'menu-item-inactive'
-                    }`}
+                    onClick={handleLinkClick}
+                    className={`menu-item group ${isActive(nav.path)
+                      ? 'menu-item-active'
+                      : 'menu-item-inactive'
+                      }`}
                   >
                     <span
-                      className={`menu-item-icon-size ${
-                        isActive(nav.path)
-                          ? 'menu-item-icon-active'
-                          : 'menu-item-icon-inactive'
-                      }`}
+                      className={`menu-item-icon-size ${isActive(nav.path)
+                        ? 'menu-item-icon-active'
+                        : 'menu-item-icon-inactive'
+                        }`}
                     >
                       <Icon width={30} height={30} />
                     </span>
@@ -247,11 +250,11 @@ const AppSidebar = () => {
                         <li key={subItem.name}>
                           <Link
                             to={subItem.path}
-                            className={`menu-dropdown-item ${
-                              isActive(subItem.path)
-                                ? 'menu-dropdown-item-active'
-                                : 'menu-dropdown-item-inactive'
-                            }`}
+                            onClick={handleLinkClick}
+                            className={`menu-dropdown-item ${isActive(subItem.path)
+                              ? 'menu-dropdown-item-active'
+                              : 'menu-dropdown-item-inactive'
+                              }`}
                           >
                             <span className="flex-1 truncate">
                               {subItem.name}
@@ -283,11 +286,10 @@ const AppSidebar = () => {
         lg:translate-x-0`}
     >
       <div
-        className={`pt-5 flex ${
-          !isExpanded ? 'lg:justify-center' : 'justify-start'
-        }`}
+        className={`pt-5 flex ${!isExpanded ? 'lg:justify-center' : 'justify-start'
+          }`}
       >
-        <Link to="/">
+        <Link to="/" onClick={handleLinkClick}>
           {isExpanded || isMobileOpen ? (
             <>
               <img
@@ -321,9 +323,8 @@ const AppSidebar = () => {
             {isAdmin && (
               <div>
                 <h2
-                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 dark:text-gray-500 ${
-                    !isExpanded ? 'lg:justify-center' : 'justify-start'
-                  }`}
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 dark:text-gray-500 ${!isExpanded ? 'lg:justify-center' : 'justify-start'
+                    }`}
                 >
                   {isExpanded || isMobileOpen ? (
                     'Admin'
@@ -337,9 +338,8 @@ const AppSidebar = () => {
             {isAdmin || isLeader ? (
               <div>
                 <h2
-                  className={`mb-4 text-xs uppercase flex  leading-5 text-gray-400 dark:text-gray-500 ${
-                    !isExpanded ? 'lg:justify-center' : 'justify-start'
-                  }`}
+                  className={`mb-4 text-xs uppercase flex  leading-5 text-gray-400 dark:text-gray-500 ${!isExpanded ? 'lg:justify-center' : 'justify-start'
+                    }`}
                 >
                   {isExpanded || isMobileOpen ? (
                     'Leaders'
@@ -352,9 +352,8 @@ const AppSidebar = () => {
             ) : null}
             <div>
               <h2
-                className={`mb-4 text-xs uppercase flex leading-5 text-gray-400 dark:text-gray-500 ${
-                  !isExpanded ? 'lg:justify-center' : 'justify-start'
-                }`}
+                className={`mb-4 text-xs uppercase flex leading-5 text-gray-400 dark:text-gray-500 ${!isExpanded ? 'lg:justify-center' : 'justify-start'
+                  }`}
               >
                 {isExpanded || isMobileOpen ? (
                   'Members'
