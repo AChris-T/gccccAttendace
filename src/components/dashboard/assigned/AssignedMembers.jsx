@@ -13,7 +13,7 @@ const AssignedMembers = () => {
         <TableSkeletonLoader />
     </section>)
 
-    if (!assignedMembers?.assigned_users?.length) return null
+    if (!assignedMembers?.length) return null
 
     return (
         <>
@@ -29,7 +29,7 @@ const AssignedMembers = () => {
                         </p>
                     </div>
                 </div>
-                {assignedMembers?.assigned_users?.length ?
+                {assignedMembers?.length ?
                     <div className="w-full overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
                         <div className="min-w-[800px]">
                             <Table>
@@ -69,7 +69,7 @@ const AssignedMembers = () => {
                                 </TableHeader>
 
                                 <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-                                    {assignedMembers?.assigned_users?.map((member, index) => (
+                                    {assignedMembers?.map((member, index) => (
                                         <TableRow key={member?.id} className="">
                                             <TableCell className="py-3">
                                                 <Link to={`/dashboard/members/${member?.id}`} target="_blank" className='text-gray-500 text-theme-sm dark:text-gray-400'>

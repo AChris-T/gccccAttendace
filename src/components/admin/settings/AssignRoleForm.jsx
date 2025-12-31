@@ -81,6 +81,7 @@ const AssignRoleForm = ({ onClose }) => {
                 error={errors.role?.message}
                 required
                 options={[
+                    { label: "Pastor", value: "pastor" },
                     { label: "Admin", value: "admin" },
                     { label: "Leader", value: "leader" },
                     { label: "Member", value: "member" },
