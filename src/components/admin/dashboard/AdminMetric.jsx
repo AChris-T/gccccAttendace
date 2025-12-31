@@ -35,7 +35,7 @@ const AdminMetric = ({ data }) => {
                             onClose={toggleDropdown}
                             className="w-40 p-2"
                         >
-                            <DropdownItem to={`/dashboard/admin/${data?.name == 'Units' ? 'units-and-leaders' : toSlug(data?.name)}`} tag="a"
+                            <DropdownItem to={`${data?.name == 'Units' ? '/dashboard/leaders/units' : `/dashboard/admin/${toSlug(data?.name)}`}`} tag="a"
                                 onItemClick={toggleDropdown}
                                 className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-blue-500 hover:underline dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                             >
@@ -54,10 +54,6 @@ const AdminMetric = ({ data }) => {
                             {data?.count}
                         </h4>
                     </div>
-
-                    {/* <Badge color={`${!data?.growth ? 'error' : 'success'}`}>
-                        {data?.growth}%
-                    </Badge> */}
                 </div>
             </div>
         </>

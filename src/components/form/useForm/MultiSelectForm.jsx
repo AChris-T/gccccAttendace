@@ -13,7 +13,8 @@ const MultiSelectForm = memo(({
     searchable = true,
     maxHeight = "16rem",
     expandParent = false,
-    defaultValue = []
+    defaultValue = [],
+    showSelectAll = true, // New prop to control select all visibility
 }) => {
     const [selectedValues, setSelectedValues] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
@@ -115,6 +116,31 @@ const MultiSelectForm = memo(({
         setSelectedValues([]);
     };
 
+    // Select all filtered options
+    const handleSelectAll = (event) => {
+        event?.stopPropagation();
+        const filteredOptionValues = filteredOptions.map(opt => opt.value);
+
+        // Check if all filtered options are selected
+        const allFilteredSelected = filteredOptionValues.every(val =>
+            selectedValues.includes(val)
+        );
+
+        if (allFilteredSelected) {
+            // Deselect all filtered options
+            const newSelectedValues = selectedValues.filter(val =>
+                !filteredOptionValues.includes(val)
+            );
+            setSelectedValues(newSelectedValues);
+        } else {
+            // Select all filtered options (merge with existing)
+            const newSelectedValues = [
+                ...new Set([...selectedValues, ...filteredOptionValues])
+            ];
+            setSelectedValues(newSelectedValues);
+        }
+    };
+
     const selectedOptions = selectedValues
         .map(value => options.find(option => option.value === value))
         .filter(Boolean);
@@ -127,6 +153,14 @@ const MultiSelectForm = memo(({
             option.text.toLowerCase().includes(searchQuery.toLowerCase())
         )
         : options;
+
+    // Check if all filtered options are selected
+    const allFilteredSelected = filteredOptions.length > 0 &&
+        filteredOptions.every(opt => selectedValues.includes(opt.value));
+
+    const someFilteredSelected = filteredOptions.length > 0 &&
+        filteredOptions.some(opt => selectedValues.includes(opt.value)) &&
+        !allFilteredSelected;
 
     return (
         <div
@@ -149,8 +183,8 @@ const MultiSelectForm = memo(({
 
                 <div className="relative inline-block w-full">
                     {/* Main Control Wrapper */}
-                    <div className="flex items-center gap-2">
-                        {/* Main Select Area - Now a DIV instead of BUTTON */}
+                    <div className="flex items-start gap-2">
+                        {/* Main Select Area */}
                         <div
                             id={name}
                             onClick={toggleDropdown}
@@ -314,6 +348,60 @@ const MultiSelectForm = memo(({
                                 </div>
                             )}
 
+                            {/* Select All Option */}
+                            {showSelectAll && filteredOptions.length > 0 && (
+                                <div className="border-b border-gray-200 dark:border-gray-700">
+                                    <button
+                                        type="button"
+                                        onClick={handleSelectAll}
+                                        className="w-full text-left px-4 py-2.5 text-sm font-medium transition-colors duration-200 flex items-center bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-900 dark:text-gray-100"
+                                    >
+                                        {/* Checkbox for Select All */}
+                                        <div className="mr-3 flex-shrink-0">
+                                            <div
+                                                className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${allFilteredSelected
+                                                    ? "bg-blue-600 dark:bg-blue-500 border-blue-600 dark:border-blue-500"
+                                                    : someFilteredSelected
+                                                        ? "bg-blue-600 dark:bg-blue-500 border-blue-600 dark:border-blue-500"
+                                                        : "border-gray-300 dark:border-gray-600"
+                                                    }`}
+                                            >
+                                                {allFilteredSelected ? (
+                                                    <svg
+                                                        className="w-3 h-3 text-white"
+                                                        fill="none"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                ) : someFilteredSelected ? (
+                                                    <svg
+                                                        className="w-3 h-3 text-white"
+                                                        fill="none"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path d="M5 12h14" />
+                                                    </svg>
+                                                ) : null}
+                                            </div>
+                                        </div>
+
+                                        <span className="flex-1">
+                                            {allFilteredSelected ? "Deselect All" : "Select All"}
+                                            {searchQuery && ` (${filteredOptions.length} filtered)`}
+                                        </span>
+                                    </button>
+                                </div>
+                            )}
+
                             {/* Options List */}
                             <div
                                 className="overflow-y-auto py-1"
@@ -410,4 +498,4 @@ const MultiSelectForm = memo(({
 });
 
 MultiSelectForm.displayName = "MultiSelectForm";
-export default MultiSelectForm
+export default MultiSelectForm;

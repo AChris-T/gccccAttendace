@@ -275,9 +275,3 @@ export const ANNOUNCEMENTS = [
     text: 'Global Fasting & Prayer - YouTube 6AM | Physical 6PM daily',
   },
 ];
-
-
-export const PERMISSIONS = {
-  // Prayer Requests
-  PRAYER_REQUEST_VIEW: 'view-prayer-request',
-};

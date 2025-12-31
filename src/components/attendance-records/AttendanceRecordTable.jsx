@@ -13,6 +13,8 @@ import CreateAttendanceRecord from './CreateAttendanceRecord';
 import EditAttendanceRecord from './EditAttendanceRecord';
 import { useModal } from '@/hooks/useModal';
 import DeleteConfirmationModal from '@/components/ui/modal/DeleteConfirmationModal';
+import { usePermission } from '@/hooks/usePermission';
+import { PERMISSIONS } from '@/utils/permissions';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -25,8 +27,9 @@ const HEADER_HEIGHT = 56;
 const PAGINATION_HEIGHT = 60;
 
 const AttendanceTable = () => {
-  const { data, isLoading, refetch, isError, error, isFetching } =
-    useAttendanceRecords();
+  const { data, isLoading, refetch, isError, error, isFetching } = useAttendanceRecords();
+  const { can } = usePermission();
+
 
   const {
     isOpen: isOpenDeleteModal,
@@ -101,7 +104,7 @@ const AttendanceTable = () => {
 
   const handleDelete = async () => {
     if (recordToDelete) {
-       deleteRecords.mutate(recordToDelete);
+      deleteRecords.mutate(recordToDelete);
     }
   };
 
@@ -140,28 +143,30 @@ const AttendanceTable = () => {
         cellRenderer: (params) => {
           const rowData = params.data;
           return (
-            <div className="flex items-center justify-center w-full h-full gap-3 py-2">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setEditingRecord(rowData);
-                }}
-                className="p-1 text-blue-500 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/30"
-                title="Edit record"
-              >
-                <EditIcon className="w-4 h-4" />
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOpenDelete(rowData.id);
-                }}
-                className="p-1 text-red-500 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30"
-                title="Delete record"
-              >
-                <TrashIcon className="w-4 h-4" />
-              </button>
-            </div>
+            <>
+              <div className="flex items-center justify-center w-full h-full gap-3 py-2">
+                {can(PERMISSIONS.ATTENDANCE_EDIT) && <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingRecord(rowData);
+                  }}
+                  className="p-1 text-blue-500 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                  title="Edit record"
+                >
+                  <EditIcon className="w-4 h-4" />
+                </button>}
+                {can(PERMISSIONS.ATTENDANCE_DELETE) && <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenDelete(rowData.id);
+                  }}
+                  className="p-1 text-red-500 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30"
+                  title="Delete record"
+                >
+                  <TrashIcon className="w-4 h-4" />
+                </button>}
+              </div>
+            </>
           );
         },
       },
@@ -249,9 +254,10 @@ const AttendanceTable = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {can(PERMISSIONS.ATTENDANCE_EDIT) && <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <CreateAttendanceRecord onSuccess={refetch} />
-      </div>
+      </div>}
+
 
       <div className="w-full mt-4 space-y-3">
         <div className="flex items-center justify-between">

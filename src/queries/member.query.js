@@ -99,6 +99,27 @@ export const useCreateMember = (options = {}) => {
     },
   });
 };
+export const useAssignMembers = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: MemberService.assignMembers,
+    onSuccess: (response, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.MEMBERS.ALL,
+      });
+      queryClient.invalidateQueries;
+      Toast.success(response.message);
+      options.onSuccess?.(response.data, variables);
+    },
+    onError: (error) => {
+      console.log(error)
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message);
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};
 
 export const useDeleteMember = (options = {}) => {
   const queryClient = useQueryClient();

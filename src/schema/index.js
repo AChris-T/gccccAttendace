@@ -289,6 +289,16 @@ export const filterAttendanceSchema = yup.object({
     .transform((value) => value || null),
 });
 
+export const AssignMemberSchema = yup.object().shape({
+  member_ids: yup
+    .array()
+    .min(1, 'At least one member must be selected')
+    .required('members are required'),
+  followup_leader_ids: yup
+    .array()
+    .min(1, 'At least one person must be selected')
+    .required('field is required'),
+});
 export const assignAbsentMemberSchema = yup.object().shape({
   attendance_date: yup
     .string()

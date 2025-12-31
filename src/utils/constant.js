@@ -1,4 +1,5 @@
 export const UserRole = Object.freeze({
+  PASTOR: 'pastor',
   ADMIN: 'admin',
   LEADER: 'leader',
   MEMBER: 'member',
@@ -15,10 +16,11 @@ export const followupCommentTypes = [
 ];
 
 export const UserRoles = [
-  { id: 1, name: 'admin' },
-  { id: 2, name: 'leader' },
-  { id: 3, name: 'member' },
-  { id: 3, name: 'firstTimer' },
+  { id: 1, name: 'pastor' },
+  { id: 2, name: 'admin' },
+  { id: 3, name: 'leader' },
+  { id: 4, name: 'member' },
+  { id: 5, name: 'firstTimer' },
 ];
 
 export const Units = Object.freeze({

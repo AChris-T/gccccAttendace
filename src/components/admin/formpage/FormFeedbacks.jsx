@@ -11,7 +11,7 @@ import Modal from '@/components/ui/modal/Modal';
 import { useModal } from '@/hooks/useModal';
 import { DeleteConfirmation } from '@/components/ui/DeleteConfirmation';
 import { usePermission } from '@/hooks/usePermission';
-import { PERMISSIONS } from '@/utils/data';
+import { PERMISSIONS } from '@/utils/permissions';
 
 const FormFeedbacks = () => {
   const { can } = usePermission();
@@ -65,7 +65,7 @@ const FormFeedbacks = () => {
       case 'prayer':
         return can(PERMISSIONS.PRAYER_REQUEST_VIEW);
       case 'question':
-        return true;
+        return can(PERMISSIONS.QUESTION_VIEW);
       case 'testimony':
         return true;
       default:
@@ -76,9 +76,9 @@ const FormFeedbacks = () => {
   const hasEditPermission = useMemo(() => {
     switch (activeTab) {
       case 'prayer':
-        return true;
+        return can(PERMISSIONS.PRAYER_REQUEST_VIEW)
       case 'question':
-        return true;
+        return can(PERMISSIONS.QUESTION_VIEW);
       case 'testimony':
         return true;
       default:
@@ -89,9 +89,9 @@ const FormFeedbacks = () => {
   const hasDeletePermission = useMemo(() => {
     switch (activeTab) {
       case 'prayer':
-        return true;
+        return can(PERMISSIONS.PRAYER_REQUEST_VIEW)
       case 'question':
-        return true;
+        return can(PERMISSIONS.QUESTION_VIEW);
       case 'testimony':
         return true;
       default:
