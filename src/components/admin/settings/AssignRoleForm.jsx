@@ -29,8 +29,8 @@ const AssignRoleForm = ({ onClose }) => {
     ];
 
     const getVisibleRoles = () => {
-        if (isAdmin) return allRoles; // Pastor sees all
-        // if (isAdmin) return allRoles.filter(role => role.value !== "pastor");
+        if (isPastor) return allRoles; // Pastor sees all
+        if (isAdmin) return allRoles.filter(role => role.value !== "pastor");
         if (isLeader) return allRoles.filter(role => ["leader", "member", "firstTimer"].includes(role.value));
         if (isMember) return allRoles.filter(role => ["member", "firstTimer"].includes(role.value));
         return allRoles.filter(role => role.value === "firstTimer"); // Default: only first timer

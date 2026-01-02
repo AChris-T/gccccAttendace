@@ -119,10 +119,10 @@ const StatusRenderer = ({ value }) => {
 
   return (
     <Badge size='sm' color={config.color}>
-      {config.text}
+      {value?.toLowerCase()}
     </Badge>
   );
-};
+}
 
 /**
  * Profile Completion Cell Renderer
@@ -173,7 +173,7 @@ const UnitsRenderer = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-wrap gap-1 py-1">
+    <div className="">
       {data.units.map((unit, index) => (
         <Badge
           key={unit.id || index}
