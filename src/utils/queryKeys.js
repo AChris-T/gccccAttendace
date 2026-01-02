@@ -21,7 +21,7 @@ export const QUERY_KEYS = {
     ALL: (params) => ['allmembers', params],
     LIST: (params) => ['members', 'list', params],
     DETAIL: (id) => ['members', 'detail', id],
-    ROLE: (role) => [('members', role)],
+    ROLE: (role, params) => [('members', role, params)],
   },
   ATTENDANCE_RECORDS: {
     ALL: ['attendance-records'],

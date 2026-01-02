@@ -1,20 +1,33 @@
-import DeleteMembers from '@/components/admin/members/DeleteMembers';
 import { AgGridReact } from 'ag-grid-react';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { Link } from "react-router-dom";
-import { useMembers } from '@/queries/member.query';
+import { Briefcase } from 'lucide-react';
+
+// Queries
+import { useMembersByRole, useUpdateGloryTeamMembers } from '@/queries/member.query';
+
+// Components
 import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
+import Avatar from '@/components/ui/Avatar';
+import ButtonCard from '@/components/ui/ButtonCard';
+import ButtonSwitch from '@/components/ui/ButtonSwitch';
 import Message from '@/components/common/Message';
 import { TableSkeletonLoader } from '@/components/skeleton';
-import { ExpandFullScreenIcon, FilterIcon } from '@/icons';
 import CreateMembers from '@/components/admin/members/CreateMembers';
 import EditMembersPanel from '@/components/admin/members/MembersFilterPanel';
-import ButtonSwitch from '@/components/ui/ButtonSwitch';
 import AssignMembers from '@/components/admin/members/AssignMembers';
+import RoleSelection from '@/components/admin/members/RoleSelection';
+
+// Icons
+import { ExpandFullScreenIcon, FilterIcon } from '@/icons';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
+// ============================================================================
+// CONSTANTS
+// ============================================================================
 const PAGINATION_PAGE_SIZES = [25, 50, 100, 200];
 const DEFAULT_PAGE_SIZE = 200;
 const MIN_TABLE_HEIGHT = 400;
@@ -26,16 +39,238 @@ const PAGINATION_HEIGHT = 60;
 const DEFAULT_FILTERS = {
   date_of_birth: [],
   birth_month: null,
-  community: null
+  community: null,
+  role: 'member'
 };
 
+const STATUS_CONFIG = {
+  active: { color: 'success', text: 'Active' },
+  inactive: { color: 'error', text: 'Inactive' },
+  suspended: { color: 'warning', text: 'Suspended' },
+  pending: { color: 'info', text: 'Pending' }
+};
+
+// ============================================================================
+// CELL RENDERERS
+// ============================================================================
+
+/**
+ * Avatar Cell Renderer
+ * Displays user avatar with profile completion status
+ */
+const AvatarRenderer = ({ data }) => {
+  if (!data) return null;
+
+  return (
+    <div className="flex items-center justify-center h-full py-1">
+      <Avatar
+        src={data.avatar}
+        alt={data.full_name || 'Member'}
+        name={data.initials || data.full_name?.substring(0, 2).toUpperCase()}
+        size="xs"
+        shape="circle"
+        showProfileStatus={true}
+        isProfileCompleted={data.profile_completed}
+      />
+    </div>
+  );
+};
+
+/**
+ * Link Cell Renderer
+ * Creates clickable links to member detail pages
+ */
+const LinkRenderer = ({ value }) => {
+  if (!value) return null;
+
+  return (
+    <Link
+      target="_blank"
+      to={`/dashboard/members/${value}`}
+      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors"
+      rel="noopener noreferrer"
+    >
+      {value}
+    </Link>
+  );
+};
+
+/**
+ * Boolean Cell Renderer
+ * Displays Yes/No badges for boolean values
+ */
+const BooleanRenderer = ({ value }) => {
+  const isTrue = value === true || value === 1 || value === 'true' || value === '1';
+
+  return (
+    <Badge size='sm' color={isTrue ? 'success' : 'error'}>
+      {isTrue ? 'Yes' : 'No'}
+    </Badge>
+  );
+};
+
+/**
+ * Status Cell Renderer
+ * Displays colored status badges
+ */
+const StatusRenderer = ({ value }) => {
+  const status = value?.toLowerCase() || 'inactive';
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG.inactive;
+
+  return (
+    <Badge size='sm' color={config.color}>
+      {config.text}
+    </Badge>
+  );
+};
+
+/**
+ * Profile Completion Cell Renderer
+ * Shows completion status with percentage
+ */
+const ProfileCompletionRenderer = ({ data }) => {
+  if (!data) return null;
+
+  const isComplete = data.profile_completed === true || data.profile_completed === 1;
+  const percentage = data.completion_percent || 0;
+
+  return (
+    <div>
+      {isComplete ? (
+        <Badge size='sm' color='success'>
+          <span className="flex items-center gap-1">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            Complete
+          </span>
+        </Badge>
+      ) : (
+        <Badge size='sm' color='warning'>
+          <span className="flex items-center gap-1">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            {percentage}%
+          </span>
+        </Badge>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Units Cell Renderer
+ * Displays member's units as badges
+ */
+const UnitsRenderer = ({ data }) => {
+  if (!data || !data.units || data.units.length === 0) {
+    return (
+      <span className="text-gray-400 dark:text-gray-500 text-xs italic">
+        No units
+      </span>
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-1 py-1">
+      {data.units.map((unit, index) => (
+        <Badge
+          key={unit.id || index}
+          size='sm'
+          color='info'
+          className="text-xs"
+        >
+          {unit.name}
+        </Badge>
+      ))}
+    </div>
+  );
+};
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Format date for display
+ */
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+/**
+ * Format units for CSV export
+ * Converts array of unit objects to comma-separated string
+ */
+const formatUnitsForExport = (units) => {
+  if (!units || !Array.isArray(units) || units.length === 0) {
+    return 'No units';
+  }
+  return units.map(unit => unit.name).join(', ');
+};
+
+/**
+ * Get unique unit names from all members for filter
+ */
+const getUniqueUnits = (members) => {
+  if (!members || !Array.isArray(members)) return [];
+
+  const unitSet = new Set();
+  members.forEach(member => {
+    if (member.units && Array.isArray(member.units)) {
+      member.units.forEach(unit => {
+        if (unit.name) unitSet.add(unit.name);
+      });
+    }
+  });
+
+  return Array.from(unitSet).sort();
+};
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
 const AdminMembersTable = () => {
+  // ========================================
+  // STATE & REFS
+  // ========================================
   const gridRef = useRef(null);
   const [isGridReady, setIsGridReady] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('member');
   const [activeFilters, setActiveFilters] = useState(DEFAULT_FILTERS);
-  const { data: members, isLoading, refetch, isError, error, isFetching } = useMembers(activeFilters);
 
+  // ========================================
+  // QUERIES
+  // ========================================
+  const queryParams = useMemo(() => ({
+    ...activeFilters,
+    role: selectedRole
+  }), [activeFilters, selectedRole]);
+
+  const {
+    data: members,
+    isLoading,
+    refetch,
+    isError,
+    error,
+    isFetching
+  } = useMembersByRole(queryParams);
+
+  const { mutateAsync: updateGloryTeam, isPending: isUpdatingGloryTeam } = useUpdateGloryTeamMembers();
+
+  // ========================================
+  // DERIVED DATA
+  // ========================================
   const memberData = useMemo(() => {
     if (!members) return [];
     return Array.isArray(members) ? members : [];
@@ -43,11 +278,32 @@ const AdminMembersTable = () => {
 
   const tableHeight = useMemo(() => {
     if (memberData.length === 0) return MIN_TABLE_HEIGHT;
-
     const contentHeight = (memberData.length * ROW_HEIGHT) + HEADER_HEIGHT + PAGINATION_HEIGHT;
     return Math.min(Math.max(contentHeight, MIN_TABLE_HEIGHT), MAX_TABLE_HEIGHT);
   }, [memberData.length]);
 
+  const uniqueUnits = useMemo(() => getUniqueUnits(memberData), [memberData]);
+
+  const hasActiveFilters = useMemo(() =>
+    activeFilters.birth_month ||
+    activeFilters.date_of_birth?.length > 0 ||
+    activeFilters.community
+    , [activeFilters]);
+
+  // ========================================
+  // FORMATTERS
+  // ========================================
+  const dateValueFormatter = useCallback((params) => {
+    return formatDate(params.value);
+  }, []);
+
+  const unitsValueGetter = useCallback((params) => {
+    return formatUnitsForExport(params.data?.units);
+  }, []);
+
+  // ========================================
+  // GRID CONFIGURATION
+  // ========================================
   const defaultColDef = useMemo(() => ({
     filter: true,
     sortable: true,
@@ -60,31 +316,19 @@ const AdminMembersTable = () => {
     wrapHeaderText: true,
   }), []);
 
-  const LinkRenderer = useCallback(({ value }) => {
-    if (!value) return null;
-    return (
-      <Link
-        target="_blank"
-        to={`/dashboard/members/${value}`}
-        className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors"
-        rel="noopener noreferrer"
-      >
-        {value}
-      </Link>
-    );
-  }, []);
-
-  const dateValueFormatter = useCallback((params) => {
-    if (!params.value) return '';
-    const date = new Date(params.value);
-    if (isNaN(date.getTime())) return params.value;
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric'
-    });
-  }, []);
-
   const columnDefs = useMemo(() => [
+    {
+      field: "avatar",
+      headerName: "",
+      cellRenderer: AvatarRenderer,
+      pinned: 'left',
+      width: 70,
+      filter: false,
+      sortable: false,
+      resizable: false,
+      suppressAutoSize: true,
+      cellClass: 'ag-cell-centered',
+    },
     {
       field: "id",
       headerName: "ID",
@@ -93,44 +337,115 @@ const AdminMembersTable = () => {
       cellClass: 'font-medium',
       editable: false,
       suppressAutoSize: false,
+      width: 80,
     },
     {
       field: "full_name",
       headerName: "Name",
       pinned: 'left',
       cellClass: 'font-medium',
+      width: 200,
     },
     {
       field: "phone_number",
       headerName: "Phone Number",
+      width: 150,
     },
     {
       field: "email",
       headerName: "Email",
       cellClass: 'text-blue-600 dark:text-blue-400',
+      width: 220,
     },
     {
       field: "gender",
       headerName: "Gender",
+      width: 120,
+      filter: 'agSetColumnFilter',
+      filterParams: {
+        values: ['Male', 'Female'],
+        debounceMs: 200,
+        buttons: ['reset', 'apply'],
+      },
     },
     {
-      field: "address",
-      headerName: "Address",
+      field: "is_glory_team_member",
+      headerName: "Glory Team",
+      cellRenderer: BooleanRenderer,
+      width: 130,
+      cellClass: 'ag-cell-centered',
+      filter: 'agSetColumnFilter',
+      filterParams: {
+        values: [true, false],
+        valueFormatter: (params) => params.value ? 'Yes' : 'No',
+        debounceMs: 200,
+        buttons: ['reset', 'apply'],
+      },
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      cellRenderer: StatusRenderer,
+      width: 120,
+      cellClass: 'ag-cell-centered',
+      filter: 'agSetColumnFilter',
+      filterParams: {
+        values: ['active', 'inactive', 'suspended', 'pending'],
+        debounceMs: 200,
+        buttons: ['reset', 'apply'],
+      },
+    },
+    {
+      field: "profile_completed",
+      headerName: "Profile",
+      cellRenderer: ProfileCompletionRenderer,
+      width: 140,
+      cellClass: 'ag-cell-centered',
+      filter: 'agSetColumnFilter',
+      filterParams: {
+        values: [true, false],
+        valueFormatter: (params) => params.value ? 'Complete' : 'Incomplete',
+        debounceMs: 200,
+        buttons: ['reset', 'apply'],
+      },
     },
     {
       field: "date_of_birth",
       headerName: "Date of Birth",
       valueFormatter: dateValueFormatter,
+      width: 150,
+    },
+    {
+      field: "units",
+      headerName: "Units",
+      cellRenderer: UnitsRenderer,
+      valueGetter: unitsValueGetter, // For CSV export
+      width: 250,
+      cellClass: 'ag-cell-wrap-text',
+      autoHeight: true,
+      filter: 'agSetColumnFilter',
+      filterParams: {
+        values: uniqueUnits,
+        debounceMs: 200,
+        buttons: ['reset', 'apply'],
+        valueGetter: (params) => {
+          const units = params.data?.units;
+          if (!units || !Array.isArray(units)) return [];
+          return units.map(unit => unit.name);
+        },
+      },
     },
     {
       field: "community",
       headerName: "Community",
+      width: 160,
     },
     {
-      field: "worker",
-      headerName: "Worker",
+      field: "address",
+      headerName: "Address",
+      width: 250,
     },
-  ], [LinkRenderer, dateValueFormatter]);
+  ], [dateValueFormatter, unitsValueGetter, uniqueUnits]);
 
   const gridOptions = useMemo(() => ({
     pagination: true,
@@ -148,6 +463,9 @@ const AdminMembersTable = () => {
     ensureDomOrder: true,
   }), []);
 
+  // ========================================
+  // EVENT HANDLERS
+  // ========================================
   const autoSizeColumns = useCallback(() => {
     if (!gridRef.current) return;
 
@@ -167,6 +485,73 @@ const AdminMembersTable = () => {
     }, 100);
   }, [autoSizeColumns]);
 
+  const handleExportCSV = useCallback(() => {
+    if (!gridRef.current) return;
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    gridRef.current.exportDataAsCsv({
+      fileName: `members-report-${selectedRole}-${timestamp}.csv`,
+      columnKeys: [
+        'id',
+        'full_name',
+        'phone_number',
+        'email',
+        'gender',
+        'is_glory_team_member',
+        'status',
+        'profile_completed',
+        'date_of_birth',
+        'units', // Will use valueGetter
+        'community',
+        'address'
+      ]
+    });
+  }, [selectedRole]);
+
+  const handleRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
+  const handleApplyFilters = useCallback((filters) => {
+    setActiveFilters(prev => ({
+      ...prev,
+      ...filters
+    }));
+  }, []);
+
+  const handleResetFilters = useCallback(() => {
+    setActiveFilters(prev => ({
+      ...DEFAULT_FILTERS,
+      role: prev.role
+    }));
+  }, []);
+
+  const handleToggleFilter = useCallback(() => {
+    if (showFilter) {
+      setActiveFilters(prev => ({
+        ...DEFAULT_FILTERS,
+        role: prev.role
+      }));
+    }
+    setShowFilter(!showFilter);
+  }, [showFilter]);
+
+  const handleRoleChange = useCallback((role) => {
+    setSelectedRole(role);
+    setActiveFilters({
+      ...DEFAULT_FILTERS,
+      role: role
+    });
+  }, []);
+
+  const handleUpdateGloryTeam = useCallback(async () => {
+    await updateGloryTeam();
+    await refetch()
+  }, [updateGloryTeam]);
+
+  // ========================================
+  // EFFECTS
+  // ========================================
   useEffect(() => {
     if (isGridReady && memberData.length > 0) {
       setTimeout(() => {
@@ -175,51 +560,20 @@ const AdminMembersTable = () => {
     }
   }, [memberData, isGridReady, autoSizeColumns]);
 
-  const handleExportCSV = useCallback(() => {
-    if (!gridRef.current) return;
-
-    const timestamp = new Date().toISOString().split('T')[0];
-    gridRef.current.exportDataAsCsv({
-      fileName: `members-report-${timestamp}.csv`,
-    });
-  }, []);
-
-  const handleRefresh = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
-  const handleApplyFilters = useCallback((filters) => {
-    setActiveFilters(filters);
-  }, []);
-
-  const handleResetFilters = useCallback((filters) => {
-    setActiveFilters(filters);
-  }, []);
-
-  const handleToggleFilter = useCallback(() => {
-    if (showFilter) {
-      setActiveFilters(DEFAULT_FILTERS);
-    }
-    setShowFilter(!showFilter);
-  }, [showFilter]);
-
-  const hasActiveFilters = useMemo(() =>
-    activeFilters.birth_month ||
-    activeFilters.date_of_birth?.length > 0 ||
-    activeFilters.community
-    , [activeFilters]);
-
+  // ========================================
+  // ERROR STATE
+  // ========================================
   if (isError) {
     return (
       <Message
-        className={'max-w-md'}
-        variant='error'
+        className="max-w-md"
+        variant="error"
         data={error?.data}
         actionButton={
           <Button
-            variant='outline-danger'
+            variant="outline-danger"
             onClick={handleRefresh}
-            className='mt-2'
+            className="mt-2"
             loading={isFetching}
           >
             Retry
@@ -229,14 +583,18 @@ const AdminMembersTable = () => {
     );
   }
 
+  // ========================================
+  // RENDER
+  // ========================================
   return (
-    <div className="w-full space-y-10">
+    <div className="w-full space-y-6">
+      {/* Action Buttons */}
       <div className="grid gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <ButtonSwitch
           onChange={handleToggleFilter}
           checked={showFilter}
           color="pink"
-          type='button'
+          type="button"
           icon={<FilterIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
           description="Filter church members data"
         >
@@ -244,10 +602,20 @@ const AdminMembersTable = () => {
         </ButtonSwitch>
         <CreateMembers />
         <AssignMembers />
+        <ButtonCard
+          color="orange"
+          loading={isUpdatingGloryTeam}
+          onClick={handleUpdateGloryTeam}
+          description="Update glory team member list"
+          icon={<Briefcase />}
+        >
+          Update GloryTeam
+        </ButtonCard>
       </div>
 
+      {/* Filter Panel */}
       {showFilter && (
-        <div className='max-w-xl p-4 dark:bg-gray-800 bg-white shadow rounded-lg'>
+        <div className="max-w-xl p-4 dark:bg-gray-800 bg-white shadow rounded-lg">
           <EditMembersPanel
             initialFilters={activeFilters}
             onApply={handleApplyFilters}
@@ -257,7 +625,16 @@ const AdminMembersTable = () => {
         </div>
       )}
 
+      {/* Role Selection */}
+      <RoleSelection
+        selectedRole={selectedRole}
+        onRoleChange={handleRoleChange}
+        disabled={isFetching}
+      />
+
+      {/* Table Section */}
       <div className="space-y-3">
+        {/* Stats Bar */}
         <div className="flex items-center gap-5 flex-wrap">
           <p className="text-sm text-green-600 dark:text-green-400">
             <span className="font-semibold text-green-500 dark:text-green-500">
@@ -273,17 +650,18 @@ const AdminMembersTable = () => {
           )}
         </div>
 
+        {/* Control Buttons */}
         <div className="flex flex-wrap gap-3 justify-between w-full">
-          <div className='flex flex-wrap gap-3'>
+          <div className="flex flex-wrap gap-3">
             <Button
-              variant='primary'
+              variant="primary"
               onClick={handleExportCSV}
               disabled={!memberData.length || isLoading}
             >
               Export CSV
             </Button>
             <Button
-              variant='ghost'
+              variant="ghost"
               onClick={handleRefresh}
               loading={isFetching}
               disabled={isLoading}
@@ -293,15 +671,16 @@ const AdminMembersTable = () => {
           </div>
           <div>
             <Button
-              variant='light'
+              variant="light"
               onClick={autoSizeColumns}
               disabled={!memberData.length || isLoading}
             >
-              <ExpandFullScreenIcon className='h-4 w-4 md:h-5 md:w-5' />
+              <ExpandFullScreenIcon className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
           </div>
         </div>
 
+        {/* Table or Loading State */}
         {isLoading && !memberData.length ? (
           <TableSkeletonLoader />
         ) : (
@@ -348,6 +727,7 @@ const AdminMembersTable = () => {
               />
             </div>
 
+            {/* Footer Info */}
             {memberData.length > 0 && (
               <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
                 <span>Last updated: {new Date().toLocaleString()}</span>

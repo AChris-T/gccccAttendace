@@ -1,4 +1,5 @@
 import AssignRole from "@/components/admin/settings/AssignRole"
+import SendMailToMembers from "@/components/admin/settings/SendMailToMembers"
 import SyncPermissions from "@/components/admin/settings/SyncPermissions"
 import UpdateYoutubeVideoCarousel from "@/components/admin/settings/UpdateYoutubeVideoCarousel"
 
@@ -8,6 +9,7 @@ const AdminSettings = () => {
             <AssignRole />
             <SyncPermissions />
             <UpdateYoutubeVideoCarousel />
+            <SendMailToMembers />
         </div>
     )
 }

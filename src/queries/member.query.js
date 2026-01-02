@@ -29,15 +29,18 @@ export const useMembers = (params = {}, options = {}) => {
   });
 };
 
-export function useMembersByRole(role) {
+export function useMembersByRole(params = {}, options = {}) {
   return useQuery({
-    queryKey: QUERY_KEYS.MEMBERS.ROLE(role),
+    queryKey: QUERY_KEYS.MEMBERS.ROLE(params?.role, params),
     queryFn: async () => {
-      const { data } = await MemberService.fetchMembersByRole(role);
+      const { data } = await MemberService.fetchMembersByRole(params?.role, params);
       return data;
     },
-    enabled: !!role,
+    enabled: !!params?.role,
     staleTime: 1000 * 60 * 5,
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 5 * 60 * 1000,
+    ...options,
   });
 }
 
@@ -85,10 +88,7 @@ export const useCreateMember = (options = {}) => {
   return useMutation({
     mutationFn: MemberService.createMember,
     onSuccess: (response, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.MEMBERS.ALL,
-      });
-      queryClient.invalidateQueries;
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
       Toast.success(response.message);
       options.onSuccess?.(response.data, variables);
     },
@@ -99,16 +99,32 @@ export const useCreateMember = (options = {}) => {
     },
   });
 };
+
+export const useUpdateGloryTeamMembers = (options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: MemberService.updateGloryTeamMembers,
+    onSuccess: (response, variables) => {
+      Toast.success(response.message);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS.ROLE({}) });
+      options.onSuccess?.(response.data, variables);
+    },
+    onError: (error) => {
+      const errorDetails = handleApiError(error);
+      Toast.error(errorDetails.message);
+      options.onError?.(new Error(errorDetails.message));
+    },
+  });
+};
+
 export const useAssignMembers = (options = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: MemberService.assignMembers,
     onSuccess: (response, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.MEMBERS.ALL,
-      });
-      queryClient.invalidateQueries;
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
       Toast.success(response.message);
       options.onSuccess?.(response.data, variables);
     },
@@ -128,9 +144,8 @@ export const useDeleteMember = (options = {}) => {
     mutationFn: MemberService.deleteMember,
 
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.MEMBERS.ALL,
-      });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS.ALL });
+      Toast.success(response.message);
       options.onSuccess?.(data, variables);
     },
     onError: (error) => {

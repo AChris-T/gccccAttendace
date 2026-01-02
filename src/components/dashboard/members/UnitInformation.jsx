@@ -11,7 +11,7 @@ export const UnitInformation = ({ user }) => {
         >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                 <InfoField icon={UsersIcon} label="Community" value={user.community} />
-                <InfoField icon={BriefcaseIcon} label="Worker" value={user.worker} />
+                <InfoField icon={BriefcaseIcon} label="Glory Team" value={user.is_glory_team_member} />
             </div>
 
             <UserUnitsDetails userUnits={user?.units} />

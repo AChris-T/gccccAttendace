@@ -1,4 +1,14 @@
 import { ShieldIcon, StarIcon, UsersIcon } from '@/icons';
+import {
+  Users,
+  Shield,
+  Star,
+  User,
+  UserPlus,
+  BookOpen,
+  Briefcase,
+  UserX
+} from 'lucide-react';
 
 export const navItems = [
   {
@@ -273,5 +283,56 @@ export const ANNOUNCEMENTS = [
   {
     icon: '🌍',
     text: 'Global Fasting & Prayer - YouTube 6AM | Physical 6PM daily',
+  },
+];
+
+export const ROLE_OPTIONS = [
+  {
+    value: 'pastor',
+    text: 'Pastors',
+    icon: BookOpen,
+    description: 'Church pastors'
+  },
+  {
+    value: 'admin',
+    text: 'Admins',
+    icon: Shield,
+    description: 'Church administrators'
+  },
+  {
+    value: 'leader',
+    text: 'Leaders',
+    icon: Star,
+    description: 'Team leaders'
+  },
+  {
+    value: 'member',
+    text: 'Members',
+    icon: User,
+    description: 'Regular members'
+  },
+  {
+    value: 'gloryTeam',
+    text: 'Glory Team',
+    icon: Briefcase,
+    description: 'Members in units'
+  },
+  {
+    value: 'nonGloryTeam',
+    text: 'Non-Glory Team',
+    icon: UserX,
+    description: 'Not in any unit'
+  },
+  {
+    value: 'all',
+    text: 'All Users',
+    icon: Users,
+    description: 'All system users'
+  },
+  {
+    value: 'firstTimer',
+    text: 'First Timers',
+    icon: UserPlus,
+    description: 'New visitors'
   },
 ];

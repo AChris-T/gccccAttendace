@@ -1,6 +1,7 @@
 import Badge from "@/components/ui/Badge";
 import { ShieldIcon, StarIcon, UserIcon, UserIcon3 } from "@/icons";
 import { useAuthStore } from "@/store/auth.store";
+import { Lectern } from "lucide-react";
 
 const RoleBadge = ({
     size = "md",
@@ -8,9 +9,15 @@ const RoleBadge = ({
     showIcon = false,
     customLabels = {}
 }) => {
-    const { isAdmin, isLeader, isMember, isFirstTimer, } = useAuthStore()
+    const { isAdmin, isLeader, isMember, isFirstTimer, isPastor } = useAuthStore()
 
     const roleConfig = [
+        {
+            condition: isPastor,
+            color: "error",
+            label: customLabels.pastor || "Pastor",
+            icon: showIcon ? <Lectern className="h-3.5 w-3.5" /> : null,
+        },
         {
             condition: isAdmin,
             color: "error",

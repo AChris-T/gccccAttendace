@@ -5,6 +5,7 @@ import { Toast } from '@/lib/toastify';
 import { useAssignRoleToUsers } from '@/queries/admin.query';
 import { useAllUsers } from '@/queries/member.query';
 import { assignUsersRoleSchema } from '@/schema';
+import { useAuthStore } from '@/store/auth.store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,7 +17,26 @@ const INITIAL_VALUES = {
 
 const AssignRoleForm = ({ onClose }) => {
     const { data: users, isLoading: isLoadingUsers } = useAllUsers();
+    const { isAdmin, isLeader, isMember, isFirstTimer, isPastor } = useAuthStore()
     const { mutateAsync, isPending } = useAssignRoleToUsers();
+
+    const allRoles = [
+        { label: "Pastor", value: "pastor" },
+        { label: "Admin", value: "admin" },
+        { label: "Leader", value: "leader" },
+        { label: "Member", value: "member" },
+        { label: "First Timer", value: "firstTimer" },
+    ];
+
+    const getVisibleRoles = () => {
+        if (isPastor) return allRoles; // Pastor sees all
+        if (isAdmin) return allRoles.filter(role => role.value !== "pastor");
+        if (isLeader) return allRoles.filter(role => ["leader", "member", "firstTimer"].includes(role.value));
+        if (isMember) return allRoles.filter(role => ["member", "firstTimer"].includes(role.value));
+        return allRoles.filter(role => role.value === "firstTimer"); // Default: only first timer
+    };
+
+    const visibleRoles = getVisibleRoles();
 
     const userOptions = useMemo(() => {
         if (!users) return [];
@@ -80,13 +100,7 @@ const AssignRoleForm = ({ onClose }) => {
                 register={register}
                 error={errors.role?.message}
                 required
-                options={[
-                    { label: "Pastor", value: "pastor" },
-                    { label: "Admin", value: "admin" },
-                    { label: "Leader", value: "leader" },
-                    { label: "Member", value: "member" },
-                    { label: "First Timer", value: "firstTimer" },
-                ]}
+                options={visibleRoles}
             />
 
             <div className="flex gap-3 border-t pt-5 dark:border-gray-600">

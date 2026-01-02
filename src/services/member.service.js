@@ -32,8 +32,21 @@ export const MemberService = {
     return data;
   },
 
-  async fetchMembersByRole(role) {
-    const { data } = await $api.get(`${ADMIN_MEMBERS}/role/${role}`);
+  async fetchMembersByRole(role, params = {}) {
+    const queryParams = new URLSearchParams();
+
+    params.date_of_birth?.forEach((date) =>
+      queryParams.append('date_of_birth[]', date)
+    );
+
+    ['birth_month', 'community'].forEach((key) => {
+      if (params[key]) queryParams.append(key, params[key]);
+    });
+
+    const query = queryParams.toString();
+    const endpoint = `${ADMIN_MEMBERS}/role/${role}${query ? `?${query}` : ''}`;
+    const { data } = await $api.get(endpoint);
+    // const { data } = await $api.get(`${ADMIN_MEMBERS}/role/${role}`);
     return data;
   },
 
@@ -49,6 +62,11 @@ export const MemberService = {
 
   async createMember(payload) {
     const { data } = await $api.post(`/${MEMBERS}`, payload);
+    return data;
+  },
+
+  async updateGloryTeamMembers() {
+    const { data } = await $api.post(`${ADMIN_MEMBERS}/glory-team/update`);
     return data;
   },
 

@@ -18,8 +18,8 @@ const FIELD_CONFIG = [
     icon: CommunityIcon,
   },
   {
-    label: 'Worker',
-    key: 'worker',
+    label: 'Glory Team',
+    key: 'is_glory_team_member',
     icon: WorkerIcon,
   },
 ];

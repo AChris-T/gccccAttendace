@@ -7,6 +7,7 @@ const initialState = {
   token: null,
   isAuthenticated: false,
   isAdmin: false,
+  isPastor: false,
   isSuperAdmin: false,
   isLeader: false,
   isMember: false,
@@ -22,12 +23,13 @@ export const useAuthStore = create()(
       ...initialState,
 
       setAuthenticatedUser: ({ user }) => {
-        const { isAdmin, isLeader, isMember, isFirstTimer } = getUserRoles(
+        const { isAdmin, isLeader, isMember, isFirstTimer, isPastor } = getUserRoles(
           user?.roles
         );
         set({
           user,
           isAdmin,
+          isPastor,
           isLeader,
           isMember,
           isFirstTimer,
@@ -47,6 +49,7 @@ export const useAuthStore = create()(
           token: null,
           isAuthenticated: false,
           isAdmin: false,
+          isPastor: false,
           isSuperAdmin: false,
           isLeader: false,
           isMember: false,
@@ -63,6 +66,7 @@ export const useAuthStore = create()(
         token: state.token,
         user: state.user,
         isAdmin: state.isAdmin,
+        isPastor: state.isPastor,
         isLeader: state.isLeader,
         isMember: state.isMember,
         isFirstTimer: state.isFirstTimer,

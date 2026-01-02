@@ -1,17 +1,20 @@
 import { UserRole } from './constant';
 
 export const getUserRoles = (roles) => {
+  const isPastor = roles?.includes(UserRole.PASTOR);
   const isAdmin = roles?.includes(UserRole.ADMIN);
   const isLeader = roles?.includes(UserRole.LEADER);
   const isMember = roles?.includes(UserRole.MEMBER);
   const isFirstTimer = roles?.includes(UserRole.FIRST_TIMER);
-  return { isAdmin, isLeader, isMember, isFirstTimer };
+  return { isPastor, isAdmin, isLeader, isMember, isFirstTimer };
 };
 
 const ROLE_PRIORITY = {
-  admin: 3,
-  leader: 2,
-  member: 1,
+  pastor: 5,
+  admin: 4,
+  leader: 3,
+  member: 2,
+  firstTimer: 1,
 };
 
 export function compareRoles(roleA, roleB) {
