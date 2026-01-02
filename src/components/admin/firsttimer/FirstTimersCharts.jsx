@@ -9,8 +9,9 @@ import { Dropdown } from "@/components/ui/dropdown/Dropdown";
 import AnnualFirstTimersOverview from "@/components/admin/firsttimer/AnnualFirstTimersOverview";
 
 const FirstTimersCharts = () => {
+
     const [selectedMonth, setSelectedMonth] = useState(new Date().toLocaleDateString('en-Ng', { month: 'long' }));
-    const [selectedYear, setSelectedYear] = useState(2025);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const { data, isLoading } = useFirstTimersAnalytics({ year: selectedYear })
     const { totalFirstTimers = [], statusesPerMonth = [], integratedFirstTimers = [] } = data || {}
 

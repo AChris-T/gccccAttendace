@@ -8,9 +8,8 @@ import { Dropdown } from '@/components/ui/dropdown/Dropdown'
 import { generateChartSeries } from '@/utils/helper'
 
 const AdminAttendanceMonthlyStats = () => {
-    const [year, setYear] = useState(2025)
+    const [year, setYear] = useState(new Date().getFullYear())
     const { data = [], isLoading, isError, error } = useMonthlyAttendanceStats(year)
-
 
     const options = {
         title: {
