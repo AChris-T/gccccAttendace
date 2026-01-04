@@ -13,8 +13,6 @@ const AssignedMembers = () => {
         <TableSkeletonLoader />
     </section>)
 
-    if (!assignedMembers?.length) return null
-
     return (
         <>
             <div className="col-span-12 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/3 sm:px-6">

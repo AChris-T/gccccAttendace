@@ -344,8 +344,9 @@ const AdminAttendanceTable = () => {
             )}
 
             <Modal
+                maxWidth='max-w-3xl'
                 title={`Assign Absent Members`}
-                description='Assign absent members to leaders'
+                description='Assign absent members for active followup'
                 isOpen={isOpenAssignModal}
                 onClose={closeAssignModal}
             >

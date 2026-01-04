@@ -1,11 +1,19 @@
 import { EmptyState } from '@/components/common/EmptyState';
+import { TableSkeletonLoader } from '@/components/skeleton';
 import Avatar from '@/components/ui/Avatar';
 import Badge from '@/components/ui/Badge';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/Table'
+import { useGetAssignedAbsentees } from '@/queries/user.query';
 import { formatDate, getTimeAgo } from '@/utils/helper';
 import { Link } from 'react-router-dom';
 
-const AssignedAbsentMembers = ({ assignedAbsentMembers }) => {
+const AssignedAbsentMembers = () => {
+    const { data: assignedAbsentMembers, isLoading } = useGetAssignedAbsentees();
+
+    if (isLoading) return (<section className="col-span-12 my-5">
+        <TableSkeletonLoader />
+    </section>)
+
     return (
         <>
             <div className="col-span-12 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">

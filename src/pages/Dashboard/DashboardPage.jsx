@@ -14,6 +14,7 @@ import AssignedMembers from '@/components/dashboard/assigned/AssignedMembers';
 import { Units } from '@/utils/constant';
 import { useHasUnit } from '@/hooks/useUnitPermission';
 import { useAuthStore } from '@/store/auth.store';
+import AssignedAbsentMembers from '@/components/dashboard/assigned/AssignedAbsentMembers';
 
 // Constants
 const getCurrentDateParams = () => ({
@@ -63,6 +64,8 @@ const DashboardPage = () => {
         {hasFollowUp && <FirstTimerAssigned />}
 
         {!isFirstTimer && <AssignedMembers />}
+
+        {!isFirstTimer && <AssignedAbsentMembers />}
       </main>
     </>
   );
