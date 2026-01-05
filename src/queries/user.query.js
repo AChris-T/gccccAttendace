@@ -40,7 +40,7 @@ export const useUpdateProfile = (options = {}) => {
 };
 
 export const useGetAssignedAbsentees = (options = {}) => {
-  const { isAdmin, isLeader } = useAuthStore();
+  const { isAdmin, isLeader, isMember } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.USER.ABSENT,
     queryFn: async () => {
@@ -50,7 +50,7 @@ export const useGetAssignedAbsentees = (options = {}) => {
     staleTime: 10 * 60 * 1000,
     cacheTime: 15 * 60 * 1000,
     refetchOnWindowFocus: true,
-    enabled: isAdmin || isLeader,
+    enabled: isAdmin || isLeader || isMember,
     ...options,
   });
 };

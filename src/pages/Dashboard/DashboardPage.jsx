@@ -40,7 +40,7 @@ const DashboardPage = () => {
   const { params, handleDateChange } = useDateFilter();
   const { data, isLoading, isError, error } = useUsersMonthlyAttendanceStats(params?.year, params?.month);
   const hasFollowUp = useHasUnit(Units.FOLLOW_UP);
-  const { isFirstTimer } = useAuthStore()
+  const { isMember } = useAuthStore()
   const attendanceProps = { data, isLoading, isError, error, params }
 
   return (
@@ -63,9 +63,9 @@ const DashboardPage = () => {
 
         {hasFollowUp && <FirstTimerAssigned />}
 
-        {!isFirstTimer && <AssignedMembers />}
+        {isMember && <AssignedMembers />}
 
-        {!isFirstTimer && <AssignedAbsentMembers />}
+        {isMember && <AssignedAbsentMembers />}
       </main>
     </>
   );
